@@ -64,18 +64,6 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-12 col-sm-4">
-        <div class="form-group mb-3">
-            <label for="amount">{{ __('Importo') }}</label>
-            <span class="text-danger">*</span>
-            <input name="amount" class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}" type="number" step=".01" value="{{ old('amount', $race->amount) }}" @if($disabled) disabled @endif>
-            @if ($errors->has('amount'))
-                <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
-            @endif
-        </div>
-    </div>
-</div>
 
 @push('after-styles')
 @endpush

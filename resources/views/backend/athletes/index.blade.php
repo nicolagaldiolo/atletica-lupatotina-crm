@@ -53,9 +53,9 @@
                             <th>
                                 Name
                             </th>
-                            <!--<th>
-                                Category
-                            </th>-->
+                            <th>
+                                Da pagare
+                            </th>
                             <th class="text-end">
                                 Action
                             </th>
@@ -97,11 +97,16 @@
                 data: 'name',
                 name: 'name'
             },
-            /*{
-                data: 'category_name',
-                name: 'category_name'
+            {
+                data: 'fees_to_pay',
+                render(data) {
+                    if(data && data.length){
+                        let amount = data.reduce((i, item) => i+item.amount, 0);
+                        return '<span class="badge text-bg-primary">' + App.money(amount) + ' (' + data.length + ')</span>';
+                    }
+                    return null;
+                },
             },
-            */
             {
                 data: 'action',
                 name: 'action',

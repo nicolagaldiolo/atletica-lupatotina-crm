@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Athlete extends Model
 {
@@ -57,6 +56,15 @@ class Athlete extends Model
     }
     */
 
+
+    public function feesToPay(): BelongsToMany
+    {
+        return $this->belongsToMany(Fee::class)
+            ->withTimestamps()
+            ->using(AthleteFee::class)
+            ->as('athletefee')
+            ->withPivot('payed_at')->wherePivot('payed_at', null);
+    }
 
 
     public function fees(): BelongsToMany

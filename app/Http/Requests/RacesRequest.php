@@ -29,8 +29,7 @@ class RacesRequest extends FormRequest
             'date' => 'required|date',
             'is_subscrible' => 'required|boolean',
             'subscrible_expiration' => 'nullable|date',
-            'is_visible_on_site' => 'required|boolean',
-            'amount' => 'required|numeric'
+            'is_visible_on_site' => 'required|boolean'
         ];
     }
 

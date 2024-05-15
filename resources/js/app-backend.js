@@ -10,7 +10,7 @@ import "/resources/js/backend-custom.js";
 const tooltipTriggerList = document.querySelectorAll('[data-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new coreui.Tooltip(tooltipTriggerEl))
 
-// live clock 
+// live clock
 $(function () {
     showTime();
 });

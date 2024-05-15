@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Backend\RaceController;
 use App\Http\Controllers\Backend\AthleteController;
+use App\Http\Controllers\Backend\AthleteFeeController;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\RaceAthleteController;
 use App\Http\Controllers\Backend\RaceFeeController;
@@ -26,7 +27,7 @@ require __DIR__.'/auth.php';
 // Language Switch
 Route::get('language/{language}', [LanguageController::class, 'switch'])->name('language.switch');
 
-Route::get('dashboard', 'App\Http\Controllers\Frontend\FrontendController@index')->name('dashboard');
+//Route::get('dashboard', 'App\Http\Controllers\Frontend\FrontendController@index')->name('dashboard');
 /*
 *
 * Frontend Routes
@@ -176,9 +177,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::get('races/subscriptions', 'RaceController@subscriptionCreate')->name('races.subscription.create');
     Route::post('races/subscriptions', 'RaceController@subscriptionStore')->name('races.subscription.store');
     Route::get('races/{race}/athletes', 'RaceController@athletes')->name('races.athletes');
+
     Route::delete('races/{race}/athleteFees/{athleteFee}', 'RaceController@athletesDestroy')->name('athleteFees.destroy');
 
-
+    Route::resource('athleteFees', AthleteFeeController::class)->except('show');
 
     Route::resource('races', RaceController::class)->except('show');
 

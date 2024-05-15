@@ -1,4 +1,4 @@
-@props(["route"=>"", "icon"=>"fas fa-eye", "title"=>"", "small"=>"", "class"=>""])
+@props(["route"=>"", "icon"=>"fas fa-eye", "title"=>"", "small"=>"", "class"=>"", "count"=>null ])
 
 @if($route)
 <a href='{{$route}}'
@@ -7,6 +7,7 @@
     title="{{ $title }}">
     <i class="{{$icon}}"></i>
     {{ $slot }}
+    <span class="badge text-bg-secondary">{{ $count }}</span>
 </a>
 @else
 <button type="submit"
@@ -15,5 +16,6 @@
     title="{{ $title }}">
     <i class="{{$icon}}"></i>
     {{ $slot }}
+    <span class="badge text-bg-secondary">{{ $count }}</span>
 </button>
 @endif

@@ -25,7 +25,8 @@ class Fee extends Model
      * @var array
      */
     protected $casts = [
-        'expired_at' => 'datetime'
+        'expired_at' => 'datetime',
+        'amount' => 'float'
     ];
 
     public function Race(): BelongsTo

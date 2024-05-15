@@ -21,7 +21,7 @@ class AthleteController extends Controller
         $this->authorize('viewAny', Athlete::class);
 
         if (request()->ajax()) {
-            return datatables()->eloquent(Athlete::query())->addColumn('action', function ($athlete) {
+            return datatables()->eloquent(Athlete::query()->with('feesToPay'))->addColumn('action', function ($athlete) {
                 return view('backend.athletes.partials.action_column', compact('athlete'));
             })
             ->orderColumn('name', function ($query, $order) {

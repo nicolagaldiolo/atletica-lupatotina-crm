@@ -55,6 +55,12 @@
                             <th>
                                 Name
                             </th>
+                            <th>
+                                Data
+                            </th>
+                            <th>
+                                Chiusura iscrizioni
+                            </th>
                             <th class="text-end">
                                 Action
                             </th>
@@ -92,6 +98,14 @@
             {
                 data: 'name',
                 name: 'name'
+            },
+            {
+                data: 'date',
+                name: 'date'
+            },
+            {
+                data: 'subscrible_expiration',
+                name: 'subscrible_expiration'
             },
             {
                 data: 'action',

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,5 +21,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+
+        Blade::directive('money', function ($amount) {
+            return "<?php echo $amount != 0 ? number_format($amount, 2, ',', '.') . ' &euro;' : ''; ?>";
+        });
     }
 }

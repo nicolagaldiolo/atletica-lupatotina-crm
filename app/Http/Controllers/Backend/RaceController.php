@@ -26,7 +26,7 @@ class RaceController extends Controller
         $this->authorize('viewAny', Race::class);
 
         if (request()->ajax()) {
-            return datatables()->eloquent(Race::query())->addColumn('action', function ($race) {
+            return datatables()->eloquent(Race::query()->withCount(['fees', 'athleteFee'])->with('fees.athletes'))->addColumn('action', function ($race) {
                 return view('backend.races.partials.action_column', compact('race'));
             })->make(true);
         }else{
@@ -181,15 +181,6 @@ class RaceController extends Controller
             });
 
             return datatables()->eloquent($builder)
-            //->editColumn('name', function ($data){
-            //    return $data->fullname;
-            //})
-            ->addColumn('fee', function ($data){
-                return $data->fee->name . ' (' . $data->fee->amount . ')';
-            })
-            ->addColumn('athlete', function ($data){
-                return $data->athlete->fullname;
-            })
             ->addColumn('action', function ($athleteFee) use($race){
                 return view('backend.races.athletes.partials.action_column', compact('race', 'athleteFee'));
             })->make(true);

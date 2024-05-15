@@ -42,9 +42,9 @@
                 <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
                     <thead>
                         <tr>
-                            <!--<th>
+                            <th>
                                 #
-                            </th>-->
+                            </th>
                             <th>
                                 {{ __('Nome') }}
                             </th>
@@ -88,15 +88,22 @@
         responsive: true,
         ajax: '{{ route("backend.races.athletes", $race) }}',
         columns: [
-            //{
-            //    data: 'id',
-            //    name: 'id'
-            //},
             {
-                data: 'athlete'
+                data: 'id',
+                name: 'id',
+                visible: false
             },
             {
-                data: 'fee'
+                data: 'athlete',
+                render(data) {
+                    return data ? data.fullname : null;
+                },
+            },
+            {
+                data: 'fee',
+                render(data) {
+                    return data ? data.name + ' (' + App.money(data.amount) + ')' : null;
+                },
             },
             {
                 data: 'created_at'

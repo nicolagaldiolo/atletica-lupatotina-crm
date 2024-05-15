@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Race extends Model
 {
@@ -19,8 +19,7 @@ class Race extends Model
         'date',
         'is_subscrible',
         'subscrible_expiration',
-        'is_visible_on_site',
-        'amount'
+        'is_visible_on_site'
     ];
 
     /**
@@ -35,13 +34,9 @@ class Race extends Model
         'is_visible_on_site' => 'boolean'
     ];
 
-    public function athletes(): BelongsToMany
+    public function athleteFee(): HasManyThrough
     {
-        return $this->belongsToMany(Athlete::class)
-            ->withTimestamps()
-            ->using(AthleteRace::class)
-            ->as('athleterace')
-            ->withPivot('id', 'subscription_at', 'fee_id');
+        return $this->hasManyThrough(AthleteFee::class, Fee::class);
     }
 
     public function fees(): HasMany
