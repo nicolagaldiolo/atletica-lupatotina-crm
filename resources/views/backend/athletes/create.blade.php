@@ -15,26 +15,8 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
-            {{ __('Aggiungi atleta') }}
-            <x-slot name="toolbar">
-                @can('viewAny', App\Models\Athlete::class)
-                    <x-backend.buttons.return route='{{ route("backend.athletes.index") }}' icon="fas fa-reply" small="true" />
-                @endcan
-            </x-slot>
-        </x-backend.section-header>
-    </div>
     {{ html()->form('POST', route("backend.athletes.store"))->class('form')->open() }}
-        <div class="card-body">
-            <div class="row">
-                <div class="col">
-                    @include ("backend.athletes.partials.form", ['disabled' => false])
-                </div>
-            </div>
-        </div>
-
-        <div class="card-footer">
+        <div class="card-header">
             <div class="row">
                 <div class="col">
                     <div class="float-end">
@@ -47,6 +29,13 @@
                             @endcan
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    @include ("backend.athletes.partials.form", ['disabled' => false])
                 </div>
             </div>
         </div>

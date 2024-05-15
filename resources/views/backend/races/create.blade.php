@@ -15,17 +15,24 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
-            {{ __('Aggiungi gara') }}
-            <x-slot name="toolbar">
-                @can('viewAny', App\Models\Race::class)
-                    <x-backend.buttons.return route='{{ route("backend.races.index") }}' icon="fas fa-reply" small="true" />
-                @endcan
-            </x-slot>
-        </x-backend.section-header>
-    </div>
     {{ html()->form('POST', route("backend.races.store"))->class('form')->open() }}
+        <div class="card-header">
+
+            <div class="row">
+                <div class="col">
+                    <div class="float-end">
+                        <div class="form-group">
+                            @can('viewAny', App\Models\Athlete::class)
+                                <x-backend.buttons.return route='{{ route("backend.races.index") }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                            @endcan
+                            @can('create', App\Models\Athlete::class)
+                                <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
+                            @endcan
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="card-body">
             <div class="row">
                 <div class="col">
@@ -34,22 +41,6 @@
             </div>
         </div>
 
-        <div class="card-footer">
-            <div class="row">
-                <div class="col">
-                    <div class="float-end">
-                        <div class="form-group">
-                            @can('viewAny', App\Models\Race::class)
-                                <x-backend.buttons.return route='{{ route("backend.races.index") }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
-                            @endcan
-                            @can('create', App\Models\Race::class)
-                                <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                            @endcan
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     {{ html()->form()->close() }}
 </div>
 

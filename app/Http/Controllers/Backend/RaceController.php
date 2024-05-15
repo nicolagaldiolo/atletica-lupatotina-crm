@@ -55,9 +55,9 @@ class RaceController extends Controller
     public function store(RacesRequest $request)
     {
         $this->authorize('create', Race::class);
-        Race::create($request->validated());
+        $race = Race::create($request->validated());
         Utility::flashSuccess();
-        return redirect(route('backend.races.index'));
+        return redirect(route('backend.races.edit', $race));
     }
 
     /**
@@ -80,8 +80,6 @@ class RaceController extends Controller
     public function edit(Race $race)
     {
         $this->authorize('update', $race);
-
-        //dd($race->fees);
 
         return view('backend.races.edit', compact('race'));
     }
@@ -187,12 +185,5 @@ class RaceController extends Controller
         }else{
             return view('backend.races.athletes.index', compact('race'));
         }
-    }
-
-    public function athletesDestroy(Race $race, AthleteFee $athleteFee)
-    {
-        $athleteFee->delete();
-        Utility::flashSuccess();
-        return redirect(route('backend.races.athletes', $race));
     }
 }

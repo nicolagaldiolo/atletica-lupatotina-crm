@@ -1,20 +1,20 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Gare')
+    $entity = __('Atleti');
 @endphp
 
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item>{{ $entity }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item type="active">{{ $race->name }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route='{{route("backend.athletes.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
 @endsection
 
 @section('secondary-nav')
-    @include ("backend.races.partials.secondary_nav")
+    @include ("backend.athletes.partials.secondary_nav")
 @endsection
 
 @section('content')
@@ -40,7 +40,9 @@
                             <th>
                                 {{ __('Pagato il') }}
                             </th>
-                            <th>&nbsp;</th>
+                            <!--<th class="text-end">
+                                Action
+                            </th>-->
                         </tr>
                     </thead>
                 </table>
@@ -67,7 +69,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("backend.races.athletes", $race) }}',
+        ajax: '{{ route("backend.athletes.races.index", $athlete) }}',
         columns: [
             {
                 data: 'id',
@@ -75,9 +77,9 @@
                 visible: false
             },
             {
-                data: 'athlete',
+                data: 'fee.race',
                 render(data) {
-                    return data ? data.fullname : null;
+                    return data ? data.name : null;
                 },
             },
             {
@@ -92,14 +94,15 @@
             {
                 data: 'payed_at'
             },
-            {
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false
-            }
+            //{
+            //    data: 'action',
+            //    name: 'action',
+            //    orderable: false,
+            //    searchable: false
+            //}
         ],
         ordering: false,
     });
 </script>
 @endpush
+

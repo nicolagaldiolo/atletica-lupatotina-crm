@@ -7,6 +7,7 @@ use App\Classes\Utility;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AthletesRequest;
+use App\Models\AthleteFee;
 
 class AthleteController extends Controller
 {
@@ -21,8 +22,12 @@ class AthleteController extends Controller
         $this->authorize('viewAny', Athlete::class);
 
         if (request()->ajax()) {
-            return datatables()->eloquent(Athlete::query()->with('feesToPay'))->addColumn('action', function ($athlete) {
+            return datatables()->eloquent(Athlete::query()->withCount('fees')->with('feesToPay'))->addColumn('action', function ($athlete) {
                 return view('backend.athletes.partials.action_column', compact('athlete'));
+            })
+            ->filterColumn('name', function($query, $keyword) {
+                $sql = "CONCAT(name, surname)  like ?";
+                $query->whereRaw($sql, ["%{$keyword}%"]);
             })
             ->orderColumn('name', function ($query, $order) {
                 $query->orderBy('surname', $order)->orderBy('name', $order);
@@ -56,9 +61,9 @@ class AthleteController extends Controller
     public function store(AthletesRequest $request)
     {
         $this->authorize('create', Athlete::class);
-        Athlete::create($request->validated());
+        $athlete = Athlete::create($request->validated());
         Utility::flashSuccess();
-        return redirect(route('backend.athletes.index'));
+        return redirect(route('backend.athletes.edit', $athlete));
     }
 
     /**
@@ -96,7 +101,7 @@ class AthleteController extends Controller
         $this->authorize('update', $athlete);
         $athlete->update($request->validated());
         Utility::flashSuccess();
-        return redirect(route('backend.athletes.index'));
+        return redirect(route('backend.athletes.edit', $athlete));
     }
 
     /**
@@ -156,4 +161,36 @@ class AthleteController extends Controller
         Utility::flashSuccess();
         return redirect(route('backend.athletes.edit', $athlete));
     }
+
+    public function races(Athlete $athlete)
+    {
+        if (request()->ajax()) {
+            $builder = AthleteFee::with(['fee.race'])->where('athlete_id', $athlete->id);
+
+            return datatables()->eloquent($builder)->make(true);
+            //->addColumn('action', function ($athleteFee) use($athlete){
+            //    return view('backend.races.athletes.partials.action_column', compact('race', 'athleteFee'));
+            //})->make(true);
+        }else{
+            return view('backend.athletes.races.index', compact('athlete'));
+        }
+    }
+
+    /*
+    public function athletes(Race $race)
+    {
+        if (request()->ajax()) {
+            $builder = AthleteFee::with(['athlete', 'fee'])->whereHas('fee', function($query) use($race){
+                $query->where('race_id', $race->id);
+            });
+
+            return datatables()->eloquent($builder)
+            ->addColumn('action', function ($athleteFee) use($race){
+                return view('backend.races.athletes.partials.action_column', compact('race', 'athleteFee'));
+            })->make(true);
+        }else{
+            return view('backend.races.athletes.index', compact('race'));
+        }
+    }
+    */
 }

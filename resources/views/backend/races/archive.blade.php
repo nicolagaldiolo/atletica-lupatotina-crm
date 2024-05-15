@@ -97,7 +97,8 @@
                 orderable: false,
                 searchable: false
             }
-        ]
+        ],
+        ordering: false,
     });
 </script>
 @endpush

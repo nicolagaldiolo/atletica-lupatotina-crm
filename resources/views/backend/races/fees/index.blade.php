@@ -8,37 +8,26 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item>{{ $entity }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item type="active">{{ $race->name }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('backend.races.index') }}">{{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('backend.races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ __('Quote') }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
+@endsection
+
+@section('secondary-nav')
+    @include ("backend.races.partials.secondary_nav")
 @endsection
 
 @section('content')
 <div class="card">
     <div class="card-header">
         <x-backend.section-header>
-            {{ $entity }}
             <x-slot name="toolbar">
 
                 @can('create', App\Models\Race::class)
                     <x-buttons.create route="{{ route('backend.races.fees.create', $race) }}" small="true" title="">
                         {{ __('Aggiungi') }}
                     </x-buttons.create>
-                @endcan
-
-                @can('restore', App\Models\Race::class)
-                    <div class="btn-group">
-                        <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-cog"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href='{{ route("backend.races.trashed") }}'>
-                                    <i class="fas fa-archive"></i> {{ __('Archivio') }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 @endcan
             </x-slot>
         </x-backend.section-header>
@@ -61,9 +50,7 @@
                             <th>
                                 {{ __('Importo') }}
                             </th>
-                            <th class="text-end">
-                                Action
-                            </th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                 </table>
@@ -106,7 +93,9 @@
             },
             {
                 data: 'amount',
-                name: 'amount'
+                render(data) {
+                    return App.money(data);
+                },
             },
             {
                 data: 'action',
@@ -114,7 +103,8 @@
                 orderable: false,
                 searchable: false
             }
-        ]
+        ],
+        ordering: false,
     });
 </script>
 @endpush

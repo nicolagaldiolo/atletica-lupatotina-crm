@@ -8,48 +8,58 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item>{{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('backend.races.index') }}">{{ __('Gare') }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('backend.races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('backend.races.fees.index', $race) }}">{{ $entity }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $fee->name }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
 @endsection
 
+@section('secondary-nav')
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-coreui-toggle="collapse" data-coreui-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ route("backend.races.fees.index", $race) }}">
+                            <i class="far fa-times-circle"></i>
+                            {{ __('Chiudi') }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+@endsection
+
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
-            {{ $fee->name }}
-            <x-slot name="toolbar">
-                @can('viewAny', Fee::class)
-                    <x-backend.buttons.return route='{{ route("backend.races.fees.index", $race) }}' icon="fas fa-reply" small="true" />
-                @endcan
-            </x-slot>
-        </x-backend.section-header>
-    </div>
     {{ html()->modelForm($fee, 'PATCH', route("backend.races.fees.update", [$race, $fee]))->class('form')->open() }}
-        <div class="card-body">
-            <div class="row">
-                <div class="col">
-                    @include ("backend.races.fees.partials.form", ['disabled' => false])
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                {{--@can('delete', $race)
+                    <x-backend.buttons.delete route='{{ route("backend.races.fees.destroy", [$race, $fee]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+                @endcan--}}
+                <div class="float-end">
+                    @can('update', $race)
+                        <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
+                    @endcan
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="card-footer">
-            <div class="row">
-                <div class="col">
-                    <div class="float-end">
-                        <div class="form-group">
-                            @can('viewAny', Fee::class)
-                                <x-backend.buttons.return route='{{ route("backend.races.fees.index", $race) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
-                            @endcan
-                            @can('create', Fee::class)
-                                <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                            @endcan
-                        </div>
-                    </div>
-                </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                @include ("backend.races.fees.partials.form", ['disabled' => false])
             </div>
         </div>
+    </div>
     {{ html()->form()->close() }}
 </div>
 

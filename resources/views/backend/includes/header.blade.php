@@ -103,8 +103,9 @@ $notifications_latest = optional($notifications)->take(5);
             </ol>
         </nav>
         <div class="d-flex flex-row float-end">
-            <div class="">{{ date_today() }}&nbsp;</div>
-            <div id="liveClock" class="clock" onload="showTime()"></div>
+            @yield('secondary-nav')
+            {{--<div class="">{{ date_today() }}&nbsp;</div>
+            <div id="liveClock" class="clock" onload="showTime()"></div>--}}
         </div>
     </div>
 </header>

@@ -12,37 +12,33 @@
 </x-backend-breadcrumbs>
 @endsection
 
+@section('secondary-nav')
+    <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
+        @can('create', App\Models\Race::class)
+            <x-buttons.create route="{{ route('backend.races.create') }}" small="true" title="">
+                {{ __('Aggiungi') }}
+            </x-buttons.create>
+        @endcan
+
+        @can('restore', App\Models\Race::class)
+            <div class="btn-group">
+                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href='{{ route("backend.races.trashed") }}'>
+                            <i class="fas fa-archive"></i> {{ __('Archivio') }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        @endcan
+    </div>
+@endsection
+
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
-            {{ $entity }}
-            <x-slot name="toolbar">
-
-
-                @can('create', App\Models\Race::class)
-                    <x-buttons.create route="{{ route('backend.races.create') }}" small="true" title="">
-                        {{ __('Aggiungi') }}
-                    </x-buttons.create>
-                @endcan
-
-                @can('restore', App\Models\Race::class)
-                    <div class="btn-group">
-                        <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-cog"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href='{{ route("backend.races.trashed") }}'>
-                                    <i class="fas fa-archive"></i> {{ __('Archivio') }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                @endcan
-            </x-slot>
-        </x-backend.section-header>
-    </div>
     <div class="card-body">
         <div class="row">
             <div class="col">
@@ -59,11 +55,12 @@
                                 Data
                             </th>
                             <th>
+                                {{ __('Iscrizioni') }}
+                            </th>
+                            <th>
                                 Chiusura iscrizioni
                             </th>
-                            <th class="text-end">
-                                Action
-                            </th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                 </table>
@@ -91,27 +88,43 @@
         autoWidth: true,
         responsive: true,
         ajax: '{{ route("backend.races.index") }}',
+        order: [[2, 'asc']],
         columns: [{
                 data: 'id',
-                name: 'id'
+                name: 'id',
+                visible:false
             },
             {
                 data: 'name',
-                name: 'name'
+                name: 'name',
             },
             {
                 data: 'date',
-                name: 'date'
+                name: 'date',
+                searchable: false,
+            },
+            {
+                data: 'athlete_fee_count',
+                render(data) {
+                    if(data){
+                        return '<span class="badge text-bg-primary">' + data + '</span>';
+                    }
+                    return null;
+                },
+                orderable: false,
+                searchable: false,
             },
             {
                 data: 'subscrible_expiration',
-                name: 'subscrible_expiration'
+                name: 'subscrible_expiration',
+                orderable: false,
+                searchable: false,
             },
             {
                 data: 'action',
                 name: 'action',
+                searchable: false,
                 orderable: false,
-                searchable: false
             }
         ]
     });

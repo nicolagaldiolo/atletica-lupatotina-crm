@@ -107,7 +107,7 @@ $menu->add(__('Operazioni'), [
 
 
             // Races
-            $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Maxi iscrizione'), [
+            $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Iscrizioni'), [
                 'route' => 'backend.races.subscription.create',
                 'class' => 'nav-item',
             ])->data([
@@ -119,7 +119,7 @@ $menu->add(__('Operazioni'), [
             ]);
 
             // Races
-            $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Maxi pagamento'), [
+            $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Pagamenti'), [
                 'route' => 'backend.payments.create',
                 'class' => 'nav-item',
             ])->data([

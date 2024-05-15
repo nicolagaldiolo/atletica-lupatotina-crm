@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Classes\Utility;
 use App\Http\Controllers\Controller;
+use App\Models\AthleteFee;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AthleteFeeController extends Controller
@@ -50,16 +53,24 @@ class AthleteFeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, AthleteFee $athleteFee)
     {
-        //
+        $athleteFee->update([
+            'payed_at' => ($athleteFee->payed_at ? null : Carbon::now())
+        ]);
+        Utility::flashSuccess();
+        return redirect(route('backend.races.athletes', $athleteFee->fee->race));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(AthleteFee $athleteFee)
     {
-        //
+        $athleteFee->load('fee.race');
+        $race = $athleteFee->fee->race;
+        $athleteFee->delete();
+        Utility::flashSuccess();
+        return redirect(route('backend.races.athletes', $race));
     }
 }

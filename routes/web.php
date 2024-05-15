@@ -169,7 +169,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::get('athletes/trashed', 'AthleteController@trashed')->name('athletes.trashed');
     Route::get('athletes/trashed/{id}', 'AthleteController@showTrashed')->name('athletes.trashed.show');
     Route::patch('athletes/trashed/{id}', 'AthleteController@restore')->name('athletes.restore');
+    
     Route::resource('athletes', AthleteController::class)->except('show');
+    Route::get('athletes/{athlete}/races', 'AthleteController@races')->name('athletes.races.index');
 
     Route::get('races/trashed', 'RaceController@trashed')->name('races.trashed');
     Route::get('races/trashed/{id}', 'RaceController@showTrashed')->name('races.trashed.show');
@@ -178,7 +180,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::post('races/subscriptions', 'RaceController@subscriptionStore')->name('races.subscription.store');
     Route::get('races/{race}/athletes', 'RaceController@athletes')->name('races.athletes');
 
-    Route::delete('races/{race}/athleteFees/{athleteFee}', 'RaceController@athletesDestroy')->name('athleteFees.destroy');
+    //Route::delete('races/{race}/athleteFees/{athleteFee}', 'RaceController@athletesDestroy')->name('athleteFees.destroy');
 
     Route::resource('athleteFees', AthleteFeeController::class)->except('show');
 

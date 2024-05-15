@@ -12,35 +12,34 @@
 </x-backend-breadcrumbs>
 @endsection
 
+@section('secondary-nav')
+    <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
+        @can('create', App\Models\Athlete::class)
+            <x-buttons.create route="{{ route('backend.athletes.create') }}" small="true" title="">
+                {{ __('Aggiungi') }}
+            </x-buttons.create>
+        @endcan
+
+        @can('restore', App\Models\Athlete::class)
+            <div class="btn-group">
+                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href='{{ route("backend.athletes.trashed") }}'>
+                            <i class="fas fa-archive"></i> {{ __('Archivio') }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        @endcan
+    </div>
+    
+@endsection
+
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
-            {{ $entity }}
-            <x-slot name="toolbar">
-                @can('create', App\Models\Athlete::class)
-                    <x-buttons.create route="{{ route('backend.athletes.create') }}" small="true" title="">
-                        {{ __('Aggiungi') }}
-                    </x-buttons.create>
-                @endcan
-
-                @can('restore', App\Models\Athlete::class)
-                    <div class="btn-group">
-                        <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-cog"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href='{{ route("backend.athletes.trashed") }}'>
-                                    <i class="fas fa-archive"></i> {{ __('Archivio') }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                @endcan
-            </x-slot>
-        </x-backend.section-header>
-    </div>
     <div class="card-body">
         <div class="row">
             <div class="col">
@@ -51,14 +50,15 @@
                                 #
                             </th>
                             <th>
-                                Name
+                                {{ __('Nome') }}
                             </th>
                             <th>
-                                Da pagare
+                                {{ __('Iscrizioni') }}
                             </th>
-                            <th class="text-end">
-                                Action
+                            <th>
+                                {{ __('Da pagare') }}
                             </th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                 </table>
@@ -91,21 +91,32 @@
             {
                 data: 'id',
                 name: 'id',
-                //visible: false
+                visible: false
             },
             {
                 data: 'name',
                 name: 'name'
             },
             {
+                data: 'fees_count',
+                render(data) {
+                    if(data){
+                        return '<span class="badge text-bg-primary">' + data + '</span>';
+                    }
+                    return null;
+                },
+            },
+            {
                 data: 'fees_to_pay',
                 render(data) {
                     if(data && data.length){
                         let amount = data.reduce((i, item) => i+item.amount, 0);
-                        return '<span class="badge text-bg-primary">' + App.money(amount) + ' (' + data.length + ')</span>';
+                        return '<span class="badge text-bg-danger">' + App.money(amount) + ' (' + data.length + ')</span>';
                     }
                     return null;
                 },
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'action',

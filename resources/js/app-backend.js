@@ -9,7 +9,7 @@ import "/resources/js/backend-custom.js";
 // Enable tooltips everywhere
 const tooltipTriggerList = document.querySelectorAll('[data-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new coreui.Tooltip(tooltipTriggerEl))
-
+/*
 // live clock
 $(function () {
     showTime();
@@ -35,3 +35,4 @@ function showTime() {
 
     setTimeout(showTime, 1000);
 }
+*/
