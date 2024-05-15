@@ -1,0 +1,22 @@
+import:
+  - recipe/laravel.php
+
+config:
+  remote_user: root
+  repository: 'git@github.com:nicolagaldiolo/atleticalupatotina.git'
+  ssh_multiplexing: false
+  keep_releases: 5
+
+hosts:
+  prod:
+    hostname: 142.93.173.88
+    #port: 22
+    deploy_path: '/var/www/test66'
+    branch: 'atleticalupatotina'
+
+tasks:
+  build:
+    - run: uptime
+
+after:
+  deploy:failed: deploy:unlock
