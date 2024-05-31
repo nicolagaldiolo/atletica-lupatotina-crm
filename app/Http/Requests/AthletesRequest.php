@@ -30,7 +30,6 @@ class AthletesRequest extends FormRequest
         return [
             'name' => 'required|max:191',
             'surname' => 'required|max:191',
-            'nickname' => 'nullable|max:191',
             'gender' => ['nullable', new EnumValue(GenderType::class, false)],
             'phone' => 'nullable|max:191',
             'email' => 'nullable|max:191|email|unique:athletes,email,' . $id,
@@ -40,7 +39,7 @@ class AthletesRequest extends FormRequest
             'birth_place' => 'nullable|max:191',
             'birth_date' => 'nullable|date',
             'registration_number' => 'nullable|max:191',
-            'personal_number' => 'nullable|max:191',
+            'size' => 'nullable|max:191',
             '10k' => 'nullable|max:191',
             'half_marathon' => 'nullable|max:191',
             'marathon' => 'nullable|max:191'
@@ -52,7 +51,6 @@ class AthletesRequest extends FormRequest
         return [
             'name' => __('nome'),
             'surname' => __('cognome'),
-            'nickname' => __('nickname'),
             'gender' => __('genere'),
             'phone' => __('telefono'),
             'email' => __('email'),
@@ -62,7 +60,7 @@ class AthletesRequest extends FormRequest
             'birth_place' => __('luogo di nascita'),
             'birth_date' => __('data di nascita'),
             'registration_number' => __('tessera fidal'),
-            'personal_number' => __('pettorale'),
+            'size' => __('taglia'),
             '10k' => __('10mila'),
             'half_marathon' => __('mezza maratona'),
             'marathon' => __('maratona')

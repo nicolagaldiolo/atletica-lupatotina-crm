@@ -48,18 +48,10 @@
                             <th>
                                 #
                             </th>
-                            <th>
-                                Name
-                            </th>
-                            <th>
-                                Data
-                            </th>
-                            <th>
-                                {{ __('Iscrizioni') }}
-                            </th>
-                            <th>
-                                Chiusura iscrizioni
-                            </th>
+                            <th>{{ __('Nome') }}</th>
+                            <th>{{ __('Data') }}</th>
+                            <th>{{ __('Iscrizioni') }}</th>
+                            <th>{{ __('Chiusura iscrizioni') }}</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>

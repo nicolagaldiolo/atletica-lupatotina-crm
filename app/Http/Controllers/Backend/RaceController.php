@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\Athlete;
 use App\Classes\Utility;
+use App\Exports\RaceSubscriptionsExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AthletesRequest;
@@ -12,6 +13,8 @@ use App\Http\Requests\RaceSubscriptionsRequest;
 use App\Models\AthleteFee;
 use App\Models\Fee;
 use App\Models\Race;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 
 class RaceController extends Controller
 {
@@ -185,5 +188,12 @@ class RaceController extends Controller
         }else{
             return view('backend.races.athletes.index', compact('race'));
         }
+    }
+
+    public function subscriptionsList(Race $race)
+    {
+        $race->load(['athleteFee.athlete', 'athleteFee.fee']);
+        $filename = Str::slug("Iscrizione {$race->name}") . ".xlsx";
+        return Excel::download(new RaceSubscriptionsExport($race->athleteFee), $filename);
     }
 }

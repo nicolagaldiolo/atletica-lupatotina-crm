@@ -179,7 +179,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::get('races/subscriptions', 'RaceController@subscriptionCreate')->name('races.subscription.create');
     Route::post('races/subscriptions', 'RaceController@subscriptionStore')->name('races.subscription.store');
     Route::get('races/{race}/athletes', 'RaceController@athletes')->name('races.athletes');
-
+    
+    Route::get('races/{race}/subscriptions-list', 'RaceController@subscriptionsList')->name('races.subscriptions-list');
+    
     //Route::delete('races/{race}/athleteFees/{athleteFee}', 'RaceController@athletesDestroy')->name('athleteFees.destroy');
 
     Route::resource('athleteFees', AthleteFeeController::class)->except('show');

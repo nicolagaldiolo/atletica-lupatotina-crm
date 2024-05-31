@@ -19,6 +19,18 @@
 
 @section('content')
 <div class="card">
+    <div class="card-header">
+        <x-backend.section-header>
+            <x-slot name="toolbar">
+
+                @can('create', App\Models\Race::class)
+                    <x-backend.buttons.download route="{{ route('backend.races.subscriptions-list', $race) }}" small="true" title="">
+                        {{ __('Elenco iscritti') }}
+                    </x-backend.buttons.download>
+                @endcan
+            </x-slot>
+        </x-backend.section-header>
+    </div>
     <div class="card-body">
         <div class="row">
             <div class="col">

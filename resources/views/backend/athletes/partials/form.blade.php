@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-sm-6">
         <div class="form-group mb-3">
             <label for="name">{{ __('Nome') }}</label>
             <span class="text-danger">*</span>
@@ -9,22 +9,13 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-sm-6">
         <div class="form-group mb-3">
             <label for="surname">{{ __('Cognome') }}</label>
             <span class="text-danger">*</span>
             <input name="surname" class="form-control {{ $errors->has('surname') ? 'is-invalid' : '' }}" type="text" value="{{ old('surname', $athlete->surname) }}" @if($disabled) disabled @endif>
             @if ($errors->has('surname'))
                 <div class="invalid-feedback">{{ $errors->first('surname') }}</div>
-            @endif
-        </div>
-    </div>
-    <div class="col-12 col-sm-4">
-        <div class="form-group mb-3">
-            <label for="nickname">{{ __('Soprannome') }}</label>
-            <input name="nickname" class="form-control {{ $errors->has('nickname') ? 'is-invalid' : '' }}" type="text" value="{{ old('nickname', $athlete->nickname) }}" @if($disabled) disabled @endif>
-            @if ($errors->has('nickname'))
-                <div class="invalid-feedback">{{ $errors->first('nickname') }}</div>
             @endif
         </div>
     </div>
@@ -127,10 +118,10 @@
 <div class="row">
     <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
-            <label for="personal_number">{{ __('Pettorale') }}</label>
-            <input name="personal_number" class="form-control {{ $errors->has('personal_number') ? 'is-invalid' : '' }}" type="text" value="{{ old('personal_number', $athlete->personal_number) }}" @if($disabled) disabled @endif>
-            @if ($errors->has('personal_number'))
-                <div class="invalid-feedback">{{ $errors->first('personal_number') }}</div>
+            <label for="size">{{ __('Taglia') }}</label>
+            <input name="size" class="form-control {{ $errors->has('size') ? 'is-invalid' : '' }}" type="text" value="{{ old('size', $athlete->size) }}" @if($disabled) disabled @endif>
+            @if ($errors->has('size'))
+                <div class="invalid-feedback">{{ $errors->first('size') }}</div>
             @endif
         </div>
     </div>

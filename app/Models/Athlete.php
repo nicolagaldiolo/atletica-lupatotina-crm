@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,21 +20,25 @@ class Athlete extends Model
         'gender',
         'phone',
         'email',
-        'nickname',
         'address',
         'zip',
         'city',
         'birth_place',
         'birth_date',
         'registration_number',
-        'personal_number',
+        'size',
         '10k',
         'half_marathon',
         'marathon',
     ];
 
+    protected $casts = [
+        'birth_date' => 'datetime'
+    ];
+
     protected $appends = [
-        'fullname'
+        'fullname',
+        'certificate'
     ];
 
     protected static function boot()
@@ -80,5 +85,10 @@ class Athlete extends Model
     public function getFullnameAttribute()
     {
         return implode(' ', [$this->surname, $this->name]);
+    }
+
+    public function getCertificateAttribute()
+    {
+        return Carbon::now();
     }
 }
