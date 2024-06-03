@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Athlete extends Model
 {
@@ -61,6 +62,15 @@ class Athlete extends Model
     }
     */
 
+    public function getFullnameAttribute()
+    {
+        return implode(' ', [$this->surname, $this->name]);
+    }
+
+    public function getCertificateAttribute()
+    {
+        return Carbon::now();
+    }
 
     public function feesToPay(): BelongsToMany
     {
@@ -71,7 +81,6 @@ class Athlete extends Model
             ->withPivot('payed_at')->wherePivot('payed_at', null);
     }
 
-
     public function fees(): BelongsToMany
     {
         return $this->belongsToMany(Fee::class)
@@ -81,14 +90,8 @@ class Athlete extends Model
             ->withPivot('payed_at');
     }
 
-
-    public function getFullnameAttribute()
+    public function certificates(): HasMany
     {
-        return implode(' ', [$this->surname, $this->name]);
-    }
-
-    public function getCertificateAttribute()
-    {
-        return Carbon::now();
+        return $this->hasMany(Certificate::class);
     }
 }

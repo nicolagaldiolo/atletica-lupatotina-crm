@@ -5,6 +5,7 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Backend\RaceController;
 use App\Http\Controllers\Backend\AthleteController;
 use App\Http\Controllers\Backend\AthleteFeeController;
+use App\Http\Controllers\Backend\CertificateController;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\RaceAthleteController;
 use App\Http\Controllers\Backend\RaceFeeController;
@@ -173,6 +174,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::resource('athletes', AthleteController::class)->except('show');
     Route::get('athletes/{athlete}/races', 'AthleteController@races')->name('athletes.races.index');
 
+    Route::resource('athletes.certificates', CertificateController::class)->except('show');
+
     Route::get('races/trashed', 'RaceController@trashed')->name('races.trashed');
     Route::get('races/trashed/{id}', 'RaceController@showTrashed')->name('races.trashed.show');
     Route::patch('races/trashed/{id}', 'RaceController@restore')->name('races.restore');
@@ -195,4 +198,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::resource('payments', PaymentController::class)->except('show');
 
     Route::get('reports/athletes', 'ReportController@athletes')->name('reports.athletes');
+
+
 });

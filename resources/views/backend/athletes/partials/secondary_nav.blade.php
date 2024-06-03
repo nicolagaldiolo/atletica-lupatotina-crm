@@ -15,6 +15,9 @@
                 <a class="nav-link" aria-current="page" href="{{ route("backend.athletes.edit", $athlete) }}">{{ __('Anagrafica') }}</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="{{ route("backend.athletes.certificates.index", $athlete) }}">{{ __('Dati sanitari') }}</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="{{ route("backend.athletes.races.index", $athlete) }}">{{ __('Iscrizioni') }}</a>
             </li>
         </ul>
