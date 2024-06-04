@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Database\Factories\AthleteFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -38,9 +40,13 @@ class Athlete extends Model
     ];
 
     protected $appends = [
-        'fullname',
-        'certificate'
+        'fullname'
     ];
+
+    protected static function newFactory(): Factory
+    {
+        return AthleteFactory::new();
+    }
 
     protected static function boot()
     {
@@ -67,11 +73,6 @@ class Athlete extends Model
         return implode(' ', [$this->surname, $this->name]);
     }
 
-    public function getCertificateAttribute()
-    {
-        return Carbon::now();
-    }
-
     public function feesToPay(): BelongsToMany
     {
         return $this->belongsToMany(Fee::class)
@@ -93,5 +94,10 @@ class Athlete extends Model
     public function certificates(): HasMany
     {
         return $this->hasMany(Certificate::class);
+    }
+
+    public function certificate()
+    {
+        return $this->certificates()->orderBy('expires_on', 'desc')->limit(1);
     }
 }

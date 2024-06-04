@@ -22,7 +22,7 @@ class AthleteController extends Controller
         $this->authorize('viewAny', Athlete::class);
 
         if (request()->ajax()) {
-            return datatables()->eloquent(Athlete::query()->withCount('fees')->with('feesToPay'))->addColumn('action', function ($athlete) {
+            return datatables()->eloquent(Athlete::query()->withCount('fees')->with(['feesToPay']))->addColumn('action', function ($athlete) {
                 return view('backend.athletes.partials.action_column', compact('athlete'));
             })
             ->filterColumn('name', function($query, $keyword) {
@@ -34,6 +34,8 @@ class AthleteController extends Controller
             })
             ->editColumn('name', function ($data) {
                 return $data->fullname;
+            })->addColumn('certificate', function ($athlete) {
+                return ""; //$athlete && $athlete->certificate ? $athlete->certificate->expires_on : null;
             })->make(true);
         }else{
             return view('backend.athletes.index');

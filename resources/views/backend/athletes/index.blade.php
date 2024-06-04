@@ -53,6 +53,9 @@
                                 {{ __('Nome') }}
                             </th>
                             <th>
+                                {{ __('scadenza certificato') }}
+                            </th>
+                            <th>
                                 {{ __('Iscrizioni') }}
                             </th>
                             <th>
@@ -96,6 +99,13 @@
             {
                 data: 'name',
                 name: 'name'
+            },
+            {
+                data: 'certificate',
+                render(data) {
+                    console.log(data);
+                    return '<span class="badge text-bg-secondary">' + data + '</span>';
+                }
             },
             {
                 data: 'fees_count',

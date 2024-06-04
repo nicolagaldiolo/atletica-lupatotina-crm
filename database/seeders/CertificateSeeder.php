@@ -23,10 +23,11 @@ class CertificateSeeder extends Seeder
         */
 
         Athlete::each(function($athlete){
-            $athlete->certificates()->create([
-                'document' => 'aaa',
-                'expires_on' => Carbon::now()
+            Certificate::factory()->count(10)->create([
+                'athlete_id' => $athlete->id
             ]);
         });
+        
+
     }
 }
