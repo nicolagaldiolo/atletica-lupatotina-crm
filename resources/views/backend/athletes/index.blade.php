@@ -53,7 +53,7 @@
                                 {{ __('Nome') }}
                             </th>
                             <th>
-                                {{ __('scadenza certificato') }}
+                                {{ __('Certificato') }}
                             </th>
                             <th>
                                 {{ __('Iscrizioni') }}
@@ -88,7 +88,11 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("backend.athletes.index") }}',
+        ajax: {
+            url: "{{ route('backend.athletes.index') }}",
+            type: "GET",
+            "datatype": 'json'
+        },
         order: [[ 1, "asc" ]],
         columns: [
             {
@@ -103,8 +107,11 @@
             {
                 data: 'certificate',
                 render(data) {
-                    console.log(data);
-                    return '<span class="badge text-bg-secondary">' + data + '</span>';
+                    if(data){
+                        return '<span class="badge text-bg-' + data.status.status_class + '">' + data.status.date + ' (' + data.status.date_diff + ')</span>';
+                    }
+
+                    return null;
                 }
             },
             {

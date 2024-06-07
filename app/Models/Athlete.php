@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Athlete extends Model
 {
@@ -96,8 +97,8 @@ class Athlete extends Model
         return $this->hasMany(Certificate::class);
     }
 
-    public function certificate()
+    public function certificate(): HasOne
     {
-        return $this->certificates()->orderBy('expires_on', 'desc')->limit(1);
+        return $this->hasOne(Certificate::class);//->orderBy('expires_on', 'desc')->limit(1);
     }
 }

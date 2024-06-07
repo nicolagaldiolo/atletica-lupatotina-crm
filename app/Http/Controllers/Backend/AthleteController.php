@@ -22,21 +22,20 @@ class AthleteController extends Controller
         $this->authorize('viewAny', Athlete::class);
 
         if (request()->ajax()) {
-            return datatables()->eloquent(Athlete::query()->withCount('fees')->with(['feesToPay']))->addColumn('action', function ($athlete) {
-                return view('backend.athletes.partials.action_column', compact('athlete'));
-            })
-            ->filterColumn('name', function($query, $keyword) {
-                $sql = "CONCAT(name, surname)  like ?";
-                $query->whereRaw($sql, ["%{$keyword}%"]);
-            })
-            ->orderColumn('name', function ($query, $order) {
-                $query->orderBy('surname', $order)->orderBy('name', $order);
-            })
-            ->editColumn('name', function ($data) {
-                return $data->fullname;
-            })->addColumn('certificate', function ($athlete) {
-                return ""; //$athlete && $athlete->certificate ? $athlete->certificate->expires_on : null;
-            })->make(true);
+            return datatables()->eloquent(Athlete::query()->withCount('fees')->with(['certificate', 'feesToPay']))
+                ->addColumn('action', function ($athlete) {
+                    return view('backend.athletes.partials.action_column', compact('athlete'));
+                })
+                ->filterColumn('name', function($query, $keyword) {
+                    $sql = "CONCAT(name, surname)  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->orderColumn('name', function ($query, $order) {
+                    $query->orderBy('surname', $order)->orderBy('name', $order);
+                })
+                ->editColumn('name', function ($data) {
+                    return $data->fullname;
+                })->make(true);
         }else{
             return view('backend.athletes.index');
         }

@@ -14,6 +14,16 @@ class CertificateController extends Controller
      */
     public function index(Athlete $athlete)
     {
+        if (request()->ajax()) {
+            return datatables()->eloquent($athlete->certificates())
+            ->addColumn('action', function ($certificate) use($athlete){
+                return view('backend.athletes.certificates.partials.action_column', compact('athlete', 'certificate'));
+            })
+            ->make(true);
+        }else{
+            return view('backend.athletes.certificates.index', compact('athlete'));
+        }
+        
         return $athlete->certificates;
     }
 
@@ -44,9 +54,9 @@ class CertificateController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Certificate $certificate)
+    public function edit(Athlete $athlete, Certificate $certificate)
     {
-        //
+        return view('backend.athletes.certificates.edit', compact('athlete', 'certificate'));
     }
 
     /**
