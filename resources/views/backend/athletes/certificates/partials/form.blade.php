@@ -11,7 +11,7 @@
     </div>
     <div class="col-12 col-sm-4">
         <div class="form-group mb-3">
-            <label for="document">{{ __('Certificato') }}</label>
+            <label for="document">{{ __('File') }}</label>
             <input name="document" class="form-control {{ $errors->has('document') ? 'is-invalid' : '' }}" type="file" value="" @if($disabled) disabled @endif>
             @if ($errors->has('document'))
                 <div class="invalid-feedback">{{ $errors->first('document') }}</div>
@@ -19,6 +19,16 @@
         </div>
     </div>
     <div class="col-12 col-sm-4">
-        <h1>Qui mostro il file</h1>
+        <div class="form-group mb-3">
+            <label for="document"></label>
+            @if($certificate->status['url_download'])
+                <div class="d-grid">
+                    <a class="btn btn-primary btn-full" href="{{ $certificate->status['url_download'] }}" target="_blank">
+                        <i class="fa fa-download"></i>
+                        {{ __('Scarica certificato') }}
+                    </a>
+                </div>
+            @endif
+        </div>
     </div>
 </div>

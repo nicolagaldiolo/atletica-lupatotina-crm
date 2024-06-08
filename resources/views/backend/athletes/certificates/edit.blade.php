@@ -37,7 +37,7 @@
 
 @section('content')
 <div class="card">
-    {{ html()->modelForm($certificate, 'PATCH', route("backend.athletes.certificates.update", [$athlete, $certificate]))->class('form')->open() }}
+    {{ html()->modelForm($certificate, 'PATCH', route("backend.athletes.certificates.update", [$athlete, $certificate]))->acceptsFiles()->class('form')->open() }}
     <div class="card-header">
         <div class="row">
             <div class="col">

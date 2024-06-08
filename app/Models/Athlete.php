@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
+use App\Traits\ModelStorage;
+use Illuminate\Support\Str;
 use Database\Factories\AthleteFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,8 +16,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Athlete extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory,
+        ModelStorage,
+        SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -99,6 +101,6 @@ class Athlete extends Model
 
     public function certificate(): HasOne
     {
-        return $this->hasOne(Certificate::class);//->orderBy('expires_on', 'desc')->limit(1);
+        return $this->hasOne(Certificate::class);
     }
 }

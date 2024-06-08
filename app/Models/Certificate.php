@@ -2,18 +2,23 @@
 
 namespace App\Models;
 
-use App\Enums\CertificateStatus;
 use Carbon\Carbon;
-use Database\Factories\CertificateFactory;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Enums\CertificateStatus;
+use App\Traits\ModelStorage;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Database\Factories\CertificateFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Certificate extends Model
 {
-    use HasFactory;
+    use HasFactory,
+    ModelStorage,
+    SoftDeletes;
 
     protected $fillable = [
         'document',
@@ -62,7 +67,21 @@ class Certificate extends Model
             'date' => $this->expires_on->format('d/m/Y'),
             'date_diff' => $this->expires_on->endOfDay()->diffForHumans(),
             'status' => $status,
-            'status_class' => $status_class
+            'status_class' => $status_class,
+            'url_download' => $this->document && Storage::exists($this->document) ? asset($this->document) : null
         ];
+    }
+
+    public function setDocumentAttribute($image)
+    {
+        if ($image) {
+            $basePath = self::getStorageBasePath(Athlete::getStorageBasePath(null, $this->athlete_id));
+            $result = handleUploadedFile($basePath, $image, $this->getOriginal('document'));
+            if($result){
+                $this->attributes['document'] = $result;
+            }else{
+                throw new \Exception('Immpossibile salvare il file');
+            }
+        }
     }
 }

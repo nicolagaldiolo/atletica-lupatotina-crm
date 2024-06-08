@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Classes\Utility;
 use App\Models\Certificate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AthleteCertificatesRequest;
 use App\Models\Athlete;
 
 class CertificateController extends Controller
@@ -62,9 +64,11 @@ class CertificateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Certificate $certificate)
+    public function update(AthleteCertificatesRequest $request, Athlete $athlete, Certificate $certificate)
     {
-        //
+        $certificate->update($request->validated());
+        Utility::flashSuccess();
+        return redirect(route('backend.athletes.certificates.index', $athlete));
     }
 
     /**

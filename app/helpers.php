@@ -1,5 +1,9 @@
 <?php
 
+use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 /*
  * Global helpers file with misc functions.
  */
@@ -522,5 +526,43 @@ if (! function_exists('demo_mode')) {
         }
 
         return $return_string;
+    }
+}
+
+if (!function_exists('generateFilename')) {
+    /**
+     * Generate filename
+     *
+     * @param string $disk
+     * @param string $path
+     * @param UploadedFile $file
+     * @param integer $count
+     * @return string $filename
+     */
+    function generateFilename(string $path, UploadedFile $file, int $count = 0, string $disk = 'public')
+    {
+
+        $extension = $file->getClientOriginalExtension();
+        $filename = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . ($count == 0 ? "." . $extension :  "-{$count}." . $extension);
+        $filePath = Str::of($path)->finish(DIRECTORY_SEPARATOR)->finish($filename)->toString();
+        if (Storage::disk($disk)->exists($filePath)) {
+            $count++;
+            return generateFilename($path, $file, $count, $disk);
+        }
+
+        return $filename;
+    }
+}
+
+if (!function_exists('handleUploadedFile')) {
+    function handleUploadedFile($path, $image, $oldImage)
+    {
+        // elimino l'immagine precedente se esiste
+        if ($oldImage) {
+            Storage::delete($oldImage);
+        }
+
+        $filename = generateFilename($path, $image);
+        return $image->storeAs($path, $filename);
     }
 }

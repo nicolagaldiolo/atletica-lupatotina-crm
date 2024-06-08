@@ -31,6 +31,9 @@
                             <th>
                                 {{ __('Scadenza') }}
                             </th>
+                            <th>
+                                {{ __('Certificato') }}
+                            </th>
                             <th class="text-end">
                                 Action
                             </th>
@@ -72,6 +75,20 @@
                 render(data) {
                     if(data){
                         return '<span class="badge text-bg-' + data.status_class + '">' + data.date + ' (' + data.date_diff + ')</span>';
+                    }
+
+                    return null;
+                }
+            },
+            {
+                data: null,
+                render(data) {
+                    if(data){
+                        if(data.status.url_download){
+                            return '<a class="btn btn-primary btn-sm" href="' + data.status.url_download + '" target="_blank"><i class="fa-solid fa-download"></i> {{ __("Scarica") }}</a>';
+                        }else{
+                            return '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
+                        }
                     }
 
                     return null;
