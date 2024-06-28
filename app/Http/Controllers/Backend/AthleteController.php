@@ -26,6 +26,9 @@ class AthleteController extends Controller
                 ->addColumn('action', function ($athlete) {
                     return view('backend.athletes.partials.action_column', compact('athlete'));
                 })
+                ->orderColumn('certificate', function ($query, $order) {
+                    $query->orderBy('certificate.expires_on', $order);
+                })
                 ->filterColumn('name', function($query, $keyword) {
                     $sql = "CONCAT(name, surname)  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Athlete;
 
 class BackendController extends Controller
 {
@@ -14,5 +15,50 @@ class BackendController extends Controller
     public function index()
     {
         return view('backend.index');
+    }
+
+    public function certificates()
+    {
+        if (request()->ajax()) {
+
+            $certificates = Athlete::query()->with(['certificate']);
+
+            /*// filtro sulle categorie
+            $category = request()->input('category');
+            if ($category) {
+                $articles->whereHas('categories', function($q) use($category) {
+                    $q->where('pim_categories.id', $category);
+                });
+            }
+                */
+
+            return datatables()->eloquent($certificates)
+                ->filterColumn('name', function($query, $keyword) {
+                    $sql = "CONCAT(name, surname)  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->orderColumn('name', function ($query, $order) {
+                    $query->orderBy('surname', $order)->orderBy('name', $order);
+                })
+                ->editColumn('name', function ($data) {
+                    return $data->fullname;
+                })->make(true);
+                /*
+                ->addColumn('action', function ($athlete) {
+                    return null;
+                    //return view('backend.athletes.partials.action_column', compact('athlete'));
+                })
+                ->filterColumn('name', function($query, $keyword) {
+                    $sql = "CONCAT(name, surname)  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->orderColumn('name', function ($query, $order) {
+                    $query->orderBy('surname', $order)->orderBy('name', $order);
+                })
+                ->editColumn('name', function ($data) {
+                    return $data->fullname;
+                })->make(true);
+                */
+        }
     }
 }

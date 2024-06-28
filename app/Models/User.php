@@ -53,6 +53,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         return $this->hasMany('App\Models\UserProvider');
     }
 
+    public function athlete()
+    {
+        return $this->hasOne(Athlete::class);
+    }
+
     /**
      * Retrieves the profile of the user.
      *

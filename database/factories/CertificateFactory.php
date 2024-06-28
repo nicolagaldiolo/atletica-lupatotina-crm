@@ -24,7 +24,8 @@ class CertificateFactory extends Factory
         return [
             'athlete_id' => Athlete::factory(),
             'expires_on' => fake()->dateTimeBetween('-10 years', '+1 year'),
-            'document' => 'aaa'
+            'is_current' => false,
+            'document' => null
         ];
     }
 }

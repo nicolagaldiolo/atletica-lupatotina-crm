@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('athlete_id')->constrained()->onDelete('cascade');
             $table->string('document')->nullable();
             $table->timestamp('expires_on');
+            $table->boolean('is_current')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

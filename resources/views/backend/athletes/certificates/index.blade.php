@@ -29,10 +29,13 @@
                                 #
                             </th>
                             <th>
+                                {{ __('Attivo') }}
+                            </th>
+                            <th>
                                 {{ __('Scadenza') }}
                             </th>
                             <th>
-                                {{ __('Certificato') }}
+                                {{ __('Documento') }}
                             </th>
                             <th class="text-end">
                                 Action
@@ -69,6 +72,16 @@
                 data: 'id',
                 name: 'id',
                 visible: false
+            },
+            {
+                data: 'is_current',
+                render(data) {
+                    if(data){
+                        return '<i class="fas fa-check-square"></i>';
+                    }
+
+                    return null;
+                }
             },
             {
                 data: 'status',

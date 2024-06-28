@@ -31,6 +31,78 @@
 </div>
 
 <div class="row">
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body p-3 d-flex align-items-center">
+                        <div class="bg-warning text-white p-3 me-3">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <div>
+                            <div class="fs-6 fw-semibold text-warning">$1.999,50</div>
+                            <div class="text-medium-emphasis text-uppercase fw-semibold small">Widget title</div>
+                        </div>
+                    </div>
+                    <div class="card-footer px-3 py-2">
+                        <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="#"><span class="small fw-semibold">View More</span>
+                            <i class="fa-solid fa-circle-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col-->
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body p-3 d-flex align-items-center">
+                        <div class="bg-danger text-white p-3 me-3">
+                            <i class="fa-regular fa-bell"></i>
+                        </div>
+                        <div>
+                            <div class="fs-6 fw-semibold text-danger">$1.999,50</div>
+                            <div class="text-medium-emphasis text-uppercase fw-semibold small">Widget title</div>
+                        </div>
+                    </div>
+                    <div class="card-footer px-3 py-2">
+                        <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="#"><span class="small fw-semibold">View More</span>
+                            <i class="fa-solid fa-circle-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col-->
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #
+                                    </th>
+                                    <th>
+                                        {{ __('Nome') }}
+                                    </th>
+                                    <th>
+                                        {{ __('Certificato') }}
+                                    </th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{--
+<div class="row">
     <div class="col-sm-6 col-lg-3">
         <div class="card mb-4">
             <div class="card-body">
@@ -52,6 +124,11 @@
                     <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                 </div><small class="text-medium-emphasis">Widget helper text</small>
             </div>
+            <div class="card-footer px-3 py-2">
+                <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="#"><span class="small fw-semibold">View More</span>
+                    <i class="fa-solid fa-circle-chevron-right"></i>
+                </a>
+            </div>
         </div>
     </div>
     <!-- /.col-->
@@ -63,6 +140,11 @@
                 <div class="progress progress-thin my-2">
                     <div class="progress-bar bg-warning" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                 </div><small class="text-medium-emphasis">Widget helper text</small>
+            </div>
+            <div class="card-footer px-3 py-2">
+                <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="#"><span class="small fw-semibold">View More</span>
+                    <i class="fa-solid fa-circle-chevron-right"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -105,6 +187,12 @@
                 <div class="progress progress-white progress-thin my-2">
                     <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                 </div><small class="text-medium-emphasis-inverse">Widget helper text</small>
+            </div>
+            <div class="card-footer text-white px-3 py-2">
+                <a class="btn-block text-white text-medium-emphasis d-flex justify-content-between align-items-center" href="#">
+                    <span class="small fw-semibold text-white"> aaa View More</span>
+                    <i class="fa-solid fa-circle-chevron-right"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -176,45 +264,78 @@
         </div>
     </div>
     <!-- /.col-->
-    <div class="col-6 col-lg-3">
-        <div class="card mb-4">
-            <div class="card-body p-3 d-flex align-items-center">
-                <div class="bg-warning text-white p-3 me-3">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-                <div>
-                    <div class="fs-6 fw-semibold text-warning">$1.999,50</div>
-                    <div class="text-medium-emphasis text-uppercase fw-semibold small">Widget title</div>
-                </div>
-            </div>
-            <div class="card-footer px-3 py-2">
-                <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="#"><span class="small fw-semibold">View More</span>
-                    <i class="fa-solid fa-circle-chevron-right"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-    <!-- /.col-->
-    <div class="col-6 col-lg-3">
-        <div class="card mb-4">
-            <div class="card-body p-3 d-flex align-items-center">
-                <div class="bg-danger text-white p-3 me-3">
-                    <i class="fa-regular fa-bell"></i>
-                </div>
-                <div>
-                    <div class="fs-6 fw-semibold text-danger">$1.999,50</div>
-                    <div class="text-medium-emphasis text-uppercase fw-semibold small">Widget title</div>
-                </div>
-            </div>
-            <div class="card-footer px-3 py-2">
-                <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="#"><span class="small fw-semibold">View More</span>
-                    <i class="fa-solid fa-circle-chevron-right"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-    <!-- /.col-->
+    
 </div>
 <!-- /.row-->
+--}}
+
 
 @endsection
+
+@push ('after-styles')
+<!-- DataTables Core and Extensions -->
+<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
+
+@endpush
+
+@push ('after-scripts')
+<!-- DataTables Core and Extensions -->
+<script type="module" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
+
+<script type="module">
+    $('#datatable').DataTable({
+        processing: true,
+        serverSide: true,
+        autoWidth: true,
+        responsive: true,
+        ajax: {
+            url: "{{ route('backend.dashboard.certificates') }}",
+            type: "GET",
+            "datatype": 'json'
+        },
+        //order: [[ 2, "asc" ]],
+        columns: [
+            {
+                data: 'id',
+                name: 'id',
+                visible: false
+            },
+            {
+                data: 'name',
+                name: 'name'
+            },
+            {
+                
+                data: 'certificate',
+                render(data) {
+                    if(data){
+                        return '<span class="badge text-bg-' + data.status.status_class + '">' + data.status.date + ' (' + data.status.date_diff + ')</span>';
+                    }
+
+                    return null;
+                }
+                
+            },
+            {
+                data: null,
+                render(data) {
+                    return null;
+                }
+            }
+            /*{
+                data: 'certificate.expires_on',
+                name: 'certificate.expires_on',
+                render(data) {
+                    if(data){
+                        return '<span class="badge text-bg-' + data.status.status_class + '">' + data.status.date + ' (' + data.status.date_diff + ')</span>';
+                    }
+
+                    return null;
+                }
+            },
+            */
+            
+        ]
+    });
+</script>
+@endpush

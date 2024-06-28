@@ -18,9 +18,14 @@ class CertificateSeeder extends Seeder
         Certificate::truncate();
 
         Athlete::each(function($athlete){
-            Certificate::factory()->count(10)->create([
-                'athlete_id' => $athlete->id
-            ]);
+            for($i = 0; $i<9; $i++){
+                Certificate::factory()->create([
+                    'athlete_id' => $athlete->id,
+                    'expires_on' => Carbon::now()->endOfYear()->subYears($i),
+                    'is_current' => $i == 0,
+
+                ]); 
+            }
         });
         
 

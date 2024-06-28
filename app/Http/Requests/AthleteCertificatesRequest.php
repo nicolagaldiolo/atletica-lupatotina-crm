@@ -24,6 +24,7 @@ class AthleteCertificatesRequest extends FormRequest
         return [
             'document' => 'sometimes|file|extensions:jpg,png,pdf',
             'expires_on' => 'required|date',
+            'is_current' => 'required|boolean',
         ];
     }
 }

@@ -101,6 +101,11 @@ class Athlete extends Model
 
     public function certificate(): HasOne
     {
-        return $this->hasOne(Certificate::class);
+        return $this->hasOne(Certificate::class)->current();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Athlete;
 use App\Models\Payment;
 use App\Models\Race;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -38,5 +39,7 @@ class ImportData extends Command
         Schema::enableForeignKeyConstraints();
 
         Excel::import(new DataImport, 'data.xlsx');
+
+        Artisan::call('db:seed');
     }
 }

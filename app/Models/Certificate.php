@@ -22,10 +22,12 @@ class Certificate extends Model
 
     protected $fillable = [
         'document',
+        'is_current',
         'expires_on'
     ];
 
     protected $casts = [
+        'is_current' => 'boolean',
         'expires_on' => 'datetime'
     ];
 
@@ -42,6 +44,14 @@ class Certificate extends Model
     {
         static::addGlobalScope('expires_on', function (Builder $builder){
             $builder->orderBy('expires_on', 'desc');
+        });
+
+        static::saving(function($model){
+            if($model->is_current){
+                Certificate::where('athlete_id', $model->athlete_id)->whereNot('id', $model->id)->update([
+                    'is_current' => false
+                ]);
+            }
         });
     }
 
@@ -68,7 +78,7 @@ class Certificate extends Model
             'date_diff' => $this->expires_on->endOfDay()->diffForHumans(),
             'status' => $status,
             'status_class' => $status_class,
-            'url_download' => $this->document && Storage::exists($this->document) ? asset($this->document) : null
+            'url_download' => $this->document && Storage::exists($this->document) ? asset('storage/' . $this->document) : null
         ];
     }
 
@@ -83,5 +93,10 @@ class Certificate extends Model
                 throw new \Exception('Immpossibile salvare il file');
             }
         }
+    }
+
+    public function scopeCurrent(Builder $query): void
+    {
+        $query->where('is_current', true);
     }
 }

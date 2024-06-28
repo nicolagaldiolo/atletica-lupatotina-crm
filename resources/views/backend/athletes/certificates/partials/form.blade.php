@@ -1,5 +1,19 @@
 <div class="row">
-    <div class="col-12 col-sm-4">
+    
+    <div class="col-12 col-sm-3">
+        <div class="form-group mb-3">
+            <label for="is_current">{{ __('Certificato corrente') }}</label>
+            <span class="text-danger">*</span>
+            <div class="form-check form-switch form-switch-lg">
+                <input name="is_current" class="form-item" type="hidden" checked value="0">
+                <input class="form-check-input form-item {{ $errors->has('is_current') ? 'is-invalid' : '' }}" type="checkbox" name="is_current" {{ old('is_current', $certificate->is_current) ? 'checked' : "" }} value="1">
+                @if ($errors->has('is_current'))
+                    <div class="invalid-feedback">{{ $errors->first('is_current') }}</div>
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="name">{{ __('Scadenza') }}</label>
             <span class="text-danger">*</span>
@@ -9,7 +23,7 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="document">{{ __('File') }}</label>
             <input name="document" class="form-control {{ $errors->has('document') ? 'is-invalid' : '' }}" type="file" value="" @if($disabled) disabled @endif>
@@ -18,7 +32,7 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="document"></label>
             @if($certificate->status['url_download'])
