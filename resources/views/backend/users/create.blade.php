@@ -4,7 +4,7 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("backend.$module_name.index")}}' icon='{{ $module_icon }}'>
+    <x-backend-breadcrumb-item route='{{route("$module_name.index")}}' icon='{{ $module_icon }}'>
         {{ __($module_title) }}
     </x-backend-breadcrumb-item>
 
@@ -31,7 +31,7 @@
         <div class="row mt-4">
             <div class="col">
 
-                {{ html()->form('POST', route('backend.users.store'))->class('form-horizontal')->open() }}
+                {{ html()->form('POST', route('users.store'))->class('form-horizontal')->open() }}
                 {{ csrf_field() }}
 
                 <div class="form-group row  mb-3">

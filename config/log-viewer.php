@@ -51,7 +51,7 @@ return [
         'enabled' => true,
 
         'attributes' => [
-            'prefix' => 'admin/log-viewer',
+            'prefix' => 'log-viewer',
             'middleware' => ['web', 'auth', 'permission:view_logs'],
         ],
         // 'attributes' => [

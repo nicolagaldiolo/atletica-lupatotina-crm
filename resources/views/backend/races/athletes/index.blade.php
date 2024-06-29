@@ -24,7 +24,7 @@
             <x-slot name="toolbar">
 
                 @can('create', App\Models\Race::class)
-                    <x-backend.buttons.download route="{{ route('backend.races.subscriptions-list', $race) }}" small="true" title="">
+                    <x-backend.buttons.download route="{{ route('races.subscriptions-list', $race) }}" small="true" title="">
                         {{ __('Elenco iscritti') }}
                     </x-backend.buttons.download>
                 @endcan
@@ -79,7 +79,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("backend.races.athletes", $race) }}',
+        ajax: '{{ route("races.athletes", $race) }}',
         columns: [
             {
                 data: 'id',

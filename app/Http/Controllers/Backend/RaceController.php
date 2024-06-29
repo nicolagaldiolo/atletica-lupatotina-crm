@@ -59,8 +59,8 @@ class RaceController extends Controller
     {
         $this->authorize('create', Race::class);
         $race = Race::create($request->validated());
-        Utility::flashSuccess();
-        return redirect(route('backend.races.edit', $race));
+        Utility::flashMessage();
+        return redirect(route('races.edit', $race));
     }
 
     /**
@@ -98,8 +98,8 @@ class RaceController extends Controller
     {
         $this->authorize('update', $race);
         $race->update($request->validated());
-        Utility::flashSuccess();
-        return redirect(route('backend.races.index'));
+        Utility::flashMessage();
+        return redirect(route('races.index'));
     }
 
     /**
@@ -112,8 +112,8 @@ class RaceController extends Controller
     {
         $this->authorize('delete', $race);
         $race->delete();
-        Utility::flashSuccess();
-        return redirect(route('backend.races.index'));
+        Utility::flashMessage();
+        return redirect(route('races.index'));
     }
 
     /**
@@ -154,8 +154,8 @@ class RaceController extends Controller
         $race = Race::onlyTrashed()->findOrFail($id);
         $this->authorize('restore', $race);
         $race->restore();
-        Utility::flashSuccess();
-        return redirect(route('backend.races.edit', $race));
+        Utility::flashMessage();
+        return redirect(route('races.edit', $race));
     }
 
     public function subscriptionCreate()
@@ -170,8 +170,8 @@ class RaceController extends Controller
     {
         //$this->authorize('create', AthleteRace::class);
         Fee::findOrFail($request->get('fee_id'))->athletes()->syncWithoutDetaching($request->get('athletes'));
-        Utility::flashSuccess();
-        return redirect(route('backend.races.subscription.create'));
+        Utility::flashMessage();
+        return redirect(route('races.subscription.create'));
     }
 
     public function athletes(Race $race)

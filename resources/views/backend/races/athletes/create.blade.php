@@ -21,12 +21,12 @@
 
             <x-slot name="toolbar">
                 @can('viewAny', App\Models\Race::class)
-                    <x-backend.buttons.return route='{{ route("backend.races.athletes.index", $race) }}' icon="fas fa-reply" small="true" />
+                    <x-backend.buttons.return route='{{ route("races.athletes.index", $race) }}' icon="fas fa-reply" small="true" />
                 @endcan
             </x-slot>
         </x-backend.section-header>
     </div>
-    {{ html()->form('POST', route("backend.races.athletes.store", [$race]))->class('form')->open() }}
+    {{ html()->form('POST', route("races.athletes.store", [$race]))->class('form')->open() }}
         <div class="card-body">
             @include ("backend.races.athletes.partials.form")
         </div>
@@ -37,7 +37,7 @@
                     <div class="float-end">
                         <div class="form-group">
                             @can('viewAny', App\Models\Race::class)
-                                <x-backend.buttons.return route='{{ route("backend.races.athletes.index", [$race]) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                                <x-backend.buttons.return route='{{ route("races.athletes.index", [$race]) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
                             @endcan
                             @can('create', App\Models\Race::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>

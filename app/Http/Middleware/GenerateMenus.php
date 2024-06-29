@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Enums\AthletePermission;
 use App\Enums\RacePermission;
+use App\Enums\Roles;
 use Closure;
 
 class GenerateMenus
@@ -19,12 +20,12 @@ class GenerateMenus
         \Menu::make('admin_sidebar', function ($menu) {
             // Dashboard
             $menu->add('<i class="nav-icon fa-solid fa-cubes"></i> '.__('Dashboard'), [
-                'route' => 'backend.dashboard',
+                'route' => 'dashboard',
                 'class' => 'nav-item',
             ])
                 ->data([
                     'order' => 1,
-                    'activematches' => 'admin/dashboard*',
+                    'activematches' => 'dashboard*',
                 ])
                 ->link->attr([
                     'class' => 'nav-link',
@@ -32,12 +33,12 @@ class GenerateMenus
 
             // Notifications
             $menu->add('<i class="nav-icon fas fa-bell"></i> Notifiche', [
-                'route' => 'backend.notifications.index',
+                'route' => 'notifications.index',
                 'class' => 'nav-item',
             ])
                 ->data([
                     'order' => 99,
-                    'activematches' => 'admin/notifications*',
+                    'activematches' => 'notifications*',
                     'permission' => [],
                 ])
                 ->link->attr([
@@ -46,11 +47,11 @@ class GenerateMenus
 
 // Athletes
 $menu->add('<i class="nav-icon fas fa-running"></i> ' . __('Tesserati'), [
-    'route' => 'backend.athletes.index',
+    'route' => 'athletes.index',
     'class' => 'nav-item',
 ])->data([
     'order' => 110,
-    'activematches' => 'admin/athletes*',
+    'activematches' => 'athletes*',
     'permission' => [AthletePermission::ListAthletes],
 ])->link->attr([
     'class' => 'nav-link',
@@ -58,11 +59,11 @@ $menu->add('<i class="nav-icon fas fa-running"></i> ' . __('Tesserati'), [
 
 // Archive
 /*$menu->add('<i class="nav-icon fas fa-running"></i> ' . __('Archivio tesserati'), [
-    'route' => 'backend.athletes.trashed',
+    'route' => 'athletes.trashed',
     'class' => 'nav-item',
 ])->data([
     'order' => 110,
-    'activematches' => 'admin/athletes*',
+    'activematches' => 'athletes*',
     'permission' => [AthletePermission::RestoreAthletes],
 ])->link->attr([
     'class' => 'nav-link',
@@ -72,11 +73,11 @@ $menu->add('<i class="nav-icon fas fa-running"></i> ' . __('Tesserati'), [
 
                 // Races
                 $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Elenco gare'), [
-                    'route' => 'backend.races.index',
+                    'route' => 'races.index',
                     'class' => 'nav-item',
                 ])->data([
                     'order' => 101,
-                    'activematches' => 'admin/races*',
+                    'activematches' => 'races*',
                     'permission' => [RacePermission::ListRaces],
                 ])->link->attr([
                     'class' => 'nav-link',
@@ -85,11 +86,11 @@ $menu->add('<i class="nav-icon fas fa-running"></i> ' . __('Tesserati'), [
                 /*
                 // Archive
                 $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Archivio gare'), [
-                    'route' => 'backend.races.trashed',
+                    'route' => 'races.trashed',
                     'class' => 'nav-item',
                 ])->data([
                     'order' => 102,
-                    'activematches' => 'admin/races*',
+                    'activematches' => 'races*',
                     'permission' => [RacePermission::ListRaces],
                 ])->link->attr([
                     'class' => 'nav-link',
@@ -108,11 +109,11 @@ $menu->add(__('Operazioni'), [
 
             // Races
             $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Iscrizioni'), [
-                'route' => 'backend.races.subscription.create',
+                'route' => 'races.subscription.create',
                 'class' => 'nav-item',
             ])->data([
                 'order' => 101,
-                'activematches' => 'admin/races*',
+                'activematches' => 'races*',
                 'permission' => [],
             ])->link->attr([
                 'class' => 'nav-link',
@@ -120,11 +121,11 @@ $menu->add(__('Operazioni'), [
 
             // Races
             $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Pagamenti'), [
-                'route' => 'backend.payments.create',
+                'route' => 'payments.create',
                 'class' => 'nav-item',
             ])->data([
                 'order' => 101,
-                'activematches' => 'admin/races*',
+                'activematches' => 'races*',
                 'permission' => [],
             ])->link->attr([
                 'class' => 'nav-link',
@@ -141,11 +142,11 @@ $menu->add(__('Estrazioni'), [
 
             // Archive
             $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Situazione soci'), [
-                'route' => 'backend.reports.athletes',
+                'route' => 'reports.athletes',
                 'class' => 'nav-item',
             ])->data([
                 'order' => 102,
-                'activematches' => 'admin/reports*',
+                'activematches' => 'reports*',
                 'permission' => [RacePermission::ListRaces],
             ])->link->attr([
                 'class' => 'nav-link',
@@ -165,12 +166,12 @@ $menu->add(__('Estrazioni'), [
 
             // Settings
             $menu->add('<i class="nav-icon fas fa-cogs"></i> Settings', [
-                'route' => 'backend.settings',
+                'route' => 'settings',
                 'class' => 'nav-item',
             ])
                 ->data([
                     'order' => 130,
-                    'activematches' => 'admin/settings*',
+                    'activematches' => 'settings*',
                     'permission' => ['edit_settings'],
                 ])
                 ->link->attr([
@@ -179,12 +180,12 @@ $menu->add(__('Estrazioni'), [
 
             // Backup
             $menu->add('<i class="nav-icon fas fa-archive"></i> Backups', [
-                'route' => 'backend.backups.index',
+                'route' => 'backups.index',
                 'class' => 'nav-item',
             ])
                 ->data([
                     'order' => 140,
-                    'activematches' => 'admin/backups*',
+                    'activematches' => 'backups*',
                     'permission' => ['view_backups'],
                 ])
                 ->link->attr([
@@ -198,8 +199,8 @@ $menu->add(__('Estrazioni'), [
                 ->data([
                     'order' => 150,
                     'activematches' => [
-                        'admin/users*',
-                        'admin/roles*',
+                        'users*',
+                        'roles*',
                     ],
                     'permission' => ['view_users', 'view_roles'],
                 ]);
@@ -210,12 +211,12 @@ $menu->add(__('Estrazioni'), [
 
             // Submenu: Users
             $accessControl->add('<i class="nav-icon fa-solid fa-user-group"></i> Users', [
-                'route' => 'backend.users.index',
+                'route' => 'users.index',
                 'class' => 'nav-item',
             ])
                 ->data([
                     'order' => 160,
-                    'activematches' => 'admin/users*',
+                    'activematches' => 'users*',
                     'permission' => ['view_users'],
                 ])
                 ->link->attr([
@@ -224,12 +225,12 @@ $menu->add(__('Estrazioni'), [
 
             // Submenu: Roles
             $accessControl->add('<i class="nav-icon fa-solid fa-user-shield"></i> Roles', [
-                'route' => 'backend.roles.index',
+                'route' => 'roles.index',
                 'class' => 'nav-item',
             ])
                 ->data([
                     'order' => 170,
-                    'activematches' => 'admin/roles*',
+                    'activematches' => 'roles*',
                     'permission' => ['view_roles'],
                 ])
                 ->link->attr([
@@ -260,7 +261,7 @@ $menu->add(__('Estrazioni'), [
             ])
                 ->data([
                     'order' => 190,
-                    'activematches' => 'admin/log-viewer',
+                    'activematches' => 'log-viewer',
                 ])
                 ->link->attr([
                     'class' => 'nav-link',
@@ -273,7 +274,7 @@ $menu->add(__('Estrazioni'), [
             ])
                 ->data([
                     'order' => 200,
-                    'activematches' => 'admin/log-viewer/logs*',
+                    'activematches' => 'log-viewer/logs*',
                 ])
                 ->link->attr([
                     'class' => 'nav-link',
@@ -283,7 +284,7 @@ $menu->add(__('Estrazioni'), [
             $menu->filter(function ($item) {
                 if ($item->data('permission')) {
                     if (auth()->check()) {
-                        if (auth()->user()->hasRole('super admin')) {
+                        if (auth()->user()->hasRole(Roles::SuperAdmin)) {
                             return true;
                         }
                         if (auth()->user()->hasAnyPermission($item->data('permission'))) {

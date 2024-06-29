@@ -35,7 +35,7 @@ class Athlete extends Model
         'size',
         '10k',
         'half_marathon',
-        'marathon',
+        'marathon'
     ];
 
     protected $casts = [

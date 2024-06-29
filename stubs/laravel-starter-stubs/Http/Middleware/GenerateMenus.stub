@@ -30,7 +30,7 @@ class GenerateMenus
             ])
             ->data([
                 'order'         => 77,
-                'activematches' => ['admin/{{moduleNameLowerPlural}}*'],
+                'activematches' => ['{{moduleNameLowerPlural}}*'],
                 'permission'    => ['view_{{moduleNameLowerPlural}}'],
             ])
             ->link->attr([

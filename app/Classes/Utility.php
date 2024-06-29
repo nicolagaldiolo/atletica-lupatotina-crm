@@ -19,9 +19,26 @@ class Utility
         });
     }
 
-    public static function flashSuccess()
+    public static function flashMessage($type = 'success', $message = null)
     {
-        Flash::success(__('Operazione eseguita con successo'))->important();
+        switch ($type) {
+            case 'error':
+                $icon = '<i class="fas fa-exclamation-triangle fa-lg"></i>';
+                $message = $message ? $message : __('Errore, qualcosa è andato storto');
+                Flash::error($icon . ' ' . $message)->important();
+                break;
+            case 'warning':
+                $icon = '<i class="fas fa-exclamation-triangle fa-lg"></i>';
+                $message = $message ? $message : __('Attenzione, qualcosa è andato storto');
+                Flash::warning($icon . ' ' . $message)->important();
+                break;
+            case 'success':
+            default:
+                $icon = '<i class="fas fa-thumbs-up fa-lg"></i>';
+                $message = $message ? $message : __('Operazione eseguita con successo');
+                Flash::success($icon . ' ' . $message)->important();
+                break;
+        }
     }
 
     public static function dateFormatted(Carbon $date = null)

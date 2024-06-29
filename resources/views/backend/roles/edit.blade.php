@@ -4,7 +4,7 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("backend.$module_name.index")}}' icon='{{ $module_icon }}'>
+    <x-backend-breadcrumb-item route='{{route("$module_name.index")}}' icon='{{ $module_icon }}'>
         {{ __($module_title) }}
     </x-backend-breadcrumb-item>
 
@@ -23,14 +23,14 @@
             </x-slot>
             <x-slot name="toolbar">
                 <x-backend.buttons.return-back />
-                <x-buttons.show route='{!!route("backend.$module_name.show", $$module_name_singular)!!}' title="{{__('Show')}} {{ ucwords(Str::singular($module_name)) }}" class="ms-1" />
+                <x-buttons.show route='{!!route("$module_name.show", $$module_name_singular)!!}' title="{{__('Show')}} {{ ucwords(Str::singular($module_name)) }}" class="ms-1" />
             </x-slot>
         </x-backend.section-header>
 
         <hr>
         <div class="row mt-4">
             <div class="col">
-                {{ html()->modelForm($$module_name_singular, 'PATCH', route("backend.$module_name.update", $$module_name_singular->id))->class('form-horizontal')->open() }}
+                {{ html()->modelForm($$module_name_singular, 'PATCH', route("$module_name.update", $$module_name_singular->id))->class('form-horizontal')->open() }}
 
                 <div class="row mb-3">
                     <?php
@@ -87,7 +87,7 @@
 
                     <div class="col-8">
                         <div class="float-end">
-                            <a href="{{route("backend.$module_name.destroy", $$module_name_singular)}}" class="btn btn-danger" data-method="DELETE" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.delete')}}"><i class="fas fa-trash-alt"></i></a>
+                            <a href="{{route("$module_name.destroy", $$module_name_singular)}}" class="btn btn-danger" data-method="DELETE" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.delete')}}"><i class="fas fa-trash-alt"></i></a>
                             <x-backend.buttons.return-back>Cancel</x-backend.buttons.return-back>
                         </div>
                     </div>

@@ -4,7 +4,7 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("backend.$module_name.index")}}' icon='{{ $module_icon }}'>
+    <x-backend-breadcrumb-item route='{{route("$module_name.index")}}' icon='{{ $module_icon }}'>
         {{ __($module_title) }}
     </x-backend-breadcrumb-item>
 
@@ -22,7 +22,7 @@
         </x-slot>
         <x-slot name="toolbar">
             <x-backend.buttons.return-back />
-            <x-buttons.edit route='{!!route("backend.$module_name.profileEdit", $$module_name_singular)!!}' title="{{__('Edit')}}" />
+            <x-buttons.edit route='{!!route("$module_name.profileEdit", $$module_name_singular)!!}' title="{{__('Edit')}}" />
         </x-slot>
     </x-backend.section-header>
 
@@ -91,7 +91,7 @@
                     <tr>
                         <th>{{ __('labels.backend.users.fields.password') }}</th>
                         <td>
-                            <a href="{{ route('backend.users.changeProfilePassword', $user->id) }}" class="btn btn-outline-primary btn-sm">Change password</a>
+                            <a href="{{ route('users.changeProfilePassword', $user->id) }}" class="btn btn-outline-primary btn-sm">Change password</a>
                         </td>
                     </tr>
 

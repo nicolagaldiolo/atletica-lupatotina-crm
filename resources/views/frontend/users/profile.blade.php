@@ -20,8 +20,8 @@
                     {{$userprofile->url_website}}
                 </a>
                 @else
-                <a class="text-blue-800 hover:text-gray-800" href="{{route('frontend.users.profile', encode_id($$module_name_singular->id))}}">
-                    {{route('frontend.users.profile', encode_id($$module_name_singular->id))}}
+                <a class="text-blue-800 hover:text-gray-800" href="{{route('users.profile', encode_id($$module_name_singular->id))}}">
+                    {{route('users.profile', encode_id($$module_name_singular->id))}}
                 </a>
                 @endif
                 <div class="mt-5 pt-5 flex border-t border-gray-200 w-40 mx-auto text-gray-500 items-center justify-between">
@@ -63,7 +63,7 @@
 
                 @if (auth()->user()->id == $$module_name_singular->id)
                 <div class="mt-8">
-                    <a href='{{ route("frontend.users.profileEdit", encode_id($$module_name_singular->id)) }}'>
+                    <a href='{{ route("users.profileEdit", encode_id($$module_name_singular->id)) }}'>
                         <div class="w-full text-sm px-6 py-2 transition ease-in duration-200 rounded text-gray-500 hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none">
                             Edit Profile
                         </div>
@@ -73,7 +73,7 @@
 
                 @if (auth()->user()->username == $$module_name_singular->username)
                 <div class="mt-8">
-                    <a href="{{ route('frontend.users.changePassword', $$module_name_singular->username) }}">
+                    <a href="{{ route('users.changePassword', $$module_name_singular->username) }}">
                         <div class="w-full text-sm px-6 py-2 transition ease-in duration-200 rounded text-gray-500 hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none">
                             Change Password
                         </div>

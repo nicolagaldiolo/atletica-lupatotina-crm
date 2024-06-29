@@ -15,7 +15,7 @@
 @section('secondary-nav')
     <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
         @can('create', App\Models\Athlete::class)
-            <x-buttons.create route="{{ route('backend.athletes.create') }}" small="true" title="">
+            <x-buttons.create route="{{ route('athletes.create') }}" small="true" title="">
                 {{ __('Aggiungi') }}
             </x-buttons.create>
         @endcan
@@ -27,7 +27,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a class="dropdown-item" href='{{ route("backend.athletes.trashed") }}'>
+                        <a class="dropdown-item" href='{{ route("athletes.trashed") }}'>
                             <i class="fas fa-archive"></i> {{ __('Archivio') }}
                         </a>
                     </li>
@@ -61,6 +61,9 @@
                             <th>
                                 {{ __('Da pagare') }}
                             </th>
+                            <th>
+                                {{ __('Utente registrato') }}
+                            </th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -89,7 +92,7 @@
         autoWidth: true,
         responsive: true,
         ajax: {
-            url: "{{ route('backend.athletes.index') }}",
+            url: "{{ route('athletes.index') }}",
             type: "GET",
             "datatype": 'json'
         },
@@ -134,6 +137,14 @@
                 },
                 searchable: false,
                 orderable: false,
+            },
+            {
+                data: 'user',
+                searchable: false,
+                orderable: false,
+                render(data) {
+                    return data ? '<i class="fas fa-user"></i>' : '<i class="fas fa-user-slash text-secondary"></i>';
+                },
             },
             {
                 data: 'action',

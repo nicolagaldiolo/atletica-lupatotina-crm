@@ -4,7 +4,7 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("backend.$module_name.index")}}' icon='{{ $module_icon }}'>
+    <x-backend-breadcrumb-item route='{{route("$module_name.index")}}' icon='{{ $module_icon }}'>
         {{ __($module_title) }}
     </x-backend-breadcrumb-item>
 
@@ -22,14 +22,14 @@
         </x-slot>
         <x-slot name="toolbar">
             <x-backend.buttons.return-back />
-            <x-buttons.show route='{!!route("backend.$module_name.show", $$module_name_singular)!!}' title="{{__('Show')}} {{ ucwords(Str::singular($module_name)) }}" class="ms-1" />
+            <x-buttons.show route='{!!route("$module_name.show", $$module_name_singular)!!}' title="{{__('Show')}} {{ ucwords(Str::singular($module_name)) }}" class="ms-1" />
         </x-slot>
     </x-backend.section-header>
     <hr>
 
     <div class="row mt-4">
         <div class="col">
-            {{ html()->modelForm($user, 'PATCH', route('backend.users.update', $user->id))->class('form-horizontal')->open() }}
+            {{ html()->modelForm($user, 'PATCH', route('users.update', $user->id))->class('form-horizontal')->open() }}
 
             <div class="row mb-3">
                 <?php
@@ -64,7 +64,7 @@
                 </div>
                 <div class="col-12 col-sm-10">
                     <div class="form-group">
-                        <a href="{{ route('backend.users.changePassword', $user->id) }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-key"></i> Change password</a>
+                        <a href="{{ route('users.changePassword', $user->id) }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-key"></i> Change password</a>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="col-12 col-sm-10">
                     <div class="form-group">
-                        <a href="{{ route('backend.users.profileEdit', $user->id) }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-user"></i> Update Profile</a>
+                        <a href="{{ route('users.profileEdit', $user->id) }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-user"></i> Update Profile</a>
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
                 <div class="col-12 col-sm-10">
                     <div class="form-group">
                         @if ($user->email_verified_at == null)
-                        <a href="{{route('backend.users.emailConfirmationResend', $user->id)}}" class="btn btn-outline-primary btn-sm " data-toggle="tooltip" title="Send Confirmation Email"><i class="fas fa-envelope"></i> Send Confirmation Email</a>
+                        <a href="{{route('users.emailConfirmationResend', $user->id)}}" class="btn btn-outline-primary btn-sm " data-toggle="tooltip" title="Send Confirmation Email"><i class="fas fa-envelope"></i> Send Confirmation Email</a>
                         @else
                         {!! $user->confirmed_label !!}
                         @endif
@@ -204,16 +204,16 @@
                 <div class="col-sm-8">
                     <div class="float-end">
                         @if ($$module_name_singular->status != 2 && $$module_name_singular->id != 1)
-                        <a href="{{route('backend.users.block', $$module_name_singular)}}" class="btn btn-danger" data-method="PATCH" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.block')}}" data-confirm="Are you sure?"><i class="fas fa-ban"></i></a>
+                        <a href="{{route('users.block', $$module_name_singular)}}" class="btn btn-danger" data-method="PATCH" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.block')}}" data-confirm="Are you sure?"><i class="fas fa-ban"></i></a>
                         @endif
                         @if ($$module_name_singular->status == 2)
-                        <a href="{{route('backend.users.unblock', $$module_name_singular)}}" class="btn btn-info" data-method="PATCH" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.unblock')}}" data-confirm="Are you sure?"><i class="fas fa-check"></i> Unblock</a>
+                        <a href="{{route('users.unblock', $$module_name_singular)}}" class="btn btn-info" data-method="PATCH" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.unblock')}}" data-confirm="Are you sure?"><i class="fas fa-check"></i> Unblock</a>
                         @endif
                         @if ($$module_name_singular->email_verified_at == null)
-                        <a href="{{route('backend.users.emailConfirmationResend', $$module_name_singular->id)}}" class="btn btn-primary" data-toggle="tooltip" title="Send Confirmation Email"><i class="fas fa-envelope"></i></a>
+                        <a href="{{route('users.emailConfirmationResend', $$module_name_singular->id)}}" class="btn btn-primary" data-toggle="tooltip" title="Send Confirmation Email"><i class="fas fa-envelope"></i></a>
                         @endif
                         @if($$module_name_singular->id != 1)
-                        <a href="{{route("backend.$module_name.destroy", $$module_name_singular)}}" class="btn btn-danger" data-method="DELETE" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.delete')}}"><i class="fas fa-trash-alt"></i> Delete</a>
+                        <a href="{{route("$module_name.destroy", $$module_name_singular)}}" class="btn btn-danger" data-method="DELETE" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.delete')}}"><i class="fas fa-trash-alt"></i> Delete</a>
                         @endif
                         <x-backend.buttons.return-back>@lang('Cancel')</x-backend.buttons.return-back>
                     </div>

@@ -43,8 +43,8 @@ class PaymentController extends Controller
         foreach($request->get('payments') as $key=>$value){
             Athlete::findOrFail($key)->fees()->syncWithPivotValues(array_keys($value), ['payed_at' => Carbon::now()], false);
         }
-        Utility::flashSuccess();
-        return redirect(route('backend.payments.create'));
+        Utility::flashMessage();
+        return redirect(route('payments.create'));
     }
 
     /**

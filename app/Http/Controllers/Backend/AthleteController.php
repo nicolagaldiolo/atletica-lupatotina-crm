@@ -22,7 +22,7 @@ class AthleteController extends Controller
         $this->authorize('viewAny', Athlete::class);
 
         if (request()->ajax()) {
-            return datatables()->eloquent(Athlete::query()->withCount('fees')->with(['certificate', 'feesToPay']))
+            return datatables()->eloquent(Athlete::query()->withCount('fees')->with(['certificate', 'feesToPay', 'user']))
                 ->addColumn('action', function ($athlete) {
                     return view('backend.athletes.partials.action_column', compact('athlete'));
                 })
@@ -66,8 +66,8 @@ class AthleteController extends Controller
     {
         $this->authorize('create', Athlete::class);
         $athlete = Athlete::create($request->validated());
-        Utility::flashSuccess();
-        return redirect(route('backend.athletes.edit', $athlete));
+        Utility::flashMessage();
+        return redirect(route('athletes.edit', $athlete));
     }
 
     /**
@@ -104,8 +104,8 @@ class AthleteController extends Controller
     {
         $this->authorize('update', $athlete);
         $athlete->update($request->validated());
-        Utility::flashSuccess();
-        return redirect(route('backend.athletes.edit', $athlete));
+        Utility::flashMessage();
+        return redirect(route('athletes.edit', $athlete));
     }
 
     /**
@@ -118,8 +118,8 @@ class AthleteController extends Controller
     {
         $this->authorize('delete', $athlete);
         $athlete->delete();
-        Utility::flashSuccess();
-        return redirect(route('backend.athletes.index'));
+        Utility::flashMessage();
+        return redirect(route('athletes.index'));
     }
 
     /**
@@ -162,8 +162,8 @@ class AthleteController extends Controller
         $athlete = Athlete::onlyTrashed()->findOrFail($id);
         $this->authorize('restore', $athlete);
         $athlete->restore();
-        Utility::flashSuccess();
-        return redirect(route('backend.athletes.edit', $athlete));
+        Utility::flashMessage();
+        return redirect(route('athletes.edit', $athlete));
     }
 
     public function races(Athlete $athlete)

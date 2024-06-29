@@ -11,7 +11,7 @@
 
         <div class="row mt-4">
             <div class="col">
-                {{ html()->modelForm($data, 'PATCH', route("backend.$module_name.update", $data))->class('form')->acceptsFiles()->open() }}
+                {{ html()->modelForm($data, 'PATCH', route("$module_name.update", $data))->class('form')->acceptsFiles()->open() }}
 
                 @include ("$module_path.$module_name.form")
 
@@ -23,7 +23,7 @@
                     <div class="col-8 mt-4">
                         <div class="float-end">
                             @can('delete_'.$module_name)
-                            <a href='{{route("backend.$module_name.destroy", $data)}}' class="btn btn-danger" data-method="DELETE" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('Delete')}}"><i class="fas fa-trash-alt"></i></a>
+                            <a href='{{route("$module_name.destroy", $data)}}' class="btn btn-danger" data-method="DELETE" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('Delete')}}"><i class="fas fa-trash-alt"></i></a>
                             @endcan
                             <x-backend.buttons.cancel />
                         </div>

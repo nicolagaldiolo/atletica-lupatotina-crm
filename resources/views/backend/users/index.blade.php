@@ -20,7 +20,7 @@
             </x-slot>
             <x-slot name="toolbar">
                 @can('add_'.$module_name)
-                <x-buttons.create route='{{ route("backend.$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
+                <x-buttons.create route='{{ route("$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
                 @endcan
 
                 @can('restore_'.$module_name)
@@ -30,7 +30,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href='{{ route("backend.$module_name.trashed") }}'>
+                            <a class="dropdown-item" href='{{ route("$module_name.trashed") }}'>
                                 <i class="fas fa-eye-slash"></i> View trash
                             </a>
                         </li>

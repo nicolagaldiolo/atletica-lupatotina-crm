@@ -8,9 +8,9 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route="{{ route('backend.athletes.index') }}">{{ __('Atleti') }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('backend.athletes.edit', $athlete) }}">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('backend.athletes.certificates.index', $athlete) }}">{{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('athletes.index') }}">{{ __('Atleti') }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('athletes.edit', $athlete) }}">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('athletes.certificates.index', $athlete) }}">{{ $entity }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $certificate->status['date'] }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
 @endsection
@@ -24,7 +24,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route("backend.athletes.certificates.index", $certificate) }}">
+                        <a class="nav-link" aria-current="page" href="{{ route("athletes.certificates.index", $certificate) }}">
                             <i class="far fa-times-circle"></i>
                             {{ __('Chiudi') }}
                         </a>
@@ -37,12 +37,12 @@
 
 @section('content')
 <div class="card">
-    {{ html()->modelForm($certificate, 'PATCH', route("backend.athletes.certificates.update", [$athlete, $certificate]))->acceptsFiles()->class('form')->open() }}
+    {{ html()->modelForm($certificate, 'PATCH', route("athletes.certificates.update", [$athlete, $certificate]))->acceptsFiles()->class('form')->open() }}
     <div class="card-header">
         <div class="row">
             <div class="col">
                 {{--@can('delete', $race)
-                    <x-backend.buttons.delete route='{{ route("backend.races.fees.destroy", [$race, $fee]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+                    <x-backend.buttons.delete route='{{ route("races.fees.destroy", [$race, $fee]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                 @endcan--}}
                 <div class="float-end">
                     {{--@can('update', $race)--}}

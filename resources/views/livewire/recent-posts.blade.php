@@ -11,7 +11,7 @@
         <ul class="flex flex-col">
             @foreach ($recentPosts as $row)
             @php
-            $details_url = route("frontend.posts.show",[encode_id($row->id), $row->slug]);
+            $details_url = route("posts.show",[encode_id($row->id), $row->slug]);
             @endphp
             <li class="border-gray-400 flex flex-row mb-2">
                 <div class="transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer bg-white rounded-md flex flex-1 items-center p-4">

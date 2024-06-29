@@ -20,12 +20,12 @@
 
             <x-slot name="toolbar">
                 {{--@can('viewAny', App\Models\Race::class)
-                    <x-backend.buttons.return route='{{ route("backend.races.athletes.index", $race) }}' icon="fas fa-reply" small="true" />
+                    <x-backend.buttons.return route='{{ route("races.athletes.index", $race) }}' icon="fas fa-reply" small="true" />
                 @endcan--}}
             </x-slot>
         </x-backend.section-header>
     </div>
-    {{ html()->form('POST', route("backend.payments.store"))->class('form')->open() }}
+    {{ html()->form('POST', route("payments.store"))->class('form')->open() }}
         <div class="card-body">
             @foreach ($athletes as $athlete)
                 <div class="card card-accent-primary mb-3">

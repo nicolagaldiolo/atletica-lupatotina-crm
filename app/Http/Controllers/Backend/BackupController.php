@@ -105,7 +105,7 @@ class BackupController extends Controller
         if (demo_mode()) {
             flash(icon().'Backup Creation Skillped on Demo Mode!')->warning()->important();
 
-            return redirect()->route("backend.{$module_path}.index");
+            return redirect()->route("{$module_path}.index");
         }
 
         try {

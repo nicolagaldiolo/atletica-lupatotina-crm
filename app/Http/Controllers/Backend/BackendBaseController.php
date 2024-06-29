@@ -200,7 +200,7 @@ class BackendBaseController extends Controller
 
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 
-        return redirect("admin/{$module_name}");
+        return redirect("{$module_name}");
     }
 
     /**
@@ -288,7 +288,7 @@ class BackendBaseController extends Controller
 
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 
-        return redirect()->route("backend.{$module_name}.show", $$module_name_singular->id);
+        return redirect()->route("{$module_name}.show", $$module_name_singular->id);
     }
 
     /**
@@ -320,7 +320,7 @@ class BackendBaseController extends Controller
 
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 
-        return redirect("admin/{$module_name}");
+        return redirect("{$module_name}");
     }
 
     /**
@@ -379,6 +379,6 @@ class BackendBaseController extends Controller
 
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 
-        return redirect("admin/{$module_name}");
+        return redirect("{$module_name}");
     }
 }

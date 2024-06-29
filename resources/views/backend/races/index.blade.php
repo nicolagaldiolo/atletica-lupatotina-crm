@@ -15,7 +15,7 @@
 @section('secondary-nav')
     <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
         @can('create', App\Models\Race::class)
-            <x-buttons.create route="{{ route('backend.races.create') }}" small="true" title="">
+            <x-buttons.create route="{{ route('races.create') }}" small="true" title="">
                 {{ __('Aggiungi') }}
             </x-buttons.create>
         @endcan
@@ -27,7 +27,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a class="dropdown-item" href='{{ route("backend.races.trashed") }}'>
+                        <a class="dropdown-item" href='{{ route("races.trashed") }}'>
                             <i class="fas fa-archive"></i> {{ __('Archivio') }}
                         </a>
                     </li>
@@ -79,7 +79,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("backend.races.index") }}',
+        ajax: '{{ route("races.index") }}',
         order: [[2, 'asc']],
         columns: [{
                 data: 'id',

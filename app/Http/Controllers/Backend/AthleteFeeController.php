@@ -58,8 +58,8 @@ class AthleteFeeController extends Controller
         $athleteFee->update([
             'payed_at' => ($athleteFee->payed_at ? null : Carbon::now())
         ]);
-        Utility::flashSuccess();
-        return redirect(route('backend.races.athletes', $athleteFee->fee->race));
+        Utility::flashMessage();
+        return redirect(route('races.athletes', $athleteFee->fee->race));
     }
 
     /**
@@ -70,7 +70,7 @@ class AthleteFeeController extends Controller
         $athleteFee->load('fee.race');
         $race = $athleteFee->fee->race;
         $athleteFee->delete();
-        Utility::flashSuccess();
-        return redirect(route('backend.races.athletes', $race));
+        Utility::flashMessage();
+        return redirect(route('races.athletes', $race));
     }
 }

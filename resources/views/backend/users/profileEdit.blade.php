@@ -4,10 +4,10 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("backend.$module_name.index")}}' icon='{{ $module_icon }}'>
+    <x-backend-breadcrumb-item route='{{route("$module_name.index")}}' icon='{{ $module_icon }}'>
         {{ __($module_title) }}
     </x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route='{{route("backend.$module_name.show", $user->id)}}' icon='{{ $module_icon }}'>
+    <x-backend-breadcrumb-item route='{{route("$module_name.show", $user->id)}}' icon='{{ $module_icon }}'>
         {{ $user->name }}
     </x-backend-breadcrumb-item>
 
@@ -32,7 +32,7 @@
 
     <div class="row mt-4">
         <div class="col">
-            {{ html()->modelForm($userprofile, 'PATCH', route('backend.users.profileUpdate', $$module_name_singular->id))->class('form-horizontal')->attributes(['enctype'=>"multipart/form-data"])->open() }}
+            {{ html()->modelForm($userprofile, 'PATCH', route('users.profileUpdate', $$module_name_singular->id))->class('form-horizontal')->attributes(['enctype'=>"multipart/form-data"])->open() }}
             <div class="form-group row">
                 {{ html()->label(__('labels.backend.users.fields.avatar'))->class('col-md-2 form-control-label')->for('name') }}
 

@@ -77,7 +77,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("backend.athletes.trashed") }}',
+        ajax: '{{ route("athletes.trashed") }}',
         columns: [{
                 data: 'id',
                 name: 'id'

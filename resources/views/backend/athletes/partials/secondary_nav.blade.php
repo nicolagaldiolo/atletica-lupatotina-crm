@@ -6,19 +6,19 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{{ route("backend.athletes.index") }}">
+                <a class="nav-link" aria-current="page" href="{{ route("athletes.index") }}">
                     <i class="far fa-times-circle"></i>
                     {{ __('Chiudi') }}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{{ route("backend.athletes.edit", $athlete) }}">{{ __('Anagrafica') }}</a>
+                <a class="nav-link" aria-current="page" href="{{ route("athletes.edit", $athlete) }}">{{ __('Anagrafica') }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{{ route("backend.athletes.certificates.index", $athlete) }}">{{ __('Dati sanitari') }}</a>
+                <a class="nav-link" aria-current="page" href="{{ route("athletes.certificates.index", $athlete) }}">{{ __('Dati sanitari') }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{{ route("backend.athletes.races.index", $athlete) }}">{{ __('Iscrizioni') }}</a>
+                <a class="nav-link" aria-current="page" href="{{ route("athletes.races.index", $athlete) }}">{{ __('Iscrizioni') }}</a>
             </li>
         </ul>
     </div>

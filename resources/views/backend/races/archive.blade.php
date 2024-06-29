@@ -77,7 +77,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("backend.races.trashed") }}',
+        ajax: '{{ route("races.trashed") }}',
         columns: [{
                 data: 'id',
                 name: 'id'

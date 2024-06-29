@@ -8,7 +8,7 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("backend.athletes.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route='{{route("athletes.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
 @endsection
@@ -19,13 +19,13 @@
 
 @section('content')
 
-{{ html()->modelForm($athlete, 'PATCH', route("backend.athletes.update", $athlete))->class('form')->open() }}
+{{ html()->modelForm($athlete, 'PATCH', route("athletes.update", $athlete))->class('form')->open() }}
 <div class="card">
     <div class="card-header">
         <div class="row">
             <div class="col">
                 @can('delete', $athlete)
-                    <x-backend.buttons.delete route='{{ route("backend.athletes.destroy", $athlete) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+                    <x-backend.buttons.delete route='{{ route("athletes.destroy", $athlete) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                 @endcan
                 <div class="float-end">
                     @can('update', $athlete)

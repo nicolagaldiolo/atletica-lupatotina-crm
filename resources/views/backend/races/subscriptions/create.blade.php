@@ -19,7 +19,7 @@
             {{ $entity }}
         </x-backend.section-header>--}}
     </div>
-    {{ html()->form('POST', route("backend.races.subscription.store"))->class('form')->open() }}
+    {{ html()->form('POST', route("races.subscription.store"))->class('form')->open() }}
         <div class="card-body">
             <div class="row">
                 <div class="col-12">

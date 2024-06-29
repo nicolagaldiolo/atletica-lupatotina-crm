@@ -8,9 +8,9 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route="{{ route('backend.races.index') }}">{{ __('Gare') }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('backend.races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('backend.races.fees.index', $race) }}">{{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('races.index') }}">{{ __('Gare') }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('races.fees.index', $race) }}">{{ $entity }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ __('Nuova quota') }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
 
@@ -21,14 +21,14 @@
 
 @section('content')
 <div class="card">
-    {{ html()->form('POST', route("backend.races.fees.store", $race))->class('form')->open() }}
+    {{ html()->form('POST', route("races.fees.store", $race))->class('form')->open() }}
         <div class="card-header">
             <div class="row">
                 <div class="col">
                     <div class="float-end">
                         <div class="form-group">
                             @can('viewAny', App\Models\Athlete::class)
-                                <x-backend.buttons.return route='{{ route("backend.races.fees.index", $race) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                                <x-backend.buttons.return route='{{ route("races.fees.index", $race) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
                             @endcan
                             @can('create', App\Models\Athlete::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>

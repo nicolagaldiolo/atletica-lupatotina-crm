@@ -8,8 +8,8 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route="{{ route('backend.races.index') }}">{{ $entity }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('backend.races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('races.index') }}">{{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route="{{ route('races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ __('Quote') }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
 @endsection
@@ -25,7 +25,7 @@
             <x-slot name="toolbar">
 
                 @can('create', App\Models\Race::class)
-                    <x-buttons.create route="{{ route('backend.races.fees.create', $race) }}" small="true" title="">
+                    <x-buttons.create route="{{ route('races.fees.create', $race) }}" small="true" title="">
                         {{ __('Aggiungi') }}
                     </x-buttons.create>
                 @endcan
@@ -77,7 +77,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("backend.races.fees.index", $race) }}',
+        ajax: '{{ route("races.fees.index", $race) }}',
         columns: [
             {
                 data: 'id',

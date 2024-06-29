@@ -48,8 +48,8 @@ class RaceFeeController extends Controller
     {
         $this->authorize('create', Fee::class);
         $fee = $race->fees()->create($request->validated());
-        Utility::flashSuccess();
-        return redirect(route('backend.races.fees.edit', [$race, $fee]));
+        Utility::flashMessage();
+        return redirect(route('races.fees.edit', [$race, $fee]));
     }
 
     /**
@@ -76,8 +76,8 @@ class RaceFeeController extends Controller
     {
         $this->authorize('update', $fee);
         $fee->update($request->validated());
-        Utility::flashSuccess();
-        return redirect(route('backend.races.fees.edit', [$race, $fee]));
+        Utility::flashMessage();
+        return redirect(route('races.fees.edit', [$race, $fee]));
     }
 
     /**

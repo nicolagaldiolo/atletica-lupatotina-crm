@@ -8,7 +8,7 @@ $module_name_singular = \Illuminate\Support\Str::singular($module_name);
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("backend.$module_name.index")}}' icon='{{ $module_icon }}'>
+    <x-backend-breadcrumb-item route='{{route("$module_name.index")}}' icon='{{ $module_icon }}'>
         {{ __($module_title) }}
     </x-backend-breadcrumb-item>
 
@@ -48,7 +48,7 @@ $module_name_singular = \Illuminate\Support\Str::singular($module_name);
         </div>
         <div class="row mt-4 mb-4">
             <div class="col">
-                {{ html()->form('PATCH', route('backend.users.changeProfilePasswordUpdate', $user->id))->class('form-horizontal')->open() }}
+                {{ html()->form('PATCH', route('users.changeProfilePasswordUpdate', $user->id))->class('form-horizontal')->open() }}
 
                 <div class="form-group row mb-3">
                     {{ html()->label(__('labels.backend.users.fields.password'))->class('col-md-2 form-control-label')->for('password') }}

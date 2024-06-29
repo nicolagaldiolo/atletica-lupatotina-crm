@@ -123,7 +123,7 @@ class RolesController extends Controller
 
         Log::info(label_case($module_title.' '.$module_action).' | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-        return redirect("admin/{$module_name}")->with('flash_success', "{$module_name} added!");
+        return redirect("{$module_name}")->with('flash_success', "{$module_name} added!");
     }
 
     /**
@@ -223,7 +223,7 @@ class RolesController extends Controller
 
         Log::info(label_case($module_title.' '.$module_action).' | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-        return redirect("admin/{$module_name}");
+        return redirect("{$module_name}");
     }
 
     /**
@@ -254,21 +254,21 @@ class RolesController extends Controller
 
             Log::notice(label_case($module_title.' '.$module_action).' Failed | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-            return redirect()->route("backend.{$module_name}.index");
+            return redirect()->route("{$module_name}.index");
         }
         if (in_array($id, $user_roles->toArray())) {
             Flash::warning("<i class='fas fa-exclamation-triangle'></i> You can not delete your Role!")->important();
 
             Log::notice(label_case($module_title.' '.$module_action).' Failed | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-            return redirect()->route("backend.{$module_name}.index");
+            return redirect()->route("{$module_name}.index");
         }
         if ($role_users->count()) {
             Flash::warning("<i class='fas fa-exclamation-triangle'></i> Can not be deleted! ".$role_users->count().' user found!')->important();
 
             Log::notice(label_case($module_title.' '.$module_action).' Failed | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-            return redirect()->route("backend.{$module_name}.index");
+            return redirect()->route("{$module_name}.index");
         }
 
         try {

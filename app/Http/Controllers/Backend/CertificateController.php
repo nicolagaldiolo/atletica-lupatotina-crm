@@ -67,8 +67,8 @@ class CertificateController extends Controller
     public function update(AthleteCertificatesRequest $request, Athlete $athlete, Certificate $certificate)
     {
         $certificate->update($request->validated());
-        Utility::flashSuccess();
-        return redirect(route('backend.athletes.certificates.index', $athlete));
+        Utility::flashMessage();
+        return redirect(route('athletes.certificates.index', $athlete));
     }
 
     /**

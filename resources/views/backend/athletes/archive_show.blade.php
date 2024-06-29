@@ -8,7 +8,7 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("backend.athletes.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route='{{route("athletes.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ __('Nuovo atleta') }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
 @endsection
@@ -20,7 +20,7 @@
             {{ $athlete->fullname }}
             <x-slot name="toolbar">
                 @can('viewAny', App\Models\Athlete::class)
-                    <x-backend.buttons.return route='{{ route("backend.athletes.trashed") }}' icon="fas fa-reply" small="true" />
+                    <x-backend.buttons.return route='{{ route("athletes.trashed") }}' icon="fas fa-reply" small="true" />
                 @endcan
             </x-slot>
         </x-backend.section-header>
@@ -38,7 +38,7 @@
             <div class="col">
                 <div class="float-end">
                     @can('restore', $athlete)
-                    <x-backend.buttons.restore route='{{ route("backend.athletes.restore", $athlete) }}' small="true" data_confirm='Sei sicuro?' data_method="PATCH" data_token="{{csrf_token()}}">{{ __('Reintegra') }} </x-backend.buttons.restore>
+                    <x-backend.buttons.restore route='{{ route("athletes.restore", $athlete) }}' small="true" data_confirm='Sei sicuro?' data_method="PATCH" data_token="{{csrf_token()}}">{{ __('Reintegra') }} </x-backend.buttons.restore>
                     @endcan
                 </div>
             </div>

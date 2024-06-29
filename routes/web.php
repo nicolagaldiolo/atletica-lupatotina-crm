@@ -9,6 +9,8 @@ use App\Http\Controllers\Backend\CertificateController;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\RaceAthleteController;
 use App\Http\Controllers\Backend\RaceFeeController;
+use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\UserInviteController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -28,24 +30,14 @@ require __DIR__.'/auth.php';
 // Language Switch
 Route::get('language/{language}', [LanguageController::class, 'switch'])->name('language.switch');
 
-//Route::get('dashboard', 'App\Http\Controllers\Frontend\FrontendController@index')->name('dashboard');
 /*
-*
-* Frontend Routes
-*
-* --------------------------------------------------------------------
-*/
-Route::group(['namespace' => 'App\Http\Controllers\Frontend', 'as' => 'frontend.'], function () {
-
-
-    /*
     * Redirigo l'utente all'area riservata
     */
     Route::get('/', function () {
-        if(Auth::check()) {
-            return redirect('/admin');
-        } else {
+        if(!Auth::check()) {
             return view('auth.login');
+        } else {
+            
         }
     })->name('index');
 
@@ -71,7 +63,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Frontend', 'as' => 'frontend.
         Route::get("{$module_name}/emailConfirmationResend/{id}", ['as' => "{$module_name}.emailConfirmationResend", 'uses' => "{$controller_name}@emailConfirmationResend"]);
         Route::delete("{$module_name}/userProviderDestroy", ['as' => "{$module_name}.userProviderDestroy", 'uses' => "{$controller_name}@userProviderDestroy"]);
     });
-});
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth', 'can:view_backend']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
@@ -83,7 +74,7 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth',
 * These routes need view-backend permission
 * --------------------------------------------------------------------
 */
-Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin', 'as' => 'backend.', 'middleware' => ['auth', 'can:view_backend']], function () {
+Route::group(['namespace' => 'App\Http\Controllers\Backend', 'middleware' => ['auth', 'can:view_backend']], function () {
     /**
      * Backend Dashboard
      * Namespaces indicate folder structure.

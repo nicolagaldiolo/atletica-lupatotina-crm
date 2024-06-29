@@ -19,7 +19,7 @@
                 @lang(":module_name Management Dashboard", ['module_name'=>Str::title($module_name)])
             </x-slot>
             <x-slot name="toolbar">
-                <x-buttons.create route='{{ route("backend.$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
+                <x-buttons.create route='{{ route("$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
 
                 <div class="btn-group">
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
@@ -27,7 +27,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href='{{ route("backend.$module_name.trashed") }}'>
+                            <a class="dropdown-item" href='{{ route("$module_name.trashed") }}'>
                                 <i class="fas fa-eye-slash"></i> View trash
                             </a>
                         </li>
@@ -91,7 +91,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("backend.$module_name.index_data") }}',
+        ajax: '{{ route("$module_name.index_data") }}',
         columns: [{
                 data: 'id',
                 name: 'id'

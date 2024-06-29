@@ -289,7 +289,7 @@
         autoWidth: true,
         responsive: true,
         ajax: {
-            url: "{{ route('backend.dashboard.certificates') }}",
+            url: "{{ route('dashboard.certificates') }}",
             type: "GET",
             "datatype": 'json'
         },

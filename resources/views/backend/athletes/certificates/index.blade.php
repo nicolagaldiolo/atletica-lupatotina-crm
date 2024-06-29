@@ -8,7 +8,7 @@
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("backend.athletes.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item route='{{route("athletes.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
 @endsection
@@ -66,7 +66,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("backend.athletes.certificates.index", $athlete) }}',
+        ajax: '{{ route("athletes.certificates.index", $athlete) }}',
         columns: [
             {
                 data: 'id',

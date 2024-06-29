@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Authorizable;
+use App\Enums\Roles;
 use App\Events\Backend\UserCreated;
 use App\Events\Backend\UserProfileUpdated;
 use App\Events\Backend\UserUpdated;
@@ -275,7 +276,7 @@ class UserController extends Controller
 
         Log::info(label_case($module_title.' '.$module_action)." | '".$$module_name_singular->name.'(ID:'.$$module_name_singular->id.") ' by User:".auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-        return redirect("admin/{$module_name}");
+        return redirect("{$module_name}");
     }
 
     /**
@@ -427,7 +428,7 @@ class UserController extends Controller
 
         Log::info(label_case($module_title.' '.$module_action).' | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-        return redirect(route('backend.users.profile', $$module_name_singular->id));
+        return redirect(route('users.profile', $$module_name_singular->id));
     }
 
     /**
@@ -489,7 +490,7 @@ class UserController extends Controller
 
         Flash::success(icon()." '".Str::singular($module_title)."' Updated Successfully")->important();
 
-        return redirect("admin/{$module_name}/profile/{$id}");
+        return redirect("{$module_name}/profile/{$id}");
     }
 
     /**
@@ -562,7 +563,7 @@ class UserController extends Controller
 
         Flash::success("<i class='fas fa-check'></i> '".Str::singular($module_title)."' Updated Successfully")->important();
 
-        return redirect("admin/{$module_name}");
+        return redirect("{$module_name}");
     }
 
     /**
@@ -633,9 +634,9 @@ class UserController extends Controller
         $$module_name_singular->update($request->except(['roles', 'permissions']));
 
         if ($id === 1) {
-            $user->syncRoles(['super admin']);
+            $user->syncRoles([Roles::SuperAdmin]);
 
-            return redirect("admin/{$module_name}")->with('flash_success', 'Update successful!');
+            return redirect("{$module_name}")->with('flash_success', 'Update successful!');
         }
 
         $roles = $request['roles'];
@@ -663,7 +664,7 @@ class UserController extends Controller
 
         Log::info(label_case($module_title.' '.$module_action)." | '".$$module_name_singular->name.'(ID:'.$$module_name_singular->id.") ' by User:".auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-        return redirect("admin/{$module_name}");
+        return redirect("{$module_name}");
     }
 
     /**
@@ -703,7 +704,7 @@ class UserController extends Controller
 
         Log::info(label_case($module_action)." '{$module_name}': '".$$module_name_singular->name.', ID:'.$$module_name_singular->id." ' by User:".auth()->user()->name);
 
-        return redirect("admin/{$module_name}");
+        return redirect("{$module_name}");
     }
 
     /**
@@ -762,7 +763,7 @@ class UserController extends Controller
 
         Log::info(label_case($module_action)." '{$module_name}': '".$$module_name_singular->name.', ID:'.$$module_name_singular->id." ' by User:".auth()->user()->name);
 
-        return redirect("admin/{$module_name}");
+        return redirect("{$module_name}");
     }
 
     /**
@@ -908,7 +909,7 @@ class UserController extends Controller
     public function emailConfirmationResend($id)
     {
         if ($id !== auth()->user()->id) {
-            if (auth()->user()->hasAnyRole(['administrator', 'super admin'])) {
+            if (auth()->user()->hasAnyRole([Roles::Administrator, Roles::SuperAdmin])) {
                 Log::info(auth()->user()->name.' ('.auth()->user()->id.') - User Requested for Email Verification.');
             } else {
                 Log::warning(auth()->user()->name.' ('.auth()->user()->id.') - User trying to confirm another users email.');
