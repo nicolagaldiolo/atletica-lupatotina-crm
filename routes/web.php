@@ -9,7 +9,7 @@ use App\Http\Controllers\Backend\CertificateController;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\RaceAthleteController;
 use App\Http\Controllers\Backend\RaceFeeController;
-use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\MyRaceController;
 use App\Http\Controllers\UserInviteController;
 use Illuminate\Support\Facades\Auth;
 
@@ -191,5 +191,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'middleware' => ['a
 
     Route::get('reports/athletes', 'ReportController@athletes')->name('reports.athletes');
 
+    
+    Route::resource('myraces', MyRaceController::class)->only('index');
 
 });

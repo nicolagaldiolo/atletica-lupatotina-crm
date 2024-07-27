@@ -11,7 +11,8 @@
     <div class="card-body">
 
         <x-backend.section-header>
-            @lang("Welcome to", ['name'=>config('app.name')])
+            {{ __('Benvenuto') }} {{ Auth::user()->name }}
+            @lang("", ['name'=>config('app.name')])
 
             <x-slot name="subtitle">
                 {{ date_today() }}
@@ -36,41 +37,59 @@
             <div class="col-lg-6">
                 <div class="card mb-4">
                     <div class="card-body p-3 d-flex align-items-center">
-                        <div class="bg-warning text-white p-3 me-3">
-                            <i class="fa-solid fa-magnifying-glass"></i>
+                        <div class="bg-success text-white p-3 me-3">
+                            <i class="fa-solid fa-coins"></i>
                         </div>
                         <div>
-                            <div class="fs-6 fw-semibold text-warning">$1.999,50</div>
-                            <div class="text-medium-emphasis text-uppercase fw-semibold small">Widget title</div>
+                            <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Gare pagate') }} ({{ $races_payed->count() }})</div>
+                            <div class="fs-6 fw-semibold text-success">@money($races_payed->sum('amount'))</div>
                         </div>
                     </div>
                     <div class="card-footer px-3 py-2">
-                        <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="#"><span class="small fw-semibold">View More</span>
+                        <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route('myraces.index') }}"><span class="small fw-semibold">{{ __('Vai alle gare') }}</span>
                             <i class="fa-solid fa-circle-chevron-right"></i>
                         </a>
                     </div>
                 </div>
             </div>
-            <!-- /.col-->
             <div class="col-lg-6">
                 <div class="card mb-4">
                     <div class="card-body p-3 d-flex align-items-center">
                         <div class="bg-danger text-white p-3 me-3">
-                            <i class="fa-regular fa-bell"></i>
+                            <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                         <div>
-                            <div class="fs-6 fw-semibold text-danger">$1.999,50</div>
-                            <div class="text-medium-emphasis text-uppercase fw-semibold small">Widget title</div>
+                            <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Gare da pagare') }} ({{ $races_to_pay->count() }})</div>
+                            <div class="fs-6 fw-semibold text-danger">@money($races_to_pay->sum('amount'))</div>
+                      
                         </div>
                     </div>
                     <div class="card-footer px-3 py-2">
-                        <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="#"><span class="small fw-semibold">View More</span>
+                        <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route('myraces.index') }}"><span class="small fw-semibold">{{ __('Vai alle gare') }}</span>
                             <i class="fa-solid fa-circle-chevron-right"></i>
                         </a>
                     </div>
                 </div>
             </div>
-            <!-- /.col-->
+            <div class="col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-body p-3 d-flex align-items-center">
+                        <div class="bg-{{ $certificate->status['status_class'] }} text-white p-3 me-3">
+                            <i class="fa-solid fa-stethoscope"></i>
+                        </div>
+                        <div>
+                            <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Scadenza certificato') }}</div>
+                            <div class="fs-6 fw-semibold text-{{ $certificate->status['status_class'] }}">{{ $certificate->status['date'] }} ({{ $certificate->status['date_diff'] }})</div>
+                      
+                        </div>
+                    </div>
+                    <div class="card-footer px-3 py-2">
+                        <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route('myraces.index') }}"><span class="small fw-semibold">{{ __('Vai ai certificati') }}</span>
+                            <i class="fa-solid fa-circle-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-sm-6">

@@ -131,6 +131,27 @@ $menu->add(__('Operazioni'), [
                 'class' => 'nav-link',
             ]);
 
+            // Separator: Access Management
+            $menu->add(__('Profilo'), [
+                'class' => 'nav-title',
+            ])->data([
+                'order' => 105,
+                'permission' => ['view_backend'],
+            ]);
+
+
+            // Races
+            $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Le mie gare'), [
+                'route' => 'myraces.index',
+                'class' => 'nav-item',
+            ])->data([
+                'order' => 101,
+                'activematches' => 'myraces*',
+                'permission' => [],
+            ])->link->attr([
+                'class' => 'nav-link',
+            ]);
+
 
             // Separator: Access Management
 $menu->add(__('Estrazioni'), [

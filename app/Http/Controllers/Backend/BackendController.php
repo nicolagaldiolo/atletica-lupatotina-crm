@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Athlete;
+use Illuminate\Support\Facades\Auth;
 
 class BackendController extends Controller
 {
@@ -14,7 +15,18 @@ class BackendController extends Controller
      */
     public function index()
     {
-        return view('backend.index');
+
+        $races_to_pay = Auth::user()->athlete->fees->filter(function($item){
+            return !$item->athletefee->payed_at;
+        });
+
+        $races_payed = Auth::user()->athlete->fees->filter(function($item){
+            return $item->athletefee->payed_at;
+        });
+
+        $certificate = Auth::user()->athlete->certificate;
+        
+        return view('backend.index', compact('races_payed', 'races_to_pay', 'certificate'));
     }
 
     public function certificates()
