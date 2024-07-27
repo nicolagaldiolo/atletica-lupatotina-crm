@@ -35,7 +35,7 @@
     <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="document"></label>
-            @if($certificate->status['url_download'])
+            @if($certificate && $certificate->status['url_download'])
                 <div class="d-grid">
                     <a class="btn btn-primary btn-full" href="{{ $certificate->status['url_download'] }}" target="_blank">
                         <i class="fa fa-download"></i>

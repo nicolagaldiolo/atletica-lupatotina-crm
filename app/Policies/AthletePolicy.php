@@ -36,9 +36,9 @@ class AthletePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user): bool
+    public function update(User $user, Athlete $athlete): bool
     {
-        return $user->can(AthletePermission::EditAthletes);
+        return $user->can(AthletePermission::EditAthletes) || $user->athlete->id == $athlete->id;
     }
 
     /**

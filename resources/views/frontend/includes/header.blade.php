@@ -82,10 +82,10 @@
                             <i class="fas fa-tachometer-alt fa-fw"></i>&nbsp;{{__('Admin Dashboard')}}
                         </a>
                         @endif
-                        <a href="{{ route('users.profile', encode_id(auth()->user()->id)) }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-orange-600 hover:text-white" role="menuitem">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:bg-orange-600 hover:text-white" role="menuitem">
                             <i class="fas fa-user fa-fw"></i>&nbsp;{{ Auth::user()->name }}
                         </a>
-                        <a href="{{ route('users.profileEdit', encode_id(auth()->user()->id)) }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-orange-600 hover:text-white" role="menuitem">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:bg-orange-600 hover:text-white" role="menuitem">
                             <i class="fas fa-cogs fa-fw"></i>&nbsp;{{__('Settings')}}
                         </a>
                         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 text-sm text-gray-600 hover:bg-orange-600 hover:text-white" role="menuitem">
@@ -97,15 +97,6 @@
                         </form>
                     </div>
                     @endauth
-                    <div x-show="isLocalMenuOpen" @click.away="isLocalMenuOpen = false" x-transition:enter="transition ease-out duration-100 transform" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75 transform" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="origin-top-right absolute right-0 mt-2 py-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="local-menu-button" tabindex="-1">
-                        @foreach(config('app.available_locales') as $locale_code => $locale_name)
-                        <div class="hover:bg-orange-100 px-4 py-1">
-                            <a class="dropdown-item" href="{{route('language.switch', $locale_code)}}">
-                                {{ $locale_name }}
-                            </a>
-                        </div>
-                        @endforeach
-                    </div>
                 </div>
             </div>
         </div>

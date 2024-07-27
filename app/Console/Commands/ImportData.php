@@ -35,7 +35,6 @@ class ImportData extends Command
         Schema::disableForeignKeyConstraints();
         Athlete::truncate();
         Race::truncate();
-        Payment::truncate();
         Schema::enableForeignKeyConstraints();
 
         Excel::import(new DataImport, 'data.xlsx');

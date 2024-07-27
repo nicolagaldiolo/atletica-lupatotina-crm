@@ -1,16 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LanguageController;
-use App\Http\Controllers\Backend\RaceController;
-use App\Http\Controllers\Backend\AthleteController;
-use App\Http\Controllers\Backend\AthleteFeeController;
-use App\Http\Controllers\Backend\CertificateController;
-use App\Http\Controllers\Backend\PaymentController;
-use App\Http\Controllers\Backend\RaceAthleteController;
-use App\Http\Controllers\Backend\RaceFeeController;
-use App\Http\Controllers\Backend\MyRaceController;
-use App\Http\Controllers\UserInviteController;
+use App\Http\Controllers\RaceController;
+use App\Http\Controllers\AthleteController;
+use App\Http\Controllers\AthleteFeeController;
+use App\Http\Controllers\BackendController;
+use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\RaceFeeController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -27,171 +26,46 @@ use Illuminate\Support\Facades\Auth;
 // Auth Routes
 require __DIR__.'/auth.php';
 
-// Language Switch
-Route::get('language/{language}', [LanguageController::class, 'switch'])->name('language.switch');
-
-/*
-    * Redirigo l'utente all'area riservata
-    */
-    Route::get('/', function () {
-        if(!Auth::check()) {
-            return view('auth.login');
-        } else {
-            
-        }
-    })->name('index');
-
-    //Route::get('/', 'FrontendController@index')->name('index');
-    //Route::get('home', 'FrontendController@index')->name('home');
-    //Route::get('privacy', 'FrontendController@privacy')->name('privacy');
-    //Route::get('terms', 'FrontendController@terms')->name('terms');
-
-    Route::group(['middleware' => ['auth']], function () {
-        /*
-        *
-        *  Users Routes
-        *
-        * ---------------------------------------------------------------------
-        */
-        $module_name = 'users';
-        $controller_name = 'UserController';
-        Route::get('profile/{id}', ['as' => "{$module_name}.profile", 'uses' => "{$controller_name}@profile"]);
-        Route::get('profile/{id}/edit', ['as' => "{$module_name}.profileEdit", 'uses' => "{$controller_name}@profileEdit"]);
-        Route::patch('profile/{id}/edit', ['as' => "{$module_name}.profileUpdate", 'uses' => "{$controller_name}@profileUpdate"]);
-        Route::get('profile/changePassword/{id}', ['as' => "{$module_name}.changePassword", 'uses' => "{$controller_name}@changePassword"]);
-        Route::patch('profile/changePassword/{id}', ['as' => "{$module_name}.changePasswordUpdate", 'uses' => "{$controller_name}@changePasswordUpdate"]);
-        Route::get("{$module_name}/emailConfirmationResend/{id}", ['as' => "{$module_name}.emailConfirmationResend", 'uses' => "{$controller_name}@emailConfirmationResend"]);
-        Route::delete("{$module_name}/userProviderDestroy", ['as' => "{$module_name}.userProviderDestroy", 'uses' => "{$controller_name}@userProviderDestroy"]);
-    });
-
-Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth', 'can:view_backend']], function () {
-    \UniSharp\LaravelFilemanager\Lfm::routes();
-});
-
 /*
 *
 * Backend Routes
 * These routes need view-backend permission
 * --------------------------------------------------------------------
 */
-Route::group(['namespace' => 'App\Http\Controllers\Backend', 'middleware' => ['auth', 'can:view_backend']], function () {
-    /**
-     * Backend Dashboard
-     * Namespaces indicate folder structure.
-     */
-    Route::get('/', 'BackendController@index')->name('home');
-    Route::get('dashboard', 'BackendController@index')->name('dashboard');
-    Route::get('dashboard/certificates', 'BackendController@certificates')->name('dashboard.certificates');
 
-    /*
-     *
-     *  Settings Routes
-     *
-     * ---------------------------------------------------------------------
-     */
-    Route::group(['middleware' => ['permission:edit_settings']], function () {
-        $module_name = 'settings';
-        $controller_name = 'SettingController';
-        Route::get("{$module_name}", "{$controller_name}@index")->name("{$module_name}");
-        Route::post("{$module_name}", "{$controller_name}@store")->name("{$module_name}.store");
-    });
-
-    /*
-    *
-    *  Notification Routes
-    *
-    * ---------------------------------------------------------------------
-    */
-    $module_name = 'notifications';
-    $controller_name = 'NotificationsController';
-    Route::get("{$module_name}", ['as' => "{$module_name}.index", 'uses' => "{$controller_name}@index"]);
-    Route::get("{$module_name}/markAllAsRead", ['as' => "{$module_name}.markAllAsRead", 'uses' => "{$controller_name}@markAllAsRead"]);
-    Route::delete("{$module_name}/deleteAll", ['as' => "{$module_name}.deleteAll", 'uses' => "{$controller_name}@deleteAll"]);
-    Route::get("{$module_name}/{id}", ['as' => "{$module_name}.show", 'uses' => "{$controller_name}@show"]);
-
-    /*
-    *
-    *  Backup Routes
-    *
-    * ---------------------------------------------------------------------
-    */
-    $module_name = 'backups';
-    $controller_name = 'BackupController';
-    Route::get("{$module_name}", ['as' => "{$module_name}.index", 'uses' => "{$controller_name}@index"]);
-    Route::get("{$module_name}/create", ['as' => "{$module_name}.create", 'uses' => "{$controller_name}@create"]);
-    Route::get("{$module_name}/download/{file_name}", ['as' => "{$module_name}.download", 'uses' => "{$controller_name}@download"]);
-    Route::get("{$module_name}/delete/{file_name}", ['as' => "{$module_name}.delete", 'uses' => "{$controller_name}@delete"]);
-
-    /*
-    *
-    *  Roles Routes
-    *
-    * ---------------------------------------------------------------------
-    */
-    $module_name = 'roles';
-    $controller_name = 'RolesController';
-    Route::resource("{$module_name}", "{$controller_name}");
-
-    /*
-    *
-    *  Users Routes
-    *
-    * ---------------------------------------------------------------------
-    */
-    $module_name = 'users';
-    $controller_name = 'UserController';
-    Route::get("{$module_name}/profile/{id}", ['as' => "{$module_name}.profile", 'uses' => "{$controller_name}@profile"]);
-    Route::get("{$module_name}/profile/{id}/edit", ['as' => "{$module_name}.profileEdit", 'uses' => "{$controller_name}@profileEdit"]);
-    Route::patch("{$module_name}/profile/{id}/edit", ['as' => "{$module_name}.profileUpdate", 'uses' => "{$controller_name}@profileUpdate"]);
-    Route::get("{$module_name}/emailConfirmationResend/{id}", ['as' => "{$module_name}.emailConfirmationResend", 'uses' => "{$controller_name}@emailConfirmationResend"]);
-    Route::delete("{$module_name}/userProviderDestroy", ['as' => "{$module_name}.userProviderDestroy", 'uses' => "{$controller_name}@userProviderDestroy"]);
-    Route::get("{$module_name}/profile/changeProfilePassword/{id}", ['as' => "{$module_name}.changeProfilePassword", 'uses' => "{$controller_name}@changeProfilePassword"]);
-    Route::patch("{$module_name}/profile/changeProfilePassword/{id}", ['as' => "{$module_name}.changeProfilePasswordUpdate", 'uses' => "{$controller_name}@changeProfilePasswordUpdate"]);
-    Route::get("{$module_name}/changePassword/{id}", ['as' => "{$module_name}.changePassword", 'uses' => "{$controller_name}@changePassword"]);
-    Route::patch("{$module_name}/changePassword/{id}", ['as' => "{$module_name}.changePasswordUpdate", 'uses' => "{$controller_name}@changePasswordUpdate"]);
-    Route::get("{$module_name}/trashed", ['as' => "{$module_name}.trashed", 'uses' => "{$controller_name}@trashed"]);
-    Route::patch("{$module_name}/trashed/{id}", ['as' => "{$module_name}.restore", 'uses' => "{$controller_name}@restore"]);
-    Route::get("{$module_name}/index_data", ['as' => "{$module_name}.index_data", 'uses' => "{$controller_name}@index_data"]);
-    Route::get("{$module_name}/index_list", ['as' => "{$module_name}.index_list", 'uses' => "{$controller_name}@index_list"]);
-    Route::resource("{$module_name}", "{$controller_name}");
-    Route::patch("{$module_name}/{id}/block", ['as' => "{$module_name}.block", 'uses' => "{$controller_name}@block", 'middleware' => ['permission:block_users']]);
-    Route::patch("{$module_name}/{id}/unblock", ['as' => "{$module_name}.unblock", 'uses' => "{$controller_name}@unblock", 'middleware' => ['permission:block_users']]);
-
-    //Route::get('categories/create/{parent_id?}', 'CategoriesController@create')->name('categories.create');
-
-    Route::get('athletes/trashed', 'AthleteController@trashed')->name('athletes.trashed');
-    Route::get('athletes/trashed/{id}', 'AthleteController@showTrashed')->name('athletes.trashed.show');
-    Route::patch('athletes/trashed/{id}', 'AthleteController@restore')->name('athletes.restore');
+Route::group(['middleware' => ['auth', 'can:view_backend']], function () {
     
+    Route::get('/', [BackendController::class, 'index'])->name('index');
+    Route::get('dashboard', [BackendController::class, 'index'])->name('dashboard');
+    Route::get('dashboard/certificates', [BackendController::class, 'certificates'])->name('dashboard.certificates');
+    
+    Route::resource("roles", RolesController::class);
+
+    Route::get("users/changePassword/{id}", [UserController::class, 'changePassword'])->name('users.changePassword');
+    Route::patch("users/changePassword/{id}", ['as' => "users.changePasswordUpdate", 'uses' => "UserController@changePasswordUpdate"]);
+    Route::get("users/trashed", ['as' => "users.trashed", 'uses' => "UserController@trashed"]);
+    Route::patch("users/trashed/{id}", ['as' => "users.restore", 'uses' => "UserController@restore"]);
+    Route::get("users/index_data", ['as' => "users.index_data", 'uses' => "UserController@index_data"]);
+    Route::get("users/index_list", ['as' => "users.index_list", 'uses' => "UserController@index_list"]);
+    Route::resource("users", UserController::class);
+    Route::patch("users/{id}/block", ['as' => "users.block", 'uses' => "UserController@block", 'middleware' => ['permission:block_users']]);
+    Route::patch("users/{id}/unblock", ['as' => "users.unblock", 'uses' => "UserController@unblock", 'middleware' => ['permission:block_users']]);
+
+    Route::get('athletes/trashed', [AthleteController::class, 'trashed'])->name('athletes.trashed');
+    Route::get('athletes/trashed/{id}', [AthleteController::class, 'showTrashed'])->name('athletes.trashed.show');
+    Route::patch('athletes/trashed/{id}', [AthleteController::class, 'restore'])->name('athletes.restore');
     Route::resource('athletes', AthleteController::class)->except('show');
-    Route::get('athletes/{athlete}/races', 'AthleteController@races')->name('athletes.races.index');
-
+    Route::get('athletes/{athlete}/races', [AthleteController::class, 'races'])->name('athletes.races.index');
     Route::resource('athletes.certificates', CertificateController::class)->except('show');
-
-    Route::get('races/trashed', 'RaceController@trashed')->name('races.trashed');
-    Route::get('races/trashed/{id}', 'RaceController@showTrashed')->name('races.trashed.show');
-    Route::patch('races/trashed/{id}', 'RaceController@restore')->name('races.restore');
-    Route::get('races/subscriptions', 'RaceController@subscriptionCreate')->name('races.subscription.create');
-    Route::post('races/subscriptions', 'RaceController@subscriptionStore')->name('races.subscription.store');
-    Route::get('races/{race}/athletes', 'RaceController@athletes')->name('races.athletes');
-    
-    Route::get('races/{race}/subscriptions-list', 'RaceController@subscriptionsList')->name('races.subscriptions-list');
-    
-    //Route::delete('races/{race}/athleteFees/{athleteFee}', 'RaceController@athletesDestroy')->name('athleteFees.destroy');
-
+    Route::get('races/trashed', [RaceController::class, 'trashed'])->name('races.trashed');
+    Route::get('races/trashed/{id}', [RaceController::class, 'showTrashed'])->name('races.trashed.show');
+    Route::patch('races/trashed/{id}', [RaceController::class, 'restore'])->name('races.restore');
+    Route::get('races/subscriptions', [RaceController::class, 'subscriptionCreate'])->name('races.subscription.create');
+    Route::post('races/subscriptions', [RaceController::class, 'subscriptionStore'])->name('races.subscription.store');
+    Route::get('races/{race}/athletes', [RaceController::class, 'athletes'])->name('races.athletes');
+    Route::get('races/{race}/subscriptions-list', [RaceController::class, 'subscriptionsList'])->name('races.subscriptions-list');
     Route::resource('athleteFees', AthleteFeeController::class)->except('show');
-
     Route::resource('races', RaceController::class)->except('show');
-
-    //Route::resource('races.athletes', RaceAthleteController::class)->except('show');
-
     Route::resource('races.fees', RaceFeeController::class)->except('show');
-
-    Route::resource('payments', PaymentController::class)->except('show');
-
-    Route::get('reports/athletes', 'ReportController@athletes')->name('reports.athletes');
-
-    
-    Route::resource('myraces', MyRaceController::class)->only('index');
-
+    Route::get('reports/athletes', [ReportController::class, 'athletes'])->name('reports.athletes');
 });

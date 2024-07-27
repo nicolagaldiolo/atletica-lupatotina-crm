@@ -43,16 +43,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'password', 'remember_token',
     ];
 
-    /**
-     * Retrieve the providers associated with the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function providers()
-    {
-        return $this->hasMany('App\Models\UserProvider');
-    }
-
     public function athlete()
     {
         return $this->hasOne(Athlete::class);
@@ -64,16 +54,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function profile()
-    {
-        return $this->hasOne('App\Models\Userprofile');
-    }
-
-    /**
-     * Get the user profile associated with the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function userprofile()
     {
         return $this->hasOne('App\Models\Userprofile');
     }
@@ -95,38 +75,5 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     public function routeNotificationForSlack($notification)
     {
         return env('SLACK_NOTIFICATION_WEBHOOK');
-    }
-
-    /**
-     * Boot the model.
-     *
-     * Register the model's event listeners.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        // create a event to happen on creating
-        static::creating(function ($table) {
-            $table->created_by = Auth::id();
-        });
-
-        // create a event to happen on updating
-        static::updating(function ($table) {
-            $table->updated_by = Auth::id();
-        });
-
-        // create a event to happen on saving
-        static::saving(function ($table) {
-            $table->updated_by = Auth::id();
-        });
-
-        // create a event to happen on deleting
-        static::deleting(function ($table) {
-            $table->deleted_by = Auth::id();
-            $table->save();
-        });
     }
 }

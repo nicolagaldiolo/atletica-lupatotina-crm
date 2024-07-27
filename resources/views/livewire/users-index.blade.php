@@ -51,17 +51,9 @@
                                 @endif
                             </td>
                             <td>
-                                <ul class="list-unstyled">
-                                    @foreach ($user->providers as $provider)
-                                    <li>
-                                        <i class="fab fa-{{ $provider->provider }}"></i> {{ label_case($provider->provider) }}
-                                    </li>
-                                    @endforeach
-                                </ul>
                             </td>
 
                             <td class="text-end">
-                                <a href="{{route('users.show', $user)}}" class="btn btn-success btn-sm mt-1" data-toggle="tooltip" title="{{__('labels.backend.show')}}"><i class="fas fa-desktop"></i></a>
                                 @can('edit_users')
                                 <a href="{{route('users.edit', $user)}}" class="btn btn-primary btn-sm mt-1" data-toggle="tooltip" title="{{__('labels.backend.edit')}}"><i class="fas fa-wrench"></i></a>
                                 <a href="{{route('users.changePassword', $user)}}" class="btn btn-info btn-sm mt-1" data-toggle="tooltip" title="{{__('labels.backend.changePassword')}}"><i class="fas fa-key"></i></a>

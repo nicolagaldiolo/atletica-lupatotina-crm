@@ -92,7 +92,10 @@
                 data: 'created_at'
             },
             {
-                data: 'payed_at'
+                data: 'payed_at',
+                render(data) {
+                    return data ? '<i class="fa-solid fa-coins"></i> (' + data + ')' : '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
+                }
             },
             //{
             //    data: 'action',
@@ -102,6 +105,11 @@
             //}
         ],
         ordering: false,
+        createdRow: function( row, data, dataIndex){
+            if(!data.payed_at){
+                $(row).addClass('table-danger');
+            }
+        }
     });
 </script>
 @endpush
