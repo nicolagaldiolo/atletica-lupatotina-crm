@@ -11,7 +11,9 @@
     <x-backend-breadcrumb-item route="{{ route('athletes.index') }}">{{ __('Atleti') }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item route="{{ route('athletes.edit', $athlete) }}">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item route="{{ route('athletes.certificates.index', $athlete) }}">{{ $entity }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item type="active">{{ $certificate->status['date'] }}</x-backend-breadcrumb-item>
+    @if($certificate)
+        <x-backend-breadcrumb-item type="active">{{ $certificate->status['date'] }}</x-backend-breadcrumb-item>
+    @endif
 </x-backend-breadcrumbs>
 @endsection
 
