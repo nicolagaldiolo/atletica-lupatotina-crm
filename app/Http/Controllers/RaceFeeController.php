@@ -47,9 +47,9 @@ class RaceFeeController extends Controller
     public function store(FeesRequest $request, Race $race)
     {
         $this->authorize('create', Fee::class);
-        $fee = $race->fees()->create($request->validated());
+        $race->fees()->create($request->validated());
         Utility::flashMessage();
-        return redirect(route('races.fees.edit', [$race, $fee]));
+        return redirect(route('races.fees.index', $race));
     }
 
     /**
@@ -77,7 +77,7 @@ class RaceFeeController extends Controller
         $this->authorize('update', $fee);
         $fee->update($request->validated());
         Utility::flashMessage();
-        return redirect(route('races.fees.edit', [$race, $fee]));
+        return redirect(route('races.fees.index', $race));
     }
 
     /**

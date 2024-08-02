@@ -18,7 +18,6 @@ return new class extends Migration
             $table->timestamp('date');
             $table->boolean('is_subscrible')->default(0);
             $table->timestamp('subscrible_expiration')->nullable();
-            $table->boolean('is_visible_on_site')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -18,8 +18,7 @@ class Race extends Model
         'distance',
         'date',
         'is_subscrible',
-        'subscrible_expiration',
-        'is_visible_on_site'
+        'subscrible_expiration'        
     ];
 
     /**
@@ -30,8 +29,7 @@ class Race extends Model
     protected $casts = [
         'date' => 'datetime',
         'subscrible_expiration' => 'datetime',
-        'is_subscrible' => 'boolean',
-        'is_visible_on_site' => 'boolean'
+        'is_subscrible' => 'boolean'
     ];
 
     public function athleteFee(): HasManyThrough

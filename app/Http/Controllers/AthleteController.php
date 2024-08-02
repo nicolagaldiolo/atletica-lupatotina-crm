@@ -67,7 +67,7 @@ class AthleteController extends Controller
         $this->authorize('create', Athlete::class);
         $athlete = Athlete::create($request->validated());
         Utility::flashMessage();
-        return redirect(route('athletes.edit', $athlete));
+        return redirect(route('athletes.index'));
     }
 
     /**
@@ -105,7 +105,7 @@ class AthleteController extends Controller
         $this->authorize('update', $athlete);
         $athlete->update($request->validated());
         Utility::flashMessage();
-        return redirect(route('athletes.edit', $athlete));
+        return redirect(route('athletes.index'));
     }
 
     /**

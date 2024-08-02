@@ -32,7 +32,7 @@
                 <td>{{ $subscription->athlete->birth_place }}</td>
                 <td>@date($subscription->athlete->birth_date)</td>
                 <td>{{ $subscription->athlete->registration_number }}</td>
-                <td>@date($subscription->athlete->certificate)</td>
+                <td>@date($subscription->athlete->certificate->expires_on)</td>
                 <td>{{ $subscription->fee->name }}</td>
                 <td>@date($subscription->fee->expired_at)</td>
                 <td>@money($subscription->fee->amount)</td>

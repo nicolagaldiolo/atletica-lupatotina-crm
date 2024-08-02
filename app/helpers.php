@@ -147,27 +147,6 @@ if (! function_exists('fielf_required')) {
         return $return_text;
     }
 }
-
-/**
- * Get or Set the Settings Values.
- */
-if (! function_exists('setting')) {
-    function setting($key, $default = null)
-    {
-        if (is_null($key)) {
-            return new App\Models\Setting();
-        }
-
-        if (is_array($key)) {
-            return App\Models\Setting::set($key[0], $key[1]);
-        }
-
-        $value = App\Models\Setting::get($key);
-
-        return is_null($value) ? value($default) : $value;
-    }
-}
-
 /*
  * Show Human readable file size
  */
@@ -505,27 +484,6 @@ if (! function_exists('language_direction')) {
         }
 
         return 'ltr';
-    }
-}
-
-/*
- * Application Demo Mode check
- */
-if (! function_exists('demo_mode')) {
-    /**
-     * Helper to grab the application name.
-     *
-     * @return mixed
-     */
-    function demo_mode()
-    {
-        $return_string = false;
-
-        if (env('DEMO_MODE') === 'true') {
-            $return_string = true;
-        }
-
-        return $return_string;
     }
 }
 

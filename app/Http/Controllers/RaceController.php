@@ -60,7 +60,7 @@ class RaceController extends Controller
         $this->authorize('create', Race::class);
         $race = Race::create($request->validated());
         Utility::flashMessage();
-        return redirect(route('races.edit', $race));
+        return redirect(route('races.index'));
     }
 
     /**
@@ -160,7 +160,7 @@ class RaceController extends Controller
 
     public function subscriptionCreate()
     {
-        $races = Race::with('fees')->get();
+        $races = Race::whereHas('fees')->with('fees')->get();
 
         $athletes = Athlete::all();
         return view('backend.races.subscriptions.create', compact('races', 'athletes'));

@@ -22,25 +22,24 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     use SoftDeletes;
     use UserPresenter;
 
-    protected $guarded = [
-        'id',
-        'updated_at',
-        '_token',
-        '_method',
-        'password_confirmation',
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'avatar',
     ];
 
     protected $casts = [
-        'deleted_at' => 'datetime',
-        'date_of_birth' => 'datetime',
         'email_verified_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
     /**
      * The attributes that should be hidden for arrays.
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 
+        'remember_token'
     ];
 
     public function athlete()
@@ -49,21 +48,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     }
 
     /**
-     * Retrieves the profile of the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function profile()
-    {
-        return $this->hasOne('App\Models\Userprofile');
-    }
-
-    /**
      * Get the list of users related to the current User.
      */
     public function getRolesListAttribute()
     {
         return array_map('intval', $this->roles->pluck('id')->toArray());
+    }
+
+    public function getAvatarAttribute()
+    {
+        return $this->attributes['avatar'] ? $this->attributes['avatar'] : "img/default-avatar.jpg";
     }
 
     /**

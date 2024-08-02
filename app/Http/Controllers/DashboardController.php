@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Athlete;
 use Illuminate\Support\Facades\Auth;
 
-class BackendController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Show the application dashboard.

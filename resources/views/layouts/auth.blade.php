@@ -6,8 +6,8 @@
     <link rel="icon" type="image/png" href="{{asset('img/favicon.png')}}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{asset('img/favicon.png')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ setting('meta_description') }}">
-    <meta name="keyword" content="{{ setting('meta_keyword') }}">
+    <meta name="description" content="aaaa">
+    <meta name="keyword" content="aaaa">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ $title }} - {{ config('app.name', 'Laravel') }}</title>
@@ -19,9 +19,6 @@
     @stack('before-styles')
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     @stack('after-styles')
-
-    <!-- Analytics -->
-    <x-google-analytics config="{{ setting('google_analytics') }}" />
 </head>
 
 <body>

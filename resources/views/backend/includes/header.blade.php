@@ -19,12 +19,6 @@
                         <div class="fw-semibold">{{ __('Account') }}</div>
                     </div>
 
-                    @if(Auth::user()->athlete)
-                        <a class="dropdown-item" href="{{route('athletes.edit', Auth::user()->athlete)}}">
-                            <i class="fa-regular fa-user me-2"></i>&nbsp;{{ __('Modifica anagrafica') }}
-                        </a>
-                    @endif
-
                     <a class="dropdown-item" href="#">
                         <i class="fa-regular fa-user me-2"></i>&nbsp;{{ Auth::user()->name }}
                     </a>

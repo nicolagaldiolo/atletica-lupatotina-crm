@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Authorizable;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
@@ -13,8 +12,6 @@ use Laracasts\Flash\Flash;
 
 class RolesController extends Controller
 {
-    use Authorizable;
-
     public $module_title;
 
     public $module_name;

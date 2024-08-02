@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Authorizable;
 use App\Enums\Roles;
-use App\Events\Backend\UserCreated;
-use App\Events\Backend\UserProfileUpdated;
-use App\Events\Backend\UserUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Userprofile;
-use App\Models\UserProvider;
 use App\Notifications\UserAccountCreated;
 use Carbon\Carbon;
 use Exception;
@@ -26,8 +20,6 @@ use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
-    use Authorizable;
-
     public $module_title;
 
     public $module_name;
@@ -87,7 +79,7 @@ class UserController extends Controller
 
     public function index_data()
     {
-        $module_title = $this->module_title;
+        /*$module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
         $module_icon = $this->module_icon;
@@ -132,6 +124,7 @@ class UserController extends Controller
             ->rawColumns(['name', 'action', 'status', 'user_roles'])
             ->orderColumns(['id'], '-:column $1')
             ->make(true);
+            */
     }
 
     /**
@@ -144,7 +137,7 @@ class UserController extends Controller
      */
     public function index_list(Request $request)
     {
-        $module_title = $this->module_title;
+        /*$module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
         $module_icon = $this->module_icon;
@@ -174,6 +167,7 @@ class UserController extends Controller
         }
 
         return response()->json($$module_name);
+        */
     }
 
     /**

@@ -11,9 +11,6 @@
                             <th>{{ __('labels.backend.users.fields.email') }}</th>
                             <th>{{ __('labels.backend.users.fields.status') }}</th>
                             <th>{{ __('labels.backend.users.fields.roles') }}</th>
-                            <th>{{ __('labels.backend.users.fields.permissions') }}</th>
-                            <th>{{ __('labels.backend.users.fields.social') }}</th>
-
                             <th class="text-end">{{ __('labels.backend.action') }}</th>
                         </tr>
                     </thead>
@@ -41,18 +38,6 @@
                                 </ul>
                                 @endif
                             </td>
-                            <td>
-                                @if($user->getAllPermissions()->count() > 0)
-                                <ul>
-                                    @foreach ($user->getDirectPermissions() as $permission)
-                                    <li>{{ $permission->name }}</li>
-                                    @endforeach
-                                </ul>
-                                @endif
-                            </td>
-                            <td>
-                            </td>
-
                             <td class="text-end">
                                 @can('edit_users')
                                 <a href="{{route('users.edit', $user)}}" class="btn btn-primary btn-sm mt-1" data-toggle="tooltip" title="{{__('labels.backend.edit')}}"><i class="fas fa-wrench"></i></a>

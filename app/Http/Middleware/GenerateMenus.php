@@ -6,6 +6,7 @@ use App\Enums\AthletePermission;
 use App\Enums\RacePermission;
 use App\Enums\Roles;
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class GenerateMenus
 {
@@ -26,10 +27,19 @@ class GenerateMenus
             ])->data([
                 'order' => 1,
                 'activematches' => 'dashboard*',
+                'permission' => ['view_backend'],
             ])->link->attr([
                 'class' => 'nav-link',
             ]);
 
+            // Separator
+            $menu->add(__('Gestione società'), [
+                'class' => 'nav-title',
+            ])->data([
+                'order' => 105,
+                'permission' => [AthletePermission::ListAthletes, RacePermission::ListRaces],
+            ]);
+            
             // Athletes
             $menu->add('<i class="nav-icon fas fa-running"></i> ' . __('Tesserati'), [
                 'route' => 'athletes.index',
@@ -54,8 +64,19 @@ class GenerateMenus
                 'class' => 'nav-link',
             ]);
 
-            // Separator: Access Management
-            $menu->add(__('Operazioni'), [
+            // Archive
+            $menu->add('<i class="nav-icon fas fa-download"></i> ' . __('Situazione soci'), [
+                'route' => 'reports.athletes',
+                'class' => 'nav-item',
+            ])->data([
+                'order' => 102,
+                'activematches' => 'reports*',
+                'permission' => [RacePermission::ListRaces],
+            ])->link->attr([
+                'class' => 'nav-link',
+            ]);
+
+            $menu->add(__('Registrazioni'), [
                 'class' => 'nav-title',
             ])->data([
                 'order' => 105,
@@ -63,7 +84,19 @@ class GenerateMenus
             ]);
 
             // Races
-            $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Iscrizioni'), [
+            $menu->add('<i class="nav-icon fas fa-coins"></i> ' . __('Pagamenti'), [
+                'route' => 'payments.create',
+                'class' => 'nav-item',
+            ])->data([
+                'order' => 101,
+                'activematches' => 'races*',
+                'permission' => [],
+            ])->link->attr([
+                'class' => 'nav-link',
+            ]);
+
+            // Races
+            $menu->add('<i class="nav-icon fas fa-file-contract"></i> ' . __('Iscrizioni'), [
                 'route' => 'races.subscription.create',
                 'class' => 'nav-item',
             ])->data([
@@ -75,81 +108,43 @@ class GenerateMenus
             ]);
 
             // Separator: Access Management
-$menu->add(__('Estrazioni'), [
-    'class' => 'nav-title',
-])->data([
-    'order' => 105,
-    'permission' => ['edit_settings', 'view_backups', 'view_users', 'view_roles', 'view_logs'],
-]);
+            $menu->add('Amministrazione', [
+                'class' => 'nav-title',
+            ])->data([
+                'order' => 120,
+                'permission' => ['edit_settings', 'view_backups', 'view_users', 'view_roles', 'view_logs'],
+            ]);
 
-            // Archive
-            $menu->add('<i class="nav-icon fa-solid fa-flag-checkered"></i> ' . __('Situazione soci'), [
-                'route' => 'reports.athletes',
+            $menu->add('<i class="nav-icon fa-solid fa-user-group"></i> Users', [
+                'route' => 'users.index',
                 'class' => 'nav-item',
             ])->data([
-                'order' => 102,
-                'activematches' => 'reports*',
-                'permission' => [RacePermission::ListRaces],
+                'order' => 160,
+                'activematches' => 'users*',
+                'permission' => ['view_users'],
             ])->link->attr([
                 'class' => 'nav-link',
             ]);
 
-
-
-
-                // Separator: Access Management
-            $menu->add('Management', [
-                'class' => 'nav-title',
-            ])
-                ->data([
-                    'order' => 120,
-                    'permission' => ['edit_settings', 'view_backups', 'view_users', 'view_roles', 'view_logs'],
-                ]);
-
-            // Access Control Dropdown
-            $accessControl = $menu->add('<i class="nav-icon fa-solid fa-user-gear"></i> Access Control', [
-                'class' => 'nav-group show',
-            ])
-                ->data([
-                    'order' => 150,
-                    'activematches' => [
-                        'users*',
-                        'roles*',
-                    ],
-                    'permission' => ['view_users', 'view_roles'],
-                ]);
-            $accessControl->link->attr([
-                'class' => 'nav-link nav-group-toggle',
-                'href' => '#',
-            ]);
-
-            // Submenu: Users
-            $accessControl->add('<i class="nav-icon fa-solid fa-user-group"></i> Users', [
-                'route' => 'users.index',
-                'class' => 'nav-item',
-            ])
-                ->data([
-                    'order' => 160,
-                    'activematches' => 'users*',
-                    'permission' => ['view_users'],
-                ])
-                ->link->attr([
-                    'class' => 'nav-link',
-                ]);
-
-            // Submenu: Roles
-            $accessControl->add('<i class="nav-icon fa-solid fa-user-shield"></i> Roles', [
+            $menu->add('<i class="nav-icon fa-solid fa-user-shield"></i> Roles', [
                 'route' => 'roles.index',
                 'class' => 'nav-item',
-            ])
-                ->data([
-                    'order' => 170,
-                    'activematches' => 'roles*',
-                    'permission' => ['view_roles'],
-                ])
-                ->link->attr([
-                    'class' => 'nav-link',
-                ]);
+            ])->data([
+                'order' => 170,
+                'activematches' => 'roles*',
+                'permission' => ['view_roles'],
+            ])->link->attr([
+                'class' => 'nav-link',
+            ]);
+
+            
+            // Separator: Access Management
+            $menu->add('Developer', [
+                'class' => 'nav-title',
+            ])->data([
+                'order' => 120,
+                'permission' => ['edit_settings', 'view_backups', 'view_users', 'view_roles', 'view_logs'],
+            ]);
 
             // Log Viewer
             // Log Viewer Dropdown

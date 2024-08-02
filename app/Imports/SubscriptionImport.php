@@ -34,17 +34,15 @@ class SubscriptionImport implements ToCollection, WithStartRow, WithHeadingRow
                 return $arr;
             }, []);
 
-            $race_name = (explode(' - ', $item['gara']))[0];
-            $race = Race::where('name', 'like', $race_name)->first();
-            if($race){
+            $race_name = (explode(' - ', trim($item['gara'])))[0];
+            $fee = Race::where('name', 'like', $race_name)->firstOrFail()->fees()->firstOrFail();
+            
+            $date = $item['timestamp'] ? Date::excelToDateTimeObject($item['timestamp'])->getTimestamp() : null;
+            $athletes = collect($athletes)->mapWithKeys(function($item) use($date){
+                return [$item->id => ['created_at' => $date]];
+            })->toArray();
 
-                $date = $item['timestamp'] ? Date::excelToDateTimeObject($item['timestamp'])->getTimestamp() : null;
-                $athletes = collect($athletes)->mapWithKeys(function($item) use($date){
-                    return [$item->id => ['subscription_at' => $date]];
-                })->toArray();
-
-                //$race->athletes()->syncWithoutDetaching($athletes);
-            }
+            $fee->athletes()->syncWithoutDetaching($athletes);
         });
     }
 }

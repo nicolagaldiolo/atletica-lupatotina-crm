@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\AthleteController;
 use App\Http\Controllers\AthleteFeeController;
-use App\Http\Controllers\BackendController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RaceFeeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolesController;
@@ -35,9 +36,9 @@ require __DIR__.'/auth.php';
 
 Route::group(['middleware' => ['auth', 'can:view_backend']], function () {
     
-    Route::get('/', [BackendController::class, 'index'])->name('index');
-    Route::get('dashboard', [BackendController::class, 'index'])->name('dashboard');
-    Route::get('dashboard/certificates', [BackendController::class, 'certificates'])->name('dashboard.certificates');
+    Route::get('/', [DashboardController::class, 'index'])->name('index');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard/certificates', [DashboardController::class, 'certificates'])->name('dashboard.certificates');
     
     Route::resource("roles", RolesController::class);
 
@@ -46,7 +47,7 @@ Route::group(['middleware' => ['auth', 'can:view_backend']], function () {
     Route::get("users/trashed", ['as' => "users.trashed", 'uses' => "UserController@trashed"]);
     Route::patch("users/trashed/{id}", ['as' => "users.restore", 'uses' => "UserController@restore"]);
     Route::get("users/index_data", ['as' => "users.index_data", 'uses' => "UserController@index_data"]);
-    Route::get("users/index_list", ['as' => "users.index_list", 'uses' => "UserController@index_list"]);
+    //Route::get("users/index_list", ['as' => "users.index_list", 'uses' => "UserController@index_list"]);
     Route::resource("users", UserController::class);
     Route::patch("users/{id}/block", ['as' => "users.block", 'uses' => "UserController@block", 'middleware' => ['permission:block_users']]);
     Route::patch("users/{id}/unblock", ['as' => "users.unblock", 'uses' => "UserController@unblock", 'middleware' => ['permission:block_users']]);
@@ -67,5 +68,8 @@ Route::group(['middleware' => ['auth', 'can:view_backend']], function () {
     Route::resource('athleteFees', AthleteFeeController::class)->except('show');
     Route::resource('races', RaceController::class)->except('show');
     Route::resource('races.fees', RaceFeeController::class)->except('show');
+    
+    Route::resource('payments', PaymentController::class)->except('show');
+
     Route::get('reports/athletes', [ReportController::class, 'athletes'])->name('reports.athletes');
 });
