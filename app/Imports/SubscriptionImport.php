@@ -7,42 +7,32 @@ use App\Models\Race;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class SubscriptionImport implements ToCollection, WithStartRow, WithHeadingRow
+class SubscriptionImport implements ToCollection
 {
-    /**
-     * @return int
-     */
-    public function startRow(): int
-    {
-        return 2;
-    }
-
     /**
     * @param Collection $collection
     */
     public function collection(Collection $collection)
     {
         $collection->each(function($item){
-            $athletes = collect(explode(', ', $item['atleta']))->unique()->reduce(function($arr, $item){
-                $athlete = Athlete::where(DB::raw("CONCAT(`surname`, ' ', `name`)"), 'like', $item)->firstOrFail();
-                $arr[] = $athlete;
-                return $arr;
-            }, []);
-
-            $race_name = (explode(' - ', trim($item['gara'])))[0];
-            $fee = Race::where('name', 'like', $race_name)->firstOrFail()->fees()->firstOrFail();
+            $row_timestamp = $item[0];
+            $row_race_name = $item[2];
+            $row_athlete_name = $item[3];
+            $row_fee_amount = $item[5];
             
-            $date = $item['timestamp'] ? Date::excelToDateTimeObject($item['timestamp'])->getTimestamp() : null;
-            $athletes = collect($athletes)->mapWithKeys(function($item) use($date){
-                return [$item->id => ['created_at' => $date]];
-            })->toArray();
+            $timestamp = $row_timestamp ? Carbon::createFromFormat('d/m/Y H.i.s', $row_timestamp) : null;
+            $athlete = Athlete::where(DB::raw("CONCAT(`surname`, ' ', `name`)"), 'like', $row_athlete_name)->firstOrFail();
 
-            $fee->athletes()->syncWithoutDetaching($athletes);
+            $race_name = (explode(' - ', trim($row_race_name)))[0];
+            $fee = Race::where('name', 'like', $race_name)->firstOrFail()->fees()->firstOrFail();
+
+            $data = [$athlete->id => [
+                'custom_amount' => $row_fee_amount,
+                'created_at' => $timestamp
+            ]]; 
+            $fee->athletes()->syncWithoutDetaching($data);
         });
     }
 }

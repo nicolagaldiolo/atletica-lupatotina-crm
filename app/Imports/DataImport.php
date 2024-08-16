@@ -2,8 +2,6 @@
 
 namespace App\Imports;
 
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class DataImport implements WithMultipleSheets
@@ -14,7 +12,9 @@ class DataImport implements WithMultipleSheets
         return [
             'nomi' => new AthleteImport(),
             'gare' => new RaceImport(),
-            'iscrizioni_form' => new SubscriptionImport(),
+            'iscrizioni_values' => new SubscriptionImport(),
+            //'pagamenti' => new PaymentImport()
+            'situazione_soci_values' => new PaymentImportNew()
         ];
     }
 }

@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Imports\DataImport;
 use App\Models\Athlete;
+use App\Models\AthleteFee;
+use App\Models\Fee;
 use App\Models\Payment;
 use App\Models\Race;
 use Illuminate\Console\Command;
@@ -35,10 +37,16 @@ class ImportData extends Command
         Schema::disableForeignKeyConstraints();
         Athlete::truncate();
         Race::truncate();
+        Fee::truncate();
+        AthleteFee::truncate();
+        //AthleteFee::whereNotNull('id')->update([
+        //    'payed_at' => null
+        //]);
+        
         Schema::enableForeignKeyConstraints();
 
-        Excel::import(new DataImport, 'data.xlsx');
+        //Artisan::call('db:seed');
 
-        Artisan::call('db:seed');
+        Excel::import(new DataImport, 'data.xlsx');
     }
 }

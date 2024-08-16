@@ -40,6 +40,6 @@ class Fee extends Model
             ->withTimestamps()
             ->using(AthleteFee::class)
             ->as('athletefee')
-            ->withPivot('payed_at');
+            ->withPivot(['payed_at', 'custom_amount']);
     }
 }

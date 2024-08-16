@@ -82,7 +82,7 @@ class Athlete extends Model
             ->withTimestamps()
             ->using(AthleteFee::class)
             ->as('athletefee')
-            ->withPivot('payed_at')->wherePivot('payed_at', null);
+            ->withPivot(['payed_at', 'custom_amount'])->wherePivot('payed_at', null);
     }
 
     public function fees(): BelongsToMany
@@ -91,7 +91,7 @@ class Athlete extends Model
             ->withTimestamps()
             ->using(AthleteFee::class)
             ->as('athletefee')
-            ->withPivot('payed_at');
+            ->withPivot(['payed_at', 'custom_amount']);
     }
 
     public function certificates(): HasMany

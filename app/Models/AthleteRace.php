@@ -19,9 +19,4 @@ class AthleteRace extends Pivot
     protected $casts = [
         'subscription_at' => 'datetime',
     ];
-
-    public function payments(): MorphMany
-    {
-        return $this->morphMany(Payment::class, 'paymentable');
-    }
 }

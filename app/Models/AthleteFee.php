@@ -15,10 +15,12 @@ class AthleteFee extends Pivot
 
     protected $fillable = [
         'payed_at',
+        'custom_amount'
     ];
 
     protected $casts = [
         'payed_at' => 'datetime',
+        'custom_amount' => 'float'
     ];
 
     public function Fee(): BelongsTo
@@ -29,10 +31,5 @@ class AthleteFee extends Pivot
     public function Athlete(): BelongsTo
     {
         return $this->belongsTo(Athlete::class);
-    }
-
-    public function payments(): MorphMany
-    {
-        return $this->morphMany(Payment::class, 'paymentable');
     }
 }
