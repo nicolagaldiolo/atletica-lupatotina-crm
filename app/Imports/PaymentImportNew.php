@@ -12,10 +12,10 @@ use Maatwebsite\Excel\Concerns\OnEachRow;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 //use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class PaymentImportNew implements ToCollection, WithStartRow
 {
@@ -26,7 +26,7 @@ class PaymentImportNew implements ToCollection, WithStartRow
      */
     public function startRow(): int
     {
-        return 0;
+        return 1;
     }
 
     /**
@@ -34,127 +34,63 @@ class PaymentImportNew implements ToCollection, WithStartRow
     */
     public function collection(Collection $collection)
     {   
-        $i = $collection;
-        /*
-        $collection->each(function($item){
-            $timestamp = (float) $item[0];
 
-            if($timestamp){
-                $atleta1 = $item[2];
-                $atleta1_importo = $item[3];
-                if($atleta1 && $atleta1_importo){
-                    $this->handleImport($atleta1, $atleta1_importo);
+        $athlete = null;
+
+        $rows = collect($collection->reduce(function($arr, $item) use(&$athlete){
+            $date_item = (int) $item[1];
+            $date_obj = $date_item ? Date::excelToDateTimeObject($date_item) : null;
+            if($date_obj){
+                // Solo se la data è valida tratto la riga come riga valida
+
+                if($item[0]){
+                    $athlete = Athlete::where(DB::raw("CONCAT(`surname`, ' ', `name`)"), 'like', $item[0])->firstOrFail();    
+                    // Qui ho cambiato atleta
                 }
 
-                $atleta2 = $item[4];
-                $atleta2_importo = $item[5];
-                if($atleta2 && $atleta2_importo){
-                    $this->handleImport($atleta2, $atleta2_importo);
-                }
+                if($athlete){
 
-                $atleta3 = $item[6];
-                $atleta3_importo = $item[7];
-                if($atleta3 && $atleta3_importo){
-                    $this->handleImport($atleta3, $atleta3_importo);
-                }
+                    $data = [
+                        'date' => $date_obj,
+                        'athlete_id' => $athlete->id,
+                        'athlete' => $athlete,
+                        'causal' => $item[2],
+                        'amount' => $item[3]
+                    ];
 
-                $atleta4 = $item[8];
-                $atleta4_importo = $item[9];
-                if($atleta4 && $atleta4_importo){
-                    $this->handleImport($atleta4, $atleta4_importo);
-                }
-
-                $atleta5 = $item[10];
-                $atleta5_importo = $item[11];
-                if($atleta5 && $atleta5_importo){
-                    $this->handleImport($atleta5, $atleta5_importo);
+                    $arr[] = $data;                    
                 }
             }
-        });
 
-        collect($this->payments)->each(function($item, $id){
-            $remaining_amount = $item;
-            Athlete::findOrFail($id)->feesToPay()->orderBy('amount', 'desc')->get()->each(function($item) use($id, &$remaining_amount){
-                //if($id == 5){
-                    $amount = $item->amount;
-                    if($remaining_amount >= $amount){
-                        //$remaining_amount = ($remaining_amount - $amount);
-                        $item->athletefee->update([
-                            'payed_at' => Carbon::now()
-                        ]);
-                    }
-                //}
-            });
-
-            $i = $remaining_amount;
+            return $arr;
             
-        });
-        */
-    }
+        }, []));
 
-    /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
-    /*
-    public function onRow(Row $row)
-    {
-        $timestamp = intval($row[0]);
-        
-        //$date = $timestamp ? Date::excelToDateTimeObject($timestamp) : null;
-
-        if($timestamp){
-
-            $atleta1 = $row[2];
-            $atleta1_importo = $row[3];
-            $atleta2 = $row[4];
-            $atleta2_importo = $row[5];
-            $atleta3 = $row[6];
-            $atleta3_importo = $row[7];
-            $atleta4 = $row[8];
-            $atleta4_importo = $row[9];
-            $atleta5 = $row[10];
-            $atleta5_importo = $row[11];
-            $i = $timestamp;
-            $i = 10;
+        $rows->each(function($item){
             
-            $row_data = intval($row['data']);
-            
+            if($item['causal'] != 'Pagato'){
+                $row_fee_amount = $item['amount'];
+                if($row_fee_amount < 0){
+                    dd("c'è qualcosa che non va");
+                }else{
+                    $race_name = (explode(' - ', trim($item['causal'])))[0];
+                    $fee = Race::where('name', 'like', $race_name)->firstOrFail()->fees()->firstOrFail();
+                    
+                    $athlete = $item['athlete'];
 
-            $row_iscrizioni_aperte_fino_al = intval($row['iscrizioni_aperte_fino_al']);
-            $subscrible_expiration = $row_iscrizioni_aperte_fino_al ? Date::excelToDateTimeObject($row_iscrizioni_aperte_fino_al) : null;
+                    $athlete->fees()->syncWithoutDetaching(
+                        [
+                            $fee->id => [
+                                'custom_amount' => $row_fee_amount,
+                                'created_at' => $item['date']
+                            ]
+                        ]
+                    );
+                }
 
-            $gara = trim($row['gara']);
-
-            if($gara){
-                Race::create([
-                    'name' => $gara,
-                    'distance' => $row['distanza'],
-                    'date' => $date,
-                    'is_subscrible' => ($row['iscrizioni_aperte'] == 'sì'),
-                    'subscrible_expiration' => $subscrible_expiration,
-                ])->fees()->create([
-                    'name' => __('Quota base'),
-                    'expired_at' => $subscrible_expiration,
-                    'amount' => $row['costo']
-                ]);
+            }else{
+                $i = "devi registrare il pagamento";
             }
-            
-        }
-
+        });
     }
-    */
-
-    /*
-    private function handleImport($atleta1, $atleta1_importo)
-    {
-        $athlete = Athlete::where(DB::raw("CONCAT(`surname`, ' ', `name`)"), 'like', $atleta1)->firstOrFail();
-        if(!array_key_exists($athlete->id, $this->payments)){
-            $this->payments[$athlete->id] = 0;
-        }
-        
-        $this->payments[$athlete->id] = $this->payments[$athlete->id] + $atleta1_importo;
-    }
-    */
 }
