@@ -20,6 +20,9 @@
             <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="{{ route("athletes.races.index", $athlete) }}">{{ __('Iscrizioni') }}</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="{{ route("athletes.vouchers.index", $athlete) }}">{{ __('Voucher') }}</a>
+            </li>
         </ul>
     </div>
     </div>

@@ -45,8 +45,8 @@ class ImportData extends Command
         
         Schema::enableForeignKeyConstraints();
 
-        //Artisan::call('db:seed');
-
         Excel::import(new DataImport, 'data.xlsx');
+
+        Artisan::call('db:seed');
     }
 }

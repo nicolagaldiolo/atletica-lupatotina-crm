@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Aggiungi atleti')
+    $entity = __('Iscrizione atleti')
 @endphp
 
 @section('title') {{ $entity }} @endsection
@@ -15,54 +15,32 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        {{--<x-backend.section-header>
+        <x-backend.section-header>
             {{ $entity }}
-        </x-backend.section-header>--}}
+        </x-backend.section-header>
     </div>
     {{ html()->form('POST', route("races.subscription.store"))->class('form')->open() }}
+        
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="form-group mb-3">
-                        <label for="fee_id">{{ __('Gara') }}</label>
-                        <select name="fee_id" class="form-control {{ $errors->has('fee_id') ? 'is-invalid' : '' }}">
-                            <option value="0">{{ __('Seleziona') }}</option>
-                            @foreach ($races as $race)
-                                <optgroup label="{{ $race->name }}">
-                                    @foreach ($race->fees as $fee)
-                                        <option value="{{ $fee->id }}" @if ($fee->id == old('fee_id')) selected @endif>{{ $fee->name }} ({{ $fee->expired_at }} - {{ $fee->amount }})</option>
-                                    @endforeach
-                                </optgroup>
-                            @endforeach
-                        </select>
-                        @if ($errors->has('fee_id'))
-                            <div class="invalid-feedback">{{ $errors->first('fee_id') }}</div>
-                        @endif
-                    </div>
+                    <h6 class="card-title">{{ __('Gara') }}</h6>
+                    
+                    <select id="fee_selector" name="fee_id" class="form-control {{ $errors->has('fee_id') ? 'is-invalid' : '' }}">
+                        <option value="0">{{ __('Seleziona') }}</option>
+                        @foreach ($races as $race)
+                            <optgroup label="{{ $race->name }}">
+                                @foreach ($race->fees as $fee)
+                                    <option data-race="{{ $race->id }}" data-fee="{{ $fee->id }}" value="{{ $fee->id }}" @if ($fee->id == old('fee_id')) selected @endif>{{ $fee->name }} (@money($fee->amount))</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-group mb-3">
-                        <label for="brand_id">{{ __('Atleti') }}</label>
-
-                        <ul class="list-group">
-                            @foreach ($athletes as $athlete)
-                                <li class="list-group-item">
-                                    <label class="form-check-label">
-                                        <input name="athletes[{{ $athlete->id }}]" class="form-check-input {{ $errors->has('athletes.' . $athlete->id) ? 'is-invalid' : '' }}" type="checkbox" value="{{ $athlete->id }}">
-                                        {{ $athlete->fullname }}
-                                        @if ($errors->has('athletes.' . $athlete->id))
-                                            <div style="display:block" class="invalid-feedback">{{ $errors->first('athletes.' . $athlete->id) }}</div>
-                                        @endif
-                                    </label>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <div id="athletes-list" class="mt-4"></div>
 
         </div>
 
@@ -90,5 +68,62 @@
 @endpush
 
 @push ('after-scripts')
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#fee_selector').on('change', function(event) {
+            
+            var race_id = event.target.options[event.target.selectedIndex].dataset.race;
+            var fee_id = event.target.options[event.target.selectedIndex].dataset.fee;
+            
+            let endpoint_url = '/races/' + race_id + '/fees/' + fee_id + '/athletesSubscribeable';
+            
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                url: endpoint_url,
+            }).done(function(data) {
+                //console.log(data);
+                $('#athletes-list').html(data);
+                /*if (data.type == 'success') {
+                    iziToast.success({
+                        message: data.message
+                    });
+                } else {
+                    iziToast.error({
+                        message: data.message
+                    });
+                }
+                */
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.log("fail");
+                /*iziToast.error({
+                    message: jqXHR.responseJSON ? jqXHR.responseJSON.message : textStatus
+                });
+                */
+            }).always(function() {
+                console.log("always");
+                //is_done = true;
+                //$button.attr('disabled', false);
+                //Tools.unblockUI();
+                //drawDocumentStatus();
+                //dataTable.draw(false);
+            });
+        });
+
+        $(document).on('change', '.athlete_subscription_switch', function(){
+            var input_form = $(this).closest('ul').find('.athlete_subscription_form');
+            if($(this).is(':checked')){
+                input_form.removeClass('d-none');
+            }else{
+                input_form.addClass('d-none');
+            }
+            input_form.find('*').prop('disabled', !($(this).is(':checked')));
+            
+        });
+
+    });
+</script>
 
 @endpush

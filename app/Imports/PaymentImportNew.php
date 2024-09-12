@@ -81,7 +81,7 @@ class PaymentImportNew implements ToCollection, WithStartRow
                 
                 if($item['causal'] != 'Pagato'){
                     $row_fee_amount = $item['amount'];
-                    if($row_fee_amount < 0){
+                    if(false && $row_fee_amount < 0){
                         dd("c'è qualcosa che non va");
                     }else{
                         $race_name = (explode(' - ', trim($item['causal'])))[0];
@@ -119,10 +119,10 @@ class PaymentImportNew implements ToCollection, WithStartRow
             });
 
             //if($resume > 0 && $athlete->id != 48 && $athlete->id != 59){
-            if($resume > 0){
-                $i = $athlete;
-                dd($athlete->id, $athlete->fullname, "c'è qualcosa che non va, ho pagato di più");
-            }
+            //if($resume > 0){
+            //    $i = $athlete;
+            //    dd($athlete->id, $athlete->fullname, "c'è qualcosa che non va, ho pagato di più");
+            //}
         
         });
     }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Database\Query\Builder;
+use App\Enums\VoucherType;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class RaceSubscriptionsRequest extends FormRequest
+class VoucherRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,20 +26,17 @@ class RaceSubscriptionsRequest extends FormRequest
     public function rules()
     {
         return [
-            'fee_id' => 'required|exists:App\Models\Fee,id',
-            'athletes' => 'required|array',
-            //'athletes.*' => [
-            //    'exists:App\Models\Athlete,id'
-            //]
+            'name' => 'nullable|string|max:191',
+            'type' => ['required', new EnumValue(VoucherType::class, false)],
+            'amount' => 'required|numeric'
         ];
     }
 
     public function attributes()
     {
         return [
-            'fee_id' => __('tariffa'),
-            'athletes' => __('atleti'),
-            'athletes.*' => __('atleta'),
+            'type' => __('tipo'),
+            'amount' => __('importo'),
         ];
     }
 }

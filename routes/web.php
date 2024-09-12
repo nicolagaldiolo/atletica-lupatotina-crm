@@ -11,6 +11,7 @@ use App\Http\Controllers\RaceFeeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -43,14 +44,17 @@ Route::group(['middleware' => ['auth', 'can:view_backend']], function () {
     Route::resource("roles", RolesController::class);
 
     Route::get("users/changePassword/{id}", [UserController::class, 'changePassword'])->name('users.changePassword');
-    Route::patch("users/changePassword/{id}", ['as' => "users.changePasswordUpdate", 'uses' => "UserController@changePasswordUpdate"]);
-    Route::get("users/trashed", ['as' => "users.trashed", 'uses' => "UserController@trashed"]);
-    Route::patch("users/trashed/{id}", ['as' => "users.restore", 'uses' => "UserController@restore"]);
-    Route::get("users/index_data", ['as' => "users.index_data", 'uses' => "UserController@index_data"]);
-    //Route::get("users/index_list", ['as' => "users.index_list", 'uses' => "UserController@index_list"]);
+    Route::patch("users/changePassword/{id}", [UserController::class, 'changePasswordUpdate'])->name('users.changePasswordUpdate');
+    Route::get("users/trashed", [UserController::class, 'trashed'])->name('users.trashed');
+    Route::patch("users/trashed/{id}", [UserController::class, 'restore'])->name('users.restore');
+    Route::get("users/index_data", [UserController::class, 'index_data'])->name('users.index_data');
+    Route::get("users/index_list", [UserController::class, 'index_list'])->name('users.index_list');
     Route::resource("users", UserController::class);
-    Route::patch("users/{id}/block", ['as' => "users.block", 'uses' => "UserController@block", 'middleware' => ['permission:block_users']]);
-    Route::patch("users/{id}/unblock", ['as' => "users.unblock", 'uses' => "UserController@unblock", 'middleware' => ['permission:block_users']]);
+    
+    Route::group(['middleware' => ['permission:block_users']], function () {
+        Route::patch("users/{id}/block", [UserController::class, 'block'])->name('users.block');
+        Route::patch("users/{id}/unblock", [UserController::class, 'unblock'])->name('users.unblock');
+    });
 
     Route::get('athletes/trashed', [AthleteController::class, 'trashed'])->name('athletes.trashed');
     Route::get('athletes/trashed/{id}', [AthleteController::class, 'showTrashed'])->name('athletes.trashed.show');
@@ -58,6 +62,7 @@ Route::group(['middleware' => ['auth', 'can:view_backend']], function () {
     Route::resource('athletes', AthleteController::class)->except('show');
     Route::get('athletes/{athlete}/races', [AthleteController::class, 'races'])->name('athletes.races.index');
     Route::resource('athletes.certificates', CertificateController::class)->except('show');
+    Route::resource('athletes.vouchers', VoucherController::class)->except('show');
     Route::get('races/trashed', [RaceController::class, 'trashed'])->name('races.trashed');
     Route::get('races/trashed/{id}', [RaceController::class, 'showTrashed'])->name('races.trashed.show');
     Route::patch('races/trashed/{id}', [RaceController::class, 'restore'])->name('races.restore');
@@ -67,6 +72,8 @@ Route::group(['middleware' => ['auth', 'can:view_backend']], function () {
     Route::get('races/{race}/subscriptions-list', [RaceController::class, 'subscriptionsList'])->name('races.subscriptions-list');
     Route::resource('athleteFees', AthleteFeeController::class)->except('show');
     Route::resource('races', RaceController::class)->except('show');
+    
+    Route::get('races/{race}/fees/{fee}/athletesSubscribeable', [RaceFeeController::class, 'athletesSubscribeable'])->name('races.fees.athletes-subscribeable');
     Route::resource('races.fees', RaceFeeController::class)->except('show');
     
     Route::resource('payments', PaymentController::class)->except('show');

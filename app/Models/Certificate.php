@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Enums\CertificateStatus;
 use App\Traits\ModelStorage;
+use App\Enums\CertificateStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Database\Factories\CertificateFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
 
 class Certificate extends Model
 {

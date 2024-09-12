@@ -25,8 +25,6 @@ class CertificateController extends Controller
         }else{
             return view('backend.athletes.certificates.index', compact('athlete'));
         }
-        
-        return $athlete->certificates;
     }
 
     /**

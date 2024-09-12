@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\VoucherType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,16 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('athlete_fee', function (Blueprint $table) {
+        Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('athlete_id')->constrained()->onDelete('cascade');
-            $table->foreignId('fee_id')->constrained()->onDelete('cascade');
-            $table->foreignId('voucher_id')->unique()->nullable()->constrained()->onDelete('cascade');
-            $table->decimal('custom_amount', 14, 2)->default(0);
-            $table->timestamp('payed_at')->nullable();
+            $table->string('name')->nullable();
+            $table->unsignedTinyInteger('type')->nullable();
+            $table->decimal('amount', 14, 2)->default(VoucherType::Credit);
             $table->timestamps();
-
-            $table->unique(['athlete_id', 'fee_id']);
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('athlete_fee');
+        Schema::dropIfExists('vouchers');
     }
 };

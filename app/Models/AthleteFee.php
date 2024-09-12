@@ -15,7 +15,8 @@ class AthleteFee extends Pivot
 
     protected $fillable = [
         'payed_at',
-        'custom_amount'
+        'custom_amount',
+        'voucher_id'
     ];
 
     protected $casts = [

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classes\Utility;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FeesRequest;
+use App\Models\Athlete;
 use App\Models\Fee;
 use App\Models\Race;
 use Illuminate\Http\Request;
@@ -86,5 +87,16 @@ class RaceFeeController extends Controller
     public function destroy(Race $race, Fee $fee)
     {
         $this->authorize('delete', $fee);
+    }
+
+    public function athletesSubscribeable(Race $race, Fee $fee)
+    {
+        if (request()->ajax()) {
+            $athletes = Athlete::with(['validVouchers'])->whereDoesntHave('fees', function($query) use($fee){
+                $query->where('fees.id', $fee->id);
+            })->get();
+            
+            return view('backend.races.subscriptions.partials.athletes_subscribeable', compact('athletes', 'fee'));
+        }
     }
 }

@@ -13,6 +13,9 @@ use App\Http\Requests\RaceSubscriptionsRequest;
 use App\Models\AthleteFee;
 use App\Models\Fee;
 use App\Models\Race;
+use App\Models\Voucher;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 
@@ -169,7 +172,7 @@ class RaceController extends Controller
     public function subscriptionStore(RaceSubscriptionsRequest $request)
     {
         //$this->authorize('create', AthleteRace::class);
-        Fee::findOrFail($request->get('fee_id'))->athletes()->syncWithoutDetaching($request->get('athletes'));
+        Fee::findOrFail($request->get('fee_id'))->athletes()->syncWithoutDetaching($request->get('athletes', []));
         Utility::flashMessage();
         return redirect(route('races.subscription.create'));
     }

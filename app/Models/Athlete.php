@@ -104,6 +104,16 @@ class Athlete extends Model
         return $this->hasOne(Certificate::class)->current();
     }
 
+    public function vouchers(): HasMany
+    {
+        return $this->hasMany(Voucher::class);
+    }
+
+    public function validVouchers(): HasMany
+    {
+        return $this->hasMany(Voucher::class)->whereDoesntHave('athleteFee');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
