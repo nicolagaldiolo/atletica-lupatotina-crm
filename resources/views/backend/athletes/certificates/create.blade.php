@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Voucher')
+    $entity = __('Certiticati')
 @endphp
 
 @section('title') {{ $entity }} @endsection
@@ -10,10 +10,7 @@
 <x-backend-breadcrumbs>
     <x-backend-breadcrumb-item route="{{ route('athletes.index') }}">{{ __('Atleti') }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item route="{{ route('athletes.edit', $athlete) }}">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('athletes.vouchers.index', $athlete) }}">{{ $entity }}</x-backend-breadcrumb-item>
-    @if($voucher)
-        <x-backend-breadcrumb-item type="active">{{ $voucher->name }}</x-backend-breadcrumb-item>
-    @endif
+    <x-backend-breadcrumb-item route="{{ route('athletes.certificates.index', $athlete) }}">{{ $entity }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
 @endsection
 
@@ -26,7 +23,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route("athletes.vouchers.index", $athlete) }}">
+                        <a class="nav-link" aria-current="page" href="{{ route("athletes.certificates.index", $athlete) }}">
                             <i class="far fa-times-circle"></i>
                             {{ __('Chiudi') }}
                         </a>
@@ -39,7 +36,7 @@
 
 @section('content')
 <div class="card">
-    {{ html()->modelForm($voucher, 'PATCH', route("athletes.vouchers.update", [$athlete, $voucher]))->class('form')->open() }}
+    {{ html()->form('POST', route("athletes.certificates.store", $athlete))->acceptsFiles()->class('form')->open() }}
     <div class="card-header">
         <div class="row">
             <div class="col">
@@ -58,7 +55,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col">
-                @include ("backend.athletes.vouchers.partials.form")
+                @include ("backend.athletes.certificates.partials.form", ['disabled' => false])
             </div>
         </div>
     </div>

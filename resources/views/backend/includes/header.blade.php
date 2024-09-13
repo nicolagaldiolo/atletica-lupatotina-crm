@@ -19,13 +19,10 @@
                         <div class="fw-semibold">{{ __('Account') }}</div>
                     </div>
 
-                    <a class="dropdown-item" href="#">
-                        <i class="fa-regular fa-user me-2"></i>&nbsp;{{ Auth::user()->name }}
+                    <a class="dropdown-item" href="{{route('users.edit', Auth::user()->id)}}">
+                        <i class="fa-regular fa-user me-2"></i>&nbsp;{{ Auth::user()->name }} <br><small>galdiolo.nicola@gmail.com</small>
                     </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="fa-regular fa-user me-2"></i>&nbsp;{{ Auth::user()->email }}
-                    </a>
-
+                    
                     <div class="dropdown-divider"></div>
 
                     <div class="dropdown-header bg-light py-2"><strong>@lang('Settings')</strong></div>

@@ -81,15 +81,6 @@
                         {{ html()->label($field_lable, $field_name)->class('form-label') }} {!! fielf_required($required) !!}
                     </div>
                 </div>
-                <div class="col-12 col-sm-10">
-                    <div class="form-group">
-                        @if ($user->email_verified_at == null)
-                        <a href="{{route('users.emailConfirmationResend', $user->id)}}" class="btn btn-outline-primary btn-sm " data-toggle="tooltip" title="Send Confirmation Email"><i class="fas fa-envelope"></i> Send Confirmation Email</a>
-                        @else
-                        {!! $user->confirmed_label !!}
-                        @endif
-                    </div>
-                </div>
             </div>
 
             <div class="form-group row mb-3">
@@ -164,9 +155,6 @@
                         @endif
                         @if ($$module_name_singular->status == 2)
                         <a href="{{route('users.unblock', $$module_name_singular)}}" class="btn btn-info" data-method="PATCH" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.unblock')}}" data-confirm="Are you sure?"><i class="fas fa-check"></i> Unblock</a>
-                        @endif
-                        @if ($$module_name_singular->email_verified_at == null)
-                        <a href="{{route('users.emailConfirmationResend', $$module_name_singular->id)}}" class="btn btn-primary" data-toggle="tooltip" title="Send Confirmation Email"><i class="fas fa-envelope"></i></a>
                         @endif
                         @if($$module_name_singular->id != 1)
                         <a href="{{route("$module_name.destroy", $$module_name_singular)}}" class="btn btn-danger" data-method="DELETE" data-token="{{csrf_token()}}" data-toggle="tooltip" title="{{__('labels.backend.delete')}}"><i class="fas fa-trash-alt"></i> Delete</a>

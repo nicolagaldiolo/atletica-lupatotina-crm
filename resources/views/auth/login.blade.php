@@ -57,12 +57,7 @@
             </div>
         </form>
 
-        <x-slot name="extra">
-            @if (Route::has('register'))
-            <p class="text-center text-gray-600 mt-4">
-                Do not have an account? <a href="{{ route('register') }}" class="underline hover:text-gray-900">Register</a>.
-            </p>
-            @endif
+        <x-slot name="extra">            
         </x-slot>
     </x-auth-card>
 </x-auth-layout>

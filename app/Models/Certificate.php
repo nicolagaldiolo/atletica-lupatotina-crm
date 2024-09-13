@@ -62,24 +62,37 @@ class Certificate extends Model
 
     public function getStatusAttribute()
     {
-        if(Carbon::now()->startOfDay()->greaterThan($this->expires_on->startOfDay())){
-            $status = CertificateStatus::Expired;
-            $status_class = 'danger';
-        } elseif(Carbon::now()->startOfDay()->addMonth()->greaterThanOrEqualTo($this->expires_on->startOfDay())){
-            $status = CertificateStatus::Expiring;
-            $status_class = 'warning';
-        } else{
-            $status = CertificateStatus::Valid;
-            $status_class = 'success';
-        }
+        if($this->id){
+            
+            if(Carbon::now()->startOfDay()->greaterThan($this->expires_on->startOfDay())){
+                $status = CertificateStatus::Expired;
+                $status_class = 'danger';
+            } elseif(Carbon::now()->startOfDay()->addMonth()->greaterThanOrEqualTo($this->expires_on->startOfDay())){
+                $status = CertificateStatus::Expiring;
+                $status_class = 'warning';
+            } else{
+                $status = CertificateStatus::Valid;
+                $status_class = 'success';
+            }
 
-        return [
-            'date' => $this->expires_on->format('d/m/Y'),
-            'date_diff' => $this->expires_on->endOfDay()->diffForHumans(),
-            'status' => $status,
-            'status_class' => $status_class,
-            'url_download' => $this->document && Storage::exists($this->document) ? asset('storage/' . $this->document) : null
-        ];
+            return [
+                'date' => $this->expires_on->format('d/m/Y'),
+                'date_diff' => $this->expires_on->endOfDay()->diffForHumans(),
+                'status' => $status,
+                'status_class' => $status_class,
+                'url_download' => $this->document && Storage::exists($this->document) ? asset('storage/' . $this->document) : null
+            ];
+        }else{
+
+            return [
+                'date' => null,
+                'date_diff' => null,
+                'status' => null,
+                'status_class' => null,
+                'url_download' => null
+            ];
+
+        }
     }
 
     public function setDocumentAttribute($image)

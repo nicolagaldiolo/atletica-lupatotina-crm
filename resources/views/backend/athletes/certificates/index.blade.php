@@ -19,6 +19,15 @@
 
 @section('content')
 <div class="card">
+    <div class="card-header">
+        <x-backend.section-header>
+            <x-slot name="toolbar">
+                <x-buttons.create route="{{ route('athletes.certificates.create', $athlete) }}" small="true" title="">
+                    {{ __('Aggiungi certificato') }}
+                </x-buttons.create>
+            </x-slot>
+        </x-backend.section-header>
+    </div>
     <div class="card-body">
         <div class="row">
             <div class="col">

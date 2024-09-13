@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -251,11 +252,8 @@ class UserController extends Controller
 
         // Username
         $id = $$module_name_singular->id;
-        $username = config('app.initial_username') + $id;
         $$module_name_singular->username = $username;
         $$module_name_singular->save();
-
-        event(new UserCreated($$module_name_singular));
 
         Flash::success("<i class='fas fa-check'></i> New '".Str::singular($module_title)."' Created")->important();
 
@@ -578,7 +576,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        if (! auth()->user()->can('edit_users')) {
+        if (!(auth()->user()->can('edit_users') || Auth::user()->id == $id)) {
             abort(404);
         }
 
@@ -618,7 +616,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (! auth()->user()->can('edit_users')) {
+        if (!(auth()->user()->can('edit_users') || Auth::user()->id == $id)) {
             abort(404);
         }
 
@@ -660,8 +658,6 @@ class UserController extends Controller
             $$module_name_singular->syncPermissions($permissions);
         }
 
-        event(new UserUpdated($$module_name_singular));
-
         Flash::success("<i class='fas fa-check'></i> '".Str::singular($module_title)."' Updated Successfully")->important();
 
         Log::info(label_case($module_title.' '.$module_action)." | '".$$module_name_singular->name.'(ID:'.$$module_name_singular->id.") ' by User:".auth()->user()->name.'(ID:'.auth()->user()->id.')');
@@ -699,8 +695,6 @@ class UserController extends Controller
         $$module_name_singular = $module_model::findOrFail($id);
 
         $$module_name_singular->delete();
-
-        event(new UserUpdated($$module_name_singular));
 
         flash('<i class="fas fa-check"></i> '.$$module_name_singular->name.' User Successfully Deleted!')->success();
 
@@ -759,8 +753,6 @@ class UserController extends Controller
 
         $$module_name_singular->userprofile()->withTrashed()->restore();
 
-        event(new UserUpdated($$module_name_singular));
-
         flash('<i class="fas fa-check"></i> '.$$module_name_singular->name.' Successfully Restoreded!')->success();
 
         Log::info(label_case($module_action)." '{$module_name}': '".$$module_name_singular->name.', ID:'.$$module_name_singular->id." ' by User:".auth()->user()->name);
@@ -800,8 +792,6 @@ class UserController extends Controller
         try {
             $$module_name_singular->status = 2;
             $$module_name_singular->save();
-
-            event(new UserUpdated($$module_name_singular));
 
             flash('<i class="fas fa-check"></i> '.$$module_name_singular->name.' User Successfully Blocked!')->success();
 
@@ -844,8 +834,6 @@ class UserController extends Controller
             $$module_name_singular->status = 1;
             $$module_name_singular->save();
 
-            event(new UserUpdated($$module_name_singular));
-
             flash('<i class="fas fa-check"></i> '.$$module_name_singular->name.' User Successfully Unblocked!')->success();
 
             Log::notice(label_case($module_title.' '.$module_action).' Success | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
@@ -858,90 +846,4 @@ class UserController extends Controller
             Log::error($e);
         }
     }
-
-    /**
-     * Destroy a user provider.
-     *
-     * @param  Request  $request  The request object.
-     * @return void
-     *
-     * @throws Exception There was a problem updating this user. Please try again.
-     */
-    /*
-     public function userProviderDestroy(Request $request)
-    {
-        $module_title = $this->module_title;
-        $module_name = $this->module_name;
-        $module_path = $this->module_path;
-        $module_icon = $this->module_icon;
-        $module_model = $this->module_model;
-        $module_name_singular = Str::singular($module_name);
-
-        $user_provider_id = $request->user_provider_id;
-        $user_id = $request->user_id;
-
-        if (! $user_provider_id > 0 || ! $user_id > 0) {
-            flash('Invalid Request. Please try again.')->error();
-
-            return redirect()->back();
-        }
-        $user_provider = UserProvider::findOrFail($user_provider_id);
-
-        if ($user_id === $user_provider->user->id) {
-            $user_provider->delete();
-
-            flash('<i class="fas fa-exclamation-triangle"></i> Unlinked from User, "'.$user_provider->user->name.'"!')->success();
-
-            return redirect()->back();
-        }
-        flash('<i class="fas fa-exclamation-triangle"></i> Request rejected. Please contact the Administrator!')->warning();
-
-        event(new UserUpdated($$module_name_singular));
-
-        throw new Exception('There was a problem updating this user. Please try again.');
-    }
-        */
-
-    /**
-     * Resends the email confirmation for a user.
-     *
-     * @param  int  $id  The ID of the user.
-     * @return \Illuminate\Http\RedirectResponse Returns a redirect response.
-     *
-     * @throws \Illuminate\Http\Client\RequestException If the user is not authorized to resend the email confirmation.
-     */
-    /*
-     public function emailConfirmationResend($id)
-    {
-        if ($id !== auth()->user()->id) {
-            if (auth()->user()->hasAnyRole([Roles::Administrator, Roles::SuperAdmin])) {
-                Log::info(auth()->user()->name.' ('.auth()->user()->id.') - User Requested for Email Verification.');
-            } else {
-                Log::warning(auth()->user()->name.' ('.auth()->user()->id.') - User trying to confirm another users email.');
-
-                abort('404');
-            }
-        }
-
-        $user = User::where('id', '=', $id)->first();
-
-        if ($user) {
-            if ($user->email_verified_at === null) {
-                Log::info($user->name.' ('.$user->id.') - User Requested for Email Verification.');
-
-                // Send Email To Registered User
-                $user->sendEmailVerificationNotification();
-
-                flash('<i class="fas fa-check"></i> Email Sent! Please Check Your Inbox.')->success()->important();
-
-                return redirect()->back();
-            }
-            Log::info($user->name.' ('.$user->id.') - User Requested but Email already verified at.'.$user->email_verified_at);
-
-            flash($user->name.', You already confirmed your email address at '.$user->email_verified_at->isoFormat('LL'))->success()->important();
-
-            return redirect()->back();
-        }
-    }
-        */
 }

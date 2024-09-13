@@ -1,6 +1,6 @@
 <div class="row">
     
-    <div class="col-12 col-sm-3">
+    <div class="col-12 col-sm-2">
         <div class="form-group mb-3">
             <label for="is_current">{{ __('Certificato corrente') }}</label>
             <span class="text-danger">*</span>
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-3">
+    <div class="col-12 col-sm-5">
         <div class="form-group mb-3">
             <label for="name">{{ __('Scadenza') }}</label>
             <span class="text-danger">*</span>
@@ -23,25 +23,19 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-3">
+    <div class="col-12 col-sm-5">
         <div class="form-group mb-3">
             <label for="document">{{ __('File') }}</label>
             <input name="document" class="form-control {{ $errors->has('document') ? 'is-invalid' : '' }}" type="file" value="" @if($disabled) disabled @endif>
             @if ($errors->has('document'))
                 <div class="invalid-feedback">{{ $errors->first('document') }}</div>
             @endif
-        </div>
-    </div>
-    <div class="col-12 col-sm-3">
-        <div class="form-group mb-3">
-            <label for="document"></label>
-            @if($certificate)
-                <div class="d-grid">
-                    <a class="btn btn-primary btn-full" href="{{ $certificate->status['url_download'] }}" target="_blank">
-                        <i class="fa fa-download"></i>
-                        {{ __('Scarica certificato') }}
-                    </a>
-                </div>
+
+            @if($certificate->status && $certificate->status['url_download'])
+                <a class="btn btn-primary btn-sm mt-2" href="{{ $certificate->status['url_download'] }}" target="_blank">
+                    <i class="fa fa-download"></i>
+                    {{ __('Scarica certificato') }}
+                </a>
             @endif
         </div>
     </div>

@@ -78,20 +78,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // username
-        $username = intval(config('app.initial_username')) + $user->id;
-        $user->username = strval($username);
-        $user->save();
-
         $athlete = Athlete::where('email', $request->email)->first()->user()->associate($user);
         $athlete->save();
-
-        event(new Registered($user));
-        event(new UserRegistered($user));
-
-        if ($user->markEmailAsVerified()) {
-            event(new Verified($request->user()));
-        }
 
         app()['cache']->forget('spatie.permission.cache');
 

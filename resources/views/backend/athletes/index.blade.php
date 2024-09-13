@@ -101,7 +101,9 @@
             {
                 data: 'id',
                 name: 'id',
-                visible: false
+                visible: false,
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'name',
@@ -115,7 +117,9 @@
                     }
 
                     return null;
-                }
+                },
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'fees_count',
@@ -125,6 +129,8 @@
                     }
                     return null;
                 },
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'fees_to_pay',
@@ -140,11 +146,11 @@
             },
             {
                 data: 'user',
-                searchable: false,
-                orderable: false,
                 render(data) {
                     return data ? '<i class="fas fa-user"></i>' : '<i class="fas fa-user-slash text-secondary"></i>';
                 },
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'action',

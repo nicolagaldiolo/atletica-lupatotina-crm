@@ -30,17 +30,22 @@ class CertificateController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Athlete $athlete)
     {
-        //
+        $certificate = new Certificate();
+        $certificate->is_current = 1;
+        return view('backend.athletes.certificates.create', compact('athlete', 'certificate'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AthleteCertificatesRequest $request, Athlete $athlete)
     {
-        //
+        $athlete->certificate()->create($request->validated());
+        Utility::flashMessage();
+        
+        return redirect(route('athletes.certificates.index', $athlete));
     }
 
     /**
@@ -72,8 +77,10 @@ class CertificateController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Certificate $certificate)
+    public function destroy(Athlete $athlete, Certificate $certificate)
     {
-        //
+        $certificate->delete();
+        Utility::flashMessage();
+        return redirect(route('athletes.certificates.index', $athlete));
     }
 }
