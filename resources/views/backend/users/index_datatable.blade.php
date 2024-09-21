@@ -21,6 +21,7 @@
             <x-slot name="toolbar">
                 <x-buttons.create route='{{ route("$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
 
+                {{--
                 <div class="btn-group">
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-cog"></i>
@@ -31,11 +32,9 @@
                                 <i class="fas fa-eye-slash"></i> View trash
                             </a>
                         </li>
-                        <!-- <li>
-                            <hr class="dropdown-divider">
-                        </li> -->
                     </ul>
                 </div>
+                --}}
             </x-slot>
         </x-backend.section-header>
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AthletesRequest;
 use App\Models\AthleteFee;
+use Carbon\Carbon;
 
 class AthleteController extends Controller
 {
@@ -19,7 +20,8 @@ class AthleteController extends Controller
 
     public function index()
     {
-        $this->authorize('viewAny', Athlete::class);
+        $this->authorize('xxx');
+        //$this->authorize('viewAny', Athlete::class);
 
         if (request()->ajax()) {
             return datatables()->eloquent(Athlete::query()->withCount('fees')->with(['certificate', 'feesToPay', 'user']))
@@ -51,6 +53,7 @@ class AthleteController extends Controller
      */
     public function create()
     {
+        $this->authorize('xxx');
         $this->authorize('create', Athlete::class);
         $athlete = new Athlete();
         return view('backend.athletes.create', compact('athlete'));
@@ -64,6 +67,7 @@ class AthleteController extends Controller
      */
     public function store(AthletesRequest $request)
     {
+        $this->authorize('xxx');
         $this->authorize('create', Athlete::class);
         $athlete = Athlete::create($request->validated());
         Utility::flashMessage();
@@ -89,6 +93,7 @@ class AthleteController extends Controller
      */
     public function edit(Athlete $athlete)
     {
+        $this->authorize('xxx');
         $this->authorize('update', $athlete);
         return view('backend.athletes.edit', compact('athlete'));
     }
@@ -102,6 +107,7 @@ class AthleteController extends Controller
      */
     public function update(AthletesRequest $request, Athlete $athlete)
     {
+        $this->authorize('xxx');
         $this->authorize('update', $athlete);
         $athlete->update($request->validated());
         Utility::flashMessage();
@@ -116,63 +122,47 @@ class AthleteController extends Controller
      */
     public function destroy(Athlete $athlete)
     {
+        $this->authorize('xxx');
         $this->authorize('delete', $athlete);
         $athlete->delete();
         Utility::flashMessage();
         return redirect(route('athletes.index'));
     }
 
-    /**
-     * List of trashed ertries
-     * works if the softdelete is enabled.
-     *
-     * @return Response
-     */
-    public function trashed()
-    {
-        $this->authorize('restore', Athlete::class);
-        if (request()->ajax()) {
-            return datatables()->eloquent(Athlete::onlyTrashed())->addColumn('action', function ($athlete) {
-                return view('backend.athletes.partials.action_column_trashed', compact('athlete'));
-            })
-            ->editColumn('name', function ($data) {
-                return $data->name . ' ' . $data->surname;
-            })->make(true);
-        }else{
-            return view('backend.athletes.archive');
-        }
-    }
-
-    public function showTrashed($id)
-    {
-        $athlete = Athlete::onlyTrashed()->findOrFail($id);
-        $this->authorize('view', $athlete);
-        return view('backend.athletes.archive_show', compact('athlete'));
-    }
-
-    /**
-     * Restore a soft deleted entry.
-     *
-     * @param  Request  $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function restore($id)
-    {
-        $athlete = Athlete::onlyTrashed()->findOrFail($id);
-        $this->authorize('restore', $athlete);
-        $athlete->restore();
-        Utility::flashMessage();
-        return redirect(route('athletes.edit', $athlete));
-    }
-
     public function races(Athlete $athlete)
     {
+        $this->authorize('xxx');
         if (request()->ajax()) {
             $builder = AthleteFee::with(['fee.race'])->where('athlete_id', $athlete->id);
-            return datatables()->eloquent($builder)->make(true);
+            return datatables()->eloquent($builder)
+            ->addColumn('action', function ($athleteFee){
+                return view('backend.athletes.races.partials.action_column', compact('athleteFee'));
+            })->make(true);
         }else{
             return view('backend.athletes.races.index', compact('athlete'));
         }
+    }
+
+    public function payFee(Request $request, AthleteFee $athleteFee)
+    {
+        $this->authorize('xxx');
+
+        $athleteFee->update([
+            'payed_at' => ($athleteFee->payed_at ? null : Carbon::now())
+        ]);
+        Utility::flashMessage();
+        return redirect(route('athletes.races.index', $athleteFee->athlete));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroyPayFee(AthleteFee $athleteFee)
+    {
+        $this->authorize('xxx');
+        
+        $athleteFee->delete();
+        Utility::flashMessage();
+        return redirect(route('athletes.races.index', $athleteFee->athlete));
     }
 }

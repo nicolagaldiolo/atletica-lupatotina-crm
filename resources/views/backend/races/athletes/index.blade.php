@@ -52,7 +52,6 @@
                             <th>
                                 {{ __('Pagato il') }}
                             </th>
-                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                 </table>
@@ -103,12 +102,6 @@
             },
             {
                 data: 'payed_at'
-            },
-            {
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false
             }
         ],
         ordering: false,

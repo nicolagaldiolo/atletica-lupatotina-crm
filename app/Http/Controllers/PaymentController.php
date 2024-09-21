@@ -23,6 +23,8 @@ class PaymentController extends Controller
      */
     public function create()
     {
+        $this->authorize('xxx');
+
         $athletes = Athlete::whereHas('fees', function($query){
             $query->whereNull('payed_at');
         })->with([
@@ -40,6 +42,8 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('xxx');
+
         foreach($request->get('payments') as $key=>$value){
             Athlete::findOrFail($key)->fees()->syncWithPivotValues(array_keys($value), ['payed_at' => Carbon::now()], false);
         }
@@ -52,7 +56,7 @@ class PaymentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $this->authorize('xxx');
     }
 
     /**
@@ -60,7 +64,7 @@ class PaymentController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $this->authorize('xxx');
     }
 
     /**
@@ -68,7 +72,7 @@ class PaymentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $this->authorize('xxx');
     }
 
     /**
@@ -76,6 +80,6 @@ class PaymentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->authorize('xxx');
     }
 }

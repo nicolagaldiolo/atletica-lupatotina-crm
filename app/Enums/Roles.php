@@ -11,7 +11,10 @@ use BenSampo\Enum\Enum;
  */
 final class Roles extends Enum
 {
-    const SuperAdmin = 'super admin';
+    const SuperAdmin = 'superadmin';
     const Administrator = 'administrator';
-    const Athlete = 'athlete';
+    const Manager = 'manager';
+    const Accountant = 'accountant';
+    const Healthcare = 'healthcare';
+    const User = 'user';
 }

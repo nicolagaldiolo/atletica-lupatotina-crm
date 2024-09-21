@@ -15,6 +15,9 @@ class VoucherController extends Controller
      */
     public function index(Athlete $athlete)
     {
+
+        $this->authorize('xxx');
+
         if (request()->ajax()) {
             return datatables()->eloquent($athlete->vouchers())
             ->addColumn('action', function ($voucher) use($athlete){
@@ -33,6 +36,8 @@ class VoucherController extends Controller
      */
     public function create(Athlete $athlete)
     {
+        $this->authorize('xxx');
+
         $voucher = new Voucher();
         return view('backend.athletes.vouchers.create', compact('athlete', 'voucher'));
     }
@@ -43,6 +48,8 @@ class VoucherController extends Controller
      */
     public function store(VoucherRequest $request, Athlete $athlete)
     {
+        $this->authorize('xxx');
+
         $athlete->vouchers()->create($request->validated());
         Utility::flashMessage();
         
@@ -54,7 +61,8 @@ class VoucherController extends Controller
      */
     public function show(Voucher $voucher)
     {
-        //
+        $this->authorize('xxx');
+
     }
 
     /**
@@ -62,6 +70,8 @@ class VoucherController extends Controller
      */
     public function edit(Athlete $athlete, Voucher $voucher)
     {
+        $this->authorize('xxx');
+
         return view('backend.athletes.vouchers.edit', compact('athlete', 'voucher'));
     }
 
@@ -70,6 +80,8 @@ class VoucherController extends Controller
      */
     public function update(VoucherRequest $request, Athlete $athlete, Voucher $voucher)
     {
+        $this->authorize('xxx');
+
         $voucher->update($request->validated());
         Utility::flashMessage();
         return redirect(route('athletes.vouchers.index', $athlete));
@@ -80,6 +92,8 @@ class VoucherController extends Controller
      */
     public function destroy(Athlete $athlete, Voucher $voucher)
     {
+        $this->authorize('xxx');
+        
         $voucher->delete();
         Utility::flashMessage();
         return redirect(route('athletes.vouchers.index', $athlete));

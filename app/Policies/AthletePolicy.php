@@ -2,10 +2,9 @@
 
 namespace App\Policies;
 
-use App\Enums\AthletePermission;
-use App\Models\Athlete;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Athlete;
+use App\Enums\Permissions;
 
 class AthletePolicy
 {
@@ -14,7 +13,8 @@ class AthletePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can(AthletePermission::ListAthletes);
+        return false;
+        return $user->can(Permissions::ListAthletes);
     }
 
     /**
@@ -22,7 +22,7 @@ class AthletePolicy
      */
     public function view(User $user): bool
     {
-        return $user->can(AthletePermission::ViewAthletes);
+        return false;
     }
 
     /**
@@ -30,7 +30,8 @@ class AthletePolicy
      */
     public function create(User $user): bool
     {
-        return $user->can(AthletePermission::CreateAthletes);
+        return false;
+        return $user->can(Permissions::CreateAthletes);
     }
 
     /**
@@ -38,7 +39,9 @@ class AthletePolicy
      */
     public function update(User $user, Athlete $athlete): bool
     {
-        return $user->can(AthletePermission::EditAthletes) || $user->athlete->id == $athlete->id;
+        return false;
+        
+        return $user->can(Permissions::EditAthletes) || ($user->athlete ? $user->athlete->id == $athlete->id : false);
     }
 
     /**
@@ -46,7 +49,7 @@ class AthletePolicy
      */
     public function delete(User $user): bool
     {
-        return $user->can(AthletePermission::DeleteAthletes);
+        return false;//$user->can(AthletePermission::DeleteAthletes);
     }
 
     /**
@@ -54,7 +57,7 @@ class AthletePolicy
      */
     public function restore(User $user): bool
     {
-        return $user->can(AthletePermission::RestoreAthletes);
+        return false;//$user->can(AthletePermission::RestoreAthletes);
     }
 
     /**
@@ -62,6 +65,6 @@ class AthletePolicy
      */
     public function forceDelete(User $user): bool
     {
-        return $user->can(AthletePermission::DeleteAthletes);
+        return false;//$user->can(AthletePermission::DeleteAthletes);
     }
 }

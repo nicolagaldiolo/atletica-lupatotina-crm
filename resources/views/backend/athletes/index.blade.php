@@ -19,7 +19,8 @@
                 {{ __('Aggiungi') }}
             </x-buttons.create>
         @endcan
-
+        
+        {{--
         @can('restore', App\Models\Athlete::class)
             <div class="btn-group">
                 <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
@@ -34,6 +35,7 @@
                 </ul>
             </div>
         @endcan
+        --}}
     </div>
     
 @endsection

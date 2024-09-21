@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Permissions;
 use App\Http\Controllers\Controller;
 use App\Models\Athlete;
+use App\Models\Certificate;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -15,6 +17,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $this->authorize(Permissions::ViewDashboard);
+
         $races_to_pay = (Auth::user()->athlete->fees ?? collect([]))->filter(function($item){
             return !$item->athletefee->payed_at;
         });
@@ -30,20 +34,15 @@ class DashboardController extends Controller
 
     public function certificates()
     {
+        $this->authorize('viewAny', Certificate::class);
+
         if (request()->ajax()) {
 
-            $certificates = Athlete::query()->with(['certificate']);
-
-            /*// filtro sulle categorie
-            $category = request()->input('category');
-            if ($category) {
-                $articles->whereHas('categories', function($q) use($category) {
-                    $q->where('pim_categories.id', $category);
-                });
-            }
-                */
-
-            return datatables()->eloquent($certificates)
+            return datatables()->eloquent(Athlete::query()->whereHas('certificate', function($query){
+                        $query->expiring();
+                    })->with(['certificate' => function($query){
+                        $query->expiring();
+                    }]))
                 ->filterColumn('name', function($query, $keyword) {
                     $sql = "CONCAT(name, surname)  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
@@ -54,11 +53,15 @@ class DashboardController extends Controller
                 ->editColumn('name', function ($data) {
                     return $data->fullname;
                 })->make(true);
-                /*
-                ->addColumn('action', function ($athlete) {
-                    return null;
-                    //return view('backend.athletes.partials.action_column', compact('athlete'));
-                })
+        }
+    }
+
+    public function fees()
+    {
+        $this->authorize(Permissions::HandlePayments);
+
+        if (request()->ajax()) {
+            return datatables()->eloquent(Athlete::query()->whereHas('feesToPay')->with(['feesToPay.race']))
                 ->filterColumn('name', function($query, $keyword) {
                     $sql = "CONCAT(name, surname)  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
@@ -69,7 +72,6 @@ class DashboardController extends Controller
                 ->editColumn('name', function ($data) {
                     return $data->fullname;
                 })->make(true);
-                */
         }
     }
 }

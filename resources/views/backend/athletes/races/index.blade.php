@@ -40,9 +40,9 @@
                             <th>
                                 {{ __('Pagato il') }}
                             </th>
-                            <!--<th class="text-end">
+                            <th class="text-end">
                                 Action
-                            </th>-->
+                            </th>
                         </tr>
                     </thead>
                 </table>
@@ -97,12 +97,12 @@
                     return data ? '<i class="fa-solid fa-coins"></i> (' + data + ')' : '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
                 }
             },
-            //{
-            //    data: 'action',
-            //    name: 'action',
-            //    orderable: false,
-            //    searchable: false
-            //}
+            {
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
+            }
         ],
         ordering: false,
         createdRow: function( row, data, dataIndex){

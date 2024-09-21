@@ -8,7 +8,6 @@ use App\Http\Requests\FeesRequest;
 use App\Models\Athlete;
 use App\Models\Fee;
 use App\Models\Race;
-use Illuminate\Http\Request;
 
 class RaceFeeController extends Controller
 {
@@ -17,6 +16,7 @@ class RaceFeeController extends Controller
      */
     public function index(Race $race)
     {
+        $this->authorize('xxx');
 
         $this->authorize('viewAny', Fee::class);
 
@@ -36,6 +36,8 @@ class RaceFeeController extends Controller
      */
     public function create(Race $race)
     {
+        $this->authorize('xxx');
+
         $this->authorize('create', Fee::class);
 
         $fee = new Fee();
@@ -47,6 +49,8 @@ class RaceFeeController extends Controller
      */
     public function store(FeesRequest $request, Race $race)
     {
+        $this->authorize('xxx');
+
         $this->authorize('create', Fee::class);
         $race->fees()->create($request->validated());
         Utility::flashMessage();
@@ -58,7 +62,8 @@ class RaceFeeController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $this->authorize('xxx');
+
     }
 
     /**
@@ -66,6 +71,8 @@ class RaceFeeController extends Controller
      */
     public function edit(Race $race, Fee $fee)
     {
+        $this->authorize('xxx');
+
         $this->authorize('update', $fee);
         return view('backend.races.fees.edit', compact('race', 'fee'));
     }
@@ -75,6 +82,8 @@ class RaceFeeController extends Controller
      */
     public function update(FeesRequest $request, Race $race, Fee $fee)
     {
+        $this->authorize('xxx');
+
         $this->authorize('update', $fee);
         $fee->update($request->validated());
         Utility::flashMessage();
@@ -86,11 +95,15 @@ class RaceFeeController extends Controller
      */
     public function destroy(Race $race, Fee $fee)
     {
+        $this->authorize('xxx');
+
         $this->authorize('delete', $fee);
     }
 
     public function athletesSubscribeable(Race $race, Fee $fee)
     {
+        $this->authorize('xxx');
+        
         if (request()->ajax()) {
             $athletes = Athlete::with(['validVouchers'])->whereDoesntHave('fees', function($query) use($fee){
                 $query->where('fees.id', $fee->id);

@@ -13,7 +13,7 @@ class FeePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can(FeePermission::ListFees);
+        return false;//$user->can(FeePermission::ListFees);
     }
 
     /**
@@ -21,7 +21,7 @@ class FeePolicy
      */
     public function view(User $user, Fee $fee): bool
     {
-        return $user->can(FeePermission::ViewFees);
+        return false;//$user->can(FeePermission::ViewFees);
     }
 
     /**
@@ -29,7 +29,7 @@ class FeePolicy
      */
     public function create(User $user): bool
     {
-        return $user->can(FeePermission::CreateFees);
+        return false;//$user->can(FeePermission::CreateFees);
     }
 
     /**
@@ -37,7 +37,7 @@ class FeePolicy
      */
     public function update(User $user, Fee $fee): bool
     {
-        return $user->can(FeePermission::EditFees);
+        return false;//$user->can(FeePermission::EditFees);
     }
 
     /**
@@ -45,7 +45,7 @@ class FeePolicy
      */
     public function delete(User $user, Fee $fee): bool
     {
-        return $user->can(FeePermission::DeleteFees);
+        return false;//$user->can(FeePermission::DeleteFees);
     }
 
     /**
@@ -53,7 +53,7 @@ class FeePolicy
      */
     public function restore(User $user, Fee $fee): bool
     {
-        return $user->can(FeePermission::RestoreFees);
+        return false;//$user->can(FeePermission::RestoreFees);
     }
 
     /**
@@ -61,6 +61,6 @@ class FeePolicy
      */
     public function forceDelete(User $user, Fee $fee): bool
     {
-        return $user->can(FeePermission::DeleteFees);
+        return false;//$user->can(FeePermission::DeleteFees);
     }
 }

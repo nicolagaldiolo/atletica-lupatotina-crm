@@ -1,0 +1,137 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Classes\Utility;
+use App\Enums\Permissions;
+use App\Enums\Roles;
+use App\Imports\DataImport;
+use App\Models\Athlete;
+use App\Models\AthleteFee;
+use App\Models\Certificate;
+use App\Models\Fee;
+use App\Models\Payment;
+use App\Models\Race;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Voucher;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
+
+class Setup extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'app:setup';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Setup applicazioneCommand description';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        Artisan::call('migrate:fresh');
+
+        // Reset cached roles and permissions
+        Artisan::call('permission:cache-reset');
+        
+
+        $permissions = Permissions::asArray();
+        Utility::manageDbPermissions($permissions);
+
+        collect(Roles::asArray())->each(function($item, $key){
+            $permissions = [];
+            switch ($item) {
+                case Roles::Administrator:
+                    $permissions = Permissions::asArray();
+                    break;
+                case Roles::Manager:
+                    $permissions = [
+                        Permissions::ViewDashboard,
+                        Permissions::ListAthletes,
+                        Permissions::ViewAthletes,
+                        Permissions::CreateAthletes,
+                        Permissions::EditAthletes,
+                        Permissions::DeleteAthletes,
+                        Permissions::ListRaces,
+                        Permissions::ViewRaces,
+                        Permissions::CreateRaces,
+                        Permissions::EditRaces,
+                        Permissions::DeleteRaces,
+                        Permissions::HandlePayments,
+                        Permissions::HandleSubscriptions
+                    ];
+                    break;
+                case Roles::Accountant:
+                    $permissions = [
+                        Permissions::ViewDashboard,
+                        Permissions::HandlePayments,
+                    ];
+                    break;
+                case Roles::Healthcare:
+                    $permissions = [
+                        Permissions::ViewDashboard,
+                        Permissions::ListCertificates,
+                        Permissions::ViewCertificates,
+                        Permissions::CreateCertificates,
+                        Permissions::EditCertificates,
+                        Permissions::DeleteCertificates
+                    ];
+                    break;
+                case Roles::User:
+                    $permissions = [
+                        Permissions::ViewDashboard
+                    ];
+                    break;
+            }
+
+            Role::create(['name' => $item])
+                ->givePermissionTo($permissions);
+
+            User::create([
+                'name' => $key,
+                'email' => Str::slug($item) . '@domain.com',
+                'password' => Hash::make('secret'),
+                'email_verified_at' => Carbon::now(),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ])->assignRole($item);
+            
+        });
+
+        Excel::import(new DataImport, 'data.xlsx');
+
+        if (App::environment('local')) {
+            Athlete::each(function($athlete){
+                for($i = 0; $i<9; $i++){
+                    Certificate::factory()->create([
+                        'athlete_id' => $athlete->id,
+                        'expires_on' => Carbon::now()->endOfYear()->subYears($i),
+                        'is_current' => $i == 0,
+                    ]); 
+                }
+
+                Voucher::factory()->create([
+                    'athlete_id' => $athlete->id
+                ]);
+            });
+        }
+
+        Artisan::call('permission:cache-reset');
+    }
+}

@@ -20,7 +20,7 @@
                     </div>
 
                     <a class="dropdown-item" href="{{route('users.edit', Auth::user()->id)}}">
-                        <i class="fa-regular fa-user me-2"></i>&nbsp;{{ Auth::user()->name }} <br><small>galdiolo.nicola@gmail.com</small>
+                        <i class="fa-regular fa-user me-2"></i>&nbsp;{{ Auth::user()->name }}
                     </a>
                     
                     <div class="dropdown-divider"></div>

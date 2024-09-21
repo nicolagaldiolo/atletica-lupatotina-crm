@@ -112,4 +112,9 @@ class Certificate extends Model
     {
         $query->where('is_current', true);
     }
+
+    public function scopeExpiring(Builder $query): void
+    {
+        $query->where('expires_on', '<=', Carbon::now()->addMonth()->endOfMonth());
+    }
 }

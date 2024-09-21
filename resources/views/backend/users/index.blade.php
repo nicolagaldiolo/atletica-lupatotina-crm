@@ -23,6 +23,7 @@
                 <x-buttons.create route='{{ route("$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
                 @endcan
 
+                {{--
                 @can('restore_'.$module_name)
                 <div class="btn-group">
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
@@ -37,6 +38,7 @@
                     </ul>
                 </div>
                 @endcan
+                --}}
             </x-slot>
         </x-backend.section-header>
 

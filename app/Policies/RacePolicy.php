@@ -13,7 +13,7 @@ class RacePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can(RacePermission::ListRaces);
+        return false;//$user->can(RacePermission::ListRaces);
     }
 
     /**
@@ -21,7 +21,7 @@ class RacePolicy
      */
     public function view(User $user, Race $race): bool
     {
-        return $user->can(RacePermission::ViewRaces);
+        return false;//$user->can(RacePermission::ViewRaces);
     }
 
     /**
@@ -29,7 +29,7 @@ class RacePolicy
      */
     public function create(User $user): bool
     {
-        return $user->can(RacePermission::CreateRaces);
+        return false;//$user->can(RacePermission::CreateRaces);
     }
 
     /**
@@ -37,7 +37,7 @@ class RacePolicy
      */
     public function update(User $user, Race $race): bool
     {
-        return $user->can(RacePermission::EditRaces);
+        return false;//$user->can(RacePermission::EditRaces);
     }
 
     /**
@@ -45,7 +45,7 @@ class RacePolicy
      */
     public function delete(User $user, Race $race): bool
     {
-        return $user->can(RacePermission::DeleteRaces);
+        return false;//$user->can(RacePermission::DeleteRaces);
     }
 
     /**
@@ -53,7 +53,7 @@ class RacePolicy
      */
     public function restore(User $user): bool
     {
-        return $user->can(RacePermission::RestoreRaces);
+        return false;//$user->can(RacePermission::RestoreRaces);
     }
 
     /**
@@ -61,6 +61,6 @@ class RacePolicy
      */
     public function forceDelete(User $user, Race $race): bool
     {
-        return $user->can(RacePermission::DeleteRaces);
+        return false;//$user->can(RacePermission::DeleteRaces);
     }
 }
