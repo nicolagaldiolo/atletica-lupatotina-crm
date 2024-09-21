@@ -46,11 +46,4 @@
 
 {{ html()->form()->close() }}
 
-<div class="mt-3">
-    <small class="float-end text-muted">
-        Updated: {{$race->updated_at->diffForHumans()}},
-        Created at: {{$race->created_at->isoFormat('LLLL')}}
-    </small>
-</div>
-
 @endsection

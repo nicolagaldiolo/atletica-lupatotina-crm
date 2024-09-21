@@ -107,7 +107,6 @@ class Setup extends Command
                 'name' => $key,
                 'email' => Str::slug($item) . '@domain.com',
                 'password' => Hash::make('secret'),
-                'email_verified_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ])->assignRole($item);

@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('10k')->nullable();
             $table->string('half_marathon')->nullable();
             $table->string('marathon')->nullable();
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
             $table->softDeletes();
         });

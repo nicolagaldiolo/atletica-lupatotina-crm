@@ -149,7 +149,7 @@
             {
                 data: 'user',
                 render(data) {
-                    return data ? '<i class="fas fa-user"></i>' : '<i class="fas fa-user-slash text-secondary"></i>';
+                    return data ? '<i class="fas fa-user"></i> (id:' + data.id + ')' : '<i class="fas fa-user-slash text-secondary"></i>';
                 },
                 searchable: false,
                 orderable: false,

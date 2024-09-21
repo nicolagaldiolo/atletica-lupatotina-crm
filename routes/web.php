@@ -45,16 +45,13 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     
     Route::resource("roles", RolesController::class);
 
-    Route::get("users/changePassword/{id}", [UserController::class, 'changePassword'])->name('users.changePassword');
-    Route::patch("users/changePassword/{id}", [UserController::class, 'changePasswordUpdate'])->name('users.changePasswordUpdate');
-    Route::get("users/index_data", [UserController::class, 'index_data'])->name('users.index_data');
-    Route::get("users/index_list", [UserController::class, 'index_list'])->name('users.index_list');
+    Route::get("users/changePassword/{user}", [UserController::class, 'changePassword'])->name('users.changePassword');
+    Route::patch("users/changePassword/{user}", [UserController::class, 'changePasswordUpdate'])->name('users.changePasswordUpdate');
     Route::resource("users", UserController::class);
     
-    Route::group(['middleware' => ['permission:block_users']], function () {
-        Route::patch("users/{id}/block", [UserController::class, 'block'])->name('users.block');
-        Route::patch("users/{id}/unblock", [UserController::class, 'unblock'])->name('users.unblock');
-    });
+    Route::patch("users/{user}/block", [UserController::class, 'block'])->name('users.block');
+    Route::patch("users/{user}/unblock", [UserController::class, 'unblock'])->name('users.unblock');
+    
 
     Route::patch('athletes/athleteFees/{athleteFee}', [AthleteController::class, 'payFee'])->name('athletes.payFee');
     Route::delete('athletes/athleteFees/{athleteFee}', [AthleteController::class, 'destroyPayFee'])->name('athletes.destroyPayFee');
@@ -69,7 +66,7 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::post('races/subscriptions', [RaceController::class, 'subscriptionStore'])->name('races.subscription.store');
     Route::get('races/{race}/athletes', [RaceController::class, 'athletes'])->name('races.athletes');
     Route::get('races/{race}/subscriptions-list', [RaceController::class, 'subscriptionsList'])->name('races.subscriptions-list');
-    Route::resource('athleteFees', AthleteFeeController::class)->except('show');
+    
     Route::resource('races', RaceController::class)->except('show');
     
     Route::get('races/{race}/fees/{fee}/athletesSubscribeable', [RaceFeeController::class, 'athletesSubscribeable'])->name('races.fees.athletes-subscribeable');
@@ -77,6 +74,4 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::resource('races.fees', RaceFeeController::class)->except('show');
     
     Route::resource('payments', PaymentController::class)->except('show');
-
-    //Route::get('reports/athletes', [ReportController::class, 'athletes'])->name('reports.athletes');
 });

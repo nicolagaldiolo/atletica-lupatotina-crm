@@ -18,9 +18,9 @@ if (user_registration()) {
     Route::get('invite/{athlete}', [RegisteredUserController::class, 'invite'])->name('invite');
 
     Route::middleware('guest')->group(function () {
-        Route::get('register', [RegisteredUserController::class, 'create'])->middleware('signed')->name('register');
+        Route::get('athlete/{athlete}/register', [RegisteredUserController::class, 'create'])->middleware('signed')->name('athlete.register');
 
-        Route::post('register', [RegisteredUserController::class, 'store']);
+        Route::post('athlete/{athlete}/register', [RegisteredUserController::class, 'store'])->name('athlete.register.store');
     });
 }
 

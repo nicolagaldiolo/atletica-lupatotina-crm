@@ -16,26 +16,20 @@
         <!-- Social login -->
         <x-auth-social-login />
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('athlete.register.store', $athlete) }}">
             @csrf
 
-            <!-- First Name -->
+            <!-- Name -->
             <div class="mt-4">
-                <x-label for="first_name" :value="__('First Name')" />
-                <x-input readonly id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name', $first_name)" required autofocus />
-            </div>
-
-            <!-- Last Name -->
-            <div class="mt-4">
-                <x-label for="last_name" :value="__('Last Name')" />
-                <x-input readonly id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name', $last_name)" required autofocus />
+                <x-label for="name" :value="__('Nome')" />
+                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $athlete->name . ' ' . $athlete->surname)" required autofocus />
             </div>
 
             <!-- Email Address -->
             <div class="mt-4">
                 <x-label for="email" :value="__('Email')" />
 
-                <x-input readonly id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $email)" required />
+                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $athlete->email)" required />
             </div>
 
             <!-- Password -->
@@ -53,20 +47,14 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <!-- <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
+                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
                     {{ __('Already registered?') }}
-                </a> -->
+                </a>
 
                 <x-button class="ml-4">
                     {{ __('Register') }}
                 </x-button>
             </div>
         </form>
-
-        <x-slot name="extra">
-            <p class="text-center text-gray-600 mt-4">
-                Already have an account? <a href="{{ route('login') }}" class="underline hover:text-gray-900">Login</a>.
-            </p>
-        </x-slot>
     </x-auth-card>
 </x-auth-layout>

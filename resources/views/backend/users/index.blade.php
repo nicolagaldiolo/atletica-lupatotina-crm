@@ -1,53 +1,132 @@
-@extends ('backend.layouts.app')
+@extends('backend.layouts.app')
 
-@section('title') {{ __($module_action) }} {{ __($module_title) }} @endsection
+@php
+    $entity = __('Utenti')
+@endphp
+
+@section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
 <x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item type="active" icon='{{ $module_icon }}'>{{ __($module_title) }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ $entity }}</x-backend-breadcrumb-item>
 </x-backend-breadcrumbs>
+@endsection
+
+@section('secondary-nav')
+    <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
+        @can('create', App\Models\User::class)
+            <x-buttons.create route="{{ route('users.create') }}" small="true" title="">
+                {{ __('Aggiungi') }}
+            </x-buttons.create>
+        @endcan
+    </div>
 @endsection
 
 @section('content')
 <div class="card">
     <div class="card-body">
-
-        <x-backend.section-header>
-            <i class="{{ $module_icon }}"></i> {{ __($module_title) }} <small class="text-muted">{{ __($module_action) }}</small>
-
-            <x-slot name="subtitle">
-                @lang(":module_name Management Dashboard", ['module_name'=>Str::title($module_name)])
-            </x-slot>
-            <x-slot name="toolbar">
-                @can('add_'.$module_name)
-                <x-buttons.create route='{{ route("$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
-                @endcan
-
-                {{--
-                @can('restore_'.$module_name)
-                <div class="btn-group">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-cog"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href='{{ route("$module_name.trashed") }}'>
-                                <i class="fas fa-eye-slash"></i> View trash
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                @endcan
-                --}}
-            </x-slot>
-        </x-backend.section-header>
-
-        <livewire:users-index />
-
-    </div>
-    <div class="card-footer">
-
+        <div class="row">
+            <div class="col">
+                <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>{{ __('Nome') }}</th>
+                            <th>{{ __('Email') }}</th>
+                            <th>{{ __('Status') }}</th>
+                            <th>{{ __('Ruoli') }}</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
 @endsection
+
+@push ('after-styles')
+<!-- DataTables Core and Extensions -->
+<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
+
+@endpush
+
+@push ('after-scripts')
+<!-- DataTables Core and Extensions -->
+<script type="module" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
+
+<script type="module">
+    $('#datatable').DataTable({
+        processing: true,
+        serverSide: true,
+        autoWidth: true,
+        responsive: true,
+        ajax: '{{ route("users.index") }}',
+        order: [[1, 'asc']],
+        columns: [{
+                data: 'id',
+                name: 'id',
+                visible:false
+            },
+            {
+                data: 'name',
+                name: 'name',
+            },
+            {
+                data: 'email',
+                name: 'email',
+                searchable: false,
+            },
+            {
+                data: 'status',
+                name: 'status',
+                searchable: false,
+                render(data) {
+                    var result = null;
+                    console.log("data", data);
+                    switch (data) {
+                        case 1:
+                            result = '<span class="badge bg-success">Attivo</span>';
+                            break;
+
+                        case 2:
+                            result = '<span class="badge bg-warning text-dark">Bloccato</span>';
+                            break;
+
+                        default:
+                            result = '<span class="badge bg-primary">Status:' + data + '</span>';
+                            break;
+                    }
+                    return result;
+                    
+                },
+            },
+            {
+                data: 'roles',
+                name: 'roles',
+                searchable: false,
+                render(data) {
+                    if(data.length){
+                        var result = data.reduce(function(arr,role){
+                            arr.push('<li><span class="fa-li"><i class="fas fa-check-square"></i></span> ' + role.name + '</li>');
+                            return arr;
+                        }, []);
+                        return "<ul class='fa-ul'>" + result.join("") + "</ul>";
+                    }else{
+                        return null;
+                    }
+                },
+            },
+            {
+                data: 'action',
+                name: 'action',
+                searchable: false,
+                orderable: false,
+            }
+        ]
+    });
+</script>
+@endpush

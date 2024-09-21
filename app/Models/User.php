@@ -20,18 +20,12 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
-    use UserPresenter;
 
     protected $fillable = [
         'name',
         'email',
         'password',
         'avatar',
-    ];
-
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -45,14 +39,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     public function athlete()
     {
         return $this->hasOne(Athlete::class);
-    }
-
-    /**
-     * Get the list of users related to the current User.
-     */
-    public function getRolesListAttribute()
-    {
-        return array_map('intval', $this->roles->pluck('id')->toArray());
     }
 
     public function getAvatarAttribute()

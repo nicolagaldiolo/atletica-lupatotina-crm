@@ -29,7 +29,7 @@ class RegisteredUserController extends Controller
      public function invite(Athlete $athlete)
      {
         try{
-            Notification::route('mail', $athlete->email)->notify(new UserInvited());
+            Notification::route('mail', $athlete->email)->notify(new UserInvited($athlete));
             Utility::flashMessage('success', "Invito inviato a {$athlete->email}");
         }catch( \Exception $e){
             Utility::flashMessage('error', 'Qualcosa è andato storto');
@@ -39,19 +39,13 @@ class RegisteredUserController extends Controller
      }
     
     
-     public function create(Request $request)
+     public function create(Request $request, Athlete $athlete)
     {
-        $request->validate([
-            'email' => ['required', 'string', 'email', 'max:191', 'unique:users', 'exists:athletes'],
-        ]);
+        if($athlete->user){
+            return redirect()->route('login');
+        }
 
-        $athlete = Athlete::where('email', $request->get('email'))->firstOrFail();
-
-        $first_name = $athlete->name;
-        $last_name = $athlete->surname;
-        $email = $athlete->email;
-
-        return view('auth.register', compact('first_name', 'last_name', 'email'));
+        return view('auth.register', compact('athlete'));
     }
 
     /**
@@ -61,29 +55,26 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request, Athlete $athlete)
     {
         $request->validate([
-            'first_name' => ['required', 'string', 'max:191'],
-            'last_name' => ['required', 'string', 'max:191'],
+            'name' => ['required', 'string', 'max:191'],
             'email' => ['required', 'string', 'email', 'max:191', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'name' => $request->first_name.' '.$request->last_name,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        $athlete = Athlete::where('email', $request->email)->first()->user()->associate($user);
+        $athlete->user()->associate($user);
         $athlete->save();
 
         app()['cache']->forget('spatie.permission.cache');
 
-        $user->assignRole(Roles::Athlete);
+        $user->assignRole(Roles::User);
 
         Auth::login($user);
 

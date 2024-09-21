@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Athlete;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,12 +13,14 @@ class UserInvited extends Notification
 {
     use Queueable;
 
+    protected $athlete;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(Athlete $athlete)
     {
-        //
+        $this->athlete = $athlete;
     }
 
     /**
@@ -36,7 +39,7 @@ class UserInvited extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $appName = env('APP_NAME');
-        $url = $this->generateInvitationUrl($notifiable->routes['mail']);
+        $url = $this->generateInvitationUrl($this->athlete);
 
         return (new MailMessage)
                     ->subject('Personal Invitation')
@@ -58,11 +61,11 @@ class UserInvited extends Notification
         ];
     }
 
-    public function generateInvitationUrl(string $email)
+    public function generateInvitationUrl(Athlete $athlete)
     {
         // ! Don't forget to import the URL Facade !
-        return URL::temporarySignedRoute('register', now()->addDay(), [
-            'email' => $email
+        return URL::temporarySignedRoute('athlete.register', now()->addDay(), [
+            'athlete' => $athlete
         ]);
     }
 }

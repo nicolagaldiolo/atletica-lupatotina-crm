@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('athlete_id')->constrained()->onDelete('cascade');
             $table->foreignId('fee_id')->constrained()->onDelete('cascade');
-            $table->foreignId('voucher_id')->unique()->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('voucher_id')->unique()->nullable()->constrained()->onDelete('restrict');
             $table->decimal('custom_amount', 14, 2)->default(0);
             $table->timestamp('payed_at')->nullable();
             $table->timestamps();
