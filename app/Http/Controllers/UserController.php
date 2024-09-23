@@ -30,7 +30,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        $this->authorize('xxx');
         $this->authorize('viewAny', User::class);
 
         if (request()->ajax()) {
@@ -50,8 +49,6 @@ class UserController extends Controller
      */
     public function create()
     {
-        $this->authorize('xxx');
-
         $this->authorize('create', User::class);
         
         $user = new user();
@@ -68,6 +65,9 @@ class UserController extends Controller
      */
     public function store(UsersRequest $request)
     {
+
+        $this->authorize('create', User::class);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -102,20 +102,22 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        if (!(auth()->user()->can('edit_users') || Auth::user()->id == $user->id)) {
-            abort(404);
+        if (!(auth()->user()->can('update', $user) || Auth::user()->id == $user->id)) {
+            abort(403);
         }
 
         $this->authorize('xxx');
+        
+        if(auth()->user()->can('update', $user)){
+            $roles = Role::get();
+            $permissions = Permission::select('name', 'id')->get();
 
-        $roles = Role::get();
-        $permissions = Permission::select('name', 'id')->get();
+            $userRoles = $user->roles->pluck('name')->all();
+            $userPermissions = $user->permissions->pluck('name')->all();
 
-        $userRoles = $user->roles->pluck('name')->all();
-        $userPermissions = $user->permissions->pluck('name')->all();
-
-        $roles = Role::get();
-        $permissions = Permission::select('name', 'id')->get();
+            $roles = Role::get();
+            $permissions = Permission::select('name', 'id')->get();
+        }
 
         return view('backend.users.edit', compact('user', 'roles', 'permissions', 'userRoles', 'userPermissions'));    
     }
@@ -131,29 +133,31 @@ class UserController extends Controller
      */
     public function update(UsersRequest $request, User $user)
     {
-        if (!(auth()->user()->can('edit_users') || Auth::user()->id == $user->id)) {
-            abort(404);
+        if (!(auth()->user()->can('update', $user) || Auth::user()->id == $user->id)) {
+            abort(403);
         }
 
         $user->update($request->except(['roles', 'permissions']));
 
-        $roles = $request['roles'];
-        $permissions = $request['permissions'];
+        if(auth()->user()->can('update', $user)){
+            $roles = $request['roles'];
+            $permissions = $request['permissions'];
 
-        // Sync Roles
-        if (isset($roles)) {
-            $user->syncRoles($roles);
-        } else {
-            $roles = [];
-            $user->syncRoles($roles);
-        }
+            // Sync Roles
+            if (isset($roles)) {
+                $user->syncRoles($roles);
+            } else {
+                $roles = [];
+                $user->syncRoles($roles);
+            }
 
-        // Sync Permissions
-        if (isset($permissions)) {
-            $user->syncPermissions($permissions);
-        } else {
-            $permissions = [];
-            $user->syncPermissions($permissions);
+            // Sync Permissions
+            if (isset($permissions)) {
+                $user->syncPermissions($permissions);
+            } else {
+                $permissions = [];
+                $user->syncPermissions($permissions);
+            }
         }
 
         Utility::flashMessage();
@@ -197,6 +201,7 @@ class UserController extends Controller
     public function block(User $user)
     {
         $this->authorize('xxx');
+        $this->authorize('block', $user);
 
         if (auth()->user()->id == $user->id) {
             Utility::flashMessage('error', 'Non puoi disabilitare te stesso');
@@ -221,6 +226,7 @@ class UserController extends Controller
     public function unblock(User $user)
     {
         $this->authorize('xxx');
+        $this->authorize('block', $user);
 
         $user->status = 1;
         $user->save();
@@ -241,6 +247,9 @@ class UserController extends Controller
     public function changePassword(User $user)
     {
         $this->authorize('xxx');
+        if (!(auth()->user()->can('update', $user) || Auth::user()->id == $user->id)) {
+            abort(403);
+        }
         
         return view("backend.users.change_password", compact('user'));
     }
@@ -258,6 +267,9 @@ class UserController extends Controller
     public function changePasswordUpdate(Request $request, User $user)
     {
         $this->authorize('xxx');
+        if (!(auth()->user()->can('update', $user) || Auth::user()->id == $user->id)) {
+            abort(403);
+        }
 
         $this->validate($request, [
             'password' => 'required|confirmed|min:6',

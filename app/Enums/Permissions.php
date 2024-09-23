@@ -43,15 +43,17 @@ final class Permissions extends Enum
     const HandleSubscriptions = 'handle_subscriptions';
 
     // Users
+    const ListUsers = 'list_users';
     const ViewUsers = 'view_users';
-    const AddUsers = 'add_users';
+    const CreateUsers = 'create_users';
     const EditUsers = 'edit_users';
     const DeleteUsers = 'delete_users';
     const BlockUsers = 'block_users';
 
     // Roles
+    const ListRoles = 'list_roles';
     const ViewRoles = 'view_roles';
-    const AddRoles = 'add_roles';
+    const CreateRoles = 'create_roles';
     const EditRoles = 'edit_roles';
     const DeleteRoles = 'delete_roles';
 }

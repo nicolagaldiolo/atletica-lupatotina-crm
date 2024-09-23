@@ -18,9 +18,11 @@
             <x-slot name="subtitle">
                 @lang(":module_name Management Dashboard", ['module_name'=>Str::title($module_name)])
             </x-slot>
-            <x-slot name="toolbar">
-                <x-buttons.create route='{{ route("$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
-            </x-slot>
+            @can('create', App\Models\Role::class)
+                <x-slot name="toolbar">
+                    <x-buttons.create route='{{ route("$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
+                </x-slot>
+            @endcan
         </x-backend.section-header>
         
         <div class="row mt-4">
@@ -34,23 +36,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($$module_name as $module_name_singular)
+                        @foreach ($$module_name as $role)
                         <tr>
                             <td>
                                 <strong>
-                                    {{ $module_name_singular->name }}
+                                    {{ $role->name }}
                                 </strong>
                             </td>
                             <td>
-                                @foreach ($module_name_singular->permissions as $permission)
+                                @foreach ($role->permissions as $permission)
                                 <li>{{ $permission->name }}</li>
                                 @endforeach
                             </td>
                             <td class="text-end">
-                                @can('edit_'.$module_name)
-                                <x-buttons.edit route='{!!route("$module_name.edit", $module_name_singular)!!}' title="{{__('Edit')}} {{ ucwords(Str::singular($module_name)) }}" small="true" />
+                                @can('update', $role)
+                                    <x-buttons.edit route="{{ route('roles.edit', $role) }}" title="{{__('Edit')}} {{ ucwords(Str::singular($module_name)) }}" small="true" />
                                 @endcan
-                                <x-buttons.show route='{!!route("$module_name.show", $module_name_singular)!!}' title="{{__('Show')}} {{ ucwords(Str::singular($module_name)) }}" small="true" />
                             </td>
                         </tr>
                         @endforeach

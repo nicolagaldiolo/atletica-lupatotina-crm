@@ -22,10 +22,10 @@
                 <div class="col">
                     <div class="float-end">
                         <div class="form-group">
-                            @can('viewAny', App\Models\Users::class)
+                            @can('viewAny', App\Models\User::class)
                                 <x-backend.buttons.return route='{{ route("users.index") }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
                             @endcan
-                            @can('create', App\Models\Users::class)
+                            @can('create', App\Models\User::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                             @endcan
                         </div>

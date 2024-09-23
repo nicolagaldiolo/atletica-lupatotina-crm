@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::get('dashboard/certificates', [DashboardController::class, 'certificates'])->name('dashboard.certificates');
     Route::get('dashboard/fees', [DashboardController::class, 'fees'])->name('dashboard.fees');
     
-    Route::resource("roles", RolesController::class);
+    Route::resource("roles", RolesController::class)->except('show');
 
     Route::get("users/changePassword/{user}", [UserController::class, 'changePassword'])->name('users.changePassword');
     Route::patch("users/changePassword/{user}", [UserController::class, 'changePasswordUpdate'])->name('users.changePasswordUpdate');

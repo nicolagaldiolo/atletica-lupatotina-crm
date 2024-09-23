@@ -47,6 +47,8 @@ class RolesController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Role::class);
+
         $module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
@@ -73,6 +75,9 @@ class RolesController extends Controller
      */
     public function create()
     {
+
+        $this->authorize('create', Role::class);
+
         $module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
@@ -97,6 +102,8 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Role::class);
+
         $module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
@@ -130,25 +137,8 @@ class RolesController extends Controller
      * @return \Illuminate\Http\Response
      * @return \Illuminate\View\View
      */
-    public function show($id)
+    public function show(Role $role)
     {
-        $module_title = $this->module_title;
-        $module_name = $this->module_name;
-        $module_path = $this->module_path;
-        $module_icon = $this->module_icon;
-        $module_model = $this->module_model;
-        $module_name_singular = Str::singular($module_name);
-
-        $module_action = 'Show';
-
-        $$module_name_singular = $module_model::findOrFail($id);
-
-        Log::info(label_case($module_title.' '.$module_action).' | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
-
-        return view(
-            "backend.{$module_name}.show",
-            compact('module_title', 'module_name', 'module_path', 'module_icon', 'module_action', 'module_name_singular', "{$module_name_singular}")
-        );
     }
 
     /**
@@ -158,8 +148,10 @@ class RolesController extends Controller
      * @return \Illuminate\Http\Response
      * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
+        $this->authorize('update', $role);
+
         $module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
@@ -171,7 +163,7 @@ class RolesController extends Controller
 
         $permissions = Permission::select('name', 'id')->get();
 
-        $$module_name_singular = $module_model::findOrFail($id);
+        $$module_name_singular = $role;
 
         Log::info(label_case($module_title.' '.$module_action).' | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
@@ -185,8 +177,10 @@ class RolesController extends Controller
      * @return \Illuminate\Http\Response
      * @return \Illuminate\View\View
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Role $role)
     {
+        $this->authorize('update', $role);
+
         $module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
@@ -196,10 +190,10 @@ class RolesController extends Controller
 
         $module_action = 'Update';
 
-        $$module_name_singular = $module_model::findOrFail($id);
+        $$module_name_singular = $role;
 
         $this->validate($request, [
-            'name' => 'required|max:20|unique:roles,name,'.$id,
+            'name' => 'required|max:20|unique:roles,name,'.$role->id,
             'permissions' => 'required',
         ]);
 
@@ -230,8 +224,10 @@ class RolesController extends Controller
      * @return \Illuminate\Http\Response
      * @return \Illuminate\View\View
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
+        $this->authorize('delete', $role);
+
         $module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
@@ -241,45 +237,44 @@ class RolesController extends Controller
 
         $module_action = 'Destroy';
 
-        $$module_name_singular = Role::findOrFail($id);
-
         $user_roles = auth()->user()->roles()->pluck('id');
-        $role_users = $$module_name_singular->users;
+        $role_users = $role->users;
 
-        if ($id === 1) {
+        if ($role->id === 1) {
             Flash::warning("<i class='fas fa-exclamation-triangle'></i> You can not delete 'Administrator'!")->important();
 
             Log::notice(label_case($module_title.' '.$module_action).' Failed | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-            return redirect()->route("{$module_name}.index");
+            return redirect()->route("roles.index");
         }
-        if (in_array($id, $user_roles->toArray())) {
+        if (in_array($role->id, $user_roles->toArray())) {
             Flash::warning("<i class='fas fa-exclamation-triangle'></i> You can not delete your Role!")->important();
 
             Log::notice(label_case($module_title.' '.$module_action).' Failed | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-            return redirect()->route("{$module_name}.index");
+            return redirect()->route("roles.index");
         }
         if ($role_users->count()) {
             Flash::warning("<i class='fas fa-exclamation-triangle'></i> Can not be deleted! ".$role_users->count().' user found!')->important();
 
             Log::notice(label_case($module_title.' '.$module_action).' Failed | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-            return redirect()->route("{$module_name}.index");
+            return redirect()->route("roles.index");
         }
 
         try {
-            if ($$module_name_singular->delete()) {
+            if ($role->delete()) {
                 Flash::success('Role successfully deleted!')->important();
 
                 Log::info(label_case($module_title.' '.$module_action).' | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
-                return redirect()->back();
+                return redirect()->route("roles.index");
             }
         } catch (\Exception $e) {
             Log::error($e);
 
-            Log::error('Can not delete role with id '.$id);
+            Log::error('Can not delete role with id '.$role->id);
         }
+
     }
 }

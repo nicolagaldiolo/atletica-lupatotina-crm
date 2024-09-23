@@ -78,7 +78,7 @@
         @endcanany
         --}}
 
-        @can('view_users')
+        @can('viewAny', App\Models\User::class)
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('users.index') }}">
                     <i class="nav-icon fa-solid fa-user-group"></i>&nbsp;{{ __('Users') }}
@@ -86,7 +86,7 @@
             </li>
         @endcan
 
-        @can('view_roles')
+        @can('viewAny', App\Models\Role::class)
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('roles.index') }}">
                     <i class="nav-icon fa-solid fa-user-shield"></i>&nbsp;{{ __('Ruoli') }}

@@ -121,7 +121,7 @@ class Setup extends Command
                     Certificate::factory()->create([
                         'athlete_id' => $athlete->id,
                         'expires_on' => Carbon::now()->endOfYear()->subYears($i),
-                        'is_current' => $i == 0,
+                        'is_current' => $i == 1,
                     ]); 
                 }
 
@@ -129,6 +129,10 @@ class Setup extends Command
                     'athlete_id' => $athlete->id
                 ]);
             });
+
+            $athlete = Athlete::findOrFail(37);
+            $athlete->user()->associate(User::find(6));
+            $athlete->save();
         }
 
         Artisan::call('permission:cache-reset');
