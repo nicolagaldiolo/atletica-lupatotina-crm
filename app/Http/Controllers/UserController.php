@@ -52,8 +52,14 @@ class UserController extends Controller
         $this->authorize('create', User::class);
         
         $user = new user();
-        $roles = Role::get();
-        $permissions = Permission::select('name', 'id')->get();
+        
+        $roles = null;
+        $permissions = null;
+        
+        if(auth()->user()->can('assign', Role::class)){
+            $roles = Role::get();
+            $permissions = Permission::select('name', 'id')->get();
+        }
 
         return view('backend.users.create', compact('user', 'roles', 'permissions'));        
     }
@@ -74,17 +80,19 @@ class UserController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        $roles = $request['roles'];
-        $permissions = $request['permissions'];
+        if(auth()->user()->can('assign', Role::class)){
+            $roles = $request['roles'];
+            $permissions = $request['permissions'];
 
-        // Sync Roles
-        if (isset($roles)) {
-            $user->syncRoles($roles);
-        }
+            // Sync Roles
+            if (isset($roles)) {
+                $user->syncRoles($roles);
+            }
 
-        // Sync Permissions
-        if (isset($permissions)) {
-            $user->syncPermissions($permissions);
+            // Sync Permissions
+            if (isset($permissions)) {
+                $user->syncPermissions($permissions);
+            }
         }
 
         Utility::flashMessage();
@@ -102,21 +110,18 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        if (!(auth()->user()->can('update', $user) || Auth::user()->id == $user->id)) {
-            abort(403);
-        }
+        $this->authorize('update', $user);
 
-        $this->authorize('xxx');
-        
-        if(auth()->user()->can('update', $user)){
+        $roles = null;
+        $permissions = null;
+        $userRoles = null;
+        $userPermissions = null;
+
+        if(auth()->user()->can('assign', Role::class)){
             $roles = Role::get();
             $permissions = Permission::select('name', 'id')->get();
-
             $userRoles = $user->roles->pluck('name')->all();
             $userPermissions = $user->permissions->pluck('name')->all();
-
-            $roles = Role::get();
-            $permissions = Permission::select('name', 'id')->get();
         }
 
         return view('backend.users.edit', compact('user', 'roles', 'permissions', 'userRoles', 'userPermissions'));    
@@ -133,13 +138,11 @@ class UserController extends Controller
      */
     public function update(UsersRequest $request, User $user)
     {
-        if (!(auth()->user()->can('update', $user) || Auth::user()->id == $user->id)) {
-            abort(403);
-        }
+        $this->authorize('update', $user);
 
         $user->update($request->except(['roles', 'permissions']));
 
-        if(auth()->user()->can('update', $user)){
+        if(auth()->user()->can('assign', Role::class)){
             $roles = $request['roles'];
             $permissions = $request['permissions'];
 
@@ -162,7 +165,11 @@ class UserController extends Controller
 
         Utility::flashMessage();
 
-        return redirect(route('users.index'));
+        if(auth()->user()->can('viewAny', User::class)){
+            return redirect(route('users.index'));
+        }else{
+            return redirect(route('dashboard'));
+        }
     }
 
     /**

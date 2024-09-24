@@ -47,4 +47,9 @@ class RolePolicy
     {
         return $user->can(Permissions::DeleteRoles);
     }
+
+    public function assign(User $user): bool
+    {
+        return $user->can(Permissions::AssignRoles);
+    }
 }

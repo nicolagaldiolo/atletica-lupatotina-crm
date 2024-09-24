@@ -20,7 +20,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return false;
+        return $user->can(Permissions::CreateUsers);
     }
 
     /**
@@ -36,7 +36,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return false; //$user->can(Permissions::EditUsers);
+        return $user->can(Permissions::EditUsers) || $user->id === $model->id;
     }
 
     /**

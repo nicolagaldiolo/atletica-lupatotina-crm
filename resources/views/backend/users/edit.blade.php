@@ -88,63 +88,65 @@
             </div>
         </div>
 
-        <div class="form-group row mb-3">
-            {{ html()->label(__('Abilities'))->class('col-sm-2 form-control-label') }}
-            <div class="col">
-                <div class="row mb-3">
-                    <div class="col-sm-6">
-                        <div class="card card-accent-primary">
-                            <div class="card-header">
-                                @lang('Roles')
-                            </div>
-                            <div class="card-body">
-                                @if ($roles->count())
-                                @foreach($roles as $role)
-                                <div class="card mb-3">
-                                    <div class="card-header">
-                                        <div class="checkbox">
-                                            {{ html()->label(html()->checkbox('roles[]', in_array($role->name, $userRoles), $role->name)->id('role-'.$role->id) . "&nbsp;". ucwords($role->name) . "&nbsp;(".$role->name.")")->for('role-'.$role->id) }}
+        @can('assign', App\Models\Role::class)
+            <div class="form-group row mb-3">
+                {{ html()->label(__('Abilities'))->class('col-sm-2 form-control-label') }}
+                <div class="col">
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <div class="card card-accent-primary">
+                                <div class="card-header">
+                                    @lang('Roles')
+                                </div>
+                                <div class="card-body">
+                                    @if ($roles->count())
+                                    @foreach($roles as $role)
+                                    <div class="card mb-3">
+                                        <div class="card-header">
+                                            <div class="checkbox">
+                                                {{ html()->label(html()->checkbox('roles[]', in_array($role->name, $userRoles), $role->name)->id('role-'.$role->id) . "&nbsp;". ucwords($role->name) . "&nbsp;(".$role->name.")")->for('role-'.$role->id) }}
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            @if ($role->id != 1)
+                                            @if ($role->permissions->count())
+                                            @foreach ($role->permissions as $permission)
+                                            <i class="far fa-check-circle mr-1"></i>&nbsp;{{ $permission->name }}&nbsp;
+                                            @endforeach
+                                            @else
+                                            @lang('None')
+                                            @endif
+                                            @else
+                                            @lang('All Permissions')
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="card-body">
-                                        @if ($role->id != 1)
-                                        @if ($role->permissions->count())
-                                        @foreach ($role->permissions as $permission)
-                                        <i class="far fa-check-circle mr-1"></i>&nbsp;{{ $permission->name }}&nbsp;
-                                        @endforeach
-                                        @else
-                                        @lang('None')
-                                        @endif
-                                        @else
-                                        @lang('All Permissions')
-                                        @endif
-                                    </div>
+                                    <!--card-->
+                                    @endforeach
+                                    @endif
                                 </div>
-                                <!--card-->
-                                @endforeach
-                                @endif
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="card card-accent-info">
-                            <div class="card-header">
-                                @lang('Permissions')
-                            </div>
-                            <div class="card-body">
-                                @if ($permissions->count())
-                                @foreach($permissions as $permission)
-                                <div class="checkbox">
-                                    {{ html()->label(html()->checkbox('permissions[]', in_array($permission->name, $userPermissions), $permission->name)->id('permission-'.$permission->id) . ' ' . $permission->name)->for('permission-'.$permission->id) }}
+                        <div class="col-sm-6">
+                            <div class="card card-accent-info">
+                                <div class="card-header">
+                                    @lang('Permissions')
                                 </div>
-                                @endforeach
-                                @endif
+                                <div class="card-body">
+                                    @if ($permissions->count())
+                                    @foreach($permissions as $permission)
+                                    <div class="checkbox">
+                                        {{ html()->label(html()->checkbox('permissions[]', in_array($permission->name, $userPermissions), $permission->name)->id('permission-'.$permission->id) . ' ' . $permission->name)->for('permission-'.$permission->id) }}
+                                    </div>
+                                    @endforeach
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endcan
     </div>
 </div>
 

@@ -56,4 +56,5 @@ final class Permissions extends Enum
     const CreateRoles = 'create_roles';
     const EditRoles = 'edit_roles';
     const DeleteRoles = 'delete_roles';
+    const AssignRoles = 'assign_roles';
 }
