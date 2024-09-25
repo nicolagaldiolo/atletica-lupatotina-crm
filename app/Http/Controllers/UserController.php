@@ -3,23 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Utility;
-use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UsersRequest;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
-use App\Notifications\UserAccountCreated;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
-use Laracasts\Flash\Flash;
-use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
@@ -97,7 +88,7 @@ class UserController extends Controller
 
         Utility::flashMessage();
 
-        return redirect(route('users.index'));
+        return $this->canRedirectOrHome();
     }
 
     /**
@@ -165,11 +156,7 @@ class UserController extends Controller
 
         Utility::flashMessage();
 
-        if(auth()->user()->can('viewAny', User::class)){
-            return redirect(route('users.index'));
-        }else{
-            return redirect(route('dashboard'));
-        }
+        return $this->canRedirectOrHome();
     }
 
     /**
@@ -182,19 +169,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-
-        $this->authorize('xxx');
-
         $this->authorize('delete', $user);
 
-        if (auth()->user()->id == $user->id) {
-            Utility::flashMessage('error', 'Non puoi eliminare te stesso');
-        }else{
-            $user->delete();
-            Utility::flashMessage();
-        }
-        
-        return redirect(route('users.index'));
+        $user->delete();
+        Utility::flashMessage();
+
+        return $this->canRedirectOrHome();
     }
 
     /**
@@ -207,19 +187,14 @@ class UserController extends Controller
      */
     public function block(User $user)
     {
-        $this->authorize('xxx');
         $this->authorize('block', $user);
 
-        if (auth()->user()->id == $user->id) {
-            Utility::flashMessage('error', 'Non puoi disabilitare te stesso');
-        }else{
-            $user->status = 2;
-            $user->save();
+        $user->status = 2;
+        $user->save();
 
-            Utility::flashMessage();
-        }
-
-        return redirect(route('users.index'));
+        Utility::flashMessage();
+        
+        return $this->canRedirectOrHome();
     }
 
     /**
@@ -232,7 +207,6 @@ class UserController extends Controller
      */
     public function unblock(User $user)
     {
-        $this->authorize('xxx');
         $this->authorize('block', $user);
 
         $user->status = 1;
@@ -240,7 +214,7 @@ class UserController extends Controller
 
         Utility::flashMessage();
 
-        return redirect(route('users.index'));
+        return $this->canRedirectOrHome();
     }
 
     /**
@@ -253,11 +227,8 @@ class UserController extends Controller
      */
     public function changePassword(User $user)
     {
-        $this->authorize('xxx');
-        if (!(auth()->user()->can('update', $user) || Auth::user()->id == $user->id)) {
-            abort(403);
-        }
-        
+        $this->authorize('update', $user);
+
         return view("backend.users.change_password", compact('user'));
     }
 
@@ -273,23 +244,27 @@ class UserController extends Controller
      */
     public function changePasswordUpdate(Request $request, User $user)
     {
-        $this->authorize('xxx');
-        if (!(auth()->user()->can('update', $user) || Auth::user()->id == $user->id)) {
-            abort(403);
-        }
+        $this->authorize('update', $user);
 
         $this->validate($request, [
             'password' => 'required|confirmed|min:6',
         ]);
 
-        $password = $request->get('password');
-        
         $user->update([
-            'password' => Hash::make($password)
+            'password' => Hash::make($request->get('password'))
         ]);
 
         Utility::flashMessage();
 
-        return redirect(route('users.index'));
+        return $this->canRedirectOrHome();
+    }
+
+    protected function canRedirectOrHome()
+    {
+        if(auth()->user()->can('viewAny', User::class)){
+            return redirect(route('users.index'));
+        }else{
+            return redirect(route('dashboard'));
+        }
     }
 }

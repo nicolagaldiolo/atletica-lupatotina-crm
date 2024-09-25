@@ -20,7 +20,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $user->can(Permissions::CreateUsers);
+        return false;
     }
 
     /**
@@ -44,7 +44,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return false; //$user->can(Permissions::DeleteUsers);
+        return $user->can(Permissions::DeleteUsers) && $user->id !== $model->id;
     }
 
     /**
@@ -52,6 +52,6 @@ class UserPolicy
      */
     public function block(User $user, User $model): bool
     {
-        return false; //$user->can(Permissions::BlockUsers);
+        return $user->can(Permissions::BlockUsers) && $user->id !== $model->id;
     }
 }

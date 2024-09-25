@@ -102,7 +102,7 @@ class RaceFeeController extends Controller
 
     public function athletesSubscribeable(Race $race, Fee $fee)
     {
-        $this->authorize('xxx');
+        $this->authorize('subscribe', Race::class);
         
         if (request()->ajax()) {
             $athletes = Athlete::with(['validVouchers'])->whereDoesntHave('fees', function($query) use($fee){

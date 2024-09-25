@@ -137,7 +137,7 @@ class RaceController extends Controller
 
     public function subscriptionCreate()
     {
-        $this->authorize('xxx');
+        $this->authorize('subscribe', Race::class);
 
         $races = Race::whereHas('fees')->with('fees')->get();
 
@@ -147,10 +147,10 @@ class RaceController extends Controller
 
     public function subscriptionStore(RaceSubscriptionsRequest $request)
     {
-        $this->authorize('xxx');
+        $this->authorize('subscribe', Race::class);
 
-        //$this->authorize('create', AthleteRace::class);
         Fee::findOrFail($request->get('fee_id'))->athletes()->syncWithoutDetaching($request->get('athletes', []));
+        
         Utility::flashMessage();
         return redirect(route('races.subscription.create'));
     }
@@ -175,6 +175,7 @@ class RaceController extends Controller
         $this->authorize('xxx');
         
         $race->load(['athleteFee.athlete', 'athleteFee.fee']);
+        
         $filename = Str::slug("Iscrizione {$race->name}") . ".xlsx";
         return Excel::download(new RaceSubscriptionsExport($race->athleteFee), $filename);
     }

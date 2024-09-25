@@ -73,5 +73,5 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     
     Route::resource('races.fees', RaceFeeController::class)->except('show');
     
-    Route::resource('payments', PaymentController::class)->except('show');
+    Route::resource('payments', PaymentController::class)->only(['create', 'store']);
 });

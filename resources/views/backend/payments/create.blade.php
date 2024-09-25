@@ -19,9 +19,6 @@
             {{ $entity }}
 
             <x-slot name="toolbar">
-                {{--@can('viewAny', App\Models\Race::class)
-                    <x-backend.buttons.return route='{{ route("races.athletes.index", $race) }}' icon="fas fa-reply" small="true" />
-                @endcan--}}
             </x-slot>
         </x-backend.section-header>
     </div>
@@ -54,7 +51,7 @@
                 <div class="col">
                     <div class="float-end">
                         <div class="form-group">
-                            @can('create', App\Models\Race::class)
+                            @can('registerPayment', App\Models\Race::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                             @endcan
                         </div>

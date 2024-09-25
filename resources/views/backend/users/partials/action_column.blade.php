@@ -15,7 +15,7 @@
             <x-backend.buttons.update icon="fas fa-check" route="{{ route('users.unblock', $user) }}" small="true" data_confirm='Sei sicuro?' data_method="PATCH" data_token="{{csrf_token()}}"/>
         @endif
     @endcan
-    @can('block', $user)
+    @can('delete', $user)
         <x-backend.buttons.delete route="{{route('users.destroy', $user)}}" small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
     @endcan
 </div>

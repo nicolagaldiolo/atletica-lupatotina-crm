@@ -5,25 +5,18 @@ namespace App\Http\Controllers;
 use App\Classes\Utility;
 use App\Http\Controllers\Controller;
 use App\Models\Athlete;
+use App\Models\Race;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $this->authorize('xxx');
+        $this->authorize('registerPayment', Race::class);
 
         $athletes = Athlete::whereHas('fees', function($query){
             $query->whereNull('payed_at');
@@ -42,44 +35,12 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('xxx');
+        $this->authorize('registerPayment', Race::class);
 
         foreach($request->get('payments') as $key=>$value){
             Athlete::findOrFail($key)->fees()->syncWithPivotValues(array_keys($value), ['payed_at' => Carbon::now()], false);
         }
         Utility::flashMessage();
         return redirect(route('payments.create'));
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $this->authorize('xxx');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $this->authorize('xxx');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $this->authorize('xxx');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $this->authorize('xxx');
     }
 }

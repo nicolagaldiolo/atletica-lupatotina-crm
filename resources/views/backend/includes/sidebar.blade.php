@@ -42,17 +42,24 @@
             </li>
         @endcan
 
-        @can(App\Enums\Permissions::HandlePayments)
+        @can(false)
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('races.reports') }}">
                     <i class="nav-icon fas fa-download"></i>&nbsp;{{ __('Situazione soci') }}
                 </a>
             </li>
         @endcan
-        
-        {{--<li class="nav-title"><a>{{ __('Registrazioni') }}</a></li>--}}
 
-        @can(App\Enums\Permissions::HandlePayments)
+        
+        
+        @if(
+            Gate::check('subscribe', App\Models\Race::class) || 
+            Gate::check('registerPayment', App\Models\Race::class)
+        )
+            <li class="nav-title"><a>{{ __('Registrazioni') }}</a></li>
+        @endif
+
+        @can('registerPayment', App\Models\Race::class)
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('payments.create') }}">
                     <i class="nav-icon fas fa-coins"></i>&nbsp;{{ __('Pagamenti') }}
@@ -60,7 +67,7 @@
             </li>
         @endcan
 
-        @can(App\Enums\Permissions::HandlePayments)
+        @can('subscribe', App\Models\Race::class)
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('races.subscription.create') }}">
                     <i class="nav-icon fas fa-file-contract"></i>&nbsp;{{ __('Iscrizioni') }}
@@ -68,16 +75,13 @@
             </li>
         @endcan
         
-        {{--
-        @canany([
-            'view_users', 
-            'view_roles'
-        ])
-
-        <li class="nav-title"><a>{{ __('Amministrazione') }}</a></li>
-        @endcanany
-        --}}
-
+        @if(
+            Gate::check('viewAny', App\Models\User::class) || 
+            Gate::check('viewAny', App\Models\Role::class)
+        )
+            <li class="nav-title"><a>{{ __('Amministrazione') }}</a></li>
+        @endif
+        
         @can('viewAny', App\Models\User::class)
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('users.index') }}">

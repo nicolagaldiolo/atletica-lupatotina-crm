@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Permissions;
 use App\Enums\RacePermission;
 use App\Models\Race;
 use App\Models\User;
@@ -48,19 +49,13 @@ class RacePolicy
         return false;//$user->can(RacePermission::DeleteRaces);
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user): bool
+    public function subscribe(User $user): bool
     {
-        return false;//$user->can(RacePermission::RestoreRaces);
+        return $user->can(Permissions::HandleSubscriptions);
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Race $race): bool
+    public function registerPayment(User $user): bool
     {
-        return false;//$user->can(RacePermission::DeleteRaces);
+        return $user->can(Permissions::HandlePayments);
     }
 }

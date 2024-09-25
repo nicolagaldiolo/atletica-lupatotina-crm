@@ -49,7 +49,7 @@
                 <div class="col">
                     <div class="float-end">
                         <div class="form-group">
-                            @can('create', App\Models\Race::class)
+                            @can('subscribe', App\Models\Race::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                             @endcan
                         </div>
