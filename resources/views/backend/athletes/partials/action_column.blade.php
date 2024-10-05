@@ -30,9 +30,11 @@
                         </li>
                     @endcan
 
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route("athletes.races.index", $athlete) }}">{{ __('Iscrizioni') }}</a>
-                    </li>
+                    @if (Gate::any(['subscribe', 'registerPayment'], App\Models\Race::class))
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ route("athletes.races.index", $athlete) }}">{{ __('Iscrizioni') }}</a>
+                        </li>
+                    @endif
 
                     @can('viewAny', App\Models\Voucher::class)
                         <li class="nav-item">
@@ -54,9 +56,13 @@
         @can('viewAny', [App\Models\Certificate::class, $athlete])
             <x-backend.buttons.edit route='{{ route("athletes.certificates.index", $athlete) }}' small="true" icon="fas fa-briefcase-medical"/>
         @endcan
-        <x-backend.buttons.edit route='{{ route("athletes.races.index", $athlete) }}' small="true" icon="fa-solid fa-flag-checkered"/>
+        
+        @if (Gate::any(['subscribe', 'registerPayment'], App\Models\Race::class))
+            <x-backend.buttons.edit route='{{ route("athletes.races.index", $athlete) }}' small="true" icon="fa-solid fa-flag-checkered"/>
+        @endif
+
         @can('viewAny', App\Models\Voucher::class)
-        <x-backend.buttons.edit route='{{ route("athletes.vouchers.index", $athlete) }}' small="true" icon="fas fa-tags"/>
+            <x-backend.buttons.edit route='{{ route("athletes.vouchers.index", $athlete) }}' small="true" icon="fas fa-tags"/>
         @endcan
         @can('delete', $athlete)
             <x-backend.buttons.delete route='{{ route("athletes.destroy", $athlete) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>

@@ -23,11 +23,7 @@
             </li>
         @endif
         
-        @if(
-            Gate::check('viewAny', App\Models\Athlete::class) || 
-            Gate::check('viewAny', App\Models\Race::class) ||
-            Gate::check('report', App\Models\Athlete::class)
-        )
+        @if (Gate::any(['viewAny', 'report'], App\Models\Athlete::class) || Gate::check('viewAny', App\Models\Race::class))
             <li class="nav-title"><a>{{ __('Gestione società') }}</a></li>
         @endif
         
@@ -55,10 +51,7 @@
             </li>
         @endcan
         
-        @if(
-            Gate::check('subscribe', App\Models\Race::class) || 
-            Gate::check('registerPayment', App\Models\Race::class)
-        )
+        @if (Gate::any(['subscribe', 'registerPayment'], App\Models\Race::class))
             <li class="nav-title"><a>{{ __('Registrazioni') }}</a></li>
         @endif
 

@@ -11,6 +11,8 @@ use App\Exports\AtheletsExport;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\AthletesRequest;
+use App\Models\Race;
+use Illuminate\Support\Facades\Gate;
 
 class AthleteController extends Controller
 {
@@ -119,7 +121,6 @@ class AthleteController extends Controller
      */
     public function destroy(Athlete $athlete)
     {
-        $this->authorize('xxx');
         $this->authorize('delete', $athlete);
         $athlete->delete();
         Utility::flashMessage();
@@ -128,6 +129,10 @@ class AthleteController extends Controller
 
     public function races(Athlete $athlete)
     {
+        if (!Gate::any(['subscribe', 'registerPayment'], Race::class)) {
+            abort(403);
+        }
+
         if (request()->ajax()) {
             $builder = AthleteFee::with(['fee.race'])->where('athlete_id', $athlete->id);
             return datatables()->eloquent($builder)
