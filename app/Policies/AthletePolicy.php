@@ -13,7 +13,6 @@ class AthletePolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
         return $user->can(Permissions::ListAthletes);
     }
 
@@ -30,7 +29,6 @@ class AthletePolicy
      */
     public function create(User $user): bool
     {
-        return false;
         return $user->can(Permissions::CreateAthletes);
     }
 
@@ -39,8 +37,6 @@ class AthletePolicy
      */
     public function update(User $user, Athlete $athlete): bool
     {
-        return false;
-        
         return $user->can(Permissions::EditAthletes) || ($user->athlete ? $user->athlete->id == $athlete->id : false);
     }
 
@@ -49,22 +45,16 @@ class AthletePolicy
      */
     public function delete(User $user): bool
     {
-        return false;//$user->can(AthletePermission::DeleteAthletes);
+        return $user->can(Permissions::DeleteAthletes);
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user): bool
+    public function report(User $user): bool
     {
-        return false;//$user->can(AthletePermission::RestoreAthletes);
+        return $user->can(Permissions::ReportAthletes);
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user): bool
+    public function invite(User $user): bool
     {
-        return false;//$user->can(AthletePermission::DeleteAthletes);
+        return $user->can(Permissions::InviteAthletes);
     }
 }

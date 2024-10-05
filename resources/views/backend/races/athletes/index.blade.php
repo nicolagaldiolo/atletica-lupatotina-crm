@@ -14,7 +14,7 @@
 @endsection
 
 @section('secondary-nav')
-    @include ("backend.races.partials.secondary_nav")
+    @include ("backend.races.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')
@@ -22,8 +22,7 @@
     <div class="card-header">
         <x-backend.section-header>
             <x-slot name="toolbar">
-
-                @can('create', App\Models\Race::class)
+                @can('report', App\Models\Race::class)
                     <x-backend.buttons.download route="{{ route('races.subscriptions-list', $race) }}" small="true" title="">
                         {{ __('Elenco iscritti') }}
                     </x-backend.buttons.download>

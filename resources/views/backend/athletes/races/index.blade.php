@@ -14,7 +14,7 @@
 @endsection
 
 @section('secondary-nav')
-    @include ("backend.athletes.partials.secondary_nav")
+    @include ("backend.athletes.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')

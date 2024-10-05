@@ -21,6 +21,15 @@ final class Permissions extends Enum
     const CreateAthletes = 'create_athletes';
     const EditAthletes = 'edit_athletes';
     const DeleteAthletes = 'delete_athletes';
+    const ReportAthletes = 'report_athletes';
+    const InviteAthletes = 'invite_athletes';
+
+    // Vouchers
+    const ListVouchers = 'list_vouchers';
+    const ViewVouchers = 'view_vouchers';
+    const CreateVouchers = 'create_vouchers';
+    const EditVouchers = 'edit_vouchers';
+    const DeleteVouchers = 'delete_vouchers';
 
     // Certificates
     const ListCertificates = 'list_certificates';
@@ -35,6 +44,7 @@ final class Permissions extends Enum
     const CreateRaces = 'create_races';
     const EditRaces = 'edit_races';
     const DeleteRaces = 'delete_races';
+    const ReportRaces = 'report_races';
 
     // Payments
     const HandlePayments = 'handle_payments';

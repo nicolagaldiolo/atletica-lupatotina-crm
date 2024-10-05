@@ -17,14 +17,19 @@
 
         @if(Auth::user()->athlete)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route("athletes.races.index", Auth::user()->athlete) }}">
+                <a class="nav-link" href="{{ route("athletes.edit", Auth::user()->athlete) }}">
                     <i class="nav-icon fas fa-running"></i>&nbsp;@lang('I miei dati')
                 </a>
             </li>
         @endif
         
-
-        {{--<li class="nav-title"><a>{{ __('Gestione società') }}</a></li>--}}
+        @if(
+            Gate::check('viewAny', App\Models\Athlete::class) || 
+            Gate::check('viewAny', App\Models\Race::class) ||
+            Gate::check('report', App\Models\Athlete::class)
+        )
+            <li class="nav-title"><a>{{ __('Gestione società') }}</a></li>
+        @endif
         
         @can('viewAny', App\Models\Athlete::class)
             <li class="nav-item">
@@ -42,15 +47,13 @@
             </li>
         @endcan
 
-        @can(false)
+        @can('report', App\Models\Athlete::class)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('races.reports') }}">
+                <a class="nav-link" href="{{ route('athletes.reports') }}">
                     <i class="nav-icon fas fa-download"></i>&nbsp;{{ __('Situazione soci') }}
                 </a>
             </li>
         @endcan
-
-        
         
         @if(
             Gate::check('subscribe', App\Models\Race::class) || 

@@ -16,15 +16,12 @@ class VoucherController extends Controller
     public function index(Athlete $athlete)
     {
 
-        $this->authorize('xxx');
+        $this->authorize('viewAny', Voucher::class);
 
         if (request()->ajax()) {
             return datatables()->eloquent($athlete->vouchers())
             ->addColumn('action', function ($voucher) use($athlete){
-                if(!$voucher->used_at){
-                    return view('backend.athletes.vouchers.partials.action_column', compact('athlete', 'voucher'));
-                }
-                return null;
+                return view('backend.athletes.vouchers.partials.action_column', compact('athlete', 'voucher'));
             })->make(true);
         }else{
             return view('backend.athletes.vouchers.index', compact('athlete'));
@@ -36,7 +33,7 @@ class VoucherController extends Controller
      */
     public function create(Athlete $athlete)
     {
-        $this->authorize('xxx');
+        $this->authorize('create', Voucher::class);
 
         $voucher = new Voucher();
         return view('backend.athletes.vouchers.create', compact('athlete', 'voucher'));
@@ -48,7 +45,7 @@ class VoucherController extends Controller
      */
     public function store(VoucherRequest $request, Athlete $athlete)
     {
-        $this->authorize('xxx');
+        $this->authorize('create', Voucher::class);
 
         $athlete->vouchers()->create($request->validated());
         Utility::flashMessage();
@@ -61,8 +58,6 @@ class VoucherController extends Controller
      */
     public function show(Voucher $voucher)
     {
-        $this->authorize('xxx');
-
     }
 
     /**
@@ -70,7 +65,7 @@ class VoucherController extends Controller
      */
     public function edit(Athlete $athlete, Voucher $voucher)
     {
-        $this->authorize('xxx');
+        $this->authorize('update', $voucher);
 
         return view('backend.athletes.vouchers.edit', compact('athlete', 'voucher'));
     }
@@ -80,7 +75,7 @@ class VoucherController extends Controller
      */
     public function update(VoucherRequest $request, Athlete $athlete, Voucher $voucher)
     {
-        $this->authorize('xxx');
+        $this->authorize('update', $voucher);
 
         $voucher->update($request->validated());
         Utility::flashMessage();
@@ -92,7 +87,7 @@ class VoucherController extends Controller
      */
     public function destroy(Athlete $athlete, Voucher $voucher)
     {
-        $this->authorize('xxx');
+        $this->authorize('delete', $voucher);
         
         $voucher->delete();
         Utility::flashMessage();

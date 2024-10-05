@@ -4,13 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Classes\Utility;
 use App\Enums\Roles;
-use App\Events\Frontend\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Models\Athlete;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -28,6 +25,9 @@ class RegisteredUserController extends Controller
     
      public function invite(Athlete $athlete)
      {
+
+        $this->authorize('invite', $athlete);
+
         try{
             Notification::route('mail', $athlete->email)->notify(new UserInvited($athlete));
             Utility::flashMessage('success', "Invito inviato a {$athlete->email}");

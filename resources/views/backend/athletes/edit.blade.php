@@ -14,7 +14,7 @@
 @endsection
 
 @section('secondary-nav')
-    @include ("backend.athletes.partials.secondary_nav")
+    @include ("backend.athletes.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')
@@ -28,6 +28,9 @@
                     <x-backend.buttons.delete route='{{ route("athletes.destroy", $athlete) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                 @endcan
                 <div class="float-end">
+                    @can('viewAny', App\Models\Athlete::class)
+                        <x-backend.buttons.return route='{{ route("athletes.index") }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                    @endcan
                     @can('update', $athlete)
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                     @endcan
@@ -45,12 +48,5 @@
 </div>
 
 {{ html()->form()->close() }}
-
-<div class="mt-3">
-    <small class="float-end text-muted">
-        Updated: {{$athlete->updated_at->diffForHumans()}},
-        Created at: {{$athlete->created_at->isoFormat('LLLL')}}
-    </small>
-</div>
 
 @endsection

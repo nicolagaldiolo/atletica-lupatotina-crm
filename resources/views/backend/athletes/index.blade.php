@@ -19,23 +19,6 @@
                 {{ __('Aggiungi') }}
             </x-buttons.create>
         @endcan
-        
-        {{--
-        @can('restore', App\Models\Athlete::class)
-            <div class="btn-group">
-                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-cog"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a class="dropdown-item" href='{{ route("athletes.trashed") }}'>
-                            <i class="fas fa-archive"></i> {{ __('Archivio') }}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        @endcan
-        --}}
     </div>
     
 @endsection

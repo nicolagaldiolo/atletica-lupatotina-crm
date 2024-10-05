@@ -16,8 +16,6 @@ class RaceFeeController extends Controller
      */
     public function index(Race $race)
     {
-        $this->authorize('xxx');
-
         $this->authorize('viewAny', Fee::class);
 
         if (request()->ajax()) {
@@ -36,10 +34,7 @@ class RaceFeeController extends Controller
      */
     public function create(Race $race)
     {
-        $this->authorize('xxx');
-
         $this->authorize('create', Fee::class);
-
         $fee = new Fee();
         return view('backend.races.fees.create', compact('race', 'fee'));
     }
@@ -49,8 +44,6 @@ class RaceFeeController extends Controller
      */
     public function store(FeesRequest $request, Race $race)
     {
-        $this->authorize('xxx');
-
         $this->authorize('create', Fee::class);
         $race->fees()->create($request->validated());
         Utility::flashMessage();
@@ -62,8 +55,6 @@ class RaceFeeController extends Controller
      */
     public function show(string $id)
     {
-        $this->authorize('xxx');
-
     }
 
     /**
@@ -71,8 +62,6 @@ class RaceFeeController extends Controller
      */
     public function edit(Race $race, Fee $fee)
     {
-        $this->authorize('xxx');
-
         $this->authorize('update', $fee);
         return view('backend.races.fees.edit', compact('race', 'fee'));
     }
@@ -82,8 +71,6 @@ class RaceFeeController extends Controller
      */
     public function update(FeesRequest $request, Race $race, Fee $fee)
     {
-        $this->authorize('xxx');
-
         $this->authorize('update', $fee);
         $fee->update($request->validated());
         Utility::flashMessage();
@@ -95,9 +82,10 @@ class RaceFeeController extends Controller
      */
     public function destroy(Race $race, Fee $fee)
     {
-        $this->authorize('xxx');
-
         $this->authorize('delete', $fee);
+        $fee->delete();
+        Utility::flashMessage();
+        return redirect(route('races.fees.index', $race));
     }
 
     public function athletesSubscribeable(Race $race, Fee $fee)

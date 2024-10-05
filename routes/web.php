@@ -4,12 +4,10 @@ use App\Enums\Permissions;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\AthleteController;
-use App\Http\Controllers\AthleteFeeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RaceFeeController;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoucherController;
@@ -54,14 +52,15 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     
 
     Route::patch('athletes/athleteFees/{athleteFee}', [AthleteController::class, 'payFee'])->name('athletes.payFee');
-    Route::delete('athletes/athleteFees/{athleteFee}', [AthleteController::class, 'destroyPayFee'])->name('athletes.destroyPayFee');
+    Route::delete('athletes/athleteFees/{athleteFee}', [AthleteController::class, 'destroySubscription'])->name('athletes.destroySubscription');
 
+    Route::get('athletes/reports', [AthleteController::class, 'report'])->name('athletes.reports');
     Route::resource('athletes', AthleteController::class)->except('show');
     Route::get('athletes/{athlete}/races', [AthleteController::class, 'races'])->name('athletes.races.index');
     Route::resource('athletes.certificates', CertificateController::class)->except('show');
     Route::resource('athletes.vouchers', VoucherController::class)->except('show');
     
-    Route::get('races/reports', [RaceController::class, 'report'])->name('races.reports');
+    
     Route::get('races/subscriptions', [RaceController::class, 'subscriptionCreate'])->name('races.subscription.create');
     Route::post('races/subscriptions', [RaceController::class, 'subscriptionStore'])->name('races.subscription.store');
     Route::get('races/{race}/athletes', [RaceController::class, 'athletes'])->name('races.athletes');

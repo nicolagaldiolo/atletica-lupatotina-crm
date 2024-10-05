@@ -14,7 +14,7 @@
 @endsection
 
 @section('secondary-nav')
-    @include ("backend.athletes.partials.secondary_nav")
+    @include ("backend.athletes.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')
@@ -22,9 +22,11 @@
     <div class="card-header">
         <x-backend.section-header>
             <x-slot name="toolbar">
-                <x-buttons.create route="{{ route('athletes.certificates.create', $athlete) }}" small="true" title="">
-                    {{ __('Aggiungi certificato') }}
-                </x-buttons.create>
+                @can('create', [App\Models\Certificate::class, $athlete])
+                    <x-buttons.create route="{{ route('athletes.certificates.create', $athlete) }}" small="true" title="">
+                        {{ __('Aggiungi certificato') }}
+                    </x-buttons.create>
+                @endcan
             </x-slot>
         </x-backend.section-header>
     </div>
@@ -38,7 +40,7 @@
                                 #
                             </th>
                             <th>
-                                {{ __('Attivo') }}
+                                {{ __('Corrente') }}
                             </th>
                             <th>
                                 {{ __('Scadenza') }}

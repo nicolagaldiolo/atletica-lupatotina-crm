@@ -66,12 +66,17 @@
                         <div class="form-group">
                             {{ __("List of permissions") }}
                             <hr>
-                            @if ($permissions->count())
-                            @foreach($permissions as $permission)
-                            <div class="checkbox">
-                                {{ html()->label(html()->checkbox('permissions[]', in_array($permission->name, $$module_name_singular->permissions->pluck('name')->all()), $permission->name)->id('permission-'.$permission->id) . ' ' . $permission->name)->for('permission-'.$permission->id) }}
-                            </div>
-                            @endforeach
+                            @if($permissions->count())
+                                @foreach($permissions as $key=>$group)
+                                    @if($group->count())
+                                        <h6 class="pt-3">{{ $key }}</h6>
+                                        @foreach($group as $permission)
+                                            <div class="checkbox">
+                                                {{ html()->label(html()->checkbox('permissions[]', in_array($permission->name, $$module_name_singular->permissions->pluck('name')->all()), $permission->name)->id('permission-'.$permission->id) . ' ' . $permission->name)->for('permission-'.$permission->id) }}
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                @endforeach
                             @endif
                         </div>
                     </div>
@@ -96,16 +101,6 @@
 
         </div>
 
-    </div>
-    <div class="card-footer">
-        <div class="row">
-            <div class="col">
-                <small class="float-end text-muted">
-                    Updated: {{$$module_name_singular->updated_at->diffForHumans()}},
-                    Created at: {{$$module_name_singular->created_at->isoFormat('LLLL')}}
-                </small>
-            </div>
-        </div>
     </div>
 </div>
 

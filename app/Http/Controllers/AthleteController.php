@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Athlete;
 use App\Classes\Utility;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\AthletesRequest;
 use App\Models\AthleteFee;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\Exports\AtheletsExport;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\AthletesRequest;
 
 class AthleteController extends Controller
 {
@@ -20,8 +22,7 @@ class AthleteController extends Controller
 
     public function index()
     {
-        $this->authorize('xxx');
-        //$this->authorize('viewAny', Athlete::class);
+        $this->authorize('viewAny', Athlete::class);
 
         if (request()->ajax()) {
             return datatables()->eloquent(Athlete::query()->withCount('fees')->with(['certificate', 'feesToPay', 'user']))
@@ -53,7 +54,6 @@ class AthleteController extends Controller
      */
     public function create()
     {
-        $this->authorize('xxx');
         $this->authorize('create', Athlete::class);
         $athlete = new Athlete();
         return view('backend.athletes.create', compact('athlete'));
@@ -67,9 +67,8 @@ class AthleteController extends Controller
      */
     public function store(AthletesRequest $request)
     {
-        $this->authorize('xxx');
         $this->authorize('create', Athlete::class);
-        $athlete = Athlete::create($request->validated());
+        Athlete::create($request->validated());
         Utility::flashMessage();
         return redirect(route('athletes.index'));
     }
@@ -93,7 +92,6 @@ class AthleteController extends Controller
      */
     public function edit(Athlete $athlete)
     {
-        $this->authorize('xxx');
         $this->authorize('update', $athlete);
         return view('backend.athletes.edit', compact('athlete'));
     }
@@ -107,7 +105,6 @@ class AthleteController extends Controller
      */
     public function update(AthletesRequest $request, Athlete $athlete)
     {
-        $this->authorize('xxx');
         $this->authorize('update', $athlete);
         $athlete->update($request->validated());
         Utility::flashMessage();
@@ -131,7 +128,6 @@ class AthleteController extends Controller
 
     public function races(Athlete $athlete)
     {
-        $this->authorize('xxx');
         if (request()->ajax()) {
             $builder = AthleteFee::with(['fee.race'])->where('athlete_id', $athlete->id);
             return datatables()->eloquent($builder)
@@ -145,8 +141,8 @@ class AthleteController extends Controller
 
     public function payFee(Request $request, AthleteFee $athleteFee)
     {
-        $this->authorize('xxx');
-
+        $this->authorize('registerPayment', $athleteFee->fee->race);
+        
         $athleteFee->update([
             'payed_at' => ($athleteFee->payed_at ? null : Carbon::now())
         ]);
@@ -154,15 +150,44 @@ class AthleteController extends Controller
         return redirect(route('athletes.races.index', $athleteFee->athlete));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroyPayFee(AthleteFee $athleteFee)
+    public function destroySubscription(AthleteFee $athleteFee)
     {
-        $this->authorize('xxx');
-        
+        $this->authorize('subscribe', $athleteFee->fee->race);
+
         $athleteFee->delete();
         Utility::flashMessage();
         return redirect(route('athletes.races.index', $athleteFee->athlete));
+    }
+
+    public function report()
+    {
+        $this->authorize('report', Athlete::class);
+        
+        $data = Athlete::whereHas('fees')->with('fees.race')->get()->reduce(function($arr, $item){
+            $item->fees->each(function($fee) use($item, &$arr){
+                $baseData = [
+                    'athlete_name' => $item->full_name,
+                ];
+                $arr[] = array_merge($baseData, [
+                    'type' => 'subscription',
+                    'movement_name' => $fee->race->name . ' - ' . $fee->name,
+                    'created_at' => $fee->athletefee->created_at,
+                    'amount' => $fee->amount
+                ]);
+
+                if($fee->athletefee->payed_at){
+                    $arr[] = array_merge($baseData, [
+                        'type' => 'payment',
+                        'movement_name' => 'Pagato',
+                        'created_at' => $fee->athletefee->payed_at,
+                        'amount' => ($fee->amount * -1)
+                    ]);
+                }
+            });
+
+            return $arr;
+        }, []);
+
+        return Excel::download(new AtheletsExport($data), "Situazione Atleti.xlsx");
     }
 }

@@ -14,7 +14,7 @@
 @endsection
 
 @section('secondary-nav')
-    @include ("backend.athletes.partials.secondary_nav")
+    @include ("backend.athletes.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')
@@ -22,9 +22,11 @@
     <div class="card-header">
         <x-backend.section-header>
             <x-slot name="toolbar">
-                <x-buttons.create route="{{ route('athletes.vouchers.create', $athlete) }}" small="true" title="">
-                    {{ __('Crea Voucher') }}
-                </x-buttons.create>
+                @can('create', App\Models\Voucher::class)
+                    <x-buttons.create route="{{ route('athletes.vouchers.create', $athlete) }}" small="true" title="">
+                        {{ __('Crea Voucher') }}
+                    </x-buttons.create>
+                @endcan
             </x-slot>
         </x-backend.section-header>
     </div>

@@ -85,13 +85,6 @@
         </div>
         <!--/.row-->
     </div>
-
-    <div class="card-footer">
-        <x-backend.section-footer>
-            @lang('Updated'): {{$$module_name_singular->updated_at->diffForHumans()}},
-            @lang('Created at'): {{$$module_name_singular->created_at->isoFormat('LLLL')}}
-        </x-backend.section-footer>
-    </div>
 </div>
 
 @endsection

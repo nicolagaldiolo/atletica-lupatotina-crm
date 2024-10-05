@@ -6,6 +6,7 @@ use App\Enums\Permissions;
 use App\Http\Controllers\Controller;
 use App\Models\Athlete;
 use App\Models\Certificate;
+use App\Models\Race;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -34,7 +35,7 @@ class DashboardController extends Controller
 
     public function certificates()
     {
-        $this->authorize('viewAny', Certificate::class);
+        $this->authorize('viewAny', [Certificate::class, null]);
 
         if (request()->ajax()) {
 
@@ -58,8 +59,8 @@ class DashboardController extends Controller
 
     public function fees()
     {
-        $this->authorize(Permissions::HandlePayments);
-
+        $this->authorize('registerPayment', Race::class);
+        
         if (request()->ajax()) {
             return datatables()->eloquent(Athlete::query()->whereHas('feesToPay')->with(['feesToPay.race']))
                 ->filterColumn('name', function($query, $keyword) {

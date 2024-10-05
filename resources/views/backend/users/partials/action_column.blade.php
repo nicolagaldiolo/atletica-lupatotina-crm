@@ -1,16 +1,12 @@
 <div class="text-end">
     @can('update', $user)
         <x-backend.buttons.edit route='{{ route("users.edit", $user) }}' small="true" />
-    @endcan
-    @can('update', $user)
         <x-backend.buttons.edit icon="fas fa-key" route="{{ route('users.changePassword', $user) }}" small="true" />
     @endcan
     @can('block', $user)
         @if ($user->status != 2)
             <x-backend.buttons.update icon="fas fa-ban" route="{{ route('users.block', $user) }}" small="true" data_confirm='Sei sicuro?' data_method="PATCH" data_token="{{csrf_token()}}"/>
         @endif
-    @endcan
-    @can('block', $user)
         @if ($user->status == 2)
             <x-backend.buttons.update icon="fas fa-check" route="{{ route('users.unblock', $user) }}" small="true" data_confirm='Sei sicuro?' data_method="PATCH" data_token="{{csrf_token()}}"/>
         @endif

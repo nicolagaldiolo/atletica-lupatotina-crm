@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laracasts\Flash\Flash;
@@ -88,7 +89,7 @@ class RolesController extends Controller
         $module_action = 'Create';
 
         $roles = Role::get();
-        $permissions = Permission::select('name', 'id')->get();
+        $permissions = $this->permissionsGrouped();
 
         Log::info(label_case($module_title.' '.$module_action).' | User:'.auth()->user()->name.'(ID:'.auth()->user()->id.')');
 
@@ -161,7 +162,7 @@ class RolesController extends Controller
 
         $module_action = 'Edit';
 
-        $permissions = Permission::select('name', 'id')->get();
+        $permissions = $this->permissionsGrouped();
 
         $$module_name_singular = $role;
 
@@ -276,5 +277,15 @@ class RolesController extends Controller
             Log::error('Can not delete role with id '.$role->id);
         }
 
+    }
+
+    private function permissionsGrouped()
+    {
+        $permissions = Permission::select('name', 'id')->get()->groupBy(function(Permission $item){
+            $arr = explode('_', $item->name);
+            return Str::ucfirst($arr[array_key_last($arr)]);
+        })->sortKeys();
+
+        return $permissions;
     }
 }

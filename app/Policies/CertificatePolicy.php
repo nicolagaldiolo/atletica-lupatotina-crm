@@ -12,9 +12,9 @@ class CertificatePolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, Athlete $athlete = null): bool
     {
-        return $user->can(Permissions::ListCertificates);
+        return $user->can(Permissions::ListCertificates) || (($user->athlete && $athlete) ? $user->athlete->id == $athlete->id : false);
     }
 
     /**
@@ -28,10 +28,9 @@ class CertificatePolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Athlete $athlete): bool
     {
-        return false;
-        return $user->can(Permissions::CreateAthletes);
+        return $user->can(Permissions::CreateCertificates) || (($user->athlete && $athlete) ? $user->athlete->id == $athlete->id : false);
     }
 
     /**
@@ -39,32 +38,14 @@ class CertificatePolicy
      */
     public function update(User $user, Certificate $certificate): bool
     {
-        return false;
-
-        return $user->can(Permissions::EditAthletes);
+        return $user->can(Permissions::EditCertificates) || ($user->athlete ? $user->athlete->id == $certificate->athlete_id : false);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user): bool
+    public function delete(User $user, Certificate $certificate): bool
     {
-        return false;//$user->can(AthletePermission::DeleteAthletes);
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user): bool
-    {
-        return false;//$user->can(AthletePermission::RestoreAthletes);
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user): bool
-    {
-        return false;//$user->can(AthletePermission::DeleteAthletes);
+        return $user->can(Permissions::DeleteCertificates) || ($user->athlete ? $user->athlete->id == $certificate->athlete_id : false);
     }
 }

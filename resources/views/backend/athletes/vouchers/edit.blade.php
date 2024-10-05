@@ -18,23 +18,6 @@
 @endsection
 
 @section('secondary-nav')
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-coreui-toggle="collapse" data-coreui-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route("athletes.vouchers.index", $athlete) }}">
-                            <i class="far fa-times-circle"></i>
-                            {{ __('Chiudi') }}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 @endsection
 
 @section('content')
@@ -43,13 +26,16 @@
     <div class="card-header">
         <div class="row">
             <div class="col">
-                {{--@can('delete', $race)
-                    <x-backend.buttons.delete route='{{ route("races.fees.destroy", [$race, $fee]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
-                @endcan--}}
+                @can('delete', $voucher)
+                    <x-backend.buttons.delete route='{{ route("athletes.vouchers.destroy", [$athlete, $voucher]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+                @endcan
                 <div class="float-end">
-                    {{--@can('update', $race)--}}
+                    @can('viewAny', App\Models\Voucher::class)
+                        <x-backend.buttons.return route='{{ route("athletes.vouchers.index", $athlete) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                    @endcan
+                    @can('update', $voucher)
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                    {{--@endcan--}}
+                    @endcan
                 </div>
             </div>
         </div>

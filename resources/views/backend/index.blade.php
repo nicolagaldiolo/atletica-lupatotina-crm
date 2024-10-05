@@ -79,7 +79,7 @@
     @endif
 
     <div class="row">
-        @can(App\Enums\Permissions::HandlePayments)
+        @can('registerPayment', App\Models\Race::class)
             <div class="col-sm-6">
                 <h5>{{ __('Posizioni aperte') }}</h5>
 
@@ -112,7 +112,7 @@
 
             </div>
         @endcan
-        @can('viewAny', App\Models\Certificate::class)
+        @can('viewAny', [App\Models\Certificate::class, null])
             <div class="col-sm-6">
                 <h5>{{ __('Certificati in scadenza') }} (@date(Carbon\Carbon::now()->addMonth()->endOfMonth()))</h5>
                 <div class="card">
@@ -155,7 +155,7 @@
 <script type="module" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
 <script type="module">
-    @can('viewAny', App\Models\Certificate::class)
+    @can('viewAny', [App\Models\Certificate::class, null])
         $('#datatable_certificates').DataTable({
             processing: true,
             serverSide: true,
@@ -195,7 +195,7 @@
         });
     @endcan
 
-    @can(App\Enums\Permissions::HandlePayments)
+    @can('registerPayment', App\Models\Race::class)
         $('#datatable_athletes').DataTable({
             processing: true,
             serverSide: true,

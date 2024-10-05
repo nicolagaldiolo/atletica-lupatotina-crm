@@ -15,7 +15,7 @@
 @endsection
 
 @section('secondary-nav')
-    @include ("backend.races.partials.secondary_nav")
+    @include ("backend.races.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')
@@ -23,8 +23,7 @@
     <div class="card-header">
         <x-backend.section-header>
             <x-slot name="toolbar">
-
-                @can('create', App\Models\Race::class)
+                @can('create', App\Models\Fee::class)
                     <x-buttons.create route="{{ route('races.fees.create', $race) }}" small="true" title="">
                         {{ __('Aggiungi') }}
                     </x-buttons.create>

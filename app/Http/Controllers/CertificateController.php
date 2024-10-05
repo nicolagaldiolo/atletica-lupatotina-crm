@@ -16,8 +16,8 @@ class CertificateController extends Controller
      */
     public function index(Athlete $athlete)
     {
-        $this->authorize('xxx');
-
+        $this->authorize('viewAny', [Certificate::class, $athlete]);
+        
         if (request()->ajax()) {
             return datatables()->eloquent($athlete->certificates())
             ->addColumn('action', function ($certificate) use($athlete){
@@ -34,8 +34,7 @@ class CertificateController extends Controller
      */
     public function create(Athlete $athlete)
     {
-
-        $this->authorize('xxx');
+        $this->authorize('create', [Certificate::class, $athlete]);
 
         $certificate = new Certificate();
         $certificate->is_current = 1;
@@ -47,9 +46,8 @@ class CertificateController extends Controller
      */
     public function store(AthleteCertificatesRequest $request, Athlete $athlete)
     {
-
-        $this->authorize('xxx');
-
+        $this->authorize('create', [Certificate::class, $athlete]);
+        
         $athlete->certificate()->create($request->validated());
         Utility::flashMessage();
         
@@ -61,7 +59,6 @@ class CertificateController extends Controller
      */
     public function show(Certificate $certificate)
     {
-        $this->authorize('xxx');
     }
 
     /**
@@ -69,7 +66,7 @@ class CertificateController extends Controller
      */
     public function edit(Athlete $athlete, Certificate $certificate)
     {
-        $this->authorize('xxx');
+        $this->authorize('update', $certificate);
 
         return view('backend.athletes.certificates.edit', compact('athlete', 'certificate'));
     }
@@ -79,7 +76,7 @@ class CertificateController extends Controller
      */
     public function update(AthleteCertificatesRequest $request, Athlete $athlete, Certificate $certificate)
     {
-        $this->authorize('xxx');
+        $this->authorize('update', $certificate);
 
         $certificate->update($request->validated());
         Utility::flashMessage();
@@ -91,8 +88,7 @@ class CertificateController extends Controller
      */
     public function destroy(Athlete $athlete, Certificate $certificate)
     {
-        $this->authorize('xxx');
-        
+        $this->authorize('delete', $certificate);
 
         $certificate->delete();
         Utility::flashMessage();
