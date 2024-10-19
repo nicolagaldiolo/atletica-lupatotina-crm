@@ -44,7 +44,7 @@
                                 Created By
                             </th>
                             <th class="text-end">
-                                Action
+                                &nbsp;
                             </th>
                         </tr>
                     </thead>

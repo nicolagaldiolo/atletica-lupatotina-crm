@@ -57,6 +57,7 @@ class Setup extends Command
         collect(Roles::asArray())->each(function($item, $key){
             $permissions = [];
             switch ($item) {
+                case Roles::SuperAdmin:
                 case Roles::Administrator:
                     $permissions = Permissions::asArray();
                     break;

@@ -49,6 +49,9 @@
                                 {{ __('Iscritto il') }}
                             </th>
                             <th>
+                                {{ __('Importo') }}
+                            </th>
+                            <th>
                                 {{ __('Pagato il') }}
                             </th>
                         </tr>
@@ -98,6 +101,25 @@
             },
             {
                 data: 'created_at'
+            },
+            {
+                data: 'custom_amount',
+                render(data, type, row, meta) {
+                    let html = [];
+                    if(data){
+                        html.push(App.money(data));
+                    }
+                    if(row.voucher){
+                        let amount = App.money(row.voucher.amount_calculated);
+
+                        if(row.voucher.type == "{{ App\Enums\VoucherType::Credit }}"){
+                            html.push('<span class="badge text-bg-success">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Credit) }} (' + amount + ')</span>');
+                        }else{
+                            html.push('<span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }} (' + amount + ')</span>');
+                        }
+                    }
+                    return html.join("\n");
+                }
             },
             {
                 data: 'payed_at'

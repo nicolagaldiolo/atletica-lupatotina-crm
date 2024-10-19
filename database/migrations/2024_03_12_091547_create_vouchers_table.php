@@ -16,8 +16,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('athlete_id')->constrained()->onDelete('cascade');
             $table->string('name')->nullable();
-            $table->unsignedTinyInteger('type')->nullable();
-            $table->decimal('amount', 14, 2)->default(VoucherType::Credit);
+            $table->unsignedTinyInteger('type')->default(VoucherType::Credit);
+            $table->decimal('amount', 14, 2)->default(0)->unsigned();
             $table->timestamps();
             $table->softDeletes();
         });

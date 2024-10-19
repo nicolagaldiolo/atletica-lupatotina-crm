@@ -134,7 +134,7 @@ class AthleteController extends Controller
         }
 
         if (request()->ajax()) {
-            $builder = AthleteFee::with(['fee.race'])->where('athlete_id', $athlete->id);
+            $builder = AthleteFee::with(['voucher', 'fee.race'])->where('athlete_id', $athlete->id);
             return datatables()->eloquent($builder)
             ->addColumn('action', function ($athleteFee){
                 return view('backend.athletes.races.partials.action_column', compact('athleteFee'));

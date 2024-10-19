@@ -35,7 +35,7 @@
                 <td>@date($subscription->athlete->certificate->expires_on)</td>
                 <td>{{ $subscription->fee->name }}</td>
                 <td>@date($subscription->fee->expired_at)</td>
-                <td>@money($subscription->fee->amount)</td>
+                <td>@money($subscription->custom_amount)</td>
             </tr>
         @endforeach
     </tbody>

@@ -43,9 +43,6 @@
                                 {{ __('Nome') }}
                             </th>
                             <th>
-                                {{ __('Tipo') }}
-                            </th>
-                            <th>
                                 {{ __('Importo') }}
                             </th>
                             <th>
@@ -55,7 +52,7 @@
                                 {{ __('Usato il') }}
                             </th>
                             <th class="text-end">
-                                Action
+                                &nbsp;
                             </th>
                         </tr>
                     </thead>
@@ -94,23 +91,16 @@
                 data: 'name'
             },
             {
-                data: 'type',
-                name: 'type',
-                render(data) {
-                    console.log("data", data);
-                    if(data == "{{ App\Enums\VoucherType::Credit }}"){
-                        return '<span class="badge text-bg-success">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Credit) }}</span>';
-                    }else{
-                        return '<span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }}</span>';
-                    }
+                data: null,
+                render(data, type, row, meta) {
+                    
+                    let amount = App.money(row.amount_calculated);
 
-                    return null;
-                }
-            },
-            {
-                data: 'amount',
-                render(data) {
-                    return App.money(data);
+                    if(row.type == "{{ App\Enums\VoucherType::Credit }}"){
+                        return '<span class="badge text-bg-success">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Credit) }} (' + amount + ')</span>';
+                    }else{
+                        return '<span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }} (' + amount + ')</span>';
+                    }
                 }
             },
             {

@@ -27,7 +27,7 @@
                                             <span class="input-group-text">
                                                 <label>
                                                     <input disabled name="athletes[{{$athlete->id}}][voucher_id]" class="form-check-input mt-0" type="radio" value="{{ $voucher->id}}">
-                                                    <span class="badge @if($voucher->type == App\Enums\VoucherType::Credit) text-bg-success @else text-bg-danger @endif ">({{ App\Enums\VoucherType::getDescription($voucher->type) }}) | {{ $voucher->name }} | @money($voucher->amount)</span>
+                                                    <span class="badge @if($voucher->type == App\Enums\VoucherType::Credit) text-bg-success @else text-bg-danger @endif ">({{ App\Enums\VoucherType::getDescription($voucher->type) }}) | {{ $voucher->name }} | @money($voucher->amount_calculated)</span>
                                                 </label>
                                             </span>
                                         @endforeach

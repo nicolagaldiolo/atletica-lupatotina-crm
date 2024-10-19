@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AthleteFee extends Pivot
@@ -24,6 +21,16 @@ class AthleteFee extends Pivot
         'custom_amount' => 'float'
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function ($model) {
+            if($model->voucher_id){
+                $voucher = Voucher::findOrFail($model->voucher_id);
+                $model->custom_amount = ($model->custom_amount - $voucher->amount_calculated);
+            }
+        });
+    }
+
     public function Fee(): BelongsTo
     {
         return $this->belongsTo(Fee::class);
@@ -32,5 +39,10 @@ class AthleteFee extends Pivot
     public function Athlete(): BelongsTo
     {
         return $this->belongsTo(Athlete::class);
+    }
+
+    public function Voucher(): BelongsTo
+    {
+        return $this->belongsTo(Voucher::class);
     }
 }

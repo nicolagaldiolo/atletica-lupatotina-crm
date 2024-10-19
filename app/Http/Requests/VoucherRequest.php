@@ -28,7 +28,7 @@ class VoucherRequest extends FormRequest
         return [
             'name' => 'nullable|string|max:191',
             'type' => ['required', new EnumValue(VoucherType::class, false)],
-            'amount' => 'required|numeric'
+            'amount' => 'required|numeric|min:1'
         ];
     }
 

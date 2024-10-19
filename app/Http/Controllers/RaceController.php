@@ -127,7 +127,7 @@ class RaceController extends Controller
     public function subscriptionStore(RaceSubscriptionsRequest $request)
     {
         $this->authorize('subscribe', Race::class);
-
+        
         Fee::findOrFail($request->get('fee_id'))->athletes()->syncWithoutDetaching($request->get('athletes', []));
         
         Utility::flashMessage();
@@ -139,7 +139,7 @@ class RaceController extends Controller
         $this->authorize('report', $race);
 
         if (request()->ajax()) {
-            $builder = AthleteFee::with(['athlete', 'fee'])->whereHas('fee', function($query) use($race){
+            $builder = AthleteFee::with(['voucher', 'athlete', 'fee'])->whereHas('fee', function($query) use($race){
                 $query->where('race_id', $race->id);
             });
             return datatables()->eloquent($builder)->make(true);

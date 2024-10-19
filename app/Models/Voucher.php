@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
+use App\Enums\VoucherType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,7 +21,8 @@ class Voucher extends Model
     ];
 
     protected $appends = [
-        'used_at'
+        'used_at',
+        'amount_calculated'
     ];
 
     protected $casts = [
@@ -45,5 +46,10 @@ class Voucher extends Model
             return $this->athleteFee->created_at->toIsoString();
         }
         return null;
+    }
+
+    public function getAmountCalculatedAttribute()
+    {
+        return ($this->type == VoucherType::Credit) ? $this->amount : ($this->amount * -1);
     }
 }
