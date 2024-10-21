@@ -76,7 +76,7 @@
             var race_id = event.target.options[event.target.selectedIndex].dataset.race;
             var fee_id = event.target.options[event.target.selectedIndex].dataset.fee;
             
-            let endpoint_url = '/races/' + race_id + '/fees/' + fee_id + '/athletesSubscribeable';
+            let endpoint_url = '{{ url("") }}/races/' + race_id + '/fees/' + fee_id + '/athletesSubscribeable';
             
             $.ajax({
                 headers: {
