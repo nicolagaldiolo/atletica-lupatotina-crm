@@ -10,7 +10,7 @@
         @can(App\Enums\Permissions::ViewDashboard)
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('dashboard') }}">
-                    <i class="nav-icon fa-solid fa-cubes"></i>&nbsp;@lang('Dashboard')
+                    <i class="nav-icon fa-solid fa-house"></i>&nbsp;@lang('Dashboard')
                 </a>
             </li>
         @endcan
@@ -18,7 +18,7 @@
         @if(Auth::user()->athlete)
             <li class="nav-item">
                 <a class="nav-link" href="{{ route("athletes.edit", Auth::user()->athlete) }}">
-                    <i class="nav-icon fas fa-running"></i>&nbsp;@lang('I miei dati')
+                    <i class="nav-icon fa solid fa-user"></i>&nbsp;@lang('I miei dati')
                 </a>
             </li>
         @endif
