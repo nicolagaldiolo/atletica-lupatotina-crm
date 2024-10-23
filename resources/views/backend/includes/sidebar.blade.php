@@ -94,6 +94,14 @@
             </li>
         @endcan
 
+        @can(App\Enums\Permissions::RunMaintenance)
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('tasks.index') }}">
+                    <i class="nav-icon fa-solid fa-screwdriver-wrench"></i>&nbsp;{{ __('Manutenzione') }}
+                </a>
+            </li>
+        @endcan
+
     </ul>
 
     <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>

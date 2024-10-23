@@ -15,6 +15,9 @@ final class Permissions extends Enum
     // General
     const ViewDashboard = 'view_dashboard';
 
+    // Maintenance
+    const RunMaintenance = 'run_maintenance';
+
     // Athletes
     const ListAthletes = 'list_athletes';
     const ViewAthletes = 'view_athletes';

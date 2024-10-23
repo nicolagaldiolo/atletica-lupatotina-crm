@@ -5,7 +5,6 @@ namespace App\Imports;
 use App\Models\Athlete;
 use App\Models\Race;
 use Carbon\Carbon;
-use Deployer\Logger\Logger;
 use Exception;
 use Maatwebsite\Excel\Row;
 use Maatwebsite\Excel\Concerns\OnEachRow;

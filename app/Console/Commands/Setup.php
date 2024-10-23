@@ -7,11 +7,7 @@ use App\Enums\Permissions;
 use App\Enums\Roles;
 use App\Imports\DataImport;
 use App\Models\Athlete;
-use App\Models\AthleteFee;
 use App\Models\Certificate;
-use App\Models\Fee;
-use App\Models\Payment;
-use App\Models\Race;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Voucher;
@@ -20,7 +16,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 
@@ -58,8 +53,49 @@ class Setup extends Command
             $permissions = [];
             switch ($item) {
                 case Roles::SuperAdmin:
-                case Roles::Administrator:
                     $permissions = Permissions::asArray();
+                    break;
+                case Roles::Administrator:
+                    $permissions = [
+                        Permissions::ViewDashboard,
+                        Permissions::ListAthletes,
+                        Permissions::ViewAthletes,
+                        Permissions::CreateAthletes,
+                        Permissions::EditAthletes,
+                        Permissions::DeleteAthletes,
+                        Permissions::ReportAthletes,
+                        Permissions::InviteAthletes,
+                        Permissions::ListVouchers,
+                        Permissions::ViewVouchers,
+                        Permissions::CreateVouchers,
+                        Permissions::EditVouchers,
+                        Permissions::DeleteVouchers,
+                        Permissions::ListCertificates,
+                        Permissions::ViewCertificates,
+                        Permissions::CreateCertificates,
+                        Permissions::EditCertificates,
+                        Permissions::DeleteCertificates,
+                        Permissions::ListRaces,
+                        Permissions::ViewRaces,
+                        Permissions::CreateRaces,
+                        Permissions::EditRaces,
+                        Permissions::DeleteRaces,
+                        Permissions::ReportRaces,
+                        Permissions::HandlePayments,
+                        Permissions::HandleSubscriptions,
+                        Permissions::ListUsers,
+                        Permissions::ViewUsers,
+                        Permissions::CreateUsers,
+                        Permissions::EditUsers,
+                        Permissions::DeleteUsers,
+                        Permissions::BlockUsers,
+                        Permissions::ListRoles,
+                        Permissions::ViewRoles,
+                        Permissions::CreateRoles,
+                        Permissions::EditRoles,
+                        Permissions::DeleteRoles,
+                        Permissions::AssignRoles
+                    ];
                     break;
                 case Roles::Manager:
                     $permissions = [
@@ -123,6 +159,7 @@ class Setup extends Command
             
         });
 
+        /*
         Excel::import(new DataImport, 'data.xlsx');
 
         if (App::environment('local')) {
@@ -144,6 +181,7 @@ class Setup extends Command
             $athlete->user()->associate(User::find(6));
             $athlete->save();
         }
+        */
 
         Artisan::call('permission:cache-reset');
     }

@@ -9,9 +9,9 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RaceFeeController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoucherController;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,4 +73,7 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::resource('races.fees', RaceFeeController::class)->except('show');
     
     Route::resource('payments', PaymentController::class)->only(['create', 'store']);
+
+    Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
+    Route::get('tasks/{task}', [TaskController::class, 'exec'])->name('tasks.exec');
 });
