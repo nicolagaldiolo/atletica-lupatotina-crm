@@ -20,7 +20,7 @@
                                 </div>
                                 <div>
                                     <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Gare pagate') }} ({{ $races_payed->count() }})</div>
-                                    <div class="fs-6 fw-semibold text-success">@money($races_payed->sum('amount'))</div>
+                                    <div class="fs-6 fw-semibold text-success">@money($races_payed->sum('athletefee.custom_amount'))</div>
                                 </div>
                             </div>
                             <div class="card-footer px-3 py-2">
@@ -38,7 +38,7 @@
                                 </div>
                                 <div>
                                     <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Gare da pagare') }} ({{ $races_to_pay->count() }})</div>
-                                    <div class="fs-6 fw-semibold text-danger">@money($races_to_pay->sum('amount'))</div>
+                                    <div class="fs-6 fw-semibold text-danger">@money($races_to_pay->sum('athletefee.custom_amount'))</div>
                             
                                 </div>
                             </div>

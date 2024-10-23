@@ -159,7 +159,6 @@ class Setup extends Command
             
         });
 
-        /*
         Excel::import(new DataImport, 'data.xlsx');
 
         if (App::environment('local')) {
@@ -181,7 +180,6 @@ class Setup extends Command
             $athlete->user()->associate(User::find(6));
             $athlete->save();
         }
-        */
 
         Artisan::call('permission:cache-reset');
     }

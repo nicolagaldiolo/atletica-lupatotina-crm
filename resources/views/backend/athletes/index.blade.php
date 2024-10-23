@@ -47,6 +47,9 @@
                                 {{ __('Da pagare') }}
                             </th>
                             <th>
+                                {{ __('Vouchers/Penalità') }}
+                            </th>
+                            <th>
                                 {{ __('Utente registrato') }}
                             </th>
                             <th>&nbsp;</th>
@@ -128,6 +131,9 @@
                 },
                 searchable: false,
                 orderable: false,
+            },
+            {
+                data: 'vouchers_count'
             },
             {
                 data: 'user',

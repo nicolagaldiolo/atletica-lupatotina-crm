@@ -14,7 +14,7 @@ class DataImport implements WithMultipleSheets
             'gare' => new RaceImport(),
             //'iscrizioni_values' => new SubscriptionImport(),
             //'pagamenti' => new PaymentImport()
-            'situazione_soci_values' => new PaymentImportNew()
+            //'situazione_soci_values' => new PaymentImportNew()
         ];
     }
 }

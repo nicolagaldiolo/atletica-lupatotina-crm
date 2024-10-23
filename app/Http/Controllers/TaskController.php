@@ -39,6 +39,10 @@ class TaskController extends Controller
                 Artisan::call('migrate:rollback --force');
                 $output = Artisan::output();
                 break;
+            case 'setup':
+                Artisan::call('app:setup');
+                $output = Artisan::output();
+                break;
             default:
                 $output = 'task non esistente';
                 break;

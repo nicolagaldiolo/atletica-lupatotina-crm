@@ -27,7 +27,7 @@ class AthleteController extends Controller
         $this->authorize('viewAny', Athlete::class);
 
         if (request()->ajax()) {
-            return datatables()->eloquent(Athlete::query()->withCount('fees')->with(['certificate', 'feesToPay', 'user']))
+            return datatables()->eloquent(Athlete::query()->withCount('vouchers')->withCount('fees')->with(['certificate', 'feesToPay', 'user']))
                 ->addColumn('action', function ($athlete) {
                     return view('backend.athletes.partials.action_column', compact('athlete'));
                 })

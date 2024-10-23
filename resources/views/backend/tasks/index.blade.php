@@ -34,6 +34,15 @@
                         <a class="btn btn-danger" href="{{ route('tasks.exec', 'migrate-rollback') }}" role="button">{{ __('Migrate Rollback') }}</a>
                     </div>
                 </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        {{ __('Manutenzione') }}
+                    </div>
+                    <div class="card-body">
+                        <a class="btn btn-danger" href="{{ route('tasks.exec', 'setup') }}" role="button">{{ __('Setup') }}</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

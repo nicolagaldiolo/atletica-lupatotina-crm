@@ -31,7 +31,7 @@
                         @foreach ($races as $race)
                             <optgroup label="{{ $race->name }}">
                                 @foreach ($race->fees as $fee)
-                                    <option data-race="{{ $race->id }}" data-fee="{{ $fee->id }}" value="{{ $fee->id }}" @if ($fee->id == old('fee_id')) selected @endif>{{ $fee->name }} (@money($fee->amount))</option>
+                                    <option data-race="{{ $race->id }}" data-fee="{{ $fee->id }}" value="{{ $fee->id }}" @if ($fee->id == old('fee_id')) selected @endif>{{ $race->name }} - {{ $fee->name }} (@money($fee->amount))</option>
                                 @endforeach
                             </optgroup>
                         @endforeach
