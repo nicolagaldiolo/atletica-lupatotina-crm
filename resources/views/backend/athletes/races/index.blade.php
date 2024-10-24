@@ -98,10 +98,10 @@
                 data: 'custom_amount',
                 render(data, type, row, meta) {
 
-                    let html = [];
-                    if(data){
-                        html.push(App.money(data));
-                    }
+                    let html = [
+                        App.money(data)
+                    ];
+                    
                     if(row.voucher){
                         let amount = App.money(row.voucher.amount_calculated);
 
@@ -111,7 +111,7 @@
                             html.push('<span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }} (' + amount + ')</span>');
                         }
                     }
-                    return html.join("\n");
+                    return html.join(" ");
                 }
             },
             {

@@ -222,13 +222,26 @@
                 {
                     data: 'fees_to_pay',
                     render(data) {
-                        console.log("data", data);
                         if(data && data.length){
                             let html = data.reduce((i, item) => {
-                                i.push("<div>" + [item.race.name,item.name,item.amount].join(' - ') + "</div>");
+                                let data = [
+                                    item.race.name + " (" + item.name + ")",
+                                    "<strong>" + App.money(item.athletefee.custom_amount) + "</strong>"
+                                ];
+                                
+                                if(item.athletefee.voucher){
+                                    let amount = App.money(item.athletefee.voucher.amount_calculated);
+                                    if(item.athletefee.voucher.type == "{{ App\Enums\VoucherType::Credit }}"){
+                                        data.push('<span class="badge text-bg-success">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Credit) }} (' + amount + ')</span>');
+                                    }else{
+                                        data.push('<span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }} (' + amount + ')</span>');
+                                    }
+                                }
+
+                                i.push("<li>" + data.join(" ") + "</li>");
                                 return i;
                             }, []);
-                            return html.join("");//'<ul>' + html.join("") + '</ul>';
+                            return (html.length) ? ('<ul>' + html.join("") + '</ul>') : null;
                         }
                         return null;
                     },
@@ -238,7 +251,7 @@
                     data: 'fees_to_pay',
                     render(data) {
                         if(data && data.length){
-                            let amount = data.reduce((i, item) => i+item.amount, 0);
+                            let amount = data.reduce((i, item) => i+item.athletefee.custom_amount, 0);
                             return App.money(amount);
                         }
                         return null;

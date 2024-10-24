@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\ModelStorage;
-use Illuminate\Support\Str;
 use Database\Factories\AthleteFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,12 +12,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 
 class Athlete extends Model
 {
     use HasFactory,
         ModelStorage,
-        SoftDeletes;
+        SoftDeletes,
+        EagerLoadPivotTrait;
 
     protected $fillable = [
         'name',

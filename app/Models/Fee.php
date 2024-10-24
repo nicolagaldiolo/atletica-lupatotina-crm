@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 
 class Fee extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use EagerLoadPivotTrait;
 
     protected $fillable = [
         'name',

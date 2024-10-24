@@ -62,7 +62,7 @@ class DashboardController extends Controller
         $this->authorize('registerPayment', Race::class);
         
         if (request()->ajax()) {
-            return datatables()->eloquent(Athlete::query()->whereHas('feesToPay')->with(['feesToPay.race']))
+            return datatables()->eloquent(Athlete::query()->whereHas('feesToPay')->with(['feesToPay.race', 'feesToPay.athletefee.voucher']))
                 ->filterColumn('name', function($query, $keyword) {
                     $sql = "CONCAT(name, surname)  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
