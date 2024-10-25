@@ -30,12 +30,12 @@ class Voucher extends Model
         'used_at' => 'datetime'
     ];
 
-    public function Athlete(): BelongsTo
+    public function athlete(): BelongsTo
     {
         return $this->belongsTo(Athlete::class);
     }
 
-    public function AthleteFee(): HasOne
+    public function athletefee(): HasOne
     {
         return $this->hasOne(AthleteFee::class);
     }

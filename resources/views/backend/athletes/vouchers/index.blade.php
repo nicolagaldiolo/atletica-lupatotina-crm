@@ -104,10 +104,24 @@
                 }
             },
             {
-                data: 'created_at'
+                data: 'created_at',
+                render(data) {
+                    return App.date(data);
+                }
             },
             {
-                data: 'used_at'
+                data: 'used_at',
+                render(data, type, row, meta) {
+                    let html = [
+                        App.date(data)
+                    ];
+                    
+                    if(row.athletefee){
+                        html.push("<span class='badge text-bg-secondary'>(" + row.athletefee.fee.race.name + " | " + row.athletefee.fee.name + ")</span>");
+                    }
+
+                    return html.join(" ");
+                }
             },
             {
                 data: 'action',

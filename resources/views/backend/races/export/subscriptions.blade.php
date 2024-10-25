@@ -14,8 +14,12 @@
             <td>{{ __('Tessera Fidal') }}</td>
             <td>{{ __('Scadenza certificato') }}</td>
             <td>{{ __('Quota iscrizione') }}</td>
-            <td>{{ __('Scadenza quota iscrizione') }}</td>
             <td>{{ __('Importo quota iscrizione') }}</td>
+            <td>{{ __('Scadenza quota iscrizione') }}</td>
+            <td>{{ __('Importo') }}</td>
+            <td>{{ __('Voucher') }}</td>
+            <td>{{ __('Penalità') }}</td>
+            <td>{{ __('Pagato il') }}</td>
         </tr>
     </thead>
     <tbody>
@@ -34,8 +38,12 @@
                 <td>{{ $subscription->athlete->registration_number }}</td>
                 <td>@date($subscription->athlete->certificate->expires_on)</td>
                 <td>{{ $subscription->fee->name }}</td>
+                <td>@money($subscription->fee->amount)</td>
                 <td>@date($subscription->fee->expired_at)</td>
                 <td>@money($subscription->custom_amount)</td>
+                <td>@if($subscription->voucher && $subscription->voucher->type == App\Enums\VoucherType::Credit)@money($subscription->voucher->amount_calculated)@else &nbsp; @endif</td>
+                <td>@if($subscription->voucher && $subscription->voucher->type == App\Enums\VoucherType::Penalty)@money($subscription->voucher->amount_calculated)@else &nbsp; @endif</td>
+                <td>@if($subscription->payed_at) @date($subscription->payed_at) @else &nbsp; @endif</td>
             </tr>
         @endforeach
     </tbody>

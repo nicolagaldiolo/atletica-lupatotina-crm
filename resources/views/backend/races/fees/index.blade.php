@@ -44,7 +44,7 @@
                                 {{ __('Nome') }}
                             </th>
                             <th>
-                                {{ __('valida sino al') }}
+                                {{ __('Valida sino al') }}
                             </th>
                             <th>
                                 {{ __('Importo') }}
@@ -88,7 +88,9 @@
             },
             {
                 data: 'expired_at',
-                name: 'expired_at'
+                render(data) {
+                    return App.date(data);
+                },
             },
             {
                 data: 'amount',

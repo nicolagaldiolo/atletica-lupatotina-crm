@@ -2,6 +2,13 @@
 
 var App = function($) {
 
+    let date = function (date){
+        if(date){
+            return new Date(date).toLocaleDateString("it-IT")
+        }
+        return null;
+    };
+
     let money = function (value, currency = 'EUR'){
 
         let options = {
@@ -19,7 +26,8 @@ var App = function($) {
     };
 
     return {
-        money,
+        date,
+        money
     };
 
 }(jQuery);

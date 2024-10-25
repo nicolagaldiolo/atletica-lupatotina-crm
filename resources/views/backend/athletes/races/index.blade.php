@@ -92,7 +92,10 @@
                 },
             },
             {
-                data: 'created_at'
+                data: 'created_at',
+                render(data) {
+                    return App.date(data);
+                },
             },
             {
                 data: 'custom_amount',
@@ -117,7 +120,7 @@
             {
                 data: 'payed_at',
                 render(data) {
-                    return data ? '<i class="fa-solid fa-coins"></i> (' + data + ')' : '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
+                    return data ? '<i class="fa-solid fa-coins"></i> (' + App.date(data) + ')' : '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
                 }
             },
             {

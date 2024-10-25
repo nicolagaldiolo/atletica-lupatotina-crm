@@ -100,15 +100,16 @@
                 },
             },
             {
-                data: 'created_at'
+                data: 'created_at',
+                render(data) {
+                    return App.date(data);
+                },
             },
             {
                 data: 'custom_amount',
                 render(data, type, row, meta) {
-                    let html = [];
-                    if(data){
-                        html.push(App.money(data));
-                    }
+                    let html = [App.money(data)];
+                    
                     if(row.voucher){
                         let amount = App.money(row.voucher.amount_calculated);
 
@@ -122,7 +123,10 @@
                 }
             },
             {
-                data: 'payed_at'
+                data: 'payed_at',
+                render(data) {
+                    return App.date(data);
+                },
             }
         ],
         ordering: false,

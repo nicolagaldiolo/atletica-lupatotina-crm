@@ -152,7 +152,14 @@ class RaceController extends Controller
     {
         $this->authorize('report', $race);
 
-        $race->load(['athleteFee.athlete', 'athleteFee.fee']);
+        $race->load([
+            'athleteFee' => [
+                'athlete',
+                'fee',
+                'voucher'
+            ],
+        ]);
+
         $filename = Str::slug("Iscrizione {$race->name}") . ".xlsx";
         return Excel::download(new RaceSubscriptionsExport($race->athleteFee), $filename);
     }

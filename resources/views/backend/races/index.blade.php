@@ -77,8 +77,10 @@
             },
             {
                 data: 'date',
-                name: 'date',
                 searchable: false,
+                render(data) {
+                    return App.date(data);
+                },
             },
             {
                 data: 'athlete_fee_count',
@@ -93,9 +95,11 @@
             },
             {
                 data: 'subscrible_expiration',
-                name: 'subscrible_expiration',
                 orderable: false,
                 searchable: false,
+                render(data) {
+                    return App.date(data);
+                },
             },
             {
                 data: 'action',

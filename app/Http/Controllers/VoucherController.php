@@ -19,7 +19,7 @@ class VoucherController extends Controller
         $this->authorize('viewAny', Voucher::class);
 
         if (request()->ajax()) {
-            return datatables()->eloquent($athlete->vouchers())
+            return datatables()->eloquent($athlete->vouchers()->with('athletefee.fee.race'))
             ->addColumn('action', function ($voucher) use($athlete){
                 return view('backend.athletes.vouchers.partials.action_column', compact('athlete', 'voucher'));
             })->make(true);

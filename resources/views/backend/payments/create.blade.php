@@ -36,19 +36,21 @@
 
                                     <input class="form-check-input" type="checkbox" value="1" id="payments_{{ $athlete->id }}_{{ $fee->id }}" name="payments[{{ $athlete->id }}][{{ $fee->id }}]">
                                     <label class="form-check-label" for="payments_{{ $athlete->id }}_{{ $fee->id }}">
-                                        <strong>{{ $fee->race->name }}</strong> ({{ $fee->name }} | {{ $fee->expired_at }} | {{ $fee->amount }})
+                                        <strong>{{ $fee->race->name }}</strong> ({{ $fee->name }} | @date($fee->expired_at))
                                         <br>
                                         <span>
-                                            {{ $fee->athletefee->custom_amount }}
+                                            <strong>
+                                                @money($fee->athletefee->custom_amount)
+                                            </strong>
                                             @if($fee->athletefee->voucher)
                                                 @php 
                                                     $amount_calculated = $fee->athletefee->voucher->amount_calculated
                                                 @endphp
                                                 
                                                 @if($fee->athletefee->voucher->type == App\Enums\VoucherType::Credit)
-                                                    <span class="badge text-bg-success">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Credit) }} ({{ $amount_calculated }})</span>
+                                                    <span class="badge text-bg-success">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Credit) }} (@money($amount_calculated))</span>
                                                 @else
-                                                    <span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }} ({{ $amount_calculated }})</span>
+                                                    <span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }} (@money($amount_calculated))</span>
                                                 @endif
                                             @endif
                                         </span>
