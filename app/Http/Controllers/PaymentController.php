@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\Utility;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PaymentsRequest;
 use App\Models\Athlete;
 use App\Models\Race;
 use Carbon\Carbon;
@@ -33,11 +34,11 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PaymentsRequest $request)
     {
         $this->authorize('registerPayment', Race::class);
 
-        foreach($request->get('payments') as $key=>$value){
+        foreach($request->get('payments' , []) as $key=>$value){
             Athlete::findOrFail($key)->fees()->syncWithPivotValues(array_keys($value), ['payed_at' => Carbon::now()], false);
         }
         Utility::flashMessage();

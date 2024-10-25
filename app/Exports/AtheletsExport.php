@@ -18,8 +18,5 @@ class AtheletsExport implements WithMultipleSheets
         return [
             new AtheletsExportPage($this->data, 'Situazione atleti dettagliata')
         ];
-        //if(Auth::user()->can('viewBudgetRequested', $this->project)){
-        //    $sheets[] = new BudgetExportPage($this->project, $this->config, $this->dataRows['rowsDataRequested'], __('Budget Richiesto'));
-        //}
     }
 }

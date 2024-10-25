@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Athlete;
 use App\Classes\Utility;
+use App\Enums\ReportRowType;
+use App\Enums\VoucherType;
 use App\Models\AthleteFee;
 use Illuminate\Http\Request;
 use App\Exports\AtheletsExport;
@@ -168,24 +170,36 @@ class AthleteController extends Controller
     {
         $this->authorize('report', Athlete::class);
         
-        $data = Athlete::whereHas('fees')->with('fees.race')->get()->reduce(function($arr, $item){
+        $data = Athlete::whereHas('fees')->with([
+            'fees' => [
+                'race',
+                'athletefee.voucher'
+            ]
+        ])->get()->reduce(function($arr, $item){
+
             $item->fees->each(function($fee) use($item, &$arr){
                 $baseData = [
                     'athlete_name' => $item->full_name,
                 ];
-                $arr[] = array_merge($baseData, [
-                    'type' => 'subscription',
-                    'movement_name' => $fee->race->name . ' - ' . $fee->name,
+                $arr[$item->id][] = array_merge($baseData, [
+                    'type' => ReportRowType::Subscription,
+                    'event' => $fee->race->name . ' (' . $fee->name . ')',
+                    'event_amount' => $fee->amount,
                     'created_at' => $fee->athletefee->created_at,
-                    'amount' => $fee->amount
+                    'voucher' => ($fee->athletefee->voucher && $fee->athletefee->voucher->type == VoucherType::Credit) ? $fee->athletefee->voucher->amount : null,
+                    'penalty' => ($fee->athletefee->voucher && $fee->athletefee->voucher->type == VoucherType::Penalty) ? $fee->athletefee->voucher->amount : null,
+                    'amount' => $fee->athletefee->custom_amount
                 ]);
 
                 if($fee->athletefee->payed_at){
-                    $arr[] = array_merge($baseData, [
-                        'type' => 'payment',
-                        'movement_name' => 'Pagato',
+                    $arr[$item->id][] = array_merge($baseData, [
+                        'type' => ReportRowType::Payment,
+                        'event' => null,
+                        'event_amount' => null,
                         'created_at' => $fee->athletefee->payed_at,
-                        'amount' => ($fee->amount * -1)
+                        'voucher' => null,
+                        'penalty' => null,
+                        'amount' => ($fee->athletefee->custom_amount * -1)
                     ]);
                 }
             });

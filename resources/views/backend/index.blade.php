@@ -225,7 +225,7 @@
                         if(data && data.length){
                             let html = data.reduce((i, item) => {
                                 let data = [
-                                    item.race.name + " (" + item.name + ")",
+                                    item.race.name + " (" + item.name + " - " + App.money(item.amount) + ")",
                                     "<strong>" + App.money(item.athletefee.custom_amount) + "</strong>"
                                 ];
                                 

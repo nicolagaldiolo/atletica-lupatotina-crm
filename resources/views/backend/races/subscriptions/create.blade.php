@@ -13,52 +13,67 @@
 @endsection
 
 @section('content')
-<div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
-            {{ $entity }}
-        </x-backend.section-header>
-    </div>
-    {{ html()->form('POST', route("races.subscription.store"))->class('form')->open() }}
-        
-        <div class="card-body">
-            <div class="row">
-                <div class="col-12">
-                    <h6 class="card-title">{{ __('Gara') }}</h6>
-                    
-                    <select id="fee_selector" name="fee_id" class="form-control {{ $errors->has('fee_id') ? 'is-invalid' : '' }}">
-                        <option value="0">{{ __('Seleziona') }}</option>
-                        @foreach ($races as $race)
-                            <optgroup label="{{ $race->name }}">
-                                @foreach ($race->fees as $fee)
-                                    <option data-race="{{ $race->id }}" data-fee="{{ $fee->id }}" value="{{ $fee->id }}" @if ($fee->id == old('fee_id')) selected @endif>{{ $race->name }} - {{ $fee->name }} (@money($fee->amount))</option>
-                                @endforeach
-                            </optgroup>
-                        @endforeach
-                    </select>
 
-                </div>
+    @if(!$races->count())
+        <div class="card text-center">
+            <div class="card-body p-5">
+                <i class="fa-solid fa-flag-checkered fa-5x opacity-50"></i>
+                <h5 class="mt-4">{{ __('Nessuna iscrizione possibile') }}</h5>
             </div>
-
-            <div id="athletes-list" class="mt-4"></div>
-
         </div>
-
-        <div class="card-footer">
-            <div class="row">
-                <div class="col">
-                    <div class="float-end">
-                        <div class="form-group">
-                            @can('subscribe', App\Models\Race::class)
-                                <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                            @endcan
+    @else
+        <div class="card">
+            {{ html()->form('POST', route("races.subscription.store"))->class('form')->open() }}
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                            <div class="float-end">
+                                @can('subscribe', App\Models\Race::class)
+                                    <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
+                                @endcan
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="card-title">{{ __('Gara') }}</h6>
+                            
+                            <select id="fee_selector" name="fee_id" class="form-control {{ $errors->has('fee_id') ? 'is-invalid' : '' }}">
+                                <option value="0">{{ __('Seleziona') }}</option>
+                                @foreach ($races as $race)
+                                    <optgroup label="{{ $race->name }}">
+                                        @foreach ($race->fees as $fee)
+                                            <option data-race="{{ $race->id }}" data-fee="{{ $fee->id }}" value="{{ $fee->id }}" @if ($fee->id == old('fee_id')) selected @endif>{{ $race->name }} - {{ $fee->name }} (@money($fee->amount))</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div id="athletes-list" class="mt-4"></div>
+
+                </div>
+
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col">
+                            <div class="float-end">
+                                <div class="form-group">
+                                    @can('subscribe', App\Models\Race::class)
+                                        <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
+                                    @endcan
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{ html()->form()->close() }}
         </div>
-    {{ html()->form()->close() }}
-</div>
+    @endif
 
 @endsection
 
