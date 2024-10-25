@@ -42,11 +42,11 @@ class UserInvited extends Notification
         $url = $this->generateInvitationUrl($this->athlete);
 
         return (new MailMessage)
-                    ->subject('Personal Invitation')
-                    ->greeting('Hello!')
-                    ->line("You have been invited to join the {$appName} application!")
-                    ->action('Click here to register your account', url($url))
-                    ->line('Note: this link expires after 24 hours.');
+                    ->subject('Registrati ' . $appName)
+                    ->greeting("Ciao {$this->athlete->full_name}!")
+                    ->line("Sei stato invitato a registrarti su " . $appName)
+                    ->action('Clicca qui per creare il tuo account', url($url))
+                    ->line('Nota: questo link scadrà tra 24 ore.');
     }
 
     /**

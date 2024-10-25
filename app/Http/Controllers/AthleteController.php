@@ -112,7 +112,11 @@ class AthleteController extends Controller
         $this->authorize('update', $athlete);
         $athlete->update($request->validated());
         Utility::flashMessage();
-        return redirect(route('athletes.index'));
+        if(auth()->user()->can('viewAny', Athlete::class)){
+            return redirect(route('athletes.index'));
+        }else{
+            return redirect(route('athletes.edit', $athlete));
+        }
     }
 
     /**
