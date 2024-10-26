@@ -1,4 +1,4 @@
-@props(["route"=>"#", "title"=>"", "type"=>""])
+@props(["route"=>"#", "title"=>"", "type"=>"", "canurl" => true])
 
 @if($type)
 <li class="breadcrumb-item active">
@@ -8,8 +8,14 @@
 </li>
 @else
 <li class="breadcrumb-item">
-    <a href='{{$route}}'>
-        {{ $slot }}
-    </a>
+    @if($canurl)
+        <a href='{{$route}}'>
+            {{ $slot }}
+        </a>
+    @else
+        <span>
+            {{ $slot }}
+        </span>
+    @endif
 </li>
 @endif

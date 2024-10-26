@@ -7,11 +7,8 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route="{{ route('races.index') }}">{{ $entity }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item canurl="{{ Auth::user()->can('update', $race) }}" route="{{ route('races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ __('Quote') }}</x-backend-breadcrumb-item>
-</x-backend-breadcrumbs>
 @endsection
 
 @section('secondary-nav')
@@ -24,9 +21,9 @@
         <x-backend.section-header>
             <x-slot name="toolbar">
                 @can('create', App\Models\Fee::class)
-                    <x-buttons.create route="{{ route('races.fees.create', $race) }}" small="true" title="">
+                    <x-backend.buttons.create route="{{ route('races.fees.create', $race) }}" small="true" title="">
                         {{ __('Aggiungi') }}
-                    </x-buttons.create>
+                    </x-backend.buttons.create>
                 @endcan
             </x-slot>
         </x-backend.section-header>
@@ -61,14 +58,9 @@
 @endsection
 
 @push ('after-styles')
-<!-- DataTables Core and Extensions -->
-<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
-
 @endpush
 
 @push ('after-scripts')
-<!-- DataTables Core and Extensions -->
-<script type="module" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
 <script type="module">
     $('#datatable').DataTable({

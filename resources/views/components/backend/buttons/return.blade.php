@@ -1,4 +1,4 @@
-@props(["route"=>"#", "icon"=>"", "title"=> "", "small"=>"", "class"=>""])
+@props(["route"=>"#", "icon"=>"fa-solid fa-chevron-left", "title"=> "", "small"=>"", "class"=>""])
 
 <a href='{{$route}}'
     class='btn btn-outline-secondary {{($small=='true')? 'btn-sm' : ''}} {{$class}}'

@@ -7,9 +7,7 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
     <x-backend-breadcrumb-item type="active">{{ $entity }}</x-backend-breadcrumb-item>
-</x-backend-breadcrumbs>
 @endsection
 
 @section('secondary-nav')
@@ -49,14 +47,9 @@
 @endsection
 
 @push ('after-styles')
-<!-- DataTables Core and Extensions -->
-<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
-
 @endpush
 
 @push ('after-scripts')
-<!-- DataTables Core and Extensions -->
-<script type="module" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
 <script type="module">
     $('#datatable').DataTable({

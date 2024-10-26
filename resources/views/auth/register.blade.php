@@ -13,9 +13,7 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <!-- Social login -->
-        <x-auth-social-login />
-
+        
         <form method="POST" action="{{ route('athlete.register.store', $athlete) }}">
             @csrf
 

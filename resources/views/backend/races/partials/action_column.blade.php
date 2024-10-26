@@ -2,7 +2,7 @@
     $layout = $layout ?? null;
 @endphp
 @if($layout == 'nav')
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-coreui-toggle="collapse" data-coreui-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -11,25 +11,34 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 @can('viewAny', App\Models\Race::class)
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route("races.index") }}">
-                            <i class="far fa-times-circle"></i>
-                            {{ __('Chiudi') }}
+                        <a class="nav-link @if(Route::is('races.index')) active @endif" aria-current="page" href="{{ route("races.index", $race) }}">
+                            <i class="fa-solid fa-flag-checkered"></i>
+                            {{ __('Elenco gare') }}
                         </a>
                     </li>
                 @endcan
                 @can('update', $race)
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route("races.edit", $race) }}">{{ __('Anagrafica') }}</a>
+                        <a class="nav-link @if(Route::is('races.edit')) active @endif" aria-current="page" href="{{ route("races.edit", $race) }}">
+                            <i class="fa-solid fa-edit"></i>
+                            {{ __('Anagrafica') }}
+                        </a>
                     </li>
                 @endcan
                 @can('viewAny', App\Models\Fee::class)
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route("races.fees.index", $race) }}">{{ __('Quote') }}</a>
+                        <a class="nav-link @if(Route::is('races.fees.*')) active @endif" aria-current="page" href="{{ route("races.fees.index", $race) }}">
+                            <i class="fa fa-coins"></i>
+                            {{ __('Quote') }}
+                        </a>
                     </li>
                 @endcan
                 @can('report', $race)
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route("races.athletes", $race) }}">{{ __('Iscrizioni') }}</a>
+                        <a class="nav-link @if(Route::is('races.athletes')) active @endif" aria-current="page" href="{{ route("races.athletes", $race) }}">
+                            <i class="fas fa-running"></i>
+                            {{ __('Iscrizioni') }}
+                        </a>
                     </li>
                 @endcan
             </ul>

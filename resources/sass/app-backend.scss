@@ -1,8 +1,10 @@
-@import "/node_modules/@fortawesome/fontawesome-free/css/all.min.css";
-@import "/node_modules/simplebar/dist/simplebar.css";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 
 @import "backend_variables";
+$navbar-nav-link-padding-x:         .7rem;
 
 @import "resources/vendors/coreui/src/scss/style.scss";
 
-@import "backend_custom";
+a {
+    text-decoration: none;
+}

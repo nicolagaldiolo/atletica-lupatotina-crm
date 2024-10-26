@@ -47,8 +47,6 @@
         </nav>
         <div class="d-flex flex-row float-end">
             @yield('secondary-nav')
-            {{--<div class="">{{ date_today() }}&nbsp;</div>
-            <div id="liveClock" class="clock" onload="showTime()"></div>--}}
         </div>
     </div>
 </header>

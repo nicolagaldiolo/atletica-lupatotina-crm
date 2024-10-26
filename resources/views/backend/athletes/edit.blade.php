@@ -7,10 +7,7 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("athletes.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
-</x-backend-breadcrumbs>
 @endsection
 
 @section('secondary-nav')
@@ -18,7 +15,6 @@
 @endsection
 
 @section('content')
-
 {{ html()->modelForm($athlete, 'PATCH', route("athletes.update", $athlete))->class('form')->open() }}
 <div class="card">
     <div class="card-header">
@@ -29,7 +25,7 @@
                 @endcan
                 <div class="float-end">
                     @can('viewAny', App\Models\Athlete::class)
-                        <x-backend.buttons.return route='{{ route("athletes.index") }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                        <x-backend.buttons.return route='{{ route("athletes.index") }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
                     @endcan
                     @can('update', $athlete)
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>

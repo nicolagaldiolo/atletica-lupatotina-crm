@@ -7,17 +7,15 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
     <x-backend-breadcrumb-item type="active">{{ $entity }}</x-backend-breadcrumb-item>
-</x-backend-breadcrumbs>
 @endsection
 
 @section('secondary-nav')
     <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
         @can('create', App\Models\User::class)
-            <x-buttons.create route="{{ route('users.create') }}" small="true" title="">
+            <x-backend.buttons.create route="{{ route('users.create') }}" small="true" title="">
                 {{ __('Aggiungi') }}
-            </x-buttons.create>
+            </x-backend.buttons.create>
         @endcan
     </div>
 @endsection
@@ -49,14 +47,9 @@
 @endsection
 
 @push ('after-styles')
-<!-- DataTables Core and Extensions -->
-<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
-
 @endpush
 
 @push ('after-scripts')
-<!-- DataTables Core and Extensions -->
-<script type="module" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
 <script type="module">
     $('#datatable').DataTable({

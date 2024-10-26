@@ -7,15 +7,12 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route="{{ route('races.index') }}">{{ __('Gare') }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('races.fees.index', $race) }}">{{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item canurl="{{ Auth::user()->can('update', $race) }}" route="{{ route('races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $fee->name }}</x-backend-breadcrumb-item>
-</x-backend-breadcrumbs>
 @endsection
 
 @section('secondary-nav')
+    @include ("backend.races.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')
@@ -28,6 +25,9 @@
                     <x-backend.buttons.delete route='{{ route("races.fees.destroy", [$race, $fee]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                 @endcan
                 <div class="float-end">
+                    @can('viewAny', App\Models\Fee::class)
+                        <x-backend.buttons.return route='{{ route("races.fees.index", $race) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                    @endcan
                     @can('update', $fee)
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                     @endcan

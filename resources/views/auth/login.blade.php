@@ -14,7 +14,7 @@
         <x-auth-session-status class="mb-4" :status="session('status')" />
 
         <!-- Social Login -->
-        <x-auth-social-login />
+        {{--<x-auth-social-login />--}}
 
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />

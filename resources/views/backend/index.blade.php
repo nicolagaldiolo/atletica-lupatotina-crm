@@ -3,13 +3,13 @@
 @section('title') @lang("Dashboard") @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs />
+    <x-backend-breadcrumb-item type="active">{{ __('Dashboard') }}</x-backend-breadcrumb-item>
 @endsection
 
 @section('content')
     @if(Auth::user()->athlete)
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-6 p-3">
                 <h5>{{ __('Le mie gare') }}</h5>
                 <div class="row">
                     <div class="col-lg-6">
@@ -51,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6 p-3">
 
                 <h5>{{ __('Il mio certificato') }}</h5>
                 @php
@@ -80,7 +80,7 @@
 
     <div class="row">
         @can('registerPayment', App\Models\Race::class)
-            <div class="col-sm-6">
+            <div class="col-sm-6 p-3">
                 <h5>{{ __('Posizioni aperte') }}</h5>
 
                 <div class="card">
@@ -113,7 +113,7 @@
             </div>
         @endcan
         @can('viewAny', [App\Models\Certificate::class, null])
-            <div class="col-sm-6">
+            <div class="col-sm-6 p-3">
                 <h5>{{ __('Certificati in scadenza') }} (@date(Carbon\Carbon::now()->addMonth()->endOfMonth()))</h5>
                 <div class="card">
                     <div class="card-body">
@@ -145,14 +145,9 @@
 @endsection
 
 @push ('after-styles')
-<!-- DataTables Core and Extensions -->
-<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
-
 @endpush
 
 @push ('after-scripts')
-<!-- DataTables Core and Extensions -->
-<script type="module" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
 <script type="module">
     @can('viewAny', [App\Models\Certificate::class, null])

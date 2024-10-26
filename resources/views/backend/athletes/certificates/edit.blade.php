@@ -7,17 +7,12 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route="{{ route('athletes.index') }}">{{ __('Atleti') }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('athletes.edit', $athlete) }}">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('athletes.certificates.index', $athlete) }}">{{ $entity }}</x-backend-breadcrumb-item>
-    @if($certificate)
-        <x-backend-breadcrumb-item type="active">{{ $certificate->status['date'] }}</x-backend-breadcrumb-item>
-    @endif
-</x-backend-breadcrumbs>
+    <x-backend-breadcrumb-item canrul="{{ Auth::user()->can('edit', $athlete) }}" route='{{route("athletes.edit", $athlete)}}'>{{ $athlete->fullname }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">@date($certificate->expires_on)</x-backend-breadcrumb-item>
 @endsection
 
 @section('secondary-nav')
+    @include ("backend.athletes.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')
@@ -26,10 +21,13 @@
     <div class="card-header">
         <div class="row">
             <div class="col">
+                @can('delete', $certificate)
+                    <x-backend.buttons.delete route='{{ route("athletes.certificates.destroy", [$athlete, $certificate]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+                @endcan
                 <div class="float-end">
                     <div class="form-group">
                         @can('viewAny', [App\Models\Certificate::class, $athlete])
-                            <x-backend.buttons.return route='{{ route("athletes.certificates.index", $athlete) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                            <x-backend.buttons.return route='{{ route("athletes.certificates.index", $athlete) }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
                         @endcan
                         @can('update', $certificate)
                             <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>

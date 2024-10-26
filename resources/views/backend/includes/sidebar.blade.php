@@ -9,7 +9,7 @@
         
         @can(App\Enums\Permissions::ViewDashboard)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('dashboard') }}">
+                <a class="nav-link @if(Route::is('dashboard.*')) active @endif" href="{{ route('dashboard') }}">
                     <i class="nav-icon fa-solid fa-house"></i>&nbsp;@lang('Dashboard')
                 </a>
             </li>
@@ -17,7 +17,7 @@
 
         @if(Auth::user()->athlete)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route("athletes.edit", Auth::user()->athlete) }}">
+                <a class="nav-link @if(Route::is('athletes.*')) active @endif" href="{{ route("athletes.edit", Auth::user()->athlete) }}">
                     <i class="nav-icon fa solid fa-user"></i>&nbsp;@lang('I miei dati')
                 </a>
             </li>
@@ -29,7 +29,7 @@
         
         @can('viewAny', App\Models\Athlete::class)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('athletes.index') }}">
+                <a class="nav-link @if(Route::is('athletes.*')) active @endif" href="{{ route('athletes.index') }}">
                     <i class="nav-icon fas fa-running"></i>&nbsp;{{ __('Tesserati') }}
                 </a>
             </li>
@@ -37,7 +37,7 @@
 
         @can('viewAny', App\Models\Race::class)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('races.index') }}">
+                <a class="nav-link @if(Route::is('races.*')) active @endif" href="{{ route('races.index') }}">
                     <i class="nav-icon fa-solid fa-flag-checkered"></i>&nbsp;{{ __('Gare') }}
                 </a>
             </li>
@@ -45,7 +45,7 @@
 
         @can('report', App\Models\Athlete::class)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('athletes.reports') }}">
+                <a class="nav-link @if(Route::is('athletes.reports')) active @endif" href="{{ route('athletes.reports') }}">
                     <i class="nav-icon fas fa-download"></i>&nbsp;{{ __('Situazione soci') }}
                 </a>
             </li>
@@ -57,7 +57,7 @@
 
         @can('registerPayment', App\Models\Race::class)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('payments.create') }}">
+                <a class="nav-link @if(Route::is('payments.*')) active @endif" href="{{ route('payments.create') }}">
                     <i class="nav-icon fas fa-coins"></i>&nbsp;{{ __('Pagamenti') }}
                 </a>
             </li>
@@ -65,7 +65,7 @@
 
         @can('subscribe', App\Models\Race::class)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('races.subscription.create') }}">
+                <a class="nav-link @if(Route::is('races.subscription.*')) active @endif" href="{{ route('races.subscription.create') }}">
                     <i class="nav-icon fas fa-file-contract"></i>&nbsp;{{ __('Iscrizioni') }}
                 </a>
             </li>
@@ -80,7 +80,7 @@
         
         @can('viewAny', App\Models\User::class)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('users.index') }}">
+                <a class="nav-link @if(Route::is('users.*')) active @endif" href="{{ route('users.index') }}">
                     <i class="nav-icon fa-solid fa-user-group"></i>&nbsp;{{ __('Users') }}
                 </a>
             </li>
@@ -88,7 +88,7 @@
 
         @can('viewAny', App\Models\Role::class)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('roles.index') }}">
+                <a class="nav-link @if(Route::is('roles.*')) active @endif" href="{{ route('roles.index') }}">
                     <i class="nav-icon fa-solid fa-user-shield"></i>&nbsp;{{ __('Ruoli') }}
                 </a>
             </li>
@@ -96,7 +96,7 @@
 
         @can(App\Enums\Permissions::RunMaintenance)
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('tasks.index') }}">
+                <a class="nav-link @if(Route::is('tasks.*')) active @endif" href="{{ route('tasks.index') }}">
                     <i class="nav-icon fa-solid fa-screwdriver-wrench"></i>&nbsp;{{ __('Manutenzione') }}
                 </a>
             </li>

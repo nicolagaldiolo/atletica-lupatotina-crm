@@ -7,16 +7,12 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route="{{ route('races.index') }}">{{ __('Gare') }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('races.fees.index', $race) }}">{{ $entity }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item canurl="{{ Auth::user()->can('update', $race) }}" route="{{ route('races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ __('Nuova quota') }}</x-backend-breadcrumb-item>
-</x-backend-breadcrumbs>
-
 @endsection
 
 @section('secondary-nav')
+    @include ("backend.races.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')

@@ -7,10 +7,7 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("users.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $user->name }}</x-backend-breadcrumb-item>
-</x-backend-breadcrumbs>
 @endsection
 
 @section('content')
@@ -22,8 +19,8 @@
         <div class="row">
             <div class="col">
                 <div class="float-end">
-                    @can('viewAny', App\Models\Athlete::class)
-                        <x-backend.buttons.return route='{{ route("users.index") }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                    @can('viewAny', App\Models\User::class)
+                        <x-backend.buttons.return route='{{ route("users.index") }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
                     @endcan
                     @can('update', $user)
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
@@ -49,12 +46,12 @@
                 </div>
 
                 <div class="form-group row mb-3">
-                    {{ html()->label(__('labels.backend.users.fields.password_confirmation'))->class('col-md-2 form-control-label')->for('password_confirmation') }}
+                    {{ html()->label(__('Conferma password'))->class('col-md-2 form-control-label')->for('password_confirmation') }}
 
                     <div class="col-md-10">
                         {{ html()->password('password_confirmation')
                             ->class('form-control')
-                            ->placeholder(__('labels.backend.users.fields.password_confirmation'))
+                            ->placeholder(__('Conferma password'))
                             ->required() }}
                     </div>
                 </div>

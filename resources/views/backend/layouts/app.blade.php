@@ -23,17 +23,9 @@
 
     @vite(['resources/sass/app-backend.scss', 'resources/js/app-backend.js'])
 
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+Bengali+UI&display=swap" rel="stylesheet" />
-    <style>
-        body {
-            font-family: Ubuntu, "Noto Sans Bengali UI", Arial, Helvetica, sans-serif
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 
     @stack('after-styles')
-
-    @livewireStyles
 
 </head>
 
@@ -69,11 +61,9 @@
 
     </div>
 
-    <!-- Scripts -->
-    @livewireScripts
-
+    <script type="module" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
     @stack('after-scripts')
-    <!-- / Scripts -->
+    
 
 </body>
 

@@ -1,16 +1,14 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Atleti');
+    $entity = __('Iscrizioni');
 @endphp
 
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("athletes.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item type="active">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
-</x-backend-breadcrumbs>
+    <x-backend-breadcrumb-item canrul="{{ Auth::user()->can('update', $athlete) }}" route='{{route("athletes.edit", $athlete)}}'>{{ $athlete->fullname }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ $entity }}</x-backend-breadcrumb-item>
 @endsection
 
 @section('secondary-nav')
@@ -57,14 +55,9 @@
 @endsection
 
 @push ('after-styles')
-<!-- DataTables Core and Extensions -->
-<link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
-
 @endpush
 
 @push ('after-scripts')
-<!-- DataTables Core and Extensions -->
-<script type="module" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
 <script type="module">
     $('#datatable').DataTable({

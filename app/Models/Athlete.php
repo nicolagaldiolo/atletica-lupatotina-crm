@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\ModelStorage;
 use Database\Factories\AthleteFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +16,6 @@ use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 class Athlete extends Model
 {
     use HasFactory,
-        ModelStorage,
         SoftDeletes,
         EagerLoadPivotTrait;
 

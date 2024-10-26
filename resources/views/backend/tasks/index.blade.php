@@ -1,15 +1,13 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Tasks')
+    $entity = __('Manutenzione')
 @endphp
 
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
     <x-backend-breadcrumb-item type="active">{{ $entity }}</x-backend-breadcrumb-item>
-</x-backend-breadcrumbs>
 @endsection
 
 @section('content')

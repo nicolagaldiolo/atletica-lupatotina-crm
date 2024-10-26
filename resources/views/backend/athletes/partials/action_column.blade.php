@@ -2,43 +2,56 @@
     $layout = $layout ?? null;
 @endphp
 @if($layout == 'nav')
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-coreui-toggle="collapse" data-coreui-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    
                     @can('viewAny', App\Models\Athlete::class)
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route("athletes.index") }}">
-                                <i class="far fa-times-circle"></i>
-                                {{ __('Chiudi') }}
+                            <a class="nav-link @if(Route::is('athletes.index')) active @endif" aria-current="page" href="{{ route("athletes.index") }}">
+                                <i class="nav-icon fas fa-running"></i>
+                                {{ __('Elenco atleti') }}
                             </a>
                         </li>
                     @endcan
-                    
+
                     @can('update', $athlete)
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route("athletes.edit", $athlete) }}">{{ __('Anagrafica') }}</a>
+                            <a class="nav-link @if(Route::is('athletes.edit')) active @endif" aria-current="page" href="{{ route("athletes.edit", $athlete) }}">
+                                <i class="nav-icon fas fa-edit"></i>
+                                {{ __('Anagrafica') }}
+                            </a>
                         </li>
                     @endcan
                     
                     @can('viewAny', [App\Models\Certificate::class, $athlete])
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route("athletes.certificates.index", $athlete) }}">{{ __('Dati sanitari') }}</a>
+                            <a class="nav-link @if(Route::is('athletes.certificates.*')) active @endif" aria-current="page" href="{{ route("athletes.certificates.index", $athlete) }}">
+                                <i class="fas fa-briefcase-medical"></i>
+                                {{ __('Dati sanitari') }}
+                            </a>
                         </li>
                     @endcan
 
                     @if (Gate::any(['subscribe', 'registerPayment'], App\Models\Race::class))
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route("athletes.races.index", $athlete) }}">{{ __('Iscrizioni') }}</a>
+                            <a class="nav-link @if(Route::is('athletes.races.*')) active @endif" aria-current="page" href="{{ route("athletes.races.index", $athlete) }}">
+                                <i class="fa-solid fa-flag-checkered"></i>
+                                {{ __('Iscrizioni') }}
+                            </a>
                         </li>
                     @endif
 
                     @can('viewAny', App\Models\Voucher::class)
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route("athletes.vouchers.index", $athlete) }}">{{ __('Voucher') }}</a>
+                            <a class="nav-link @if(Route::is('athletes.vouchers.*')) active @endif" aria-current="page" href="{{ route("athletes.vouchers.index", $athlete) }}">
+                                <i class="fas fa-tags"></i>
+                                {{ __('Voucher') }}
+                            </a>
                         </li>
                     @endcan
                 </ul>

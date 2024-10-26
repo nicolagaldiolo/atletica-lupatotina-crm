@@ -7,17 +7,13 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route="{{ route('athletes.index') }}">{{ __('Atleti') }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('athletes.edit', $athlete) }}">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item route="{{ route('athletes.vouchers.index', $athlete) }}">{{ $entity }}</x-backend-breadcrumb-item>
-    @if($voucher)
-        <x-backend-breadcrumb-item type="active">{{ $voucher->name }}</x-backend-breadcrumb-item>
-    @endif
-</x-backend-breadcrumbs>
+    <x-backend-breadcrumb-item canrul="{{ Auth::user()->can('edit', $athlete) }}" route='{{route("athletes.edit", $athlete)}}'>{{ $athlete->fullname }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ $voucher->name }}</x-backend-breadcrumb-item>
+
 @endsection
 
 @section('secondary-nav')
+    @include ("backend.athletes.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')

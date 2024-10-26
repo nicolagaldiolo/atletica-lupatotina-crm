@@ -7,10 +7,7 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-<x-backend-breadcrumbs>
-    <x-backend-breadcrumb-item route='{{route("users.index")}}'> {{ $entity }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $user->name }}</x-backend-breadcrumb-item>
-</x-backend-breadcrumbs>
 @endsection
 
 @section('content')
@@ -24,6 +21,9 @@
                     <x-backend.buttons.delete route='{{ route("users.destroy", $user) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                 @endcan
                 <div class="float-end">
+                    @can('viewAny', $user)
+                        <x-backend.buttons.return route='{{ route("users.index") }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
+                    @endcan
                     @can('update', $user)
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                     @endcan
@@ -83,7 +83,7 @@
             </div>
             <div class="col-12 col-sm-10">
                 <div class="form-group">
-                    <a href="{{ route('users.changePassword', $user->id) }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-key"></i> Change password</a>
+                    <a href="{{ route('users.changePassword', $user->id) }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-key"></i> {{ __('Cambio password') }}</a>
                 </div>
             </div>
         </div>
