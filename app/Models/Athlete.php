@@ -12,12 +12,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
+use App\Traits\ModelStorage;
 
 class Athlete extends Model
 {
     use HasFactory,
         SoftDeletes,
-        EagerLoadPivotTrait;
+        EagerLoadPivotTrait,
+        ModelStorage;
 
     protected $fillable = [
         'name',

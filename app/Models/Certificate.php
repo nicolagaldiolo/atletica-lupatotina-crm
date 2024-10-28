@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use App\Enums\CertificateStatus;
+use App\Traits\ModelStorage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,7 +17,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Certificate extends Model
 {
     use HasFactory,
-    SoftDeletes;
+    SoftDeletes,
+    ModelStorage;
 
     protected $fillable = [
         'document',
