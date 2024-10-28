@@ -70,25 +70,33 @@
             {
                 data: 'id',
                 name: 'id',
-                visible: false
+                visible: false,
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'fee.race',
                 render(data) {
                     return data ? data.name : null;
                 },
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'fee',
                 render(data) {
                     return data ? data.name + ' (' + App.money(data.amount) + ')' : null;
                 },
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'created_at',
                 render(data) {
                     return App.date(data);
                 },
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'custom_amount',
@@ -108,13 +116,17 @@
                         }
                     }
                     return html.join(" ");
-                }
+                },
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'payed_at',
                 render(data) {
                     return data ? '<i class="fa-solid fa-coins"></i> (' + App.date(data) + ')' : '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
-                }
+                },
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'action',
@@ -123,7 +135,6 @@
                 searchable: false
             }
         ],
-        ordering: false,
         createdRow: function( row, data, dataIndex){
             if(!data.payed_at){
                 $(row).addClass('table-danger');

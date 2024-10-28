@@ -62,7 +62,9 @@
         columns: [{
                 data: 'id',
                 name: 'id',
-                visible:false
+                visible:false,
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'name',
@@ -112,6 +114,8 @@
                         return null;
                     }
                 },
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'action',

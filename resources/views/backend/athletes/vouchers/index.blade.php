@@ -17,17 +17,17 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
-            <x-slot name="toolbar">
-                @can('create', App\Models\Voucher::class)
+    @can('create', App\Models\Voucher::class)
+        <div class="card-header">
+            <x-backend.section-header>
+                <x-slot name="toolbar">
                     <x-buttons.create route="{{ route('athletes.vouchers.create', $athlete) }}" small="true" title="">
                         {{ __('Crea Voucher') }}
                     </x-buttons.create>
-                @endcan
-            </x-slot>
-        </x-backend.section-header>
-    </div>
+                </x-slot>
+            </x-backend.section-header>
+        </div>
+    @endcan
     <div class="card-body">
         <div class="row">
             <div class="col">
@@ -78,7 +78,9 @@
             {
                 data: 'id',
                 name: 'id',
-                visible: false
+                visible: false,
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'name'
@@ -94,13 +96,17 @@
                     }else{
                         return '<span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }} (' + amount + ')</span>';
                     }
-                }
+                },
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'created_at',
                 render(data) {
                     return App.date(data);
-                }
+                },
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'used_at',
@@ -114,7 +120,9 @@
                     }
 
                     return html.join(" ");
-                }
+                },
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'action',
@@ -123,7 +131,6 @@
                 searchable: false
             }
         ],
-        ordering: false,
     });
 </script>
 @endpush

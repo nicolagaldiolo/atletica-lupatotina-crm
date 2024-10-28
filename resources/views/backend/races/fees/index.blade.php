@@ -72,7 +72,8 @@
         columns: [
             {
                 data: 'id',
-                name: 'id'
+                name: 'id',
+                visible: false,
             },
             {
                 data: 'name',
@@ -96,8 +97,7 @@
                 orderable: false,
                 searchable: false
             }
-        ],
-        ordering: false,
+        ]
     });
 </script>
 @endpush

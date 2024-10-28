@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="float-end">
-                            @can('registerPayment', App\Models\Race::class)
+                            @can('registerPayment', App\Models\AthleteFee::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                             @endcan
                         </div>
@@ -77,7 +77,7 @@
                     <div class="col">
                         <div class="float-end">
                             <div class="form-group">
-                                @can('registerPayment', App\Models\Race::class)
+                                @can('registerPayment', App\Models\AthleteFee::class)
                                     <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                                 @endcan
                             </div>

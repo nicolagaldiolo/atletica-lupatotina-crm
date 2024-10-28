@@ -16,8 +16,8 @@ class VoucherController extends Controller
     public function index(Athlete $athlete)
     {
 
-        $this->authorize('viewAny', Voucher::class);
-
+        $this->authorize('viewAny', [Voucher::class, $athlete]);
+        
         if (request()->ajax()) {
             return datatables()->eloquent($athlete->vouchers()->with('athletefee.fee.race'))
             ->addColumn('action', function ($voucher) use($athlete){

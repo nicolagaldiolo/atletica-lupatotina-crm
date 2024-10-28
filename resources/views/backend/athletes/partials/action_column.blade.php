@@ -37,7 +37,7 @@
                         </li>
                     @endcan
 
-                    @if (Gate::any(['subscribe', 'registerPayment'], App\Models\Race::class))
+                    @if (Gate::any(['subscribe', 'registerPayment', 'viewAny'], [App\Models\AthleteFee::class, $athlete]))
                         <li class="nav-item">
                             <a class="nav-link @if(Route::is('athletes.races.*')) active @endif" aria-current="page" href="{{ route("athletes.races.index", $athlete) }}">
                                 <i class="fa-solid fa-flag-checkered"></i>
@@ -46,7 +46,7 @@
                         </li>
                     @endif
 
-                    @can('viewAny', App\Models\Voucher::class)
+                    @can('viewAny', [App\Models\Voucher::class, $athlete])
                         <li class="nav-item">
                             <a class="nav-link @if(Route::is('athletes.vouchers.*')) active @endif" aria-current="page" href="{{ route("athletes.vouchers.index", $athlete) }}">
                                 <i class="fas fa-tags"></i>
@@ -70,7 +70,7 @@
             <x-backend.buttons.edit route='{{ route("athletes.certificates.index", $athlete) }}' small="true" icon="fas fa-briefcase-medical"/>
         @endcan
         
-        @if (Gate::any(['subscribe', 'registerPayment'], App\Models\Race::class))
+        @if (Gate::any(['subscribe', 'registerPayment'], App\Models\AthleteFee::class))
             <x-backend.buttons.edit route='{{ route("athletes.races.index", $athlete) }}' small="true" icon="fa-solid fa-flag-checkered"/>
         @endif
 

@@ -62,7 +62,9 @@
         columns: [{
                 data: 'id',
                 name: 'id',
-                visible:false
+                visible:false,
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'name',
@@ -88,8 +90,6 @@
             },
             {
                 data: 'subscrible_expiration',
-                orderable: false,
-                searchable: false,
                 render(data) {
                     return App.date(data);
                 },

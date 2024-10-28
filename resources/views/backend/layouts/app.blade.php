@@ -23,7 +23,7 @@
 
     @vite(['resources/sass/app-backend.scss', 'resources/js/app-backend.js'])
 
-    <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
 
     @stack('after-styles')
 
@@ -61,8 +61,16 @@
 
     </div>
 
-    <script type="module" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
+    <script>
+        Object.assign(DataTable.defaults, {
+            language: {
+                url: "{{ asset('vendor/DataTables/it-IT.json') }}",
+            },
+        });
+    </script>
     @stack('after-scripts')
+
     
 
 </body>

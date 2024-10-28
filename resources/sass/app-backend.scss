@@ -1,10 +1,17 @@
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
 @import "backend_variables";
-$navbar-nav-link-padding-x:         .7rem;
 
 @import "resources/vendors/coreui/src/scss/style.scss";
 
 a {
     text-decoration: none;
+}
+
+.breadcrumb{
+    font-size: 1.4rem;
+    a{
+        font-weight: 700;
+        color: $black;
+    }
 }

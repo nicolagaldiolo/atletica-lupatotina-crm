@@ -51,11 +51,11 @@
             </li>
         @endcan
         
-        @if (Gate::any(['subscribe', 'registerPayment'], App\Models\Race::class))
+        @if (Gate::any(['subscribe', 'registerPayment'], App\Models\AthleteFee::class))
             <li class="nav-title"><a>{{ __('Registrazioni') }}</a></li>
         @endif
 
-        @can('registerPayment', App\Models\Race::class)
+        @can('registerPayment', App\Models\AthleteFee::class)
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('payments.*')) active @endif" href="{{ route('payments.create') }}">
                     <i class="nav-icon fas fa-coins"></i>&nbsp;{{ __('Pagamenti') }}
@@ -63,7 +63,7 @@
             </li>
         @endcan
 
-        @can('subscribe', App\Models\Race::class)
+        @can('subscribe', App\Models\AthleteFee::class)
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('races.subscription.*')) active @endif" href="{{ route('races.subscription.create') }}">
                     <i class="nav-icon fas fa-file-contract"></i>&nbsp;{{ __('Iscrizioni') }}

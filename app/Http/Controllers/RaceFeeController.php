@@ -6,6 +6,7 @@ use App\Classes\Utility;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FeesRequest;
 use App\Models\Athlete;
+use App\Models\AthleteFee;
 use App\Models\Fee;
 use App\Models\Race;
 
@@ -90,7 +91,7 @@ class RaceFeeController extends Controller
 
     public function athletesSubscribeable(Race $race, Fee $fee)
     {
-        $this->authorize('subscribe', Race::class);
+        $this->authorize('subscribe', AthleteFee::class);
         
         if (request()->ajax()) {
             $athletes = Athlete::with(['validVouchers'])->whereDoesntHave('fees', function($query) use($fee){

@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\Permissions;
 use App\Http\Controllers\Controller;
 use App\Models\Athlete;
+use App\Models\AthleteFee;
 use App\Models\Certificate;
-use App\Models\Race;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -59,7 +59,7 @@ class DashboardController extends Controller
 
     public function fees()
     {
-        $this->authorize('registerPayment', Race::class);
+        $this->authorize('registerPayment', AthleteFee::class);
         
         if (request()->ajax()) {
             return datatables()->eloquent(Athlete::query()->whereHas('feesToPay')->with(['feesToPay.race', 'feesToPay.athletefee.voucher']))

@@ -126,7 +126,9 @@
                 orderable: false,
             },
             {
-                data: 'vouchers_count'
+                data: 'vouchers_count',
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'user',

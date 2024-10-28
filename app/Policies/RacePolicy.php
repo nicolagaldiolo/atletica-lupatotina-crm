@@ -49,16 +49,6 @@ class RacePolicy
         return $user->can(Permissions::DeleteRaces);
     }
 
-    public function subscribe(User $user): bool
-    {
-        return $user->can(Permissions::HandleSubscriptions);
-    }
-
-    public function registerPayment(User $user): bool
-    {
-        return $user->can(Permissions::HandlePayments);
-    }
-
     public function report(User $user): bool
     {
         return $user->can(Permissions::ReportRaces);

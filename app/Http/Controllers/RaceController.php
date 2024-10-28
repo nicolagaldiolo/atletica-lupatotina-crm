@@ -116,7 +116,7 @@ class RaceController extends Controller
 
     public function subscriptionCreate()
     {
-        $this->authorize('subscribe', Race::class);
+        $this->authorize('subscribe', AthleteFee::class);
 
         $races = Race::whereHas('fees')->with('fees')->get();
 
@@ -126,7 +126,7 @@ class RaceController extends Controller
 
     public function subscriptionStore(RaceSubscriptionsRequest $request)
     {
-        $this->authorize('subscribe', Race::class);
+        $this->authorize('subscribe', AthleteFee::class);
         
         Fee::findOrFail($request->get('fee_id'))->athletes()->syncWithoutDetaching($request->get('athletes', []));
         

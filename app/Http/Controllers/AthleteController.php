@@ -13,7 +13,6 @@ use App\Exports\AtheletsExport;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\AthletesRequest;
-use App\Models\Race;
 use Illuminate\Support\Facades\Gate;
 
 class AthleteController extends Controller
@@ -135,7 +134,10 @@ class AthleteController extends Controller
 
     public function races(Athlete $athlete)
     {
-        if (!Gate::any(['subscribe', 'registerPayment'], Race::class)) {
+        
+
+
+        if (!Gate::any(['subscribe', 'registerPayment', 'viewAny'], [AthleteFee::class, $athlete])) {
             abort(403);
         }
 
@@ -152,7 +154,7 @@ class AthleteController extends Controller
 
     public function payFee(Request $request, AthleteFee $athleteFee)
     {
-        $this->authorize('registerPayment', $athleteFee->fee->race);
+        $this->authorize('registerPayment', $athleteFee);
         
         $athleteFee->update([
             'payed_at' => ($athleteFee->payed_at ? null : Carbon::now())
@@ -163,7 +165,7 @@ class AthleteController extends Controller
 
     public function destroySubscription(AthleteFee $athleteFee)
     {
-        $this->authorize('subscribe', $athleteFee->fee->race);
+        $this->authorize('subscribe', $athleteFee);
 
         $athleteFee->delete();
         Utility::flashMessage();

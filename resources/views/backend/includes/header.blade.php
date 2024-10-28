@@ -41,7 +41,7 @@
 
     <div class="container-fluid">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb my-0 ms-2">
+            <ol class="breadcrumb my-0">
                 @yield('breadcrumbs')
             </ol>
         </nav>

@@ -79,7 +79,7 @@
     @endif
 
     <div class="row">
-        @can('registerPayment', App\Models\Race::class)
+        @can('registerPayment', App\Models\AthleteFee::class)
             <div class="col-sm-6 p-3">
                 <h5>{{ __('Posizioni aperte') }}</h5>
 
@@ -167,7 +167,8 @@
                     data: 'id',
                     name: 'id',
                     visible: false,
-                    searchable: false
+                    searchable: false,
+                    orderable: false,
                 },
                 {
                     data: 'name',
@@ -183,14 +184,15 @@
 
                         return null;
                     },
-                    searchable: false
+                    searchable: false,
+                    orderable: false,
                 },
                 
             ]
         });
     @endcan
 
-    @can('registerPayment', App\Models\Race::class)
+    @can('registerPayment', App\Models\AthleteFee::class)
         $('#datatable_athletes').DataTable({
             processing: true,
             serverSide: true,
@@ -241,6 +243,7 @@
                         return null;
                     },
                     searchable: false,
+                    orderable: false,
                 },
                 {
                     data: 'fees_to_pay',

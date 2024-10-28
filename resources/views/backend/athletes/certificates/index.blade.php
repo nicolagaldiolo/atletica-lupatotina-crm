@@ -66,6 +66,7 @@
 
 <script type="module">
     $('#datatable').DataTable({
+        searching: false,
         processing: true,
         serverSide: true,
         autoWidth: true,
@@ -85,7 +86,9 @@
                     }
 
                     return null;
-                }
+                },
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'status',
@@ -95,7 +98,9 @@
                     }
 
                     return null;
-                }
+                },
+                orderable: false,
+                searchable: false
             },
             {
                 data: null,
@@ -109,7 +114,9 @@
                     }
 
                     return null;
-                }
+                },
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'action',
@@ -118,7 +125,6 @@
                 searchable: false
             }
         ],
-        ordering: false,
     });
 </script>
 @endpush
