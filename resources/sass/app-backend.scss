@@ -8,6 +8,15 @@ a {
     text-decoration: none;
 }
 
+.navbar-nav{
+    .nav-link{
+        &.active,
+        &.show{
+            color: $white;
+        }
+    }  
+}
+
 .breadcrumb{
     font-size: 1.4rem;
     a{

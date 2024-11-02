@@ -84,27 +84,21 @@
             },
             {
                 data: 'athlete',
-                render(data) {
+                render(data, type, row, meta) {
                     return data ? data.fullname : null;
                 },
-                orderable: false,
-                searchable: false
             },
             {
                 data: 'fee',
                 render(data) {
                     return data ? data.name + ' (' + App.money(data.amount) + ')' : null;
-                },
-                orderable: false,
-                searchable: false
+                }
             },
             {
                 data: 'created_at',
                 render(data) {
                     return App.date(data);
-                },
-                orderable: false,
-                searchable: false
+                }
             },
             {
                 data: 'custom_amount',
@@ -121,17 +115,13 @@
                         }
                     }
                     return html.join("\n");
-                },
-                orderable: false,
-                searchable: false
+                }
             },
             {
                 data: 'payed_at',
                 render(data) {
                     return App.date(data);
-                },
-                orderable: false,
-                searchable: false
+                }
             }
         ]
     });

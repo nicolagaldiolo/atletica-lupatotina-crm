@@ -64,6 +64,31 @@
     <script type="text/javascript" src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script>
         Object.assign(DataTable.defaults, {
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: '<i class="fa-solid fa-file-excel"></i>',
+                    titleAttr: 'Excel'
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="fa-solid fa-file-pdf"></i>',
+                    titleAttr: 'Pdf'
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa-solid fa-print"></i>',
+                    titleAttr: 'Stampa'
+                }
+            ],
+            layout: {            
+                top: null,
+                topStart: 'pageLength',
+                topEnd: ['search', 'buttons'],
+                bottom: null,
+                bottomStart: 'info',
+                bottomEnd: 'paging'
+            },
             language: {
                 url: "{{ asset('vendor/DataTables/it-IT.json') }}",
             },

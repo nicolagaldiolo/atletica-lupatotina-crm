@@ -161,7 +161,7 @@
                 type: "GET",
                 "datatype": 'json'
             },
-            //order: [[ 2, "asc" ]],
+            order: [[ 2, "asc" ]],
             columns: [
                 {
                     data: 'id',
@@ -184,8 +184,7 @@
 
                         return null;
                     },
-                    searchable: false,
-                    orderable: false,
+                    searchable: false
                 },
                 
             ]

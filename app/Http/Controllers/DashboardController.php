@@ -8,6 +8,7 @@ use App\Models\Athlete;
 use App\Models\AthleteFee;
 use App\Models\Certificate;
 use Illuminate\Support\Facades\Auth;
+use Kirschbaum\PowerJoins\PowerJoinClause;
 
 class DashboardController extends Controller
 {
@@ -39,11 +40,15 @@ class DashboardController extends Controller
 
         if (request()->ajax()) {
 
-            return datatables()->eloquent(Athlete::query()->whereHas('certificate', function($query){
-                        $query->expiring();
-                    })->with(['certificate' => function($query){
-                        $query->expiring();
-                    }]))
+            $builder = Athlete::with(['certificate' => function($query){
+                $query->expiring();
+            }])->joinRelationship('certificate', function(PowerJoinClause $join){
+                $join->expiring();
+            })->whereHas('certificate', function($query){
+                $query->expiring();
+            });
+
+            return datatables()->eloquent($builder)
                 ->filterColumn('name', function($query, $keyword) {
                     $sql = "CONCAT(name, surname)  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
@@ -53,6 +58,9 @@ class DashboardController extends Controller
                 })
                 ->editColumn('name', function ($data) {
                     return $data->fullname;
+                })
+                ->orderColumn('certificate', function ($query, $order) {
+                    $query->orderBy('certificates.expires_on', $order);
                 })->make(true);
         }
     }

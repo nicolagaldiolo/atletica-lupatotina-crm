@@ -8,7 +8,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav nav-pills me-auto mb-2 mb-lg-0">
                     
                     @can('viewAny', App\Models\Athlete::class)
                         <li class="nav-item">

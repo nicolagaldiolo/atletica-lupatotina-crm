@@ -72,6 +72,7 @@
         autoWidth: true,
         responsive: true,
         ajax: '{{ route("athletes.certificates.index", $athlete) }}',
+        order: [[2, 'desc']],
         columns: [
             {
                 data: 'id',
@@ -86,37 +87,27 @@
                     }
 
                     return null;
-                },
-                orderable: false,
-                searchable: false
+                }
             },
             {
-                data: 'status',
-                render(data) {
+                data: 'expires_on',
+                render(data, type, row, meta) {
                     if(data){
-                        return '<span class="badge text-bg-' + data.status_class + '">' + data.date + ' (' + data.date_diff + ')</span>';
+                        return '<span class="badge text-bg-' + row.status.status_class + '">' + row.status.date + ' (' + row.status.date_diff + ')</span>';
                     }
 
                     return null;
-                },
-                orderable: false,
-                searchable: false
+                }
             },
             {
-                data: null,
-                render(data) {
-                    if(data){
-                        if(data.status.url_download){
-                            return '<a class="btn btn-primary btn-sm" href="' + data.status.url_download + '" target="_blank"><i class="fa-solid fa-download"></i> {{ __("Scarica") }}</a>';
-                        }else{
-                            return '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
-                        }
+                data: 'document',
+                render(data, type, row, meta) {
+                    if(row.status.url_download){
+                        return '<a class="btn btn-primary btn-sm" href="' + row.status.url_download + '" target="_blank"><i class="fa-solid fa-download"></i> {{ __("Scarica") }}</a>';
+                    }else{
+                        return '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
                     }
-
-                    return null;
-                },
-                orderable: false,
-                searchable: false
+                }
             },
             {
                 data: 'action',

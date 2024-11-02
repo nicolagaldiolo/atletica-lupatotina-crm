@@ -141,8 +141,23 @@ class RaceController extends Controller
         if (request()->ajax()) {
             $builder = AthleteFee::with(['voucher', 'athlete', 'fee'])->whereHas('fee', function($query) use($race){
                 $query->where('race_id', $race->id);
-            });
-            return datatables()->eloquent($builder)->make(true);
+            })->joinRelationship('athlete')->joinRelationship('fee');
+
+            return datatables()->eloquent($builder)
+                ->orderColumn('athlete', function ($query, $order) {
+                    $query->orderBy('athletes.surname', $order)->orderBy('athletes.name', $order);
+                })
+                ->filterColumn('athlete', function($query, $keyword) {
+                    $sql = "CONCAT(athletes.name, athletes.surname)  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->orderColumn('fee', function ($query, $order) {
+                    $query->orderBy('fees.name', $order);
+                })
+                ->filterColumn('fee', function($query, $keyword) {
+                    $query->whereRaw('fees.name like ?', ["%{$keyword}%"]);
+                })
+                ->make(true);
         }else{
             return view('backend.races.athletes.index', compact('race'));
         }

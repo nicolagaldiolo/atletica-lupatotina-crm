@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Athlete;
 use App\Classes\Utility;
 use App\Models\Certificate;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AthleteCertificatesRequest;
-use App\Models\Athlete;
 
 class CertificateController extends Controller
 {

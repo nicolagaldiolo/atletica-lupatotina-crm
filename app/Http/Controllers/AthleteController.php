@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\AthletesRequest;
 use Illuminate\Support\Facades\Gate;
+use Kirschbaum\PowerJoins\PowerJoinClause;
 
 class AthleteController extends Controller
 {
@@ -28,12 +29,19 @@ class AthleteController extends Controller
         $this->authorize('viewAny', Athlete::class);
 
         if (request()->ajax()) {
-            return datatables()->eloquent(Athlete::query()->withCount('vouchers')->withCount('fees')->with(['certificate', 'feesToPay', 'user']))
+
+            $builder = Athlete::query()
+                ->withCount('vouchers')
+                ->withCount('fees')
+                ->withCount('feesToPay')
+                ->with(['certificate', 'feesToPay', 'user'])
+                ->joinRelationship('certificate', function(PowerJoinClause $join){
+                    $join->expiring();
+            });
+
+            return datatables()->eloquent($builder)
                 ->addColumn('action', function ($athlete) {
                     return view('backend.athletes.partials.action_column', compact('athlete'));
-                })
-                ->orderColumn('certificate', function ($query, $order) {
-                    $query->orderBy('certificate.expires_on', $order);
                 })
                 ->filterColumn('name', function($query, $keyword) {
                     $sql = "CONCAT(name, surname)  like ?";
@@ -44,6 +52,9 @@ class AthleteController extends Controller
                 })
                 ->editColumn('name', function ($data) {
                     return $data->fullname;
+                })
+                ->orderColumn('certificate', function ($query, $order) {
+                    $query->orderBy('certificates.expires_on', $order);
                 })->make(true);
         }else{
             return view('backend.athletes.index');
@@ -134,16 +145,22 @@ class AthleteController extends Controller
 
     public function races(Athlete $athlete)
     {
-        
-
-
         if (!Gate::any(['subscribe', 'registerPayment', 'viewAny'], [AthleteFee::class, $athlete])) {
             abort(403);
         }
 
         if (request()->ajax()) {
-            $builder = AthleteFee::with(['voucher', 'fee.race'])->where('athlete_id', $athlete->id);
+            $builder = AthleteFee::with(['voucher', 'fee.race'])
+                ->joinRelationship('fee.race')
+                ->where('athlete_id', $athlete->id);
+
             return datatables()->eloquent($builder)
+            ->filterColumn('fee', function($query, $keyword) {
+                $query->whereRaw("fees.name like ?", ["%{$keyword}%"]);
+            })
+            ->orderColumn('fee', function ($query, $order) {
+                $query->orderBy('races.name', $order);
+            })
             ->addColumn('action', function ($athleteFee){
                 return view('backend.athletes.races.partials.action_column', compact('athleteFee'));
             })->make(true);

@@ -62,16 +62,6 @@ class Athlete extends Model
         });
     }
 
-    /*public function races(): BelongsToMany
-    {
-        return $this->belongsToMany(Race::class)
-            ->withTimestamps()
-            ->using(AthleteRace::class)
-            ->as('athleterace')
-            ->withPivot('id', 'subscription_at', 'fee_id');
-    }
-    */
-
     public function getFullnameAttribute()
     {
         return implode(' ', [$this->surname, $this->name]);

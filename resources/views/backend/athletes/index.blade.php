@@ -99,8 +99,7 @@
 
                     return null;
                 },
-                searchable: false,
-                orderable: false,
+                searchable: false
             },
             {
                 data: 'fees_count',
@@ -110,25 +109,22 @@
                     }
                     return null;
                 },
-                searchable: false,
-                orderable: false,
+                searchable: false
             },
             {
-                data: 'fees_to_pay',
-                render(data) {
-                    if(data && data.length){
-                        let amount = data.reduce((i, item) => i+item.athletefee.custom_amount, 0);
-                        return '<span class="badge text-bg-danger">' + App.money(amount) + ' (' + data.length + ')</span>';
+                data: 'fees_to_pay_count',
+                render(data, type, row, meta) {
+                    if(data){
+                        let amount = row.fees_to_pay.reduce((i, item) => i+item.athletefee.custom_amount, 0);
+                        return '<span class="badge text-bg-danger">' + App.money(amount) + ' (' + data + ')</span>';
                     }
                     return null;
                 },
                 searchable: false,
-                orderable: false,
             },
             {
                 data: 'vouchers_count',
-                searchable: false,
-                orderable: false,
+                searchable: false
             },
             {
                 data: 'user',

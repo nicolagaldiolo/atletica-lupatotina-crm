@@ -42,9 +42,9 @@ class Certificate extends Model
 
     protected static function booted(): void
     {
-        static::addGlobalScope('expires_on', function (Builder $builder){
-            $builder->orderBy('expires_on', 'desc');
-        });
+        //static::addGlobalScope('expires_on', function (Builder $builder){
+        //    $builder->orderBy('expires_on', 'desc');
+        //});
 
         static::saving(function($model){
             if($model->is_current){
@@ -108,12 +108,12 @@ class Certificate extends Model
         }
     }
 
-    public function scopeCurrent(Builder $query): void
+    public function scopeCurrent($query): void
     {
         $query->where('is_current', true);
     }
 
-    public function scopeExpiring(Builder $query): void
+    public function scopeExpiring($query): void
     {
         $query->where('expires_on', '<=', Carbon::now()->addMonth()->endOfMonth());
     }
