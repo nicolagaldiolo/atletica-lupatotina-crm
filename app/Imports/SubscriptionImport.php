@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class SubscriptionImport implements ToCollection
 {
@@ -22,7 +23,7 @@ class SubscriptionImport implements ToCollection
             $row_athlete_name = $item[3];
             $row_fee_amount = $item[5];
             
-            $timestamp = $row_timestamp ? Carbon::createFromFormat('d/m/Y H.i.s', $row_timestamp) : null;
+            $timestamp = $row_timestamp ? Date::excelToDateTimeObject($row_timestamp) : null;
             $athlete = Athlete::where(DB::raw("CONCAT(`surname`, ' ', `name`)"), 'like', $row_athlete_name)->firstOrFail();
 
             $race_name = (explode(' - ', trim($row_race_name)))[0];

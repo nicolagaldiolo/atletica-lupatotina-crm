@@ -171,9 +171,9 @@ class Setup extends Command
                     ]); 
                 }
 
-                Voucher::factory()->create([
-                    'athlete_id' => $athlete->id
-                ]);
+                //Voucher::factory()->create([
+                //    'athlete_id' => $athlete->id
+                //]);
             });
 
             $athlete = Athlete::findOrFail(37);
