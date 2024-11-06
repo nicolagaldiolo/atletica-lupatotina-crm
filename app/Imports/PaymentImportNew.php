@@ -19,8 +19,6 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 
 class PaymentImportNew implements ToCollection, WithStartRow
 {
-    private $payments = [];
-
     /**
      * @return int
      */
@@ -44,49 +42,51 @@ class PaymentImportNew implements ToCollection, WithStartRow
                 // Solo se la data è valida tratto la riga come riga valida
 
                 if($item[0]){
-                    $athlete = Athlete::where(DB::raw("CONCAT(`surname`, ' ', `name`)"), 'like', $item[0])->firstOrFail();    
                     // Qui ho cambiato atleta
+                    $athlete = Athlete::where(DB::raw("CONCAT(`surname`, ' ', `name`)"), 'like', $item[0])->firstOrFail();                        
                 }
-
                 if($athlete){
-
-                    $data = [
+                    $arr[] = [
                         'date' => $date_obj,
                         'athlete_id' => $athlete->id,
                         'athlete' => $athlete,
                         'causal' => $item[2],
                         'amount' => $item[3]
                     ];
-
-                    $arr[] = $data;                    
                 }
             }
-
             return $arr;
-            
         }, []))->groupBy('athlete_id');
 
         $athleteRows->each(function($rows, $athleteKey){
 
-            if($athleteKey <= 2){
+            // CASI NON GESTITI 
+            //12 - Brunelli Alberto,
+            //37 - Nicola Galdiolo,
+            //56 - Maurizio Passarini,
+            //70 - Torre Luciano,
+            
+            if($athleteKey == 56){
 
                 $fees_to_pay = collect([]);
-                $resume = 0;
+                $budget = 0;
 
                 $athlete = Athlete::findOrFail($athleteKey);
 
-                $rows->each(function($item) use($athlete, $fees_to_pay, &$resume){
+                $i = $rows;
+
+                $rows->each(function($item, $keyRow) use($athlete, $fees_to_pay, &$budget){
                     
                     if($item['causal'] != 'Pagato'){
                         $row_fee_amount = $item['amount'];
                         if($row_fee_amount < 0){
-                            dd("c'è qualcosa che non va");
+                            dd("C'è qualcosa che non va, non può essere che la causale sia diversa da pagato e ci sia un importo negativo");
                         }else{
 
                             $race_name = (explode(' - ', trim($item['causal'])))[0];
                             $fee = Race::where('name', 'like', $race_name)->firstOrFail()->fees()->firstOrFail();
                             
-                            $voucher = $athlete->validVouchers()->orderBy('amount', 'desc')->first();
+                            //$voucher = $athlete->validVouchers()->orderBy('amount', 'desc')->first();
                             
                             $fees_to_pay->put($fee->id, $fee);
                             $athlete->fees()->syncWithoutDetaching(
@@ -101,60 +101,38 @@ class PaymentImportNew implements ToCollection, WithStartRow
                         }
         
                     }else{
-                        $resume = ($resume + abs($item['amount']));
-
-                        $fees_to_pay->each(function($fee, $feeKey) use($athlete, $item, $fees_to_pay, &$resume){
+                        // Se la causale è Pagato e l'importo è positivo si tratta di un errata-corrige di pagamento
+                        // quindi lo sottraggo al budget
+                        if($item['amount']){
+                            $budget = ($budget - $item['amount']);    
+                        }else{
+                            $budget = ($budget + abs($item['amount']));    
+                        }
+                        
+                        $fees_to_pay->each(function($fee, $feeKey) use($athlete, $item, $fees_to_pay, &$budget){
                             $athletefee = $athlete->fees()->findOrFail($fee->id)->athletefee;
-                            if($resume >= $athletefee->custom_amount){
+                            if($budget >= $athletefee->custom_amount){
                                 //ho budget per pagare la gara, registro il pagamento e scalo il residuo
-                                $resume = ($resume - $athletefee->custom_amount);
+                                $budget = ($budget - $athletefee->custom_amount);
                                 $athletefee->update([
                                     'payed_at' => $item['date']
                                 ]);
                                 $fees_to_pay->forget($feeKey);
-                            }//else{
-                            //    dd($athlete->fullname, "c'è qualcosa che non va, nn ho più soldi");
-                            //}
-
-                            if($resume > 0){
-                                $currentVouchers = $athlete->vouchers()->get();
-                                
-                                if($currentVouchers->count() > 1){
-                                    abort(500, 'Ho più di un voucher, non va bene');
-                                }else{
-    
-                                    $voucher = $currentVouchers->first();
-    
-                                    if($voucher){
-                                        $voucher->update([
-                                            'amount' => $voucher->amount + $resume
-                                        ]);
-                                    }else{
-                                        $voucher = $athlete->vouchers()->create([
-                                            'name' => 'normalizzazione pagamento del ' . $item['date']->format('Y-m-d H:i:s'),
-                                            'type' => VoucherType::Credit,
-                                            'amount' => $resume
-                                        ]);
-                                    }
-    
-                                    $resume = 0;
-                                }
-                                
                             }
-
-
-
                         });
-
-                        
                     }
                 });
 
-                //if($resume > 0 && $athlete->id != 48 && $athlete->id != 59){
-                //if($resume > 0){
-                //    $i = $athlete;
-                //    dd($athlete->id, $athlete->fullname, "c'è qualcosa che non va, ho pagato di più");
-                //}
+                if($budget > 0){
+                    // Se ho ancora budget emetto un voucher del valore del budget
+                    $voucher = $athlete->vouchers()->create([
+                        'name' => 'Buono gara',
+                        'type' => VoucherType::Credit,
+                        'amount' => $budget
+                    ]);
+                    //$i = 10;
+                    dd($athlete->id, $athlete->fullname, "c'è qualcosa che non va, ho pagato di più");
+                }
             }
         
         });
