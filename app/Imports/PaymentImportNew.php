@@ -63,19 +63,49 @@ class PaymentImportNew implements ToCollection, WithStartRow
             // CASI NON GESTITI 
             //12 - Brunelli Alberto,
             //37 - Nicola Galdiolo,
-            //56 - Maurizio Passarini,
-            //70 - Torre Luciano,
             
-            if($athleteKey == 56){
+            if($athleteKey == 12){
 
                 $fees_to_pay = collect([]);
                 $budget = 0;
 
                 $athlete = Athlete::findOrFail($athleteKey);
 
-                $i = $rows;
+                $data = collect([]);
+                
+                // INIZIO CASO PARTICOLARE
+                // Potrebbe verificarsi il caso che viene registrata erroneamente un'iscrizione due volte
+                // ed è stato registrato un pagamento anche della seconda iscrizione errata.
+                // a quel punto rimuovo la seconda iscrizione errata e rimuovo anche il relativo pagamento correttivo
+                $exists = collect([]);
+                $amount_to_remove = 0;
+                
+                $rows->each(function($item) use($exists, $data, &$amount_to_remove){
+                    if($item['causal'] == 'Pagato'){
+                        $data->push($item);
+                    }else{
+                        if(!$exists->contains($item['causal'])){
+                            $data->push($item);
+                            $exists->push($item['causal']);
+                        }else{
+                            $amount_to_remove = $amount_to_remove + $item['amount'];
+                        }
+                    }
+                    
+                });
 
-                $rows->each(function($item, $keyRow) use($athlete, $fees_to_pay, &$budget){
+                if($amount_to_remove){
+                    $data = $data->map(function($item) use(&$amount_to_remove){
+                        if($item['causal'] == 'Pagato' && $amount_to_remove && $item['causal'] >= $amount_to_remove){
+                            $item['amount'] = $item['amount'] + $amount_to_remove;
+                            $amount_to_remove = 0;
+                        }
+                        return $item;
+                    });
+                }
+                // FINE CASO PARTICOLARE
+
+                $data->each(function($item, $keyRow) use($athlete, $fees_to_pay, &$budget){
                     
                     if($item['causal'] != 'Pagato'){
                         $row_fee_amount = $item['amount'];
