@@ -13,4 +13,5 @@ final class ReportRowType extends Enum
 {
     const Subscription = 'Iscrizione';
     const Payment = 'Pagamento';
+    const Voucher = 'Voucher';
 }

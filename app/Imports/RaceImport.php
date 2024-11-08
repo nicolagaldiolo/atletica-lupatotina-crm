@@ -9,16 +9,8 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
-class RaceImport implements OnEachRow, WithStartRow, WithHeadingRow
+class RaceImport implements OnEachRow
 {
-    /**
-     * @return int
-     */
-    public function startRow(): int
-    {
-        return 2;
-    }
-
     /**
     * @param array $row
     *
@@ -26,25 +18,25 @@ class RaceImport implements OnEachRow, WithStartRow, WithHeadingRow
     */
     public function onRow(Row $row)
     {
-        $row_data = intval($row['data']);
+        $row_data = intval($row[4]);
         $date = $row_data ? Date::excelToDateTimeObject($row_data) : null;
 
-        $row_iscrizioni_aperte_fino_al = intval($row['iscrizioni_aperte_fino_al']);
+        $row_iscrizioni_aperte_fino_al = intval($row[6]);
         $subscrible_expiration = $row_iscrizioni_aperte_fino_al ? Date::excelToDateTimeObject($row_iscrizioni_aperte_fino_al) : null;
 
-        $gara = trim($row['gara']);
+        $gara = trim($row[2]);
 
         if($gara){
             Race::create([
                 'name' => $gara,
-                'distance' => $row['distanza'],
+                'distance' => $row[3],
                 'date' => $date,
-                'is_subscrible' => ($row['iscrizioni_aperte'] == 'sì'),
+                'is_subscrible' => ($row[5] == 'sì'),
                 'subscrible_expiration' => $subscrible_expiration,
             ])->fees()->create([
                 'name' => __('Quota base'),
                 'expired_at' => $subscrible_expiration,
-                'amount' => $row['costo']
+                'amount' => $row[8]
             ]);
         }
 

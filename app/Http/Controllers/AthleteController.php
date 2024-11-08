@@ -197,14 +197,13 @@ class AthleteController extends Controller
             'fees' => [
                 'race',
                 'athletefee.voucher'
-            ]
+            ],
+            'validVouchers'
         ])->get()->reduce(function($arr, $item){
 
             $item->fees->each(function($fee) use($item, &$arr){
-                $baseData = [
+                $arr[$item->id][] = [
                     'athlete_name' => $item->full_name,
-                ];
-                $arr[$item->id][] = array_merge($baseData, [
                     'type' => ReportRowType::Subscription,
                     'event' => $fee->race->name . ' (' . $fee->name . ')',
                     'event_amount' => $fee->amount,
@@ -212,10 +211,11 @@ class AthleteController extends Controller
                     'voucher' => ($fee->athletefee->voucher && $fee->athletefee->voucher->type == VoucherType::Credit) ? $fee->athletefee->voucher->amount : null,
                     'penalty' => ($fee->athletefee->voucher && $fee->athletefee->voucher->type == VoucherType::Penalty) ? $fee->athletefee->voucher->amount : null,
                     'amount' => $fee->athletefee->custom_amount
-                ]);
+                ];
 
                 if($fee->athletefee->payed_at){
-                    $arr[$item->id][] = array_merge($baseData, [
+                    $arr[$item->id][] = [
+                        'athlete_name' => $item->full_name,
                         'type' => ReportRowType::Payment,
                         'event' => null,
                         'event_amount' => null,
@@ -223,9 +223,23 @@ class AthleteController extends Controller
                         'voucher' => null,
                         'penalty' => null,
                         'amount' => ($fee->athletefee->custom_amount * -1)
-                    ]);
+                    ];
                 }
             });
+
+            $item->validVouchers->each(function($voucher) use($item, &$arr){
+                $arr[$item->id][] = [
+                    'athlete_name' => $item->full_name,
+                    'type' => ReportRowType::Voucher,
+                    'event' => null,
+                    'event_amount' => null,
+                    'created_at' => $voucher->created_at,
+                    'voucher' => ($voucher->type == VoucherType::Credit) ? $voucher->amount : null,
+                    'penalty' => ($voucher->type == VoucherType::Penalty) ? $voucher->amount : null,
+                    'amount' => ($voucher->amount_calculated * -1)
+                ];
+            });
+
 
             return $arr;
         }, []);

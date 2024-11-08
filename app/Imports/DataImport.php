@@ -12,10 +12,7 @@ class DataImport implements WithMultipleSheets
         return [
             'nomi' => new AthleteImport(),
             'gare' => new RaceImport(),
-            //'iscrizioni_values' => new SubscriptionImport(),
-            'situazione_soci_values' => new PaymentImportNew()
-            //'pagamenti' => new PaymentImport()
-            
+            'situazione_soci' => new PaymentImport()            
         ];
     }
 }

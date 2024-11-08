@@ -2,152 +2,159 @@
 
 namespace App\Imports;
 
+use App\Enums\VoucherType;
 use App\Models\Athlete;
 use App\Models\Race;
 use Carbon\Carbon;
-use Exception;
-use Maatwebsite\Excel\Row;
-use Maatwebsite\Excel\Concerns\OnEachRow;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-//use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithStartRow;
-use Maatwebsite\Excel\Concerns\ToCollection;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Maatwebsite\Excel\Concerns\ToCollection;
 
-class PaymentImport implements ToCollection, WithStartRow
+class PaymentImport implements ToCollection
 {
-    private $payments = [];
-
-    /**
-     * @return int
-     */
-    public function startRow(): int
-    {
-        return 2;
-    }
-
     /**
     * @param Collection $collection
     */
     public function collection(Collection $collection)
     {   
-        $collection->each(function($item){
-            $timestamp = (float) $item[0];
-
-            if($timestamp){
-                $atleta1 = $item[2];
-                $atleta1_importo = $item[3];
-                if($atleta1 && $atleta1_importo){
-                    $this->handleImport($atleta1, $atleta1_importo);
+        // 1 MI CREO LA STRUTTURA DATI DA ELABORARE
+        $athlete = null;
+        $athleteRows = collect($collection->reduce(function($arr, $item) use(&$athlete){
+            $date_item = (int) $item[1];
+            $date_obj = $date_item ? Date::excelToDateTimeObject($date_item) : null;
+            if($date_obj){
+                // Solo se la data è valida tratto la riga come riga valida
+                if($item[0]){
+                    // Qui ho cambiato atleta
+                    $athlete = Athlete::where(DB::raw("CONCAT(`surname`, ' ', `name`)"), 'like', $item[0])->firstOrFail();                        
                 }
-
-                $atleta2 = $item[4];
-                $atleta2_importo = $item[5];
-                if($atleta2 && $atleta2_importo){
-                    $this->handleImport($atleta2, $atleta2_importo);
-                }
-
-                $atleta3 = $item[6];
-                $atleta3_importo = $item[7];
-                if($atleta3 && $atleta3_importo){
-                    $this->handleImport($atleta3, $atleta3_importo);
-                }
-
-                $atleta4 = $item[8];
-                $atleta4_importo = $item[9];
-                if($atleta4 && $atleta4_importo){
-                    $this->handleImport($atleta4, $atleta4_importo);
-                }
-
-                $atleta5 = $item[10];
-                $atleta5_importo = $item[11];
-                if($atleta5 && $atleta5_importo){
-                    $this->handleImport($atleta5, $atleta5_importo);
+                if($athlete){
+                    $arr[] = [
+                        'date' => $date_obj,
+                        'athlete_id' => $athlete->id,
+                        'athlete' => $athlete,
+                        'causal' => $item[2],
+                        'amount' => $item[3]
+                    ];
                 }
             }
-        });
+            return $arr;
+        }, []))->groupBy('athlete_id');
 
-        collect($this->payments)->each(function($item, $id){
-            $remaining_amount = $item;
-            Athlete::findOrFail($id)->feesToPay()->orderBy('amount', 'desc')->get()->each(function($item) use($id, &$remaining_amount){
-                //if($id == 5){
-                    $amount = $item->amount;
-                    if($remaining_amount >= $amount){
-                        //$remaining_amount = ($remaining_amount - $amount);
-                        $item->athletefee->update([
-                            'payed_at' => Carbon::now()
-                        ]);
+        // 2 GIRO GLI ATLETI E GESTISCO LE RELATIVE ISCRIZIONI/PAGAMENTI
+        $athleteRows->each(function($rows, $athleteKey){
+
+            $causal_payment = 'Pagato';
+
+            $athlete = Athlete::findOrFail($athleteKey);
+
+            $data = collect([]);
+            
+            // NB: INIZIO CASO PARTICOLARE (ERRATA DOPPIA ISCRIZIONE CON DOPPIA REGISTRAZIONE PAGAMENTO)
+            // Potrebbe verificarsi il caso che viene registrata erroneamente un'iscrizione due volte
+            // ed è stato registrato un pagamento anche della seconda iscrizione errata.
+            // a quel punto rimuovo la seconda iscrizione errata e rimuovo anche il relativo pagamento correttivo
+            $exists = collect([]);
+            $amount_to_remove = 0;
+            
+            $rows->each(function($item) use($exists, $data, &$amount_to_remove, $causal_payment){
+                if($item['causal'] == $causal_payment){
+                    $data->push($item);
+                }else{
+                    if(!$exists->contains($item['causal'])){
+                        $data->push($item);
+                        $exists->push($item['causal']);
+                    }else{
+                        $amount_to_remove = $amount_to_remove + $item['amount'];
                     }
-                //}
+                }
+                
             });
 
-            $i = $remaining_amount;
+            if($amount_to_remove){
+                $data = $data->map(function($item) use(&$amount_to_remove, $causal_payment){
+                    if($item['causal'] == $causal_payment && $amount_to_remove && $item['causal'] >= $amount_to_remove){
+                        $item['amount'] = $item['amount'] + $amount_to_remove;
+                        $amount_to_remove = 0;
+                    }
+                    return $item;
+                });
+            };
+            // FINE CASO PARTICOLARE (ERRATA DOPPIA ISCRIZIONE CON DOPPIA REGISTRAZIONE PAGAMENTO)
+
+            //3 - DEFINISCO IL BUDGET DELL'ATLETA
+            $budget = abs($data->filter(function($item) use($causal_payment){
+                return $item['causal'] == $causal_payment;
+            })->reduce(function($amount, $item){
+                $amount = $amount + $item['amount'];
+                return $amount;
+            }, 0));
+
+
+            //4 - DEFINISCO LE ISCRIZIONI DELL'ATLETA
+            $fees_to_pay = $data->filter(function($item) use($causal_payment){
+                return $item['causal'] != $causal_payment;
+            });
             
-        });
-    }
+            //5 - CICLO LE ISCRIZIONI E REGISTRO I PAGAMENTI
+            $last_fees_to_pay_key = $fees_to_pay->keys()->last();
+            $fees_to_pay->each(function($item, $keyRow) use($athlete, &$budget, $last_fees_to_pay_key){
+                
+                $race_name = (explode(' - ', trim($item['causal'])))[0];
+                $fee = Race::where('name', 'like', $race_name)->firstOrFail()->fees()->firstOrFail();
+                
+                if($item['amount'] < 0){
+                    abort(500, "{$athlete->id} | Qualcosa non va, non può essere che la causale sia diversa da pagato e ci sia un importo negativo");
+                }
 
-    /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
-    /*
-    public function onRow(Row $row)
-    {
-        $timestamp = intval($row[0]);
-        
-        //$date = $timestamp ? Date::excelToDateTimeObject($timestamp) : null;
+                if($budget >= $item['amount']){
+                    // se ho budget per pagare iscrivo alla gara e la segno come pagata
+                    $athlete->fees()->syncWithoutDetaching(
+                        [
+                            $fee->id => [
+                                'custom_amount' => $item['amount'],
+                                'created_at' => $item['date'],
+                                'payed_at' => Carbon::now()
+                            ]
+                        ]
+                    );
 
-        if($timestamp){
+                    // sottraggo l'importo dal budget disponibile
+                    $budget = ($budget - $item['amount']);
+                }else{
+                    
+                    // se non ho budget a sufficienza per pagare iscrivo alla gara, 
+                    // se sono sull'ultima riga e ho del budget inoltre lo scalo all'importo da pagare e imposto il budegt a zero
+                    
+                    $amount = $item['amount'];
+                    if($last_fees_to_pay_key == $keyRow){
+                        $amount = ($amount - $budget);
+                        $budget = 0;
+                    }
 
-            $atleta1 = $row[2];
-            $atleta1_importo = $row[3];
-            $atleta2 = $row[4];
-            $atleta2_importo = $row[5];
-            $atleta3 = $row[6];
-            $atleta3_importo = $row[7];
-            $atleta4 = $row[8];
-            $atleta4_importo = $row[9];
-            $atleta5 = $row[10];
-            $atleta5_importo = $row[11];
-            $i = $timestamp;
-            $i = 10;
-            
-            $row_data = intval($row['data']);
-            
+                    $athlete->fees()->syncWithoutDetaching(
+                        [
+                            $fee->id => [
+                                'custom_amount' => $amount,
+                                'created_at' => $item['date'],
+                                'payed_at' => !$amount ? Carbon::now() : null // segno la gara come pagata solo se l'importo è zero
+                            ]
+                        ]
+                    );
+                }
+            });
 
-            $row_iscrizioni_aperte_fino_al = intval($row['iscrizioni_aperte_fino_al']);
-            $subscrible_expiration = $row_iscrizioni_aperte_fino_al ? Date::excelToDateTimeObject($row_iscrizioni_aperte_fino_al) : null;
-
-            $gara = trim($row['gara']);
-
-            if($gara){
-                Race::create([
-                    'name' => $gara,
-                    'distance' => $row['distanza'],
-                    'date' => $date,
-                    'is_subscrible' => ($row['iscrizioni_aperte'] == 'sì'),
-                    'subscrible_expiration' => $subscrible_expiration,
-                ])->fees()->create([
-                    'name' => __('Quota base'),
-                    'expired_at' => $subscrible_expiration,
-                    'amount' => $row['costo']
+            //6 - SE DOPO AVER REGISTRATO TUTTI I PAGAMENTI MI RIMANE DEL BUDGET EMETTO UN VOUCHER
+            if($budget > 0){
+                $athlete->vouchers()->create([
+                    'name' => 'Buono gara',
+                    'type' => VoucherType::Credit,
+                    'amount' => $budget
                 ]);
+            }else if($budget < 0){
+                abort(500, "{$athlete->id} | Qualcosa non va, Il budget non può essere negativo");
             }
-            
-        }
-
-    }
-    */
-
-    private function handleImport($atleta1, $atleta1_importo)
-    {
-        $athlete = Athlete::where(DB::raw("CONCAT(`surname`, ' ', `name`)"), 'like', $atleta1)->firstOrFail();
-        if(!array_key_exists($athlete->id, $this->payments)){
-            $this->payments[$athlete->id] = 0;
-        }
-        
-        $this->payments[$athlete->id] = $this->payments[$athlete->id] + $atleta1_importo;
+        });
     }
 }
