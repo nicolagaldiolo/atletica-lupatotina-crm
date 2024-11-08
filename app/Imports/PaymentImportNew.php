@@ -61,10 +61,10 @@ class PaymentImportNew implements ToCollection, WithStartRow
         $athleteRows->each(function($rows, $athleteKey){
 
             // CASI NON GESTITI 
-            //12 - Brunelli Alberto,
             //37 - Nicola Galdiolo,
+            //68 - Matteo Spiazzi, crea una penalità quando dovrebbe rimanere la gara da saldare
             
-            if($athleteKey == 12){
+            if($athleteKey != 37){
 
                 $fees_to_pay = collect([]);
                 $budget = 0;
@@ -73,7 +73,7 @@ class PaymentImportNew implements ToCollection, WithStartRow
 
                 $data = collect([]);
                 
-                // INIZIO CASO PARTICOLARE
+                // INIZIO CASO PARTICOLARE (ERRATA DOPPIA ISCRIZIONE CON DOPPIA REGISTRAZIONE PAGAMENTO)
                 // Potrebbe verificarsi il caso che viene registrata erroneamente un'iscrizione due volte
                 // ed è stato registrato un pagamento anche della seconda iscrizione errata.
                 // a quel punto rimuovo la seconda iscrizione errata e rimuovo anche il relativo pagamento correttivo
@@ -103,9 +103,9 @@ class PaymentImportNew implements ToCollection, WithStartRow
                         return $item;
                     });
                 }
-                // FINE CASO PARTICOLARE
+                // FINE CASO PARTICOLARE (ERRATA DOPPIA ISCRIZIONE CON DOPPIA REGISTRAZIONE PAGAMENTO)
 
-                $data->each(function($item, $keyRow) use($athlete, $fees_to_pay, &$budget){
+                $data->each(function($item, $keyRow) use($athlete, $fees_to_pay, &$budget, $data){
                     
                     if($item['causal'] != 'Pagato'){
                         $row_fee_amount = $item['amount'];
@@ -131,6 +131,7 @@ class PaymentImportNew implements ToCollection, WithStartRow
                         }
         
                     }else{
+                        // INIZIO CASO PARTICOLARE (CAUSALE PAGATO CON IMPORTO POSITIVO)
                         // Se la causale è Pagato e l'importo è positivo si tratta di un errata-corrige di pagamento
                         // quindi lo sottraggo al budget
                         if($item['amount']){
@@ -138,7 +139,8 @@ class PaymentImportNew implements ToCollection, WithStartRow
                         }else{
                             $budget = ($budget + abs($item['amount']));    
                         }
-                        
+                        // FINE CASO PARTICOLARE (CAUSALE PAGATO CON IMPORTO POSITIVO)
+
                         $fees_to_pay->each(function($fee, $feeKey) use($athlete, $item, $fees_to_pay, &$budget){
                             $athletefee = $athlete->fees()->findOrFail($fee->id)->athletefee;
                             if($budget >= $athletefee->custom_amount){
@@ -150,18 +152,52 @@ class PaymentImportNew implements ToCollection, WithStartRow
                                 $fees_to_pay->forget($feeKey);
                             }
                         });
+
                     }
+
+                    // INIZIO CASO PARTICOLARE (HO FATTO UN PAGAMENTO PARZIALE E HO ANCORA UNA GARA DA SALDARE)
+                    // Se sono all'ultima riga e si tratta di pagamento e ho ancora delle gare da saldare significa che il pagamento 
+                    // non copriva l'importo da saldare, marco la gara come pagata ed emetto una penalità da saldare
+                    if($fees_to_pay->count() && $data->keys()->last() == $keyRow && $item['causal'] == 'Pagato'){
+                        
+                        if($fees_to_pay->count() > 1){
+                            // Se ho più di una gara da saldare è un caso non previsto, emetto un eccezzione
+                            abort(500, $athlete->id . ' | ' . $athlete->fullname . ' | Sono arrivato in fondo ed ho ho più di una gara da saldare è un caso non previsto');
+                        }else{
+                            // Altrimenti procedo
+                            $fee = $fees_to_pay->first();
+                            $athletefee = $athlete->fees()->findOrFail($fee->id)->athletefee;
+                            $athletefee->update([
+                                'payed_at' => $item['date']
+                            ]);
+                            $fees_to_pay->forget($fee->id);
+                            $budget = ($budget - $athletefee->custom_amount);
+
+                            if($budget < 0){
+                                $athlete->vouchers()->create([
+                                    'name' => 'Penalità gara',
+                                    'type' => VoucherType::Penalty,
+                                    'amount' => abs($budget)
+                                ]);
+                                $budget = 0;
+                            }
+                        }
+                    }
+                    // FINE CASO PARTICOLARE (HO FATTO UN PAGAMENTO PARZIALE E HO ANCORA UNA GARA DA SALDARE)
                 });
 
+                // Gestisco il fatto se ho ancora budget
                 if($budget > 0){
-                    // Se ho ancora budget emetto un voucher del valore del budget
-                    $voucher = $athlete->vouchers()->create([
-                        'name' => 'Buono gara',
-                        'type' => VoucherType::Credit,
-                        'amount' => $budget
-                    ]);
-                    //$i = 10;
-                    dd($athlete->id, $athlete->fullname, "c'è qualcosa che non va, ho pagato di più");
+                    if($fees_to_pay->count()){
+                        abort(500, $athlete->id . ' | ' . $athlete->fullname . ' | Qualcosa che non va, ho ancora badget e ancora gare da pagare, gestire il caso');
+                    }else{
+                        // Se ho ancora gare da saldare sollevo un eccezione, c'è un errore da gestire
+                        $athlete->vouchers()->create([
+                            'name' => 'Buono gara',
+                            'type' => VoucherType::Credit,
+                            'amount' => $budget
+                        ]);
+                    }
                 }
             }
         
