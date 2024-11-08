@@ -62,9 +62,8 @@ class PaymentImportNew implements ToCollection, WithStartRow
 
             // CASI NON GESTITI 
             //37 - Nicola Galdiolo,
-            //68 - Matteo Spiazzi, crea una penalità quando dovrebbe rimanere la gara da saldare
             
-            if($athleteKey != 37){
+            if($athleteKey == 37){
 
                 $fees_to_pay = collect([]);
                 $budget = 0;
@@ -110,7 +109,7 @@ class PaymentImportNew implements ToCollection, WithStartRow
                     if($item['causal'] != 'Pagato'){
                         $row_fee_amount = $item['amount'];
                         if($row_fee_amount < 0){
-                            dd("C'è qualcosa che non va, non può essere che la causale sia diversa da pagato e ci sia un importo negativo");
+                            dd($athlete->id, "C'è qualcosa che non va, non può essere che la causale sia diversa da pagato e ci sia un importo negativo");
                         }else{
 
                             $race_name = (explode(' - ', trim($item['causal'])))[0];
@@ -156,48 +155,54 @@ class PaymentImportNew implements ToCollection, WithStartRow
                     }
 
                     // INIZIO CASO PARTICOLARE (HO FATTO UN PAGAMENTO PARZIALE E HO ANCORA UNA GARA DA SALDARE)
-                    // Se sono all'ultima riga e si tratta di pagamento e ho ancora delle gare da saldare significa che il pagamento 
+                    // Se ho ancora budget e sono all'ultima riga e si tratta di pagamento e ho ancora delle gare da saldare significa che il pagamento 
                     // non copriva l'importo da saldare, marco la gara come pagata ed emetto una penalità da saldare
-                    if($fees_to_pay->count() && $data->keys()->last() == $keyRow && $item['causal'] == 'Pagato'){
+                    if($budget > 0 && $fees_to_pay->count() && $data->keys()->last() == $keyRow && $item['causal'] == 'Pagato'){
                         
-                        if($fees_to_pay->count() > 1){
-                            // Se ho più di una gara da saldare è un caso non previsto, emetto un eccezzione
-                            abort(500, $athlete->id . ' | ' . $athlete->fullname . ' | Sono arrivato in fondo ed ho ho più di una gara da saldare è un caso non previsto');
-                        }else{
-                            // Altrimenti procedo
-                            $fee = $fees_to_pay->first();
-                            $athletefee = $athlete->fees()->findOrFail($fee->id)->athletefee;
-                            $athletefee->update([
-                                'payed_at' => $item['date']
-                            ]);
-                            $fees_to_pay->forget($fee->id);
-                            $budget = ($budget - $athletefee->custom_amount);
+                        
+                            
+                        $fees_to_pay->each(function($fee) use($athlete, &$budget, $item){
+                            if($budget > 0){
+                                $athletefee = $athlete->fees()->findOrFail($fee->id)->athletefee;
+                                $amount = $athletefee->custom_amount;
+                                $date = $athletefee->created_at;
+                                $athletefee->delete();
 
-                            if($budget < 0){
-                                $athlete->vouchers()->create([
-                                    'name' => 'Penalità gara',
-                                    'type' => VoucherType::Penalty,
-                                    'amount' => abs($budget)
-                                ]);
-                                $budget = 0;
+                                $custom_amount = $amount - $budget;
+                                if($custom_amount < 0){
+                                    $budget = abs($custom_amount);
+                                    $custom_amount = 0;
+                                    $payed_at = null;
+                                }else{
+                                    $budget = 0;
+                                    $payed_at = $item['date'];
+                                }
+
+                                $athlete->fees()->syncWithoutDetaching(
+                                    [
+                                        $fee->id => [
+                                            'custom_amount' => $custom_amount,
+                                            'created_at' => $date,
+                                            'payed_at' => $payed_at
+                                        ]
+                                    ]
+                                );
                             }
-                        }
+                        });
                     }
                     // FINE CASO PARTICOLARE (HO FATTO UN PAGAMENTO PARZIALE E HO ANCORA UNA GARA DA SALDARE)
                 });
 
                 // Gestisco il fatto se ho ancora budget
                 if($budget > 0){
-                    if($fees_to_pay->count()){
-                        abort(500, $athlete->id . ' | ' . $athlete->fullname . ' | Qualcosa che non va, ho ancora badget e ancora gare da pagare, gestire il caso');
-                    }else{
-                        // Se ho ancora gare da saldare sollevo un eccezione, c'è un errore da gestire
-                        $athlete->vouchers()->create([
-                            'name' => 'Buono gara',
-                            'type' => VoucherType::Credit,
-                            'amount' => $budget
-                        ]);
-                    }
+                    // Se ho ancora gare da saldare sollevo un eccezione, c'è un errore da gestire
+                    $athlete->vouchers()->create([
+                        'name' => 'Buono gara',
+                        'type' => VoucherType::Credit,
+                        'amount' => $budget
+                    ]);
+                }else if($budget < 0){
+                    dd($athlete->id, "Il budget non può essere negativo");
                 }
             }
         

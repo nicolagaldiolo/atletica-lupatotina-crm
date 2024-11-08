@@ -46,6 +46,6 @@ class CertificatePolicy
      */
     public function delete(User $user, Certificate $certificate): bool
     {
-        return $user->can(Permissions::DeleteCertificates) || ($user->athlete ? $user->athlete->id == $certificate->athlete_id : false);
+        return ($user->can(Permissions::DeleteCertificates) || ($user->athlete ? $user->athlete->id == $certificate->athlete_id : false)) && !$certificate->is_current;
     }
 }
