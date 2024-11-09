@@ -6,6 +6,9 @@
 
 @section('title') {{ $entity }} @endsection
 
+@section('before-breadcrumbs')
+    <img class="avatar avatar-lg me-2" src="{{ $athlete->avatar }}">
+@endsection
 @section('breadcrumbs')
     <x-backend-breadcrumb-item type="active">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
 @endsection

@@ -85,7 +85,15 @@
             {
                 data: 'athlete',
                 render(data, type, row, meta) {
-                    return data ? data.fullname : null;
+                    if(data){
+                        var html = [
+                            '<img class="avatar me-2" src="' + row.athlete.avatar + '">',
+                            data.fullname
+                        ];
+                        return html.join("");
+                    }
+
+                    return null;
                 },
             },
             {

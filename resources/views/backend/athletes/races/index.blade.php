@@ -6,6 +6,10 @@
 
 @section('title') {{ $entity }} @endsection
 
+@section('before-breadcrumbs')
+    <img class="avatar avatar-lg me-2" src="{{ $athlete->avatar }}">
+@endsection
+
 @section('breadcrumbs')
     <x-backend-breadcrumb-item canrul="{{ Auth::user()->can('update', $athlete) }}" route='{{route("athletes.edit", $athlete)}}'>{{ $athlete->fullname }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $entity }}</x-backend-breadcrumb-item>

@@ -172,7 +172,18 @@
                 },
                 {
                     data: 'name',
-                    name: 'name'
+                    name: 'name',
+                    render(data, type, row, meta) {
+                        if(data){
+                            var html = [
+                                '<img class="avatar avatar-sm me-2" src="' + row.avatar + '">',
+                                row.fullname
+                            ];
+                            return html.join("");
+                        }
+
+                        return null;
+                    },
                 },
                 {
                     
@@ -213,7 +224,18 @@
                 },
                 {
                     data: 'name',
-                    name: 'name'
+                    name: 'name',
+                    render(data, type, row, meta) {
+                        if(data){
+                            var html = [
+                                '<img class="avatar avatar-sm me-2" src="' + row.avatar + '">',
+                                row.fullname
+                            ];
+                            return html.join("");
+                        }
+
+                        return null;
+                    },
                 },
                 {
                     data: 'fees_to_pay',
@@ -234,10 +256,10 @@
                                     }
                                 }
 
-                                i.push("<li>" + data.join(" ") + "</li>");
+                                i.push("<small>" + data.join(" ") + "</small>");
                                 return i;
                             }, []);
-                            return (html.length) ? ('<ul>' + html.join("") + '</ul>') : null;
+                            return (html.length) ? ('<span>' + html.join("<hr class='p-1 m-0'>") + '</span>') : null;
                         }
                         return null;
                     },

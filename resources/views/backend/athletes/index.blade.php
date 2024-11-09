@@ -88,7 +88,18 @@
             },
             {
                 data: 'name',
-                name: 'name'
+                name: 'name',
+                render(data, type, row, meta) {
+                    if(data){
+                        var html = [
+                            '<img class="avatar me-2" src="' + row.avatar + '">',
+                            data
+                        ];
+                        return html.join("");
+                    }
+
+                    return null;
+                },
             },
             {
                 data: 'certificate',

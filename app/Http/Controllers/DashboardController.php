@@ -78,9 +78,7 @@ class DashboardController extends Controller
                 ->orderColumn('name', function ($query, $order) {
                     $query->orderBy('surname', $order)->orderBy('name', $order);
                 })
-                ->editColumn('name', function ($data) {
-                    return $data->fullname;
-                })->make(true);
+                ->make(true);
         }
     }
 }

@@ -41,9 +41,12 @@
 
     <div class="container-fluid">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb my-0">
-                @yield('breadcrumbs')
-            </ol>
+            <div class="d-flex align-items-center">
+                @yield('before-breadcrumbs')
+                <ol class="breadcrumb my-0">
+                    @yield('breadcrumbs')
+                </ol>
+            </div>
         </nav>
         <div class="d-flex flex-row float-end">
             @yield('secondary-nav')
