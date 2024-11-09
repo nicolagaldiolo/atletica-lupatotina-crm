@@ -40,7 +40,7 @@ class Setup extends Command
      */
     public function handle()
     {
-        Artisan::call('migrate:fresh');
+        Artisan::call('migrate:fresh --force');
 
         // Reset cached roles and permissions
         Artisan::call('permission:cache-reset');
@@ -149,14 +149,24 @@ class Setup extends Command
             Role::create(['name' => $item])
                 ->givePermissionTo($permissions);
 
-            User::create([
-                'name' => $key,
-                'email' => Str::slug($item) . '@domain.com',
-                'password' => Hash::make('secret'),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ])->assignRole($item);
-            
+            $email = Str::slug($item) . '@domain.com';
+            $password = 'secret';
+
+            if($item == Roles::SuperAdmin || App::environment('local')){
+
+                if($item == Roles::SuperAdmin){
+                    $email = env('SUPER_ADMIN_USERNAME', $email);
+                    $password = env('SUPER_ADMIN_PASSWORD', $password);
+                }
+                
+                User::create([
+                    'name' => $key,
+                    'email' => $email,
+                    'password' => Hash::make($password),
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ])->assignRole($item);
+            };    
         });
 
         Excel::import(new DataImport, 'data.xlsx');

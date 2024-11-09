@@ -35,7 +35,7 @@ class AthleteController extends Controller
                 ->withCount('fees')
                 ->withCount('feesToPay')
                 ->with(['certificate', 'feesToPay', 'user'])
-                ->joinRelationship('certificate', function(PowerJoinClause $join){
+                ->leftJoinRelationship('certificate', function(PowerJoinClause $join){
                     $join->expiring();
             });
 
@@ -151,7 +151,7 @@ class AthleteController extends Controller
 
         if (request()->ajax()) {
             $builder = AthleteFee::with(['voucher', 'fee.race'])
-                ->joinRelationship('fee.race')
+                ->leftJoinRelationship('fee.race')
                 ->where('athlete_id', $athlete->id);
 
             return datatables()->eloquent($builder)

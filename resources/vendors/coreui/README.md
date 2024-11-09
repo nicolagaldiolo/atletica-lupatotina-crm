@@ -92,7 +92,7 @@ free-bootstrap-admin-template/
 ├── src/
 │   ├── assets/
 │   │   ├── brand/
-│   │   ├── favicon/
+│   │   ├── logo-y/
 │   │   ├── icons/
 │   │   ├── img/
 │   ├── js/

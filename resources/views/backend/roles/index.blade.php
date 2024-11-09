@@ -18,7 +18,7 @@
             </x-slot>
             @can('create', App\Models\Role::class)
                 <x-slot name="toolbar">
-                    <x-buttons.create route='{{ route("$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
+                    <x-backend.buttons.create route='{{ route("$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}" />
                 </x-slot>
             @endcan
         </x-backend.section-header>

@@ -13,7 +13,7 @@
 @section('secondary-nav')
     <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
         @can('create', App\Models\Athlete::class)
-            <x-backend.buttons.create route="{{ route('athletes.create') }}" small="true" title="{{ __('Crea nuovo atleta') }}">
+            <x-backend.buttons.create route="{{ route('athletes.create') }}" small="true" title="">
                 {{ __('Aggiungi nuovo') }}
             </x-backend.buttons.create>
         @endcan
@@ -105,7 +105,7 @@
                 data: 'fees_count',
                 render(data) {
                     if(data){
-                        return '<span class="badge text-bg-primary">' + data + '</span>';
+                        return '<span class="badge text-bg-secondary">' + data + '</span>';
                     }
                     return null;
                 },

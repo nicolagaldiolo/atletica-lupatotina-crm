@@ -5,14 +5,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <link rel="icon" type="image/png" href="{{asset('img/favicon.png')}}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('img/favicon.png')}}">
+    <link rel="icon" type="image/png" href="{{asset('img/logo.png')}}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('img/logo.png')}}">
     <meta name="keyword" content="aaaa">
     <meta name="description" content="aaaa">
 
     <!-- Shortcut Icon -->
-    <link rel="shortcut icon" href="{{asset('img/favicon.png')}}">
-    <link rel="icon" type="image/ico" href="{{asset('img/favicon.png')}}" />
+    <link rel="shortcut icon" href="{{asset('img/logo.png')}}">
+    <link rel="icon" type="image/ico" href="{{asset('img/logo.png')}}" />
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -24,6 +24,7 @@
     @vite(['resources/sass/app-backend.scss', 'resources/js/app-backend.js'])
 
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
 
     @stack('after-styles')
 

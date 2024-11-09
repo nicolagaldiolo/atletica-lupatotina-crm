@@ -1,8 +1,8 @@
 <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
-        <a href="/">
-            <img class="sidebar-brand-full" src="{{asset('img/logo.png')}}" height="46" alt="{{ app_name() }}">
-            <img class="sidebar-brand-narrow" src="{{asset('img/logo.png')}}" height="46" alt="{{ app_name() }}">
+        <a href="{{ config('app.url') }}">
+            <img class="sidebar-brand-full" src="{{asset('img/logo.png')}}" height="60" alt="{{ app_name() }}">
+            <img class="sidebar-brand-narrow" src="{{asset('img/logo.png')}}" height="60" alt="{{ app_name() }}">
         </a>
     </div>
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
@@ -104,5 +104,5 @@
 
     </ul>
 
-    <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+    {{--<button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>--}}
 </div>

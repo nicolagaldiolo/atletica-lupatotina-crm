@@ -3,15 +3,15 @@
         <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
             <i class="fa-solid fa-bars"></i>
         </button>
-        <a class="header-brand d-sm-none" href="#">
+        <a class="header-brand d-sm-none" href="{{ config('app.url') }}">
             <img class="sidebar-brand-full" src="{{asset('img/logo.png')}}" height="46" alt="{{ app_name() }}">
         </a>
-
+        
         <ul class="header-nav ms-3">
             <li class="nav-item dropdown">
-                <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link py-0" data-coreui-toggle="dropdown" href="{{ config('app.url') }}" role="button" aria-haspopup="true" aria-expanded="false">
                     <div class="avatar avatar-md">
-                        <img class="avatar-img" src="{{ asset(auth()->user()->avatar) }}" alt="{{ asset(auth()->user()->name) }}">
+                        <img class="avatar-img" src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}">
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end pt-0">

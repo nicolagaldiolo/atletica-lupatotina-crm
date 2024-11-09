@@ -141,7 +141,7 @@ class RaceController extends Controller
         if (request()->ajax()) {
             $builder = AthleteFee::with(['voucher', 'athlete', 'fee'])->whereHas('fee', function($query) use($race){
                 $query->where('race_id', $race->id);
-            })->joinRelationship('athlete')->joinRelationship('fee');
+            })->leftJoinRelationship('athlete')->leftJoinRelationship('fee');
 
             return datatables()->eloquent($builder)
                 ->orderColumn('athlete', function ($query, $order) {

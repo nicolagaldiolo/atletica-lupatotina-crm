@@ -42,7 +42,7 @@ class DashboardController extends Controller
 
             $builder = Athlete::with(['certificate' => function($query){
                 $query->expiring();
-            }])->joinRelationship('certificate', function(PowerJoinClause $join){
+            }])->leftJoinRelationship('certificate', function(PowerJoinClause $join){
                 $join->expiring();
             })->whereHas('certificate', function($query){
                 $query->expiring();

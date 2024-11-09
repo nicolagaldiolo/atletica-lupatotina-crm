@@ -21,9 +21,9 @@
         <x-backend.section-header>
             <x-slot name="toolbar">
                 @can('create', [App\Models\Certificate::class, $athlete])
-                    <x-buttons.create route="{{ route('athletes.certificates.create', $athlete) }}" small="true" title="">
+                    <x-backend.buttons.create route="{{ route('athletes.certificates.create', $athlete) }}" small="true" title="">
                         {{ __('Aggiungi certificato') }}
-                    </x-buttons.create>
+                    </x-backend.buttons.create>
                 @endcan
             </x-slot>
         </x-backend.section-header>

@@ -21,9 +21,9 @@
         <div class="card-header">
             <x-backend.section-header>
                 <x-slot name="toolbar">
-                    <x-buttons.create route="{{ route('athletes.vouchers.create', $athlete) }}" small="true" title="">
+                    <x-backend.buttons.create route="{{ route('athletes.vouchers.create', $athlete) }}" small="true" title="">
                         {{ __('Crea Voucher') }}
-                    </x-buttons.create>
+                    </x-backend.buttons.create>
                 </x-slot>
             </x-backend.section-header>
         </div>
