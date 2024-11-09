@@ -170,15 +170,7 @@ class Setup extends Command
                         'is_current' => $i == 1,
                     ]); 
                 }
-
-                //Voucher::factory()->create([
-                //    'athlete_id' => $athlete->id
-                //]);
             });
-
-            $athlete = Athlete::findOrFail(37);
-            $athlete->user()->associate(User::find(6));
-            $athlete->save();
         }
 
         Artisan::call('permission:cache-reset');
