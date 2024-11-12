@@ -1,8 +1,7 @@
 # Command
 
 ```php
-php artisan app:import-data
-
+php artisan app:setup
 ```
 
 # Invite workflow
