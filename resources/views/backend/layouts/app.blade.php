@@ -93,6 +93,7 @@
             language: {
                 url: "{{ asset('vendor/DataTables/it-IT.json') }}",
             },
+            pageLength: 50
         });
     </script>
     @stack('after-scripts')
