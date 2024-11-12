@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\HasAvatar;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravolt\Avatar\Facade as Avatar;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -16,6 +16,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
+    use HasAvatar;
 
     protected $fillable = [
         'name',
@@ -31,13 +32,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'password', 
         'remember_token'
     ];
-
-    protected static function booted(): void
-    {
-        static::saving(function ($model) {
-            $model->avatar = Avatar::create($model->name)->toBase64();
-        });
-    }
 
     public function athlete()
     {

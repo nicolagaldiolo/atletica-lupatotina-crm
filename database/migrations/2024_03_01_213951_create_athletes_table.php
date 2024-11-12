@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('surname');
+            $table->text('avatar')->nullable();
             $table->unsignedTinyInteger('gender')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable()->unique();

@@ -12,15 +12,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
+use App\Traits\HasAvatar;
 use App\Traits\ModelStorage;
-use Laravolt\Avatar\Facade as Avatar;
 
 class Athlete extends Model
 {
     use HasFactory,
         SoftDeletes,
         EagerLoadPivotTrait,
-        ModelStorage;
+        ModelStorage,
+        HasAvatar;
 
     protected $fillable = [
         'name',
@@ -45,8 +46,7 @@ class Athlete extends Model
     ];
 
     protected $appends = [
-        'fullname',
-        'avatar'
+        'fullname'
     ];
 
     protected static function newFactory(): Factory
@@ -69,11 +69,7 @@ class Athlete extends Model
         return implode(' ', [$this->surname, $this->name]);
     }
 
-    public function getAvatarAttribute()
-    {
-        return Avatar::create(implode(' ', [$this->name, $this->surname]))->toBase64();
-    }
-
+    
     public function feesToPay(): BelongsToMany
     {
         return $this->belongsToMany(Fee::class)
