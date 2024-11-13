@@ -49,7 +49,7 @@
 <div class="text-end">
 
     @can('update', $race)
-        <x-backend.buttons.edit route='{{ route("races.edit", $race) }}' small="true" />
+        <x-backend.buttons.edit route='{{ route("races.edit", $race) }}' small="true" title="{{ __('Modifica') }}"/>
     @endcan
     @can('viewAny', App\Models\Fee::class)
         <x-backend.buttons.edit route='{{ route("races.fees.index", $race) }}' icon="fa fa-coins" title="{{ __('Quote') }}" small="true" />
@@ -58,7 +58,7 @@
         <x-backend.buttons.edit route='{{ route("races.athletes", $race) }}' icon="fas fa-running" title="{{ 'Iscrizioni' }}" small="true" />
     @endcan
     @can('delete', $race)
-        <x-backend.buttons.delete route='{{ route("races.destroy", $race) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+        <x-backend.buttons.delete route='{{ route("races.destroy", $race) }}' small="true" title="{{ __('Elimina') }}" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
     @endcan
     
 </div>

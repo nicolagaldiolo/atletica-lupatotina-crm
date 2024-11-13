@@ -61,24 +61,24 @@
 @else
     <div class="text-end">
         @can('invite', $athlete)
-            <x-backend.buttons.edit route='{{ route("invite", $athlete) }}' small="true" icon="fas fa-link" title="invita" />
+            <x-backend.buttons.edit route='{{ route("invite", $athlete) }}' small="true" icon="fas fa-link" title="{{ __('Invita utente') }}" />
         @endcan
         @can('update', $athlete)
-            <x-backend.buttons.edit route='{{ route("athletes.edit", $athlete) }}' small="true" />
+            <x-backend.buttons.edit route='{{ route("athletes.edit", $athlete) }}' small="true" title="{{ __('Anagrafica') }}" />
         @endcan
         @can('viewAny', [App\Models\Certificate::class, $athlete])
-            <x-backend.buttons.edit route='{{ route("athletes.certificates.index", $athlete) }}' small="true" icon="fas fa-briefcase-medical"/>
+            <x-backend.buttons.edit route='{{ route("athletes.certificates.index", $athlete) }}' small="true" icon="fas fa-briefcase-medical" title="{{ __('Certificati medici') }}"/>
         @endcan
         
         @if (Gate::any(['subscribe', 'registerPayment'], App\Models\AthleteFee::class))
-            <x-backend.buttons.edit route='{{ route("athletes.races.index", $athlete) }}' small="true" icon="fa-solid fa-flag-checkered"/>
+            <x-backend.buttons.edit route='{{ route("athletes.races.index", $athlete) }}' small="true" icon="fa-solid fa-flag-checkered" title="{{ __('Iscrizioni') }}"/>
         @endif
 
         @can('viewAny', App\Models\Voucher::class)
-            <x-backend.buttons.edit route='{{ route("athletes.vouchers.index", $athlete) }}' small="true" icon="fas fa-tags"/>
+            <x-backend.buttons.edit route='{{ route("athletes.vouchers.index", $athlete) }}' small="true" icon="fas fa-tags" title="{{ __('Voucher') }}"/>
         @endcan
         @can('delete', $athlete)
-            <x-backend.buttons.delete route='{{ route("athletes.destroy", $athlete) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+            <x-backend.buttons.delete route='{{ route("athletes.destroy", $athlete) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" title="{{ __('Elimina') }}" data_token="{{csrf_token()}}"/>
         @endcan
     </div>
 @endif

@@ -95,10 +95,13 @@
             },
             pageLength: 50
         });
+
+        $( document ).ready(function() {
+            window.App.initialize();
+        });
+
     </script>
     @stack('after-scripts')
-
-    
 
 </body>
 

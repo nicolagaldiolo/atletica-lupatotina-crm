@@ -25,9 +25,16 @@ var App = function($) {
         return number.format(value);
     };
 
+    let initialize = function () {
+        $('body').tooltip({
+            selector: '[data-toggle="tooltip"]'
+        });
+    };
+
     return {
         date,
-        money
+        money,
+        initialize
     };
 
 }(jQuery);
