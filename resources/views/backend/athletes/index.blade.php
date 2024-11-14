@@ -45,10 +45,10 @@
                                 {{ __('Da pagare') }}
                             </th>
                             <th>
-                                {{ __('Vouchers/Penalità') }}
+                                {{ __('Vouchers') }}
                             </th>
                             <th>
-                                {{ __('Utente registrato') }}
+                                {{ __('Registrato') }}
                             </th>
                             <th>&nbsp;</th>
                         </tr>
@@ -114,12 +114,6 @@
             },
             {
                 data: 'fees_count',
-                render(data) {
-                    if(data){
-                        return '<span class="badge text-bg-secondary">' + data + '</span>';
-                    }
-                    return null;
-                },
                 searchable: false
             },
             {
