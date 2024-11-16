@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classes\Utility;
 use App\Enums\Permissions;
 use Illuminate\Support\Facades\Artisan;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 class TaskController extends Controller
 {
@@ -25,34 +26,33 @@ class TaskController extends Controller
     {
         $this->authorize(Permissions::RunMaintenance);
         
-        $output = null;
+        $output = new BufferedOutput();
+
         switch ($task) {
             case 'inspire':
-                Artisan::call('inspire');
-                $output = Artisan::output();
+                Artisan::call('inspire', [], $output);
                 break;
             case 'migrate':
-                Artisan::call('migrate --force');
-                $output = Artisan::output();
+                Artisan::call('migrate --force', [], $output);
                 break;
             case 'migrate-rollback':
-                Artisan::call('migrate:rollback --force');
-                $output = Artisan::output();
+                Artisan::call('migrate:rollback --force', [], $output);
                 break;
             case 'setup':
-                Artisan::call('app:setup');
-                $output = Artisan::output();
+                Artisan::call('app:setup', [], $output);
                 break;
             case 'import-data':
-                Artisan::call('app:import-data');
-                $output = Artisan::output();
+                Artisan::call('app:import-data', [], $output);
                 break;
             default:
                 $output = 'task non esistente';
                 break;
         }
-        if($output){
-            Utility::flashMessage("warning", $output);
+        
+        $message = trim($output->fetch());
+
+        if($message){
+            Utility::flashMessage("warning", $message);
         }
         
         return redirect(route('tasks.index'));
