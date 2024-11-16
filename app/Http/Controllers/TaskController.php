@@ -43,6 +43,10 @@ class TaskController extends Controller
                 Artisan::call('app:setup');
                 $output = Artisan::output();
                 break;
+            case 'import-data':
+                Artisan::call('app:import-data');
+                $output = Artisan::output();
+                break;
             default:
                 $output = 'task non esistente';
                 break;

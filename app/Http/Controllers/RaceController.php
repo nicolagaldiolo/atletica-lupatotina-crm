@@ -12,6 +12,7 @@ use App\Http\Requests\RaceSubscriptionsRequest;
 use App\Models\AthleteFee;
 use App\Models\Fee;
 use App\Models\Race;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 
@@ -28,11 +29,25 @@ class RaceController extends Controller
         $this->authorize('viewAny', Race::class);
 
         if (request()->ajax()) {
-            return datatables()->eloquent(Race::query()->withCount(['fees', 'athleteFee'])->with('fees.athletes'))->addColumn('action', function ($race) {
+
+            $builder = Race::query()->withCount(['fees', 'athleteFee'])->with('fees.athletes');
+            
+            // Filtro per anno
+            Session::put('dataTableSearch.searchByYear', request()->get('searchByYear', now()->year));
+            $year = Session::get('dataTableSearch.searchByYear');
+            if ($year) {
+                $builder->whereRaw("DATE_FORMAT(date, '%Y') = ?", [$year]);
+            }
+
+            return datatables()->eloquent($builder)->addColumn('action', function ($race) {
                 return view('backend.races.partials.action_column', compact('race'));
             })->make(true);
         }else{
-            return view('backend.races.index');
+
+            $searchByYear = Session::get('dataTableSearch.searchByYear');
+            $years = Race::selectRaw("DATE_FORMAT(date, '%Y') as years")->groupBy('years')->orderBy('years')->get()->pluck('years');
+
+            return view('backend.races.index', compact('years', 'searchByYear'));
         }
     }
 

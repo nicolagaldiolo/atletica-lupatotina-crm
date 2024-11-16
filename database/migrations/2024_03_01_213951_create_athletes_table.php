@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('half_marathon')->nullable();
             $table->string('marathon')->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->timestamp('invited_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

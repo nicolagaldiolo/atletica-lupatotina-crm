@@ -30,6 +30,9 @@ class RegisteredUserController extends Controller
 
         try{
             Notification::route('mail', $athlete->email)->notify(new UserInvited($athlete));
+            $athlete->update([
+                'invited_at' => now()
+            ]);
             Utility::flashMessage('success', "Invito inviato a {$athlete->email}");
         }catch( \Exception $e){
             Utility::flashMessage('error', 'Qualcosa è andato storto');

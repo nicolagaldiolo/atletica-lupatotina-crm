@@ -43,7 +43,7 @@ class Setup extends Command
         Artisan::call('migrate:fresh --force');
 
         // Reset cached roles and permissions
-        Artisan::call('permission:cache-reset');
+        //Artisan::call('permission:cache-reset');
         
 
         $permissions = Permissions::asArray();
@@ -169,20 +169,8 @@ class Setup extends Command
             };    
         });
 
-        Excel::import(new DataImport, 'data.xlsx');
-
-        if (App::environment('local')) {
-            Athlete::each(function($athlete){
-                for($i = 0; $i<9; $i++){
-                    Certificate::factory()->create([
-                        'athlete_id' => $athlete->id,
-                        'expires_on' => Carbon::now()->endOfYear()->subYears($i),
-                        'is_current' => $i == 1,
-                    ]); 
-                }
-            });
-        }
-
-        Artisan::call('permission:cache-reset');
+        Artisan::call('app:import-data', [], $this->getOutput());
+        
+        //Artisan::call('permission:cache-reset', [], $this->getOutput());
     }
 }

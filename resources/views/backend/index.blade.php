@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+
     @if(Auth::user()->athlete)
         <div class="row">
             <div class="col-sm-6 p-3">

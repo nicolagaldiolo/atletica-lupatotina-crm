@@ -23,7 +23,23 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <div class="row">
+        @if($years->count())
+            <div class="row">
+                <div class="col-auto">
+                    <div class="input-group">
+                        <label class="input-group-text fw-bold">{{ __('Seleziona anno') }}</label>
+                        <select id="searchByYear" class="form-select">
+                            @foreach ($years as $year)
+                                <option value="{{ $year }}" @if($year == $searchByYear) selected @endif>{{ $year }}</option>    
+                            @endforeach
+                        </select>
+                        <button id="dtSearch" class="btn btn-secondary" type="button">{{ __('Filtra') }}</button>
+                    </div>
+                </div>
+            </div>
+        @endif
+        
+        <div class="row mt-3">
             <div class="col">
                 <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
                     <thead>
@@ -52,12 +68,17 @@
 @push ('after-scripts')
 
 <script type="module">
-    $('#datatable').DataTable({
+    let dataTable = $('#datatable').DataTable({
         processing: true,
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("races.index") }}',
+        ajax: {
+            url: '{{ route("races.index") }}',
+            data: function(data){
+                data.searchByYear = $('#searchByYear').val();
+            }
+        },
         order: [[2, 'asc']],
         columns: [{
                 data: 'id',
@@ -102,5 +123,9 @@
             }
         ]
     });
+
+    $('#dtSearch').click(function(){
+        dataTable.draw(false);
+    })
 </script>
 @endpush

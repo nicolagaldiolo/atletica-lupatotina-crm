@@ -48,7 +48,10 @@
                                 {{ __('Vouchers') }}
                             </th>
                             <th>
-                                {{ __('Registrato') }}
+                                {{ __('Utente') }}
+                            </th>
+                            <th>
+                                {{ __('Invitato il') }}
                             </th>
                             <th>&nbsp;</th>
                         </tr>
@@ -138,6 +141,11 @@
                 },
                 searchable: false,
                 orderable: false,
+                visible: "{{ auth()->user()->can('invite', App\Models\Athlete::class) }}"
+            },
+            {
+                data: 'invited_at',
+                visible: "{{ auth()->user()->can('invite', App\Models\Athlete::class) }}"
             },
             {
                 data: 'action',

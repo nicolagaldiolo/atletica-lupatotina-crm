@@ -53,8 +53,8 @@ class AthletePolicy
         return $user->can(Permissions::ReportAthletes);
     }
 
-    public function invite(User $user): bool
+    public function invite(User $user, Athlete $athlete = null): bool
     {
-        return $user->can(Permissions::InviteAthletes);
+        return $user->can(Permissions::InviteAthletes) && ($athlete ? !$athlete->user : true);
     }
 }

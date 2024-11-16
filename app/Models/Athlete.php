@@ -38,11 +38,13 @@ class Athlete extends Model
         'size',
         '10k',
         'half_marathon',
-        'marathon'
+        'marathon',
+        'invited_at'
     ];
 
     protected $casts = [
-        'birth_date' => 'datetime'
+        'birth_date' => 'datetime',
+        'invited_at' => 'datetime'
     ];
 
     protected $appends = [
