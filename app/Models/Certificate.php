@@ -108,6 +108,7 @@ class Certificate extends Model
         }
     }
 
+    
     public function scopeCurrent($query): void
     {
         $query->where('is_current', true);

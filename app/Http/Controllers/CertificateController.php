@@ -47,15 +47,10 @@ class CertificateController extends Controller
     {
         $this->authorize('create', [Certificate::class, $athlete]);
         
-        $data = $request->validated();
-        unset($data['document']);
-    
-        $certificate = $athlete->certificate()->create($data);
-        // Lo salvo in 2 tranche altrimenti durante il salvataggio contestuale non ha il campo athlete_id valorizzato
-        $certificate->update([
-            'document' => $request->file('document', null)
-        ]);
-
+        $responde = $athlete->certificate()->create($request->except('document'));
+        $responde->document = $request->file('document', null);
+        $responde->save();
+        
         Utility::flashMessage();
         
         return redirect(route('athletes.certificates.index', $athlete));
