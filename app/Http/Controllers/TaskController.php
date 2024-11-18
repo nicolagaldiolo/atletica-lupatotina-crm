@@ -44,6 +44,9 @@ class TaskController extends Controller
             case 'import-data':
                 Artisan::call('app:import-data', [], $output);
                 break;
+            case 'storage-link':
+                Artisan::call('storage:link', [], $output);
+                break;
             default:
                 $output = 'task non esistente';
                 break;
