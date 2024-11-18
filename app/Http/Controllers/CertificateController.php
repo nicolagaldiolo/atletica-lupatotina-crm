@@ -47,7 +47,14 @@ class CertificateController extends Controller
     {
         $this->authorize('create', [Certificate::class, $athlete]);
         
-        $athlete->certificate()->create($request->validated());
+        $data = $request->validated();
+        unset($data['document']);
+        
+        $certificate = $athlete->certificate()->create($data);
+        $certificate->update([
+            'document' => $request->file('document', null)
+        ]);
+
         Utility::flashMessage();
         
         return redirect(route('athletes.certificates.index', $athlete));
