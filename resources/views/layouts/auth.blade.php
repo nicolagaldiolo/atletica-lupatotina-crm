@@ -4,10 +4,8 @@
 <head>
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="{{asset('img/logo.png')}}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('img/logo.png')}}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('img/apple-touch-icon.png')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="aaaa">
-    <meta name="keyword" content="aaaa">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ $title }} - {{ config('app.name', 'Laravel') }}</title>
