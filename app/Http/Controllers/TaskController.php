@@ -47,6 +47,12 @@ class TaskController extends Controller
             case 'storage-link':
                 Artisan::call('storage:link', [], $output);
                 break;
+            case 'cache-clear':
+                Artisan::call('cache:clear', [], $output);
+                break;
+            case 'config-clear':
+                Artisan::call('config:clear', [], $output);
+                break;
             default:
                 $output = 'task non esistente';
                 break;

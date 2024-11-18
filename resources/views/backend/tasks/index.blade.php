@@ -34,6 +34,16 @@
                     </div>
                 </div>
 
+                <div class="card mt-4">
+                    <div class="card-header">
+                        {{ __('Pulizia') }}
+                    </div>
+                    <div class="card-body">
+                        <a class="btn btn-secondary" href="{{ route('tasks.exec', 'cache-clear') }}" role="button">{{ __('Pulizia cache') }}</a>
+                        <a class="btn btn-secondary" href="{{ route('tasks.exec', 'config-clear') }}" role="button">{{ __('Pulizia configurazione') }}</a>
+                    </div>
+                </div>
+
                 <div class="card border-danger mt-4">
                     <div class="card-header">
                         {{ __('Manutenzione') }}
