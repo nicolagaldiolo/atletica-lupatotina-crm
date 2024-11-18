@@ -46,13 +46,14 @@ class Certificate extends Model
         //    $builder->orderBy('expires_on', 'desc');
         //});
 
-        static::saving(function($model){
+        /*static::saving(function($model){
             if($model->is_current){
                 Certificate::where('athlete_id', $model->athlete_id)->whereNot('id', $model->id)->update([
                     'is_current' => false
                 ]);
             }
         });
+        */
     }
 
     public function Athlete(): BelongsTo
