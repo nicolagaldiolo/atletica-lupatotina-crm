@@ -7,7 +7,7 @@
             <img class="sidebar-brand-full" src="{{asset('img/logo.png')}}" height="46" alt="{{ app_name() }}">
         </a>
         
-        <ul class="header-nav ms-3">
+        <ul class="header-nav">
             <li class="nav-item dropdown">
                 <a class="nav-link py-0" data-coreui-toggle="dropdown" href="{{ config('app.url') }}" role="button" aria-haspopup="true" aria-expanded="false">
                     <div class="avatar avatar-md">

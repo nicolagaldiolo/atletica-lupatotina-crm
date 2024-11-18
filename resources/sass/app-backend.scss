@@ -14,6 +14,10 @@ a {
     }
 }
 
+html:not([dir=rtl]) .header-brand{
+    margin: 0;
+}
+
 .sidebar-brand {
     padding: 10px 0;
     background: transparent;
