@@ -49,8 +49,9 @@ class CertificateController extends Controller
         
         $data = $request->validated();
         unset($data['document']);
-        
+    
         $certificate = $athlete->certificate()->create($data);
+        // Lo salvo in 2 tranche altrimenti durante il salvataggio contestuale non ha il campo athlete_id valorizzato
         $certificate->update([
             'document' => $request->file('document', null)
         ]);
