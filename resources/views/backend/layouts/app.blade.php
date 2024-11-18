@@ -93,7 +93,7 @@
             language: {
                 url: "{{ asset('vendor/DataTables/it-IT.json') }}",
             },
-            pageLength: 50
+            pageLength: 25
         });
 
         $( document ).ready(function() {

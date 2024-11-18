@@ -132,6 +132,9 @@
                                             <th>
                                                 {{ __('Certificato') }}
                                             </th>
+                                            <th>
+                                                {{ __('Documento') }}
+                                            </th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -198,7 +201,17 @@
                     },
                     searchable: false
                 },
-                
+                {
+                    data: 'certificate',
+                    render(data, type, row, meta) {
+                        if(data.status.url_download){
+                            return '<a class="btn btn-primary btn-sm" href="' + data.status.url_download + '" target="_blank"><i class="fa-solid fa-download"></i> {{ __("Scarica") }}</a>';
+                        }else{
+                            return '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
+                        }
+                    },
+                    searchable: false
+                },
             ]
         });
     @endcan
