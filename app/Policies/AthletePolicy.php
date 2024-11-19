@@ -19,9 +19,9 @@ class AthletePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user): bool
+    public function view(User $user, Athlete $athlete): bool
     {
-        return false;
+        return $user->can(Permissions::ViewAthletes) || ($user->athlete ? $user->athlete->id == $athlete->id : false);
     }
 
     /**
@@ -35,9 +35,9 @@ class AthletePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Athlete $athlete): bool
+    public function update(User $user): bool
     {
-        return $user->can(Permissions::EditAthletes) || ($user->athlete ? $user->athlete->id == $athlete->id : false);
+        return $user->can(Permissions::EditAthletes);
     }
 
     /**

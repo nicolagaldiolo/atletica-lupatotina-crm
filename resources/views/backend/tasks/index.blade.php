@@ -49,8 +49,11 @@
                         {{ __('Manutenzione') }}
                     </div>
                     <div class="card-body">
+                        {{--
                         <a class="btn btn-danger" href="{{ route('tasks.exec', 'setup') }}" role="button">{{ __('Reset') }}</a>
                         <a class="btn btn-danger" href="{{ route('tasks.exec', 'import-data') }}" role="button">{{ __('Import dati') }}</a>
+                        --}}
+                        <a class="btn btn-danger" href="{{ route('tasks.exec', 'import-certificate') }}" role="button">{{ __('Import certificati') }}</a>
                         <a class="btn btn-secondary" href="{{ route('tasks.exec', 'storage-link') }}" role="button">{{ __('Creazione link storage') }}</a>
                     </div>
                 </div>

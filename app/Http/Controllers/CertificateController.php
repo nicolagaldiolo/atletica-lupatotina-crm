@@ -47,10 +47,10 @@ class CertificateController extends Controller
     {
         $this->authorize('create', [Certificate::class, $athlete]);
         
-
         $certificate = $athlete->certificate()->create($request->except('document'));
-        $certificate->document = $request->file('document', null);
-        $certificate->save();
+        $certificate->update([
+            'document' => $request->file('document', null)
+        ]);
         
         Utility::flashMessage();
         

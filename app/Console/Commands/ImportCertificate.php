@@ -24,21 +24,21 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 use Throwable;
 
-class ImportData extends Command
+class ImportCertificate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:import-data';
+    protected $signature = 'app:import-certificate';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Importazione dati atleti';
+    protected $description = 'Importazione certificati atleti';
 
     /**
      * Execute the console command.
@@ -46,17 +46,25 @@ class ImportData extends Command
     public function handle()
     {
         try{
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            AthleteFee::truncate();
-            Athlete::truncate();
-            Fee::truncate();
-            Race::truncate();
-            Voucher::truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            Certificate::all()->each(function($certificate){
+                $certificate->forceDelete();
+            });
 
-            Excel::import(new DataImport, 'data.xlsx');
+            /*
+            //Excel::import(new DataImport, 'data.xlsx');
 
-            $this->info('Importazione dati avvenuta con successo');
+            Athlete::each(function($athlete){
+                for($i = 0; $i<9; $i++){
+                    Certificate::factory()->create([
+                        'athlete_id' => $athlete->id,
+                        'expires_on' => Carbon::now()->endOfYear()->subYears($i),
+                        'is_current' => $i == 1,
+                    ]); 
+                }
+            });
+            */
+
+            $this->info('Importazione certificati avvenuta con successo');
         }catch(Throwable $e){
             $this->error('Qualcosa è andato storto: ' . $e->getMessage());
         }

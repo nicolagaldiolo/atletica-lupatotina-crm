@@ -26,6 +26,13 @@
                                 {{ __('Anagrafica') }}
                             </a>
                         </li>
+                    @elsecan('view', $athlete)
+                        <li class="nav-item">
+                            <a class="nav-link @if(Route::is('athletes.show')) active @endif" aria-current="page" href="{{ route("athletes.show", $athlete) }}">
+                                <i class="nav-icon fas fa-edit"></i>
+                                {{ __('Anagrafica') }}
+                            </a>
+                        </li>
                     @endcan
                     
                     @can('viewAny', [App\Models\Certificate::class, $athlete])

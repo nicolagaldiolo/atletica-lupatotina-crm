@@ -38,11 +38,14 @@ class TaskController extends Controller
             case 'migrate-rollback':
                 Artisan::call('migrate:rollback --force', [], $output);
                 break;
-            case 'setup':
-                Artisan::call('app:setup', [], $output);
-                break;
-            case 'import-data':
-                Artisan::call('app:import-data', [], $output);
+            //case 'setup':
+            //    Artisan::call('app:setup', [], $output);
+            //    break;
+            //case 'import-data':
+            //    Artisan::call('app:import-data', [], $output);
+            //    break;
+            case 'import-certificate':
+                Artisan::call('app:import-certificate', [], $output);
                 break;
             case 'storage-link':
                 Artisan::call('storage:link', [], $output);

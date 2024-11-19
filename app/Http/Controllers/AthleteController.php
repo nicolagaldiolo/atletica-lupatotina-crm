@@ -93,9 +93,10 @@ class AthleteController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show(Athlete $athlete)
     {
-
+        $this->authorize('view', $athlete);
+        return view('backend.athletes.show', compact('athlete'));
     }
 
     /**
@@ -122,11 +123,7 @@ class AthleteController extends Controller
         $this->authorize('update', $athlete);
         $athlete->update($request->validated());
         Utility::flashMessage();
-        if(auth()->user()->can('viewAny', Athlete::class)){
-            return redirect(route('athletes.index'));
-        }else{
-            return redirect(route('athletes.edit', $athlete));
-        }
+        return redirect(route('athletes.index'));
     }
 
     /**

@@ -21,17 +21,17 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <x-backend.section-header>
-            <x-slot name="toolbar">
-                @can('create', [App\Models\Certificate::class, $athlete])
+    @can('create', [App\Models\Certificate::class, $athlete])
+        <div class="card-header">
+            <x-backend.section-header>
+                <x-slot name="toolbar">
                     <x-backend.buttons.create route="{{ route('athletes.certificates.create', $athlete) }}" small="true" title="">
                         {{ __('Aggiungi certificato') }}
                     </x-backend.buttons.create>
-                @endcan
-            </x-slot>
-        </x-backend.section-header>
-    </div>
+                </x-slot>
+            </x-backend.section-header>
+        </div>
+    @endcan
     <div class="card-body">
         <div class="row">
             <div class="col">

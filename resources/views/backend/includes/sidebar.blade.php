@@ -17,7 +17,7 @@
 
         @if(Auth::user()->athlete)
             <li class="nav-item">
-                <a class="nav-link @if(Route::is('athletes.*')) active @endif" href="{{ route("athletes.edit", Auth::user()->athlete) }}">
+                <a class="nav-link @if(Route::is('athletes.*')) active @endif" href="{{ route("athletes.show", Auth::user()->athlete) }}">
                     <i class="nav-icon fa solid fa-user"></i>&nbsp;@lang('I miei dati')
                 </a>
             </li>

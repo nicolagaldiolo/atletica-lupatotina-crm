@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::delete('athletes/athleteFees/{athleteFee}', [AthleteController::class, 'destroySubscription'])->name('athletes.destroySubscription');
 
     Route::get('athletes/reports', [AthleteController::class, 'report'])->name('athletes.reports');
-    Route::resource('athletes', AthleteController::class)->except('show');
+    Route::resource('athletes', AthleteController::class);
     Route::get('athletes/{athlete}/races', [AthleteController::class, 'races'])->name('athletes.races.index');
     Route::resource('athletes.certificates', CertificateController::class)->except('show');
     Route::resource('athletes.vouchers', VoucherController::class)->except('show');

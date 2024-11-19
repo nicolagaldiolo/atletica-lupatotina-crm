@@ -98,7 +98,7 @@
     <div class="col-12 col-sm-4">
         <div class="form-group mb-3">
             <label for="birth_date">{{ __('Data di nascita') }}</label>
-            <input name="birth_date" class="form-control {{ $errors->has('birth_date') ? 'is-invalid' : '' }}" type="date" value="{{ old('birth_date', $athlete->birth_date) }}" @if($disabled) disabled @endif>
+            <input name="birth_date" class="form-control {{ $errors->has('birth_date') ? 'is-invalid' : '' }}" type="date" value="{{ old('birth_date', $athlete->birth_date_formatted) }}" @if($disabled) disabled @endif>
             @if ($errors->has('birth_date'))
                 <div class="invalid-feedback">{{ $errors->first('birth_date') }}</div>
             @endif

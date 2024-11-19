@@ -71,6 +71,10 @@ class Athlete extends Model
         return implode(' ', [$this->surname, $this->name]);
     }
 
+    public function getBirthDateFormattedAttribute()
+    {
+        return $this->birth_date ? $this->birth_date->format('Y-m-d') : null;
+    }
     
     public function feesToPay(): BelongsToMany
     {

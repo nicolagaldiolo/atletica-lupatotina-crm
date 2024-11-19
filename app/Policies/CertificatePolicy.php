@@ -30,7 +30,7 @@ class CertificatePolicy
      */
     public function create(User $user, Athlete $athlete): bool
     {
-        return $user->can(Permissions::CreateCertificates) || (($user->athlete && $athlete) ? $user->athlete->id == $athlete->id : false);
+        return $user->can(Permissions::CreateCertificates);
     }
 
     /**
@@ -38,7 +38,7 @@ class CertificatePolicy
      */
     public function update(User $user, Certificate $certificate): bool
     {
-        return $user->can(Permissions::EditCertificates) || ($user->athlete ? $user->athlete->id == $certificate->athlete_id : false);
+        return $user->can(Permissions::EditCertificates);
     }
 
     /**
@@ -46,6 +46,6 @@ class CertificatePolicy
      */
     public function delete(User $user, Certificate $certificate): bool
     {
-        return ($user->can(Permissions::DeleteCertificates) || ($user->athlete ? $user->athlete->id == $certificate->athlete_id : false)) && !$certificate->is_current;
+        return $user->can(Permissions::DeleteCertificates) && !$certificate->is_current;
     }
 }

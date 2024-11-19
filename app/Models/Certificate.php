@@ -54,6 +54,10 @@ class Certificate extends Model
                 });
             }
         });
+
+        static::forceDeleted(function($model){
+            Storage::delete($model->document);
+        });
     }
 
     public function Athlete(): BelongsTo
