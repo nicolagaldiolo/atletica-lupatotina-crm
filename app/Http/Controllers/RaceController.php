@@ -133,7 +133,7 @@ class RaceController extends Controller
     {
         $this->authorize('subscribe', AthleteFee::class);
 
-        $races = Race::whereHas('fees')->with('fees')->get();
+        $races = Race::subscribeable()->whereHas('fees')->with('fees')->get();
 
         $athletes = Athlete::all();
         return view('backend.races.subscriptions.create', compact('races', 'athletes'));

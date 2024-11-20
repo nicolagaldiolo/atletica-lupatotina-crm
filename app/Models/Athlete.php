@@ -70,11 +70,6 @@ class Athlete extends Model
     {
         return implode(' ', [$this->surname, $this->name]);
     }
-
-    public function getBirthDateFormattedAttribute()
-    {
-        return $this->birth_date ? $this->birth_date->format('Y-m-d') : null;
-    }
     
     public function feesToPay(): BelongsToMany
     {
@@ -82,7 +77,7 @@ class Athlete extends Model
             ->withTimestamps()
             ->using(AthleteFee::class)
             ->as('athletefee')
-            ->withPivot(['payed_at', 'custom_amount', 'voucher_id'])->wherePivot('payed_at', null);
+            ->withPivot(['voucher_id', 'custom_amount', 'payed_at', 'bank_transfer', 'cashed_by'])->wherePivot('payed_at', null);
     }
 
     public function fees(): BelongsToMany
@@ -91,7 +86,7 @@ class Athlete extends Model
             ->withTimestamps()
             ->using(AthleteFee::class)
             ->as('athletefee')
-            ->withPivot(['payed_at', 'custom_amount', 'voucher_id']);
+            ->withPivot(['voucher_id', 'custom_amount', 'payed_at', 'bank_transfer', 'cashed_by']);
     }
 
     public function certificates(): HasMany

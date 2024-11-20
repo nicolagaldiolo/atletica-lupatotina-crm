@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,5 +41,10 @@ class Race extends Model
     public function fees(): HasMany
     {
         return $this->hasMany(Fee::class);
+    }
+
+    public function scopeSubscribeable($query): void
+    {
+        $query->where('date', '>=', Carbon::now()->startOfDay());
     }
 }

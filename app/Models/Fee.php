@@ -42,6 +42,6 @@ class Fee extends Model
             ->withTimestamps()
             ->using(AthleteFee::class)
             ->as('athletefee')
-            ->withPivot(['payed_at', 'custom_amount', 'voucher_id']);
+            ->withPivot(['voucher_id', 'custom_amount', 'payed_at', 'bank_transfer', 'cashed_by']);
     }
 }
