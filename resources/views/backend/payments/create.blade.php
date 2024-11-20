@@ -40,34 +40,62 @@
                             {{ $athlete->fullname }}
                         </div>
                         <div class="card-body">
-                            @foreach ($athlete->fees as $fee)
-                                <div class="form-group mb-3">
-                                    <div class="form-check">
-
-                                        <input class="payments-item form-check-input" type="checkbox" value="1" id="payments_{{ $athlete->id }}_{{ $fee->id }}" name="payments[{{ $athlete->id }}][{{ $fee->id }}]">
-                                        <label class="form-check-label" for="payments_{{ $athlete->id }}_{{ $fee->id }}">
-                                            <strong>{{ $fee->race->name }}</strong> ({{ $fee->name }} | @date($fee->expired_at) | @money($fee->amount))
-                                            <br>
-                                            <span>
-                                                <strong>
-                                                    @money($fee->athletefee->custom_amount)
-                                                </strong>
-                                                @if($fee->athletefee->voucher)
-                                                    @php 
-                                                        $amount_calculated = $fee->athletefee->voucher->amount_calculated
-                                                    @endphp
-                                                    
-                                                    @if($fee->athletefee->voucher->type == App\Enums\VoucherType::Credit)
-                                                        <span class="badge text-bg-success">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Credit) }} (@money($amount_calculated))</span>
-                                                    @else
-                                                        <span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }} (@money($amount_calculated))</span>
-                                                    @endif
-                                                @endif
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            @endforeach
+                            <table class="table table-stripped">
+                                <tr>
+                                    <th>{{ __('Gara') }}</th>
+                                    <th>{{ __('Importo') }}</th>
+                                    <th>{{ __('Bonifico') }}</th>
+                                    <th>{{ __('Esattore') }}</th>
+                                </tr>
+                                @foreach ($athlete->fees as $fee)
+                                    <tr>
+                                        <td>
+                                            <div class="form-group mb-3">
+                                                <div class="form-check">
+            
+                                                    <input type="hidden" value="0" name="payments[{{ $athlete->id }}][{{ $fee->id }}][payed]">
+                                                    <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $athlete->id }}][{{ $fee->id }}][payed]" id="payments_{{ $athlete->id }}_{{ $fee->id }}">
+                                                    <label class="form-check-label" for="payments_{{ $athlete->id }}_{{ $fee->id }}">
+                                                        <strong>{{ $fee->race->name }}</strong> ({{ $fee->name }} | @date($fee->expired_at) | @money($fee->amount))
+                                                        @if($fee->athletefee->voucher)
+                                                            <br>
+                                                            <span>
+                                                                @php 
+                                                                    $amount_calculated = $fee->athletefee->voucher->amount_calculated
+                                                                @endphp
+                                                                
+                                                                @if($fee->athletefee->voucher->type == App\Enums\VoucherType::Credit)
+                                                                    <span class="badge text-bg-success">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Credit) }} (@money($amount_calculated))</span>
+                                                                @else
+                                                                    <span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }} (@money($amount_calculated))</span>
+                                                                @endif
+                                                            </span>
+                                                        @endif
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <strong>
+                                                @money($fee->athletefee->custom_amount)
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" value="0" name="payments[{{ $athlete->id }}][{{ $fee->id }}][bank_transfer]">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $athlete->id }}][{{ $fee->id }}][bank_transfer]">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <select class="form-control" name="payments[{{ $athlete->id }}][{{ $fee->id }}][cashed_by]">
+                                                @foreach ($accountants as $accountant)
+                                                    <option @if(Auth::id() == $accountant->id) selected @endif value="{{ $accountant->id }}">{{ $accountant->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </table>
                         </div>
                     </div>
                 @endforeach

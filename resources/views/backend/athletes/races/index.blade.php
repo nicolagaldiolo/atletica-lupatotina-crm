@@ -43,7 +43,10 @@
                                 {{ __('Importo') }}
                             </th>
                             <th>
-                                {{ __('Pagato il') }}
+                                {{ __('Pagamento') }}
+                            </th>
+                            <th>
+                                {{ __('Esattore') }}
                             </th>
                             <th class="text-end">
                                 &nbsp;
@@ -122,9 +125,25 @@
                 }
             },
             {
-                data: 'payed_at',
+                data: 'bank_transfer',
+                render(data, type, row, meta) {
+                    if(row.payed_at){
+                        let html = [
+                            App.date(row.payed_at),
+                            (data ? 
+                                '<span class="badge text-bg-secondary"><i class="fa-solid fa-building-columns"></i> Bonifico</span>' : 
+                                '<span class="badge text-bg-success"><i class="fa-solid fa-coins"></i> Contanti</span>')
+                        ];
+                        return html.join("<br>");
+                    }else{
+                        return '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
+                    }
+                }
+            },
+            {
+                data: 'cashed',
                 render(data) {
-                    return data ? '<i class="fa-solid fa-coins"></i> (' + App.date(data) + ')' : '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
+                    return data ? data.name : null;
                 }
             },
             {

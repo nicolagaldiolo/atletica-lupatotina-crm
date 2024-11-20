@@ -15,7 +15,9 @@ class AthleteFee extends Pivot
     protected $fillable = [
         'payed_at',
         'custom_amount',
-        'voucher_id'
+        'voucher_id',
+        'bank_transfer',
+        'cashed_by'
     ];
 
     protected $casts = [
@@ -65,5 +67,10 @@ class AthleteFee extends Pivot
     public function voucher(): BelongsTo
     {
         return $this->belongsTo(Voucher::class);
+    }
+
+    public function cashed(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'cashed_by', 'id');
     }
 }

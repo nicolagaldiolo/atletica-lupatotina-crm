@@ -147,7 +147,7 @@ class AthleteController extends Controller
         }
 
         if (request()->ajax()) {
-            $builder = AthleteFee::with(['voucher', 'fee.race'])
+            $builder = AthleteFee::with(['voucher', 'fee.race', 'cashed'])
                 ->leftJoinRelationship('fee.race')
                 ->where('athlete_id', $athlete->id);
 
