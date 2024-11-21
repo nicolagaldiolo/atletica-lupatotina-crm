@@ -96,6 +96,7 @@
                                                 @foreach ($accountants as $accountant)
                                                     <option @if(Auth::id() == $accountant->id) selected @endif value="{{ $accountant->id }}">{{ $accountant->name }}</option>
                                                 @endforeach
+                                                {{--<option value="{{ App\Models\User::find(7)->id }}">{{ App\Models\User::find(7)->name }}</option>--}}
                                             </select>
                                         </div>
                                     </td>

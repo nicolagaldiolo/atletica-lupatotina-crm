@@ -29,7 +29,7 @@ class PaymentController extends Controller
             'fees.race'
         ])->get();
 
-        $accountants = User::permission(Permissions::HandlePayments)->get();
+        $accountants = User::HandlePayments()->get();
 
         return view('backend.payments.create', compact('athletes', 'accountants'));
     }
