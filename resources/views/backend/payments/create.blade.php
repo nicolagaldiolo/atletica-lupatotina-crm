@@ -35,30 +35,34 @@
             </div>
             <div class="card-body">
                 @foreach ($athletes as $athlete)
-                    <div class="card card-accent-primary @if(!$loop->last) mb-3 @endif">
-                        <div class="card-header">
-                            {{ $athlete->fullname }}
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-stripped">
+                    <table class="table table-bordered table-responsive">
+                        <thead class="table-light">
+                            <tr>
+                                <th colspan="4">{{ $athlete->fullname }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>{{ __('Gara') }}</th>
+                                <th>{{ __('Pagamento') }}</th>
+                            </tr>
+                            @foreach ($athlete->fees as $fee)
                                 <tr>
-                                    <th>{{ __('Gara') }}</th>
-                                    <th>{{ __('Importo') }}</th>
-                                    <th>{{ __('Bonifico') }}</th>
-                                    <th>{{ __('Esattore') }}</th>
-                                </tr>
-                                @foreach ($athlete->fees as $fee)
-                                    <tr>
-                                        <td>
-                                            <div class="form-group mb-3">
-                                                <div class="form-check">
-            
-                                                    <input type="hidden" value="0" name="payments[{{ $athlete->id }}][{{ $fee->id }}][payed]">
-                                                    <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $athlete->id }}][{{ $fee->id }}][payed]" id="payments_{{ $athlete->id }}_{{ $fee->id }}">
-                                                    <label class="form-check-label" for="payments_{{ $athlete->id }}_{{ $fee->id }}">
-                                                        <strong>{{ $fee->race->name }}</strong> ({{ $fee->name }} | @date($fee->expired_at) | @money($fee->amount))
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                @php 
+                                                    $id_checkbox = 'payments_' . $athlete->id . '_' . $fee->id; 
+                                                @endphp
+                                                <input type="hidden" value="0" name="payments[{{ $athlete->id }}][{{ $fee->id }}][payed]">
+                                                <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $athlete->id }}][{{ $fee->id }}][payed]" id="{{ $id_checkbox }}">
+                                                <label class="form-check-label" for="{{ $id_checkbox }}">
+                                                    <strong>{{ $fee->race->name }}</strong> ({{ $fee->name }} | @date($fee->expired_at) | @money($fee->amount))
+                                                    <div>
+                                                        <span class="badge text-bg-primary">
+                                                            <i class="nav-icon fas fa-coins"></i> @money($fee->athletefee->custom_amount)
+                                                        </span>
                                                         @if($fee->athletefee->voucher)
-                                                            <br>
                                                             <span>
                                                                 @php 
                                                                     $amount_calculated = $fee->athletefee->voucher->amount_calculated
@@ -71,33 +75,34 @@
                                                                 @endif
                                                             </span>
                                                         @endif
-                                                    </label>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <div class="form-check form-switch">
+                                                    @php 
+                                                        $id_switch = 'flexSwitchCheckDefault_' . $athlete->id . '_' . $fee->id; 
+                                                    @endphp
+                                                    <input type="hidden" value="0" name="payments[{{ $athlete->id }}][{{ $fee->id }}][bank_transfer]">
+                                                    <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $athlete->id }}][{{ $fee->id }}][bank_transfer]" role="switch" id="{{ $id_switch }}">
+                                                    <label class="form-check-label" for="{{ $id_switch }}"><i class="fa-solid fa-landmark"></i> {{ __('Bonifico') }}</label>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td>
-                                            <strong>
-                                                @money($fee->athletefee->custom_amount)
-                                            </strong>
-                                        </td>
-                                        <td>
-                                            <input type="hidden" value="0" name="payments[{{ $athlete->id }}][{{ $fee->id }}][bank_transfer]">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $athlete->id }}][{{ $fee->id }}][bank_transfer]">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <select class="form-control" name="payments[{{ $athlete->id }}][{{ $fee->id }}][cashed_by]">
+                                            <select class="form-select" name="payments[{{ $athlete->id }}][{{ $fee->id }}][cashed_by]" id="inputGroupSelect01">
                                                 @foreach ($accountants as $accountant)
                                                     <option @if(Auth::id() == $accountant->id) selected @endif value="{{ $accountant->id }}">{{ $accountant->name }}</option>
                                                 @endforeach
                                             </select>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                        </div>
-                    </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 @endforeach
             </div>
             <div class="card-footer">

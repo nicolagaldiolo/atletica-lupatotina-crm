@@ -131,7 +131,7 @@
                         let html = [
                             App.date(row.payed_at),
                             (data ? 
-                                '<span class="badge text-bg-secondary"><i class="fa-solid fa-building-columns"></i> Bonifico</span>' : 
+                                '<span class="badge text-bg-secondary"><i class="fa-solid fa-landmark"></i> Bonifico</span>' : 
                                 '<span class="badge text-bg-success"><i class="fa-solid fa-coins"></i> Contanti</span>')
                         ];
                         return html.join("<br>");
