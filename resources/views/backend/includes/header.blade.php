@@ -8,6 +8,31 @@
         </a>
         
         <ul class="header-nav">
+
+            @if(auth()->user()->canImpersonate())
+                <li class="nav-item dropdown">
+                    @if (app('impersonate')->isImpersonating())
+                        <a class="nav-link" href="{{ route('impersonate.leave') }}">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> {{ auth()->user()->name }}
+                        </a>
+                    @else
+                        <a class="nav-link" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-users"></i> {{ __('Impersonate')}}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end pt-0">
+                            <div class="dropdown-header bg-light py-2">
+                                <div class="fw-semibold">{{ __('Impersonate User') }}</div>
+                            </div>
+                            @foreach($otherUsers as $user)
+                            <a class="dropdown-item" href="{{ route('impersonate', $user->id) }}">
+                                {{ $user->name }}
+                            </a>
+                            @endforeach
+                        </div>
+                    @endif
+                </li>
+            @endif
+
             <li class="nav-item dropdown">
                 <a class="nav-link py-0" data-coreui-toggle="dropdown" href="{{ config('app.url') }}" role="button" aria-haspopup="true" aria-expanded="false">
                     <div class="avatar avatar-md">

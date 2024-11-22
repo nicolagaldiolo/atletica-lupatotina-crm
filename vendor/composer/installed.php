@@ -3,7 +3,7 @@
         'name' => 'nasirkhan/laravel-starter',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '1f3e69f8be34196975c2dba479094f5f84c88e9f',
+        'reference' => '0b42fe304e20a324658a09ecf0dd1d5d5c286468',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -598,6 +598,15 @@
                 0 => '*',
             ),
         ),
+        'lab404/laravel-impersonate' => array(
+            'pretty_version' => '1.7.5',
+            'version' => '1.7.5.0',
+            'reference' => '82cad73700a8699d63de169bb41abd5ae283e9a8',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../lab404/laravel-impersonate',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'laminas/laminas-code' => array(
             'pretty_version' => '4.15.1',
             'version' => '4.15.1.0',
@@ -1003,7 +1012,7 @@
         'nasirkhan/laravel-starter' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '1f3e69f8be34196975c2dba479094f5f84c88e9f',
+            'reference' => '0b42fe304e20a324658a09ecf0dd1d5d5c286468',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1379,8 +1388,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '3.0.0',
+                0 => '3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache' => array(

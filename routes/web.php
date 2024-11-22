@@ -76,4 +76,9 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
 
     Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('tasks/{task}', [TaskController::class, 'exec'])->name('tasks.exec');
+
+    /*
+    * Impersonate routes
+    */
+    Route::impersonate();
 });

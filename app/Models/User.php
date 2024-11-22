@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Enums\Permissions;
+use App\Enums\Roles;
 use App\Traits\HasAvatar;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Lab404\Impersonate\Models\Impersonate;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -18,6 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use SoftDeletes;
     use HasAvatar;
+    use Impersonate;
 
     protected $fillable = [
         'name',
@@ -53,5 +57,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function scopeHandlePayments($query): void
     {
         $query->permission(Permissions::HandlePayments);
+    }
+
+    /**
+     * @return bool
+     */
+    public function canImpersonate()
+    {
+        $user = Auth::user();
+        $impersonator = app('impersonate')->getImpersonatorId();
+        if ($impersonator) {
+            $user = User::findOrFail($impersonator);
+        }
+
+        return $user->hasRole(Roles::SuperAdmin);
     }
 }
