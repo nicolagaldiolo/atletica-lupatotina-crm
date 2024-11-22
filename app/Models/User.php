@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\Permissions;
 use App\Enums\Roles;
 use App\Traits\HasAvatar;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -52,11 +51,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function routeNotificationForSlack($notification)
     {
         return env('SLACK_NOTIFICATION_WEBHOOK');
-    }
-
-    public function scopeHandlePayments($query): void
-    {
-        $query->permission(Permissions::HandlePayments);
     }
 
     /**
