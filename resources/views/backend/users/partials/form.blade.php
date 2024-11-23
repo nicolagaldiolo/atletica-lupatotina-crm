@@ -66,16 +66,12 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    @if ($role->id != 1)
-                                        @if ($role->permissions->count())
-                                            @foreach ($role->permissions as $permission)
-                                                <i class="far fa-check-circle mr-1"></i>&nbsp;{{ $permission->name }}&nbsp;
-                                            @endforeach
-                                        @else
-                                            @lang('None')
-                                        @endif
+                                    @if ($role->permissions->count())
+                                        @foreach ($role->permissions as $permission)
+                                            <i class="far fa-check-circle mr-1"></i>&nbsp;{{ $permission->name }}&nbsp;
+                                        @endforeach
                                     @else
-                                        @lang('All Permissions')
+                                        @lang('None')
                                     @endif
                                 </div>
                             </div>
