@@ -1025,7 +1025,6 @@ class ComposerStaticInit50c0745cd5a126f806bb8989acb15c85
         'App\\Http\\Requests\\AthletesRequest' => __DIR__ . '/../..' . '/app/Http/Requests/AthletesRequest.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
         'App\\Http\\Requests\\FeesRequest' => __DIR__ . '/../..' . '/app/Http/Requests/FeesRequest.php',
-        'App\\Http\\Requests\\PaymentsRequest' => __DIR__ . '/../..' . '/app/Http/Requests/PaymentsRequest.php',
         'App\\Http\\Requests\\RaceSubscriptionsRequest' => __DIR__ . '/../..' . '/app/Http/Requests/RaceSubscriptionsRequest.php',
         'App\\Http\\Requests\\RacesRequest' => __DIR__ . '/../..' . '/app/Http/Requests/RacesRequest.php',
         'App\\Http\\Requests\\UsersRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UsersRequest.php',

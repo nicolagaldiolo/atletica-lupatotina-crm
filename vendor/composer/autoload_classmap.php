@@ -57,7 +57,6 @@ return array(
     'App\\Http\\Requests\\AthletesRequest' => $baseDir . '/app/Http/Requests/AthletesRequest.php',
     'App\\Http\\Requests\\Auth\\LoginRequest' => $baseDir . '/app/Http/Requests/Auth/LoginRequest.php',
     'App\\Http\\Requests\\FeesRequest' => $baseDir . '/app/Http/Requests/FeesRequest.php',
-    'App\\Http\\Requests\\PaymentsRequest' => $baseDir . '/app/Http/Requests/PaymentsRequest.php',
     'App\\Http\\Requests\\RaceSubscriptionsRequest' => $baseDir . '/app/Http/Requests/RaceSubscriptionsRequest.php',
     'App\\Http\\Requests\\RacesRequest' => $baseDir . '/app/Http/Requests/RacesRequest.php',
     'App\\Http\\Requests\\UsersRequest' => $baseDir . '/app/Http/Requests/UsersRequest.php',
