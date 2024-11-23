@@ -97,6 +97,7 @@ return array(
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',
     'App\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',
+    'App\\Providers\\ImpersonateServiceProvider' => $baseDir . '/app/Providers/ImpersonateServiceProvider.php',
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
     'App\\Traits\\HasAvatar' => $baseDir . '/app/Traits/HasAvatar.php',
     'App\\Traits\\ModelStorage' => $baseDir . '/app/Traits/ModelStorage.php',

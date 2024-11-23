@@ -1065,6 +1065,7 @@ class ComposerStaticInit50c0745cd5a126f806bb8989acb15c85
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
+        'App\\Providers\\ImpersonateServiceProvider' => __DIR__ . '/../..' . '/app/Providers/ImpersonateServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Traits\\HasAvatar' => __DIR__ . '/../..' . '/app/Traits/HasAvatar.php',
         'App\\Traits\\ModelStorage' => __DIR__ . '/../..' . '/app/Traits/ModelStorage.php',
