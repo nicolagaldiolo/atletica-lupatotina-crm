@@ -44,12 +44,12 @@ class TaskController extends Controller
             //case 'import-data':
             //    Artisan::call('app:import-data', [], $output);
             //    break;
-            case 'import-certificate':
-                Artisan::call('app:import-certificate', [], $output);
-                break;
-            case 'storage-link':
-                Artisan::call('storage:link', [], $output);
-                break;
+            //case 'import-certificate':
+            //    Artisan::call('app:import-certificate', [], $output);
+            //    break;
+            //case 'storage-link':
+            //    Artisan::call('storage:link', [], $output);
+            //    break;
             case 'cache-clear':
                 Artisan::call('cache:clear', [], $output);
                 break;

@@ -29,8 +29,10 @@
                         {{ __('Migrazioni') }}
                     </div>
                     <div class="card-body">
-                        <a class="btn btn-secondary" href="{{ route('tasks.exec', 'migrate') }}" role="button">{{ __('Migrate') }}</a>
-                        <a class="btn btn-secondary" href="{{ route('tasks.exec', 'migrate-rollback') }}" role="button">{{ __('Migrate Rollback') }}</a>
+                        <div class="d-flex align-items-start">
+                            <a class="btn btn-secondary" href="{{ route('tasks.exec', 'migrate') }}" role="button">{{ __('Migrate') }}</a>
+                            <a class="btn-sm ms-auto btn btn-danger" href="{{ route('tasks.exec', 'migrate-rollback') }}" role="button">{{ __('Migrate Rollback') }}</a>
+                        </div>
                     </div>
                 </div>
 
@@ -44,19 +46,19 @@
                     </div>
                 </div>
 
+                {{--
                 <div class="card border-danger mt-4">
                     <div class="card-header">
                         {{ __('Manutenzione') }}
                     </div>
-                    <div class="card-body">
-                        {{--
+                    <div class="card-body">    
                         <a class="btn btn-danger" href="{{ route('tasks.exec', 'setup') }}" role="button">{{ __('Reset') }}</a>
                         <a class="btn btn-danger" href="{{ route('tasks.exec', 'import-data') }}" role="button">{{ __('Import dati') }}</a>
-                        --}}
                         <a class="btn btn-danger" href="{{ route('tasks.exec', 'import-certificate') }}" role="button">{{ __('Import certificati') }}</a>
                         <a class="btn btn-secondary" href="{{ route('tasks.exec', 'storage-link') }}" role="button">{{ __('Creazione link storage') }}</a>
                     </div>
                 </div>
+                --}}
             </div>
         </div>
     </div>

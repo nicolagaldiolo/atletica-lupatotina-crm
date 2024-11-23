@@ -2,26 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Utility;
-use App\Enums\Permissions;
-use App\Enums\Roles;
+use App\Imports\CertificateImport;
 use App\Imports\DataImport;
 use App\Models\Athlete;
 use App\Models\AthleteFee;
 use App\Models\Certificate;
 use App\Models\Fee;
 use App\Models\Race;
-use App\Models\Role;
-use App\Models\User;
 use App\Models\Voucher;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Str;
 use Throwable;
 
 class ImportData extends Command
@@ -57,6 +48,14 @@ class ImportData extends Command
             Excel::import(new DataImport, 'data.xlsx');
 
             $this->info('Importazione dati avvenuta con successo');
+
+            Certificate::all()->each(function($certificate){
+                $certificate->forceDelete();
+            });
+
+            Excel::import(new CertificateImport, 'certificates.xlsx');
+            $this->info('Importazione certificati avvenuta con successo');
+            
         }catch(Throwable $e){
             $this->error('Qualcosa è andato storto: ' . $e->getMessage());
         }
