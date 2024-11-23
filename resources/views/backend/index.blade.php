@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                             <div class="card-footer px-3 py-2">
-                                <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route('athletes.races.index', Auth::user()->athlete) }}"><span class="small fw-semibold">{{ __('Vai alle gare') }}</span>
+                                <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route('athletes.fees.index', Auth::user()->athlete) }}"><span class="small fw-semibold">{{ __('Vai alle gare') }}</span>
                                     <i class="fa-solid fa-circle-chevron-right"></i>
                                 </a>
                             </div>
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                             <div class="card-footer px-3 py-2">
-                                <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route('athletes.races.index', Auth::user()->athlete) }}"><span class="small fw-semibold">{{ __('Vai alle gare') }}</span>
+                                <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route('athletes.fees.index', Auth::user()->athlete) }}"><span class="small fw-semibold">{{ __('Vai alle gare') }}</span>
                                     <i class="fa-solid fa-circle-chevron-right"></i>
                                 </a>
                             </div>
@@ -205,7 +205,7 @@
                     data: 'certificate',
                     render(data, type, row, meta) {
                         if(data.status.url_download){
-                            return '<a class="btn btn-primary btn-sm" href="' + data.status.url_download + '" target="_blank"><i class="fa-solid fa-download"></i> {{ __("Scarica") }}</a>';
+                            return '<a class="btn btn-secondary btn-sm" href="' + data.status.url_download + '" target="_blank"><i class="fa-solid fa-download"></i> {{ __("Scarica") }}</a>';
                         }else{
                             return '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
                         }

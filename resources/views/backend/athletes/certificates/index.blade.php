@@ -107,7 +107,7 @@
                 data: 'document',
                 render(data, type, row, meta) {
                     if(row.status.url_download){
-                        return '<a class="btn btn-primary btn-sm" href="' + row.status.url_download + '" target="_blank"><i class="fa-solid fa-download"></i> {{ __("Scarica") }}</a>';
+                        return '<a class="btn btn-secondary btn-sm" href="' + row.status.url_download + '" target="_blank"><i class="fa-solid fa-download"></i> {{ __("Scarica") }}</a>';
                     }else{
                         return '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
                     }

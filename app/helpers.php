@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -522,5 +523,18 @@ if (!function_exists('handleUploadedFile')) {
 
         $filename = generateFilename($path, $image);
         return $image->storeAs($path, $filename);
+    }
+}
+
+if (!function_exists('cashFee')) {
+    function cashFee($athleteFee, $data)
+    {
+        $athleteFee->update([
+            'payed_at' => ($data['payed'] ? ($athleteFee->payed_at ? $athleteFee->payed_at : Carbon::now()) : null),
+            'bank_transfer' => $data['payed'] ? $data['bank_transfer'] : 0,
+            'cashed_by' => $data['bank_transfer'] ? null : $data['cashed_by']
+        ]);
+
+        return $athleteFee;
     }
 }

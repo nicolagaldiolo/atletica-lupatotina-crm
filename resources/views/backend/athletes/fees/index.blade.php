@@ -37,7 +37,10 @@
                                 {{ __('Quota') }}
                             </th>
                             <th>
-                                {{ __('Iscritto il') }}
+                                {{ __('Data iscrizione') }}
+                            </th>
+                            <th>
+                                {{ __('Iscritto da') }}
                             </th>
                             <th>
                                 {{ __('Importo') }}
@@ -46,7 +49,7 @@
                                 {{ __('Pagamento') }}
                             </th>
                             <th>
-                                {{ __('Esattore') }}
+                                {{ __('Pagato a') }}
                             </th>
                             <th class="text-end">
                                 &nbsp;
@@ -72,7 +75,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("athletes.races.index", $athlete) }}',
+        ajax: '{{ route("athletes.fees.index", $athlete) }}',
         columns: [
             {
                 data: 'id',
@@ -88,8 +91,9 @@
                     if(!row.payed_at){
                         html.push('<span class="badge text-bg-danger">Da pagare</span>');
                     }
+
                     html.push(data);
-                    return html.join(" ");
+                    return html.join("<br>");
                 },
             },
             {
@@ -101,8 +105,16 @@
             {
                 data: 'created_at',
                 render(data) {
-                    return App.date(data);
+                    return data ? App.date(data) : null
                 }
+            },
+            {
+                data: 'owner',
+                render(data) {
+                    return data ? data.name : null;
+                },
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'custom_amount',
@@ -121,20 +133,17 @@
                             html.push('<span class="badge text-bg-danger">{{ App\Enums\VoucherType::getDescription(App\Enums\VoucherType::Penalty) }} (' + amount + ')</span>');
                         }
                     }
-                    return html.join(" ");
+                    return html.join("<br>");
                 }
             },
             {
                 data: 'bank_transfer',
                 render(data, type, row, meta) {
                     if(row.payed_at){
-                        let html = [
+                        return [
                             App.date(row.payed_at),
-                            (data ? 
-                                '<span class="badge text-bg-secondary"><i class="fa-solid fa-landmark"></i> Bonifico</span>' : 
-                                '<span class="badge text-bg-success"><i class="fa-solid fa-coins"></i> Contanti</span>')
-                        ];
-                        return html.join("<br>");
+                            data ? '<span class="badge text-bg-secondary"><i class="fa-solid fa-landmark"></i> Bonifico</span>' : '<span class="badge text-bg-success"><i class="fa-solid fa-coins"></i> Contanti</span>'
+                        ].join("<br>");
                     }else{
                         return '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
                     }
@@ -144,7 +153,9 @@
                 data: 'cashed',
                 render(data) {
                     return data ? data.name : null;
-                }
+                },
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'action',

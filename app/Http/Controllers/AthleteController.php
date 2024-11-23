@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use App\Models\Fee;
+use App\Models\User;
 use App\Models\Athlete;
 use App\Classes\Utility;
-use App\Enums\ReportRowType;
 use App\Enums\VoucherType;
 use App\Models\AthleteFee;
 use Illuminate\Http\Request;
+use App\Enums\ReportRowType;
+use Illuminate\Validation\Rule;
 use App\Exports\AtheletsExport;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\AthletesRequest;
-use Illuminate\Support\Facades\Gate;
 use Kirschbaum\PowerJoins\PowerJoinClause;
 
 class AthleteController extends Controller
@@ -147,7 +149,7 @@ class AthleteController extends Controller
         }
 
         if (request()->ajax()) {
-            $builder = AthleteFee::with(['voucher', 'fee.race', 'cashed'])
+            $builder = AthleteFee::with(['voucher', 'fee.race', 'cashed', 'owner'])
                 ->leftJoinRelationship('fee.race')
                 ->where('athlete_id', $athlete->id);
 
@@ -159,31 +161,51 @@ class AthleteController extends Controller
                 $query->orderBy('races.name', $order);
             })
             ->addColumn('action', function ($athleteFee){
-                return view('backend.athletes.races.partials.action_column', compact('athleteFee'));
+                $i = $athleteFee;
+                return view('backend.athletes.fees.partials.action_column', compact('athleteFee'));
             })->make(true);
         }else{
-            return view('backend.athletes.races.index', compact('athlete'));
+            return view('backend.athletes.fees.index', compact('athlete'));
         }
     }
 
-    public function payFee(Request $request, AthleteFee $athleteFee)
+    public function editFee(Request $request, Athlete $athlete, Fee $fee, AthleteFee $athleteFee)
     {
         $this->authorize('registerPayment', $athleteFee);
         
-        $athleteFee->update([
-            'payed_at' => ($athleteFee->payed_at ? null : Carbon::now())
-        ]);
-        Utility::flashMessage();
-        return redirect(route('athletes.races.index', $athleteFee->athlete));
+        $accountants = User::HandlePayments()->get();
+        $athlete = $athleteFee->athlete;
+        $fee->load('race');
+        
+        return view('backend.athletes.fees.edit', compact('athlete', 'fee', 'athleteFee', 'accountants'));
     }
 
-    public function destroySubscription(AthleteFee $athleteFee)
+    public function updateFee(Request $request, Athlete $athlete, Fee $fee, AthleteFee $athleteFee)
+    {
+        $this->authorize('registerPayment', $athleteFee);
+
+        $validated = $request->validate([
+            'payed' => 'required|boolean',
+            'bank_transfer' => 'required|boolean',
+            'cashed_by' => [
+                'required',
+                Rule::exists('users', 'id'),
+            ]
+        ]);
+
+        cashFee($athleteFee, $validated);
+
+        Utility::flashMessage();
+        return redirect(route('athletes.fees.index', $athleteFee->athlete));
+    }
+
+    public function destroySubscription(Athlete $athlete, Fee $fee, AthleteFee $athleteFee)
     {
         $this->authorize('subscribe', $athleteFee);
 
         $athleteFee->delete();
         Utility::flashMessage();
-        return redirect(route('athletes.races.index', $athleteFee->athlete));
+        return redirect(route('athletes.fees.index', $athleteFee->athlete));
     }
 
     public function report()

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\VoucherType;
+use App\Traits\Owner;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,17 +12,20 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 class AthleteFee extends Pivot
 {
     use HasFactory;
+    use Owner;
 
     protected $fillable = [
         'payed_at',
         'custom_amount',
         'voucher_id',
         'bank_transfer',
-        'cashed_by'
+        'cashed_by',
+        'deduct_at'
     ];
 
     protected $casts = [
         'payed_at' => 'datetime',
+        'deduct_at' => 'datetime',
         'custom_amount' => 'float'
     ];
 

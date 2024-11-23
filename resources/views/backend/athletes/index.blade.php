@@ -51,7 +51,7 @@
                                 {{ __('Utente') }}
                             </th>
                             <th>
-                                {{ __('Invitato il') }}
+                                {{ __('Invito') }}
                             </th>
                             <th>&nbsp;</th>
                         </tr>
@@ -145,7 +145,10 @@
             },
             {
                 data: 'invited_at',
-                visible: "{{ auth()->user()->can('invite', App\Models\Athlete::class) }}"
+                visible: "{{ auth()->user()->can('invite', App\Models\Athlete::class) }}",
+                render(data) {
+                    return data ? App.date(data, true) : null;
+                },
             },
             {
                 data: 'action',

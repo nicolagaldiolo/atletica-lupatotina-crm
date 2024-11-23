@@ -23,11 +23,19 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasAvatar;
     use Impersonate;
 
+    protected $appends = [
+        'login_status'
+    ];
+
     protected $fillable = [
         'name',
         'email',
         'password',
         'avatar',
+    ];
+
+    protected $casts = [
+        'last_login_at' => 'datetime',
     ];
 
     /**
@@ -41,6 +49,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function athlete()
     {
         return $this->hasOne(Athlete::class);
+    }
+
+    public function getLoginStatusAttribute()
+    {
+        return [
+            'date' => $this->last_login_at ? $this->last_login_at->format('d/m/Y H:i:s'): null,
+            'date_diff' => $this->last_login_at ? $this->last_login_at->diffForHumans() : null
+        ];
     }
 
     /**

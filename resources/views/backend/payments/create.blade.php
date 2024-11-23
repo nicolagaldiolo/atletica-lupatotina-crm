@@ -52,10 +52,10 @@
                                         <div class="form-group">
                                             <div class="form-check">
                                                 @php 
-                                                    $id_checkbox = 'payments_' . $athlete->id . '_' . $fee->id; 
+                                                    $id_checkbox = 'payments_' . $fee->athletefee->id; 
                                                 @endphp
-                                                <input type="hidden" value="0" name="payments[{{ $athlete->id }}][{{ $fee->id }}][payed]">
-                                                <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $athlete->id }}][{{ $fee->id }}][payed]" id="{{ $id_checkbox }}">
+                                                <input type="hidden" value="0" name="payments[{{ $fee->athletefee->id }}][payed]">
+                                                <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $fee->athletefee->id }}][payed]" id="{{ $id_checkbox }}">
                                                 <label class="form-check-label" for="{{ $id_checkbox }}">
                                                     <strong>{{ $fee->race->name }}</strong> ({{ $fee->name }} | @date($fee->expired_at) | @money($fee->amount))
                                                     <div>
@@ -87,16 +87,15 @@
                                                     @php 
                                                         $id_switch = 'flexSwitchCheckDefault_' . $athlete->id . '_' . $fee->id; 
                                                     @endphp
-                                                    <input type="hidden" value="0" name="payments[{{ $athlete->id }}][{{ $fee->id }}][bank_transfer]">
-                                                    <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $athlete->id }}][{{ $fee->id }}][bank_transfer]" role="switch" id="{{ $id_switch }}">
+                                                    <input type="hidden" value="0" name="payments[{{ $fee->athletefee->id }}][bank_transfer]">
+                                                    <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $fee->athletefee->id }}][bank_transfer]" role="switch" id="{{ $id_switch }}">
                                                     <label class="form-check-label" for="{{ $id_switch }}"><i class="fa-solid fa-landmark"></i> {{ __('Bonifico') }}</label>
                                                 </div>
                                             </div>
-                                            <select class="form-select" name="payments[{{ $athlete->id }}][{{ $fee->id }}][cashed_by]" id="inputGroupSelect01">
+                                            <select class="form-select" name="payments[{{ $fee->athletefee->id }}][cashed_by]" id="inputGroupSelect01">
                                                 @foreach ($accountants as $accountant)
                                                     <option @if(Auth::id() == $accountant->id) selected @endif value="{{ $accountant->id }}">{{ $accountant->name }}</option>
                                                 @endforeach
-                                                {{--<option value="{{ App\Models\User::find(7)->id }}">{{ App\Models\User::find(7)->name }}</option>--}}
                                             </select>
                                         </div>
                                     </td>

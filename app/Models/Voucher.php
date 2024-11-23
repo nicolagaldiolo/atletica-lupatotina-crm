@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\VoucherType;
+use App\Traits\Owner;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,8 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Voucher extends Model
 {
-    use HasFactory,
-    SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
+    use Owner;
 
     protected $fillable = [
         'name',

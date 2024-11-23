@@ -2,9 +2,14 @@
 
 var App = function($) {
 
-    let date = function (date){
+    let date = function (date, time = false){
         if(date){
-            return new Date(date).toLocaleDateString("it-IT")
+            var data = [];
+            data.push(new Date(date).toLocaleDateString("it-IT"));
+            if(time){
+                data.push(new Date(date).toLocaleTimeString("it-IT"));
+            }
+            return data.join(" ");
         }
         return null;
     };

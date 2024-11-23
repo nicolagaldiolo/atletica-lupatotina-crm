@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\Utility;
-use App\Enums\Permissions;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\PaymentsRequest;
-use App\Models\Athlete;
-use App\Models\AthleteFee;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Models\Athlete;
+use App\Classes\Utility;
+use App\Models\AthleteFee;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
 
 class PaymentController extends Controller
 {
@@ -26,7 +25,8 @@ class PaymentController extends Controller
             'fees' => function($query){
                 $query->whereNull('payed_at');
             },
-            'fees.race'
+            'fees.race',
+            'fees.athletefee',
         ])->get();
 
         $accountants = User::HandlePayments()->get();
@@ -37,28 +37,28 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PaymentsRequest $request)
+    public function store(Request $request)
     {
         $this->authorize('registerPayment', AthleteFee::class);
 
-        foreach($request->get('payments' , []) as $athlete_id=>$fees){
+        $validated = $request->validate([
+            'payments' => 'required|array',
+            'payments.*' => 'required|array',
+            'payments.*.payed' => 'required|boolean',
+            'payments.*.bank_transfer' => 'required|boolean',
+            'payments.*.cashed_by' => [
+                'required',
+                Rule::exists('users', 'id')
+            ]
+        ]);
+        
+        collect($request->get('payments' , []))->filter(function($item){
+            return intval($item['payed']);
+        })->each(function($item, $key){
+            $athleteFee = AthleteFee::findOrFail($key);
+            cashFee($athleteFee, $item);
+        });            
 
-            $fees_to_mark_as_payed = collect($fees)->filter(function($item){
-                return intval($item['payed']);
-            })->map(function($item){
-                unset($item['payed']);
-                $item['payed_at'] = Carbon::now();
-                if(intval($item['bank_transfer'])){
-                    unset($item['cashed_by']);
-                }
-                return $item;
-            });
-
-            if($fees_to_mark_as_payed->count()){
-                Athlete::findOrFail($athlete_id)->fees()->syncWithoutDetaching($fees_to_mark_as_payed);
-            }
-            
-        }
         Utility::flashMessage();
         return redirect(route('payments.create'));
     }

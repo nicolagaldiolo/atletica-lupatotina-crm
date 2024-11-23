@@ -14,14 +14,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 use App\Traits\HasAvatar;
 use App\Traits\ModelStorage;
+use App\Traits\Owner;
 
 class Athlete extends Model
 {
-    use HasFactory,
-        SoftDeletes,
-        EagerLoadPivotTrait,
-        ModelStorage,
-        HasAvatar;
+    use HasFactory;
+    use SoftDeletes;
+    use EagerLoadPivotTrait;
+    use ModelStorage;
+    use HasAvatar;
+    use Owner;
 
     protected $fillable = [
         'name',
@@ -77,7 +79,18 @@ class Athlete extends Model
             ->withTimestamps()
             ->using(AthleteFee::class)
             ->as('athletefee')
-            ->withPivot(['voucher_id', 'custom_amount', 'payed_at', 'bank_transfer', 'cashed_by'])->wherePivot('payed_at', null);
+            ->withPivot([
+                'id',
+                'voucher_id', 
+                'custom_amount', 
+                'payed_at', 
+                'bank_transfer', 
+                'cashed_by', 
+                'deduct_at',
+                'created_by', 
+                'updated_by', 
+                'deleted_by'
+            ])->wherePivot('payed_at', null);
     }
 
     public function fees(): BelongsToMany
@@ -86,7 +99,18 @@ class Athlete extends Model
             ->withTimestamps()
             ->using(AthleteFee::class)
             ->as('athletefee')
-            ->withPivot(['voucher_id', 'custom_amount', 'payed_at', 'bank_transfer', 'cashed_by']);
+            ->withPivot([
+                'id',
+                'voucher_id', 
+                'custom_amount', 
+                'payed_at', 
+                'bank_transfer', 
+                'cashed_by', 
+                'deduct_at',
+                'created_by', 
+                'updated_by', 
+                'deleted_by'
+            ]);
     }
 
     public function certificates(): HasMany

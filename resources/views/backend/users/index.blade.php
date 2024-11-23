@@ -35,6 +35,7 @@
                             <th>{{ __('Email') }}</th>
                             <th>{{ __('Status') }}</th>
                             <th>{{ __('Ruoli') }}</th>
+                            <th>{{ __('Ultimo accesso') }}</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -92,7 +93,6 @@
                 searchable: false,
                 render(data) {
                     var result = null;
-                    console.log("data", data);
                     switch (data) {
                         case 1:
                             result = '<span class="badge bg-success">Attivo</span>';
@@ -126,6 +126,20 @@
                     }
                 },
                 orderable: false,
+                searchable: false
+            },
+            {
+                data: 'last_login_at',
+                render(data, type, row, meta) {
+                    var html = [];
+                    if(row.login_status.date_diff){
+                        html.push('<span class="badge bg-secondary">' + row.login_status.date_diff + '</span>')
+                    }
+                    if(row.login_status.date){
+                        html.push('<small class="d-block">' + row.login_status.date + '</small>')
+                    }
+                    return html.join("<br>");
+                },
                 searchable: false
             },
             {

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Listeners\Login as ListenersLogin;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -11,7 +13,11 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array<class-string, array<int, class-string>>
      */
-    protected $listen = [];
+    protected $listen = [
+        'Illuminate\Auth\Events\Login' => [
+            'App\Listeners\LoginSuccessful'
+        ]
+    ];
 
     /**
      * Register any events for your application.
