@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\GenderType;
+use App\Enums\MemberType;
 use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -38,6 +39,7 @@ class AthletesRequest extends FormRequest
             'city' => 'nullable|max:191',
             'birth_place' => 'nullable|max:191',
             'birth_date' => 'nullable|date',
+            'type' => ['required', new EnumValue(MemberType::class, false)],
             'registration_number' => 'nullable|max:191',
             'size' => 'nullable|max:191',
             '10k' => 'nullable|max:191',
@@ -59,6 +61,7 @@ class AthletesRequest extends FormRequest
             'city' => __('comune'),
             'birth_place' => __('luogo di nascita'),
             'birth_date' => __('data di nascita'),
+            'type' => __('tipo'),
             'registration_number' => __('tessera fidal'),
             'size' => __('taglia'),
             '10k' => __('10mila'),

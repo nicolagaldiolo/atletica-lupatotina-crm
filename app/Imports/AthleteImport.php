@@ -4,6 +4,8 @@ namespace App\Imports;
 
 use App\Models\Athlete;
 use App\Enums\GenderType;
+use App\Enums\MemberType;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
@@ -33,6 +35,8 @@ class AthleteImport implements ToModel
                     break;
             }
 
+            $fidal_card = trim($row[11]);
+
             return new Athlete([
                 'name' => trim($row[1]),
                 'surname' => trim($row[0]),
@@ -44,7 +48,8 @@ class AthleteImport implements ToModel
                 'city' => trim($row[8]),
                 'birth_place' => trim($row[9]),
                 'birth_date' => $birth_date,
-                'registration_number' => trim($row[10]),
+                'type' => ((Str::lower($fidal_card) == 'simpatizzante') ? MemberType::Supporter : MemberType::Athlete),
+                'registration_number' => ((Str::lower($fidal_card) == 'simpatizzante') ? null : $fidal_card),
                 '10k' => null,
                 'half_marathon' => null,
                 'marathon' => null

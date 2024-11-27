@@ -1,6 +1,31 @@
 <div class="row">
     <div class="col-12 col-sm-6">
         <div class="form-group mb-3">
+            <label for="name">{{ __('Tipo') }}</label>
+            <span class="text-danger">*</span>
+            <select name="type" class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}" @if($disabled) disabled @endif>
+                @foreach(App\Enums\MemberType::asSelectArray() as $key => $value)
+                    <option value="{{$key}}" @if($key == old('type', $athlete->type)) selected @endif>{{ __($value) }}</option>
+                @endforeach
+            </select>
+            @if ($errors->has('type'))
+                <div class="invalid-feedback">{{ $errors->first('type') }}</div>
+            @endif
+        </div>
+    </div>
+    <div class="col-12 col-sm-6">
+        <div class="form-group mb-3">
+            <label for="registration_number">{{ __('Tessera fidal') }}</label>
+            <input name="registration_number" class="form-control {{ $errors->has('registration_number') ? 'is-invalid' : '' }}" type="text" value="{{ old('registration_number', $athlete->registration_number) }}" @if($disabled) disabled @endif>
+            @if ($errors->has('registration_number'))
+                <div class="invalid-feedback">{{ $errors->first('registration_number') }}</div>
+            @endif
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 col-sm-6">
+        <div class="form-group mb-3">
             <label for="name">{{ __('Nome') }}</label>
             <span class="text-danger">*</span>
             <input name="name" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" value="{{ old('name', $athlete->name) }}" @if($disabled) disabled @endif>
@@ -86,7 +111,7 @@
 </div>
 
 <div class="row">
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-sm-6">
         <div class="form-group mb-3">
             <label for="birth_place">{{ __('Luogo di nascita') }}</label>
             <input name="birth_place" class="form-control {{ $errors->has('birth_place') ? 'is-invalid' : '' }}" type="text" value="{{ old('birth_place', $athlete->birth_place) }}" @if($disabled) disabled @endif>
@@ -95,21 +120,12 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-sm-6">
         <div class="form-group mb-3">
             <label for="birth_date">{{ __('Data di nascita') }}</label>
             <input name="birth_date" class="form-control {{ $errors->has('birth_date') ? 'is-invalid' : '' }}" type="date" value="{{ old('birth_date', App\Classes\Utility::dateFormatted($athlete->birth_date)) }}" @if($disabled) disabled @endif>
             @if ($errors->has('birth_date'))
                 <div class="invalid-feedback">{{ $errors->first('birth_date') }}</div>
-            @endif
-        </div>
-    </div>
-    <div class="col-12 col-sm-4">
-        <div class="form-group mb-3">
-            <label for="registration_number">{{ __('Tessera fidal') }}</label>
-            <input name="registration_number" class="form-control {{ $errors->has('registration_number') ? 'is-invalid' : '' }}" type="text" value="{{ old('registration_number', $athlete->registration_number) }}" @if($disabled) disabled @endif>
-            @if ($errors->has('registration_number'))
-                <div class="invalid-feedback">{{ $errors->first('registration_number') }}</div>
             @endif
         </div>
     </div>

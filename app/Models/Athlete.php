@@ -36,6 +36,7 @@ class Athlete extends Model
         'city',
         'birth_place',
         'birth_date',
+        'type',
         'registration_number',
         'size',
         '10k',

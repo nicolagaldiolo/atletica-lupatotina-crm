@@ -36,6 +36,12 @@
                                 {{ __('Nome') }}
                             </th>
                             <th>
+                                {{ __('Tipo') }}
+                            </th>
+                            <th>
+                                {{ __('Fidal') }}
+                            </th>
+                            <th>
                                 {{ __('Certificato') }}
                             </th>
                             <th>
@@ -102,6 +108,23 @@
                     }
 
                     return null;
+                },
+            },
+            {
+                data: 'type',
+                render(data, type, row, meta) {
+                    if(data == 0){
+                        return '{{ App\Enums\MemberType::getDescription(App\Enums\MemberType::Athlete) }}';    
+                    }else if(data == 1){
+                        return '{{ App\Enums\MemberType::getDescription(App\Enums\MemberType::Supporter) }}';    
+                    }
+                    return null;
+                },
+            },
+            {
+                data: 'registration_number',
+                render(data, type, row, meta) {
+                    return data ? data : null;
                 },
             },
             {
