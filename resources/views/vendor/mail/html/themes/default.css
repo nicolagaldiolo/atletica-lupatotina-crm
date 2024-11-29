@@ -229,13 +229,20 @@ img {
     text-decoration: none;
 }
 
-.button-blue,
-.button-primary {
+.button-blue {
     background-color: #2d3748;
     border-bottom: 8px solid #2d3748;
     border-left: 18px solid #2d3748;
     border-right: 18px solid #2d3748;
     border-top: 8px solid #2d3748;
+}
+
+.button-primary {
+    background-color: #EA00AC;
+    border-bottom: 8px solid #EA00AC;
+    border-left: 18px solid #EA00AC;
+    border-right: 18px solid #EA00AC;
+    border-top: 8px solid #EA00AC;
 }
 
 .button-green,
