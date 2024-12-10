@@ -145,4 +145,9 @@ class Athlete extends Model
     {
         $query->where('is_active', true);
     }
+
+    public function scopeDisabled(Builder $query): void
+    {
+        $query->where('is_active', false);
+    }
 }

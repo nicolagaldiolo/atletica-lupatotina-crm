@@ -135,8 +135,7 @@ class RaceController extends Controller
 
         $races = Race::subscribeable()->whereHas('fees')->with('fees')->get();
 
-        $athletes = Athlete::all();
-        return view('backend.races.subscriptions.create', compact('races', 'athletes'));
+        return view('backend.races.subscriptions.create', compact('races'));
     }
 
     public function subscriptionStore(RaceSubscriptionsRequest $request)

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\AthletesRequest;
+use Illuminate\Support\Facades\Session;
 use Kirschbaum\PowerJoins\PowerJoinClause;
 
 class AthleteController extends Controller
@@ -30,6 +31,8 @@ class AthleteController extends Controller
     {
         $this->authorize('viewAny', Athlete::class);
 
+        $activeFilterDefault = 1;
+
         if (request()->ajax()) {
 
             $builder = Athlete::query()
@@ -37,9 +40,21 @@ class AthleteController extends Controller
                 ->withCount('fees')
                 ->withCount('feesToPay')
                 ->with(['certificate', 'feesToPay', 'user'])
-                ->leftJoinRelationship('certificate', function(PowerJoinClause $join){
-                    $join->expiring();
-            });
+                ->leftJoinRelationship('certificate');
+                //->leftJoinRelationship('certificate', function(PowerJoinClause $join){
+                //    $join->expiring();
+                //});
+
+            // Filtro per stato
+            Session::put('dataTableSearch.searchByActive', intval(request()->get('searchByActive', $activeFilterDefault)));
+            $activeFilter = Session::get('dataTableSearch.searchByActive');
+            if ($activeFilter != -1) {
+                if($activeFilter == 1){
+                    $builder->active();
+                }else if($activeFilter == 0){
+                    $builder->disabled();
+                }
+            }
 
             return datatables()->eloquent($builder)
                 ->addColumn('action', function ($athlete) {
@@ -59,7 +74,9 @@ class AthleteController extends Controller
                     $query->orderBy('certificates.expires_on', $order);
                 })->make(true);
         }else{
-            return view('backend.athletes.index');
+            $searchByActive = Session::get('dataTableSearch.searchByActive', $activeFilterDefault);
+
+            return view('backend.athletes.index', compact('searchByActive'));
         }
     }
 
@@ -72,6 +89,7 @@ class AthleteController extends Controller
     {
         $this->authorize('create', Athlete::class);
         $athlete = new Athlete();
+        $athlete->is_active = true;
         return view('backend.athletes.create', compact('athlete'));
     }
 

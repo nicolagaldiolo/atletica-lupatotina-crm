@@ -125,6 +125,7 @@ class Certificate extends Model
 
     public function scopeExpiring($query): void
     {
-        $query->where('expires_on', '<=', Carbon::now()->addMonth()->endOfMonth());
+        $query->where('expires_on', '>=', Carbon::now()->subMonth()->startOfMonth())
+            ->where('expires_on', '<=', Carbon::now()->addMonth()->endOfMonth());
     }
 }

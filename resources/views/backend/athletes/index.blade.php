@@ -25,6 +25,20 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
+            <div class="col-auto">
+                <div class="input-group">
+                    <label class="input-group-text fw-bold">{{ __('Filtra') }}</label>
+                    <select id="searchByActive" class="form-select">
+                        <option value="1" @if($searchByActive == 1) selected @endif>{{ __('Attivi') }}</option>
+                        <option value="0"@if($searchByActive == 0) selected @endif>{{ __('Non attivi') }}</option>
+                        <option value="-1" @if($searchByActive == -1) selected @endif>{{ __('Tutti') }}</option>
+                    </select>
+                    <button id="dtSearch" class="btn btn-secondary" type="button">{{ __('Filtra') }}</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
             <div class="col">
                 <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
                     <thead>
@@ -79,15 +93,16 @@
 @push ('after-scripts')
 
 <script type="module">
-    $('#datatable').DataTable({
+    let dataTable = $('#datatable').DataTable({
         processing: true,
         serverSide: true,
         autoWidth: true,
         responsive: true,
         ajax: {
-            url: "{{ route('athletes.index') }}",
-            type: "GET",
-            "datatype": 'json'
+            url: '{{ route("athletes.index") }}',
+            data: function(data){
+                data.searchByActive = $('#searchByActive').val();
+            }
         },
         order: [[ 1, "asc" ]],
         columns: [
@@ -199,5 +214,9 @@
             }
         }
     });
+
+    $('#dtSearch').click(function(){
+        dataTable.draw(false);
+    })
 </script>
 @endpush
