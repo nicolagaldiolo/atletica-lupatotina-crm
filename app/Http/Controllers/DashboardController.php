@@ -40,7 +40,7 @@ class DashboardController extends Controller
 
         if (request()->ajax()) {
 
-            $builder = Athlete::with(['certificate' => function($query){
+            $builder = Athlete::active()->with(['certificate' => function($query){
                 $query->expiring();
             }])->leftJoinRelationship('certificate', function(PowerJoinClause $join){
                 $join->expiring();
