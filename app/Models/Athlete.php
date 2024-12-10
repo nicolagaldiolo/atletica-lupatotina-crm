@@ -42,10 +42,12 @@ class Athlete extends Model
         '10k',
         'half_marathon',
         'marathon',
+        'is_active',
         'invited_at'
     ];
 
     protected $casts = [
+        'is_active' => 'boolean',
         'birth_date' => 'datetime',
         'invited_at' => 'datetime'
     ];
@@ -137,5 +139,10 @@ class Athlete extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('is_active', true);
     }
 }

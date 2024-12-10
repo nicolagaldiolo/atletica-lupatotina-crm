@@ -36,6 +36,9 @@
                                 {{ __('Nome') }}
                             </th>
                             <th>
+                                {{ __('Attivo') }}
+                            </th>
+                            <th>
                                 {{ __('Tipo') }}
                             </th>
                             <th>
@@ -111,6 +114,16 @@
                 },
             },
             {
+                data: 'is_active',
+                render(data, type, row, meta) {
+                    if(data){
+                        return '<i class="fa-solid fa-user-check"></i>';
+                    }else{
+                        return '<i class="fa-solid fa-ban"></i>';
+                    }
+                },
+            },
+            {
                 data: 'type',
                 render(data, type, row, meta) {
                     if(data == 0){
@@ -179,7 +192,12 @@
                 orderable: false,
                 searchable: false
             }
-        ]
+        ],
+        createdRow: function( row, data, dataIndex){
+            if(!data.is_active){
+                $(row).addClass('opacity-50');
+            }
+        }
     });
 </script>
 @endpush

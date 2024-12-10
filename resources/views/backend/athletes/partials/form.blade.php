@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-12 col-sm-6">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="name">{{ __('Tipo') }}</label>
             <span class="text-danger">*</span>
@@ -13,7 +13,7 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-6">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="registration_number">{{ __('Tessera fidal') }}</label>
             <input name="registration_number" class="form-control {{ $errors->has('registration_number') ? 'is-invalid' : '' }}" type="text" value="{{ old('registration_number', $athlete->registration_number) }}" @if($disabled) disabled @endif>
@@ -22,9 +22,7 @@
             @endif
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-12 col-sm-6">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="name">{{ __('Nome') }}</label>
             <span class="text-danger">*</span>
@@ -34,7 +32,7 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-6">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="surname">{{ __('Cognome') }}</label>
             <span class="text-danger">*</span>
@@ -166,6 +164,21 @@
             @if ($errors->has('marathon'))
                 <div class="invalid-feedback">{{ $errors->first('marathon') }}</div>
             @endif
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 col-sm-4">
+        <div class="form-group mb-3">
+            <label for="is_active">{{ __('Attivo') }}</label>
+            <span class="text-danger">*</span>
+            <div class="form-check form-switch form-switch-lg">
+                <input name="is_active" type="hidden" checked value="0" @if($disabled) disabled @endif>
+                <input class="form-check-input {{ $errors->has('is_active') ? 'is-invalid' : '' }}" type="checkbox" name="is_active" {{ old('is_active', $athlete->is_active) ? 'checked' : "" }} value="1" @if($disabled) disabled @endif>
+                @if ($errors->has('is_active'))
+                <div class="invalid-feedback">{{ $errors->first('is_active') }}</div>
+                @endif
+            </div>
         </div>
     </div>
 </div>

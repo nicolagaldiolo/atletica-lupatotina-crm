@@ -44,7 +44,8 @@ class AthletesRequest extends FormRequest
             'size' => 'nullable|max:191',
             '10k' => 'nullable|max:191',
             'half_marathon' => 'nullable|max:191',
-            'marathon' => 'nullable|max:191'
+            'marathon' => 'nullable|max:191',
+            'is_active' => 'required|boolean',
         ];
     }
 
@@ -66,7 +67,8 @@ class AthletesRequest extends FormRequest
             'size' => __('taglia'),
             '10k' => __('10mila'),
             'half_marathon' => __('mezza maratona'),
-            'marathon' => __('maratona')
+            'marathon' => __('maratona'),
+            'is_active' => __('attivo'),
         ];
     }
 }
