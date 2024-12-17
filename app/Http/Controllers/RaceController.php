@@ -44,8 +44,8 @@ class RaceController extends Controller
             })->make(true);
         }else{
 
-            $searchByYear = Session::get('dataTableSearch.searchByYear');
-            $years = Race::selectRaw("DATE_FORMAT(date, '%Y') as years")->groupBy('years')->orderBy('years')->get()->pluck('years');
+            $searchByYear = Session::get('dataTableSearch.searchByYear', now()->year);
+            $years = raceYears();
 
             return view('backend.races.index', compact('years', 'searchByYear'));
         }

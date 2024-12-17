@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RaceFeeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
@@ -50,7 +51,6 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::patch("users/{user}/block", [UserController::class, 'block'])->name('users.block');
     Route::patch("users/{user}/unblock", [UserController::class, 'unblock'])->name('users.unblock');
     
-    Route::get('athletes/reports', [AthleteController::class, 'report'])->name('athletes.reports');
     Route::resource('athletes', AthleteController::class);
     Route::get('athletes/{athlete}/fees', [AthleteController::class, 'races'])->name('athletes.fees.index');
     Route::get('athletes/{athlete}/fees/{fee}/athletefee/{athleteFee}/edit', [AthleteController::class, 'editFee'])->name('athletes.fees.athletefee.edit');
@@ -59,7 +59,9 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::resource('athletes.certificates', CertificateController::class)->except('show');
     Route::resource('athletes.vouchers', VoucherController::class)->except('show');
     
-    
+    Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('reports/download', [ReportController::class, 'download'])->name('reports.download');
+
     Route::get('races/subscriptions', [RaceController::class, 'subscriptionCreate'])->name('races.subscription.create');
     Route::post('races/subscriptions', [RaceController::class, 'subscriptionStore'])->name('races.subscription.store');
     Route::get('races/{race}/athletes', [RaceController::class, 'athletes'])->name('races.athletes');

@@ -45,7 +45,7 @@
 
         @can('report', App\Models\Athlete::class)
             <li class="nav-item">
-                <a class="nav-link @if(Route::is('athletes.reports')) active @endif" href="{{ route('athletes.reports') }}">
+                <a class="nav-link @if(Route::is('reports.*')) active @endif" href="{{ route('reports.index') }}">
                     <i class="nav-icon fas fa-download"></i>&nbsp;{{ __('Situazione soci') }}
                 </a>
             </li>

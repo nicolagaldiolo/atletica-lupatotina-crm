@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Race;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
@@ -536,5 +537,14 @@ if (!function_exists('cashFee')) {
         ]);
 
         return $athleteFee;
+    }
+}
+
+if(!function_exists('raceYears')) {
+    function raceYears()
+    {
+        $years = Race::selectRaw("DATE_FORMAT(date, '%Y') as years")->groupBy('years')->orderBy('years')->get()->pluck('years');
+
+        return $years;
     }
 }
