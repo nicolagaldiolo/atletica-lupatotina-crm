@@ -22,9 +22,9 @@
         @if($years->count())
             {{ html()->form('POST', route("reports.download"))->class('form')->open() }}
                 <div class="row">
-                    <div class="col-xxl mb-3 mb-xxl-0">
+                    <div class="col-xxl-3 mb-3 mb-xxl-0">
                         <div class="input-group">
-                            <label class="input-group-text">{{ __('Filtra per anno') }}</label>
+                            <label class="input-group-text">{{ __('Anno') }}</label>
                             <select name="year" id="searchByYear" class="form-select">
                                 @foreach ($years as $year)
                                     <option value="{{ $year }}" @if($year == $searchByYear) selected @endif>{{ $year }}</option>    
@@ -34,22 +34,22 @@
                     </div>
                     <div class="col-xxl mb-3 mb-xxl-0">
                         <div class="input-group">
-                            <label class="input-group-text" for="raceLists">{{ __('Filtra per gara') }}</label>
+                            <label class="input-group-text" for="raceLists">{{ __('Gara') }}</label>
                             <select name="race_id" class="form-select" id="raceLists"></select>
                         </div>
                     </div>
                     <div class="col-xxl mb-3 mb-xxl-0">
                         <div class="input-group">
-                            <label class="input-group-text" for="athleteLists">{{ __('Filtra per atleta') }}</label>
+                            <label class="input-group-text" for="athleteLists">{{ __('Atleta') }}</label>
                             <select name="athlete" class="form-select" id="athleteLists">
-                                <option value="">{{ __('Seleziona atleta') }}</option>
+                                <option value="">{{ __('Seleziona') }}</option>
                                 @foreach ($athletes as $athlete)
                                     <option value="{{ $athlete->id }}">{{ $athlete->fullname }}</option>    
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col-xxl">
+                    <div class="col-xxl-2">
                         <button class="btn btn-primary w-100" type="submit">
                             <i class="nav-icon fas fa-download"></i>&nbsp;{{ __('Download') }}
                         </button>
