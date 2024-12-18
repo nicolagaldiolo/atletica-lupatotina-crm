@@ -60,7 +60,8 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::resource('athletes.vouchers', VoucherController::class)->except('show');
     
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::get('reports/download', [ReportController::class, 'download'])->name('reports.download');
+    Route::get('reports/{year}/races', [ReportController::class, 'races'])->name('reports.races');
+    Route::post('reports/download', [ReportController::class, 'download'])->name('reports.download');
 
     Route::get('races/subscriptions', [RaceController::class, 'subscriptionCreate'])->name('races.subscription.create');
     Route::post('races/subscriptions', [RaceController::class, 'subscriptionStore'])->name('races.subscription.store');

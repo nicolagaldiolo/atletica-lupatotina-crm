@@ -15,50 +15,48 @@
 
 @section('content')
 <div class="card">
+    <div class="card-header">
+        {{ __('Situazione soci') }}
+    </div>
     <div class="card-body">
-
-        {{--@if($years->count())
-            <div class="row">
-                <div class="col-auto">
-                    <div class="input-group">
-                        <label class="input-group-text fw-bold">{{ __('Seleziona anno') }}</label>
-                        <select id="searchByYear" class="form-select">
-                            @foreach ($years as $year)
-                                <option value="{{ $year }}" @if($year == $searchByYear) selected @endif>{{ $year }}</option>    
-                            @endforeach
-                        </select>
+        @if($years->count())
+            {{ html()->form('POST', route("reports.download"))->class('form')->open() }}
+                <div class="row">
+                    <div class="col-xxl mb-3 mb-xxl-0">
+                        <div class="input-group">
+                            <label class="input-group-text">{{ __('Filtra per anno') }}</label>
+                            <select name="year" id="searchByYear" class="form-select">
+                                @foreach ($years as $year)
+                                    <option value="{{ $year }}" @if($year == $searchByYear) selected @endif>{{ $year }}</option>    
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </div>
+                    <div class="col-xxl mb-3 mb-xxl-0">
+                        <div class="input-group">
+                            <label class="input-group-text" for="raceLists">{{ __('Filtra per gara') }}</label>
+                            <select name="race_id" class="form-select" id="raceLists"></select>
+                        </div>
+                    </div>
+                    <div class="col-xxl mb-3 mb-xxl-0">
+                        <div class="input-group">
+                            <label class="input-group-text" for="athleteLists">{{ __('Filtra per atleta') }}</label>
+                            <select name="athlete" class="form-select" id="athleteLists">
+                                <option value="">{{ __('Seleziona atleta') }}</option>
+                                @foreach ($athletes as $athlete)
+                                    <option value="{{ $athlete->id }}">{{ $athlete->fullname }}</option>    
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xxl">
+                        <button class="btn btn-primary w-100" type="submit">
+                            <i class="nav-icon fas fa-download"></i>&nbsp;{{ __('Download') }}
+                        </button>
+                    </div>
+                </div>    
+            {{ html()->form()->close() }}
         @endif
-
-        <hr>--}}
-
-        <a class="btn btn-primary" href="{{ route('reports.download') }}">
-            <i class="nav-icon fas fa-download"></i>&nbsp;{{ __('Situazione soci') }}
-        </a>
-
-        {{--
-        <hr>
-
-        <div class="input-group">
-            <label class="input-group-text" for="inputGroupFile01">Filtra per gara</label>
-            <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                <option selected>Choose...</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
-            <label class="input-group-text" for="inputGroupFile01">Filtra per atleta</label>
-            <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                <option selected>Choose...</option>
-                @foreach ($athletes as $athlete)
-                    <option value="{{ $athlete->id }}">{{ $athlete->fullname }}</option>    
-                @endforeach
-            </select>
-            <button class="btn btn-primary" type="button">Button</button>
-        </div>
-        --}}
     </div>
 </div>
 
@@ -72,12 +70,15 @@
     $(document).ready(function() {
         $('#searchByYear').on('change', function(event) {
             
-            console.log($(event.target.options[event.target.selectedIndex]).val());
+            $race_lists_obj = $('#raceLists');
+            $athlete_lists_obj = $('#athleteLists');
 
-            //var race_id = event.target.options[event.target.selectedIndex].dataset.race;
-            //var fee_id = event.target.options[event.target.selectedIndex].dataset.fee;
-            /*
-            let endpoint_url = '{{ url("") }}/races/' + race_id + '/fees/' + fee_id + '/athletesSubscribeable';
+            $race_lists_obj.prop('selectedIndex',0);
+            $athlete_lists_obj.prop('selectedIndex',0);
+
+            var year = $(event.target.options[event.target.selectedIndex]).val();
+
+            let endpoint_url = '{{ url("") }}/reports/' + year + '/races';
             
             $.ajax({
                 headers: {
@@ -85,13 +86,12 @@
                 },
                 url: endpoint_url,
             }).done(function(data) {
-                $('#athletes-list').html(data);
+                $race_lists_obj.html(data);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.log("fail");
             }).always(function() {
                 console.log("always");
             });
-            */
         });
         $('#searchByYear').trigger('change');
 
