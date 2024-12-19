@@ -43,8 +43,8 @@ class ReportController extends Controller
         ]);
         
         $year = $request->get('year');
-        $race_id = $request->get('race');
-        $athlete_id = $request->get('athlete');
+        $race_id = $request->get('race_id');
+        $athlete_id = $request->get('athlete_id');
 
         $data = Athlete::when($athlete_id, function($query) use($athlete_id){
             $query->where('id', $athlete_id);

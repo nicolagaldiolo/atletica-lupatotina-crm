@@ -41,7 +41,7 @@
                     <div class="col-xxl mb-3 mb-xxl-0">
                         <div class="input-group">
                             <label class="input-group-text" for="athleteLists">{{ __('Atleta') }}</label>
-                            <select name="athlete" class="form-select" id="athleteLists">
+                            <select name="athlete_id" class="form-select" id="athleteLists">
                                 <option value="">{{ __('Seleziona') }}</option>
                                 @foreach ($athletes as $athlete)
                                     <option value="{{ $athlete->id }}">{{ $athlete->fullname }}</option>    
