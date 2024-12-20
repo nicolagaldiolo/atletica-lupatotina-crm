@@ -4,6 +4,7 @@ use App\Enums\Permissions;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\AthleteController;
+use App\Http\Controllers\ProceedController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\PaymentController;
@@ -69,6 +70,8 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::get('races/{race}/subscriptions-list', [RaceController::class, 'subscriptionsList'])->name('races.subscriptions-list');
     
     Route::resource('races', RaceController::class)->except('show');
+
+    Route::resource('proceeds', ProceedController::class);
     
     Route::get('races/{race}/fees/{fee}/athletesSubscribeable', [RaceFeeController::class, 'athletesSubscribeable'])->name('races.fees.athletes-subscribeable');
     

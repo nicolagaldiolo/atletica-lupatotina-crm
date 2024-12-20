@@ -50,6 +50,12 @@
                 </a>
             </li>
         @endcan
+
+        <li class="nav-item">
+            <a class="nav-link @if(Route::is('proceeds.*')) active @endif" href="{{ route('proceeds.index') }}">
+                <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Proceeds') }}
+            </a>
+        </li>
         
         @if (Gate::any(['subscribe', 'registerPayment'], App\Models\AthleteFee::class))
             <li class="nav-title"><a>{{ __('Registrazioni') }}</a></li>
