@@ -13,7 +13,7 @@ class ProceedController extends Controller
     public function index()
     {
         
-        return Proceed::all()->groupBy('cashed_by');
+        return view('backend.proceeds.index'); //Proceed::all()->groupBy('cashed_by');
     }
 
     /**

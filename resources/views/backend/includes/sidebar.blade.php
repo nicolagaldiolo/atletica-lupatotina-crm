@@ -53,7 +53,7 @@
 
         <li class="nav-item">
             <a class="nav-link @if(Route::is('proceeds.*')) active @endif" href="{{ route('proceeds.index') }}">
-                <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Proceeds') }}
+                <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Incassi') }}
             </a>
         </li>
         
