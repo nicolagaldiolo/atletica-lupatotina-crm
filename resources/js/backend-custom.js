@@ -2,12 +2,17 @@
 
 var App = function($) {
 
-    let date = function (date, time = false){
+    let date = function (date, time = false, day = true, month = true, year = true){
+        const options = {};
+        if(year) options.year = 'numeric';
+        if(month) options.month = 'numeric';
+        if(day) options.day = 'numeric';
+
         if(date){
             var data = [];
-            data.push(new Date(date).toLocaleDateString("it-IT"));
+            data.push(new Date(date).toLocaleDateString("it-IT", options));
             if(time){
-                data.push(new Date(date).toLocaleTimeString("it-IT"));
+                data.push(new Date(date).toLocaleTimeString("it-IT", options));
             }
             return data.join(" ");
         }

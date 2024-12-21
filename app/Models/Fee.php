@@ -51,7 +51,6 @@ class Fee extends Model
                 'payed_at', 
                 'bank_transfer', 
                 'cashed_by',
-                'deduct_at',
                 'created_by', 
                 'updated_by', 
                 'deleted_by'

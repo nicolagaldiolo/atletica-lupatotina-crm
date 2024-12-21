@@ -71,7 +71,11 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     
     Route::resource('races', RaceController::class)->except('show');
 
-    Route::resource('proceeds', ProceedController::class);
+    Route::get('proceeds', [ProceedController::class, 'index'])->name('proceeds.index');
+    Route::get('proceeds/{user}', [ProceedController::class, 'show'])->name('proceeds.show');
+    Route::get('proceeds/{user}/deducted', [ProceedController::class, 'deducted'])->name('proceeds.deducted');
+    Route::patch('proceeds/{user}/deduct', [ProceedController::class, 'update'])->name('proceeds.update');
+    
     
     Route::get('races/{race}/fees/{fee}/athletesSubscribeable', [RaceFeeController::class, 'athletesSubscribeable'])->name('races.fees.athletes-subscribeable');
     

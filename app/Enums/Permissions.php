@@ -51,6 +51,7 @@ final class Permissions extends Enum
 
     // Payments
     const HandlePayments = 'handle_payments';
+    const DeductPayments = 'deduct_payments';
     
     // Subscriptions
     const HandleSubscriptions = 'handle_subscriptions';

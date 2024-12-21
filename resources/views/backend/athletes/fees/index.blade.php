@@ -86,15 +86,6 @@
             },
             {
                 data: 'fee.race.name',
-                render(data, type, row, meta) {
-                    var html = [];
-                    if(!row.payed_at){
-                        html.push('<span class="badge text-bg-danger">Da pagare</span>');
-                    }
-
-                    html.push(data);
-                    return html.join("<br>");
-                },
             },
             {
                 data: 'fee',
@@ -164,11 +155,12 @@
                 searchable: false
             }
         ],
-        //createdRow: function( row, data, dataIndex){
-        //    if(!data.payed_at){
-        //        $(row).addClass('border border-danger');
-        //    }
-        //}
+        createdRow: function( row, data, dataIndex){
+            if(!data.payed_at){
+                $(row).addClass('bg-danger');
+                $(row).css('--cui-bg-opacity', '.5');
+            }
+        }
     });
 </script>
 @endpush

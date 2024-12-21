@@ -7,7 +7,6 @@ use App\Traits\Owner;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class AthleteFee extends Pivot
 {
@@ -20,12 +19,10 @@ class AthleteFee extends Pivot
         'voucher_id',
         'bank_transfer',
         'cashed_by',
-        'deduct_at'
     ];
 
     protected $casts = [
         'payed_at' => 'datetime',
-        'deduct_at' => 'datetime',
         'custom_amount' => 'float'
     ];
 

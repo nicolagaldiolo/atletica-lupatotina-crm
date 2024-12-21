@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Atleti')
+    $entity = __('Incassi')
 @endphp
 
 @section('title') {{ $entity }} @endsection
@@ -14,29 +14,29 @@
 @endsection
 
 @section('content')
+
 <div class="card">
     <div class="card-body">
-        <div class="row">
-            
-            <nav class="mb-3">
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="general-tab" data-coreui-toggle="tab" data-coreui-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">
-                        <i class="far fa-file-alt"></i> Generale
-                    </button>
-                    <button class="nav-link" id="images-tab" data-coreui-toggle="tab" data-coreui-target="#images" type="button" role="tab" aria-controls="images" aria-selected="false" tabindex="-1">
-                        <i class="far fa-images"></i> Immagini
-                    </button>
-                </div>
-            </nav>
+        <div class="rowa">
+            @if (count($accounts))
 
-            <div class="tab-content mb-3" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab" tabindex="0">
-                    aaa
+                <nav class="mb-3">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        @foreach ($accounts as $account)
+                            <button class="nav-link @if($loop->first) active @endif" id="account-{{$account->id}}-tab" data-coreui-toggle="tab" data-coreui-target="#account-{{$account->id}}" type="button" role="tab" aria-controls="account-{{$account->id}}" aria-selected="true">
+                                {{$account->name}}
+                            </button>
+                        @endforeach
+                    </div>
+                </nav>
+                
+                <div class="tab-content" id="nav-tabContent">
+                    @foreach ($accounts as $account)
+                        @include('backend.proceeds.partials.tab_content')
+                    @endforeach
                 </div>
-                <div class="tab-pane fade show" id="images" role="tabpanel" aria-labelledby="images-tab" tabindex="1">
-                    bbb
-                </div>
-            </div>
+
+            @endif
         </div>
 
     </div>

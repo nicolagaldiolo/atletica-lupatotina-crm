@@ -88,4 +88,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $query->permission(Permissions::HandlePayments);
     }
+
+    public function proceeds()
+    {
+        return $this->hasMany(Proceed::class, 'cashed_by');
+    }
 }

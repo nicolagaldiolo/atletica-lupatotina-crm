@@ -530,11 +530,21 @@ if (!function_exists('handleUploadedFile')) {
 if (!function_exists('cashFee')) {
     function cashFee($athleteFee, $data)
     {
-        $athleteFee->update([
-            'payed_at' => ($data['payed'] ? ($athleteFee->payed_at ? $athleteFee->payed_at : Carbon::now()) : null),
-            'bank_transfer' => $data['payed'] ? $data['bank_transfer'] : 0,
-            'cashed_by' => $data['bank_transfer'] ? null : $data['cashed_by']
-        ]);
+        if($data['payed']){
+            $payload = [
+                'payed_at' => $athleteFee->payed_at ? $athleteFee->payed_at : Carbon::now(),
+                'bank_transfer' => $data['bank_transfer'],
+                'cashed_by' => $data['bank_transfer'] ? null : $data['cashed_by']
+            ];
+        }else{
+            $payload = [
+                'payed_at' => null,
+                'bank_transfer' => 0,
+                'cashed_by' => null
+            ];
+        }
+        
+        $athleteFee->update($payload);
 
         return $athleteFee;
     }

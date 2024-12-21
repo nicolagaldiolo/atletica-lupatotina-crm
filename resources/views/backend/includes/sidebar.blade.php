@@ -51,12 +51,6 @@
             </li>
         @endcan
 
-        <li class="nav-item">
-            <a class="nav-link @if(Route::is('proceeds.*')) active @endif" href="{{ route('proceeds.index') }}">
-                <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Incassi') }}
-            </a>
-        </li>
-        
         @if (Gate::any(['subscribe', 'registerPayment'], App\Models\AthleteFee::class))
             <li class="nav-title"><a>{{ __('Registrazioni') }}</a></li>
         @endif
@@ -73,6 +67,14 @@
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('races.subscription.*')) active @endif" href="{{ route('races.subscription.create') }}">
                     <i class="nav-icon fas fa-file-contract"></i>&nbsp;{{ __('Iscrizioni') }}
+                </a>
+            </li>
+        @endcan
+        
+        @can('registerPayment', App\Models\AthleteFee::class)
+            <li class="nav-item">
+                <a class="nav-link @if(Route::is('proceeds.*')) active @endif" href="{{ route('proceeds.index') }}">
+                    <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Incassi') }}
                 </a>
             </li>
         @endcan

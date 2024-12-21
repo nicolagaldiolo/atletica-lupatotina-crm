@@ -84,6 +84,7 @@ class Setup extends Command
                             Permissions::DeleteRaces,
                             Permissions::ReportRaces,
                             Permissions::HandlePayments,
+                            Permissions::DeductPayments,
                             Permissions::HandleSubscriptions,
                             Permissions::ListUsers,
                             Permissions::ViewUsers,
@@ -120,6 +121,7 @@ class Setup extends Command
                             Permissions::EditVouchers,
                             Permissions::DeleteVouchers,
                             Permissions::HandlePayments,
+                            Permissions::DeductPayments,
                             Permissions::HandleSubscriptions
                         ];
                         break;
