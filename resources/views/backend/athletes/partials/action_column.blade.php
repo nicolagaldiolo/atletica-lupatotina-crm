@@ -43,8 +43,8 @@
                             </a>
                         </li>
                     @endcan
-
-                    @if (Gate::any(['subscribe', 'registerPayment', 'viewAny'], [App\Models\AthleteFee::class, $athlete]))
+                    
+                    @if(Gate::any(['subscribe', 'registerPayment'], App\Models\AthleteFee::class) || Gate::check('viewAny', [AthleteFee::class, $athlete]))
                         <li class="nav-item">
                             <a class="nav-link @if(Route::is('athletes.fees.*')) active @endif" aria-current="page" href="{{ route("athletes.fees.index", $athlete) }}">
                                 <i class="fa-solid fa-flag-checkered"></i>

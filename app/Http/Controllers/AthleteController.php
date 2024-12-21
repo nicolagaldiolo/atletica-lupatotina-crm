@@ -162,28 +162,28 @@ class AthleteController extends Controller
 
     public function races(Athlete $athlete)
     {
-        if (!Gate::any(['subscribe', 'registerPayment', 'viewAny'], [AthleteFee::class, $athlete])) {
-            abort(403);
-        }
-
-        if (request()->ajax()) {
-            $builder = AthleteFee::with(['voucher', 'fee.race', 'cashed', 'owner'])
-                ->leftJoinRelationship('fee.race')
-                ->where('athlete_id', $athlete->id);
-
-            return datatables()->eloquent($builder)
-            ->filterColumn('fee', function($query, $keyword) {
-                $query->whereRaw("fees.name like ?", ["%{$keyword}%"]);
-            })
-            ->orderColumn('fee', function ($query, $order) {
-                $query->orderBy('races.name', $order);
-            })
-            ->addColumn('action', function ($athleteFee){
-                $i = $athleteFee;
-                return view('backend.athletes.fees.partials.action_column', compact('athleteFee'));
-            })->make(true);
+        if (Gate::any(['subscribe', 'registerPayment'], AthleteFee::class) || Gate::check('viewAny', [AthleteFee::class, $athlete])) {
+            if (request()->ajax()) {
+                $builder = AthleteFee::with(['voucher', 'fee.race', 'cashed', 'owner'])
+                    ->leftJoinRelationship('fee.race')
+                    ->where('athlete_id', $athlete->id);
+    
+                return datatables()->eloquent($builder)
+                ->filterColumn('fee', function($query, $keyword) {
+                    $query->whereRaw("fees.name like ?", ["%{$keyword}%"]);
+                })
+                ->orderColumn('fee', function ($query, $order) {
+                    $query->orderBy('races.name', $order);
+                })
+                ->addColumn('action', function ($athleteFee){
+                    $i = $athleteFee;
+                    return view('backend.athletes.fees.partials.action_column', compact('athleteFee'));
+                })->make(true);
+            }else{
+                return view('backend.athletes.fees.index', compact('athlete'));
+            }
         }else{
-            return view('backend.athletes.fees.index', compact('athlete'));
+            abort(403);
         }
     }
 
