@@ -48,7 +48,4 @@
 @endpush
 
 @push ('after-scripts')
-
-<script type="module">
-</script>
 @endpush

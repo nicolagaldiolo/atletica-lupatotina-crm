@@ -65,9 +65,9 @@ class ProceedController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize('deductPayment', AthleteFee::class);
+        
         if (request()->ajax()) {
-
-            $this->authorize('deductPayment', AthleteFee::class);
 
             $available_ids = $user->proceeds()->toDeduct()->pluck('id')->toArray();
 

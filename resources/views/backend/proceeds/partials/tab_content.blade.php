@@ -100,15 +100,6 @@
         },
     });
 
-
-    let select = false;
-    if(canDeductPayment){
-        select =  {
-            style: 'multi',
-            selector: 'td:first-child'
-        };
-    }
-
     let dataTable_{{ $account->id }} = $('#datatable-{{ $account->id }}').DataTable({
         processing: true,
         serverSide: true,
@@ -117,7 +108,10 @@
         ajax: {
             url: '{{ route("proceeds.show", $account->id) }}'
         },
-        select: canDeductPayment,
+        select: {
+            style: 'multi',
+            selector: 'td:first-child'
+        },
         order: [[ 3, "desc" ]],
         columns: [
             {
