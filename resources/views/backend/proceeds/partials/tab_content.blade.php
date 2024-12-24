@@ -1,6 +1,6 @@
 <div class="tab-pane fade @if($loop->first)active show @endif" id="account-{{$account->id}}" role="tabpanel" aria-labelledby="account-{{$account->id}}-tab" tabindex="{{ $loop->index }}">
     <div class="row">
-        <div class="col-7">
+        <div class="col-12 col-xl-7">
             <div class="p-3">
                 <div class="alert alert-info" role="alert">
                     <i class="fas fa-cash-register fa-lg"></i> <strong>{{ __('Incassato da scaricare') }}</strong></h4>
@@ -35,7 +35,7 @@
                 </table>
             </div>
         </div>    
-        <div class="col-5">
+        <div class="col-12 col-xl-5">
             <div class="p-3">
                 <div class="alert alert-success" role="alert">
                     <i class="fas fa-chart-line fa-lg"></i> <strong>{{ __('Incassato scaricato') }}</strong></h4>
