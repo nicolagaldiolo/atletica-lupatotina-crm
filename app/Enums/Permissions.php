@@ -18,6 +18,13 @@ final class Permissions extends Enum
     // Maintenance
     const RunMaintenance = 'run_maintenance';
 
+    // Articles
+    const ListArticles = 'list_articles';
+    const ViewArticles = 'view_articles';
+    const CreateArticles = 'create_articles';
+    const EditArticles = 'edit_articles';
+    const DeleteArticles = 'delete_articles';
+
     // Athletes
     const ListAthletes = 'list_athletes';
     const ViewAthletes = 'view_athletes';

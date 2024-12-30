@@ -79,6 +79,15 @@
             </li>
         @endcan
         
+        @can('viewAny', App\Models\Article::class)
+            <li class="nav-title"><a>{{ __('Magazzino') }}</a></li>
+            <li class="nav-item">
+                <a class="nav-link @if(Route::is('articles.*')) active @endif" href="{{ route('articles.index') }}">
+                    <i class="nav-icon fa-solid fa-shirt"></i>&nbsp;{{ __('Abbigliamento') }}
+                </a>
+            </li>
+        @endcan
+
         @if(
             Gate::check('viewAny', App\Models\User::class) || 
             Gate::check('viewAny', App\Models\Role::class)

@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Permissions;
+use App\Http\Controllers\ArticleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RaceController;
 use App\Http\Controllers\AthleteController;
@@ -82,6 +83,8 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::resource('races.fees', RaceFeeController::class)->except('show');
     
     Route::resource('payments', PaymentController::class)->only(['create', 'store']);
+
+    Route::resource('articles', ArticleController::class)->except('show');
 
     Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('tasks/{task}', [TaskController::class, 'exec'])->name('tasks.exec');
