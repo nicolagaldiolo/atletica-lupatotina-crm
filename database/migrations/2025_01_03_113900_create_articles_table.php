@@ -30,7 +30,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('price', 14, 2)->default(0);
-            $table->json('variants')->nullable();
+            $table->text('variants')->nullable(); // Non è possibile utilizzare il campo json perchè la versione di MySql è troppo vecchia per supportarlo
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
