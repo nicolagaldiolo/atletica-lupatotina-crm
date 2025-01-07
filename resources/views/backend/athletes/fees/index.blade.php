@@ -76,6 +76,7 @@
         autoWidth: true,
         responsive: true,
         ajax: '{{ route("athletes.fees.index", $athlete) }}',
+        order: [[3, 'desc']],
         columns: [
             {
                 data: 'id',

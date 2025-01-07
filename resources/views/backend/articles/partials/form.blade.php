@@ -27,16 +27,6 @@
                 <div class="invalid-feedback">{{ $errors->first('price') }}</div>
             @endif
         </div>
-        <div class="form-group mb-3">
-            <label for="name">{{ __('Quantità') }}</label>
-            <span class="text-danger">*</span>
-            <input name="quantity" class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}" type="number" step="1" value="{{ old('quantity', $article->quantity) }}">
-            @if ($errors->has('quantity'))
-                <div class="invalid-feedback">{{ $errors->first('quantity') }}</div>
-            @endif
-        </div>
-
-
         <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">{{ __('Taglie disponibili') }}</h5>

@@ -79,7 +79,7 @@
                 data.searchByYear = $('#searchByYear').val();
             }
         },
-        order: [[2, 'asc']],
+        order: [[2, 'desc']],
         columns: [{
                 data: 'id',
                 name: 'id',

@@ -27,3 +27,7 @@ html:not([dir=rtl]) .header-brand{
     padding-top: 7px;
     padding-bottom: 7px;
 }
+
+.nav-link{
+    padding: $nav-link-padding-y $nav-link-padding-x;
+}

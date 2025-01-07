@@ -46,7 +46,7 @@ class UserInvited extends Notification
                     ->greeting("Ciao {$this->athlete->full_name}!")
                     ->line("Sei stato invitato a registrarti su " . $appName)
                     ->action('Clicca qui per creare il tuo account', url($url))
-                    ->line('Nota: questo link scadrà tra 24 ore.');
+                    ->line('Nota: questo link scadrà tra 2 settimane.');
     }
 
     /**
@@ -63,8 +63,7 @@ class UserInvited extends Notification
 
     public function generateInvitationUrl(Athlete $athlete)
     {
-        // ! Don't forget to import the URL Facade !
-        return URL::temporarySignedRoute('athlete.register', now()->addDay(), [
+        return URL::temporarySignedRoute('athlete.register', now()->addWeeks(2), [
             'athlete' => $athlete
         ]);
     }

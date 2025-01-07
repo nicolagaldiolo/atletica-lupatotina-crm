@@ -38,10 +38,7 @@
                             <th>
                                 {{ __('Prezzo') }}
                             </th>
-                            <th>
-                                {{ __('Quantità') }}
-                            </th>
-                            <th>
+                            s<th>
                                 {{ __('Attivo') }}
                             </th>
                             <th>&nbsp;</th>
@@ -67,10 +64,7 @@
         autoWidth: true,
         responsive: true,
         ajax: {
-            url: '{{ route("articles.index") }}',
-            data: function(data){
-                data.searchByActive = $('#searchByActive').val();
-            }
+            url: '{{ route("articles.index") }}'
         },
         order: [[ 1, "asc" ]],
         columns: [
@@ -89,9 +83,6 @@
                 render(data) {
                     return App.money(data);
                 },
-            },
-            {
-                data: 'quantity',
             },
             {
                 data: 'is_active',

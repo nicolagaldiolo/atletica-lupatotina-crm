@@ -26,7 +26,6 @@ class ArticleRequest extends FormRequest
         return [
             'name' => 'required|max:191',
             'price' => 'required|numeric',
-            'quantity' => 'required|numeric',
             'is_active' => 'required|boolean',
         ];
     }
@@ -36,7 +35,6 @@ class ArticleRequest extends FormRequest
         return [
             'name' => __('nome'),
             'price' => __('importo'),
-            'quantity' => __('quantità'),
             'is_active' => __('attivo'),
         ];
     }
