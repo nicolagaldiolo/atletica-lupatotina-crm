@@ -112,7 +112,7 @@ class Certificate extends Model
             if($result){
                 $this->attributes['document'] = $result;
             }else{
-                throw new \Exception('Immpossibile salvare il file');
+                throw new \Exception('Impossibile salvare il file');
             }
         }
     }
