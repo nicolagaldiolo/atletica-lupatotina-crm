@@ -36,7 +36,6 @@ class AthleteController extends Controller
         if (request()->ajax()) {
 
             $builder = Athlete::query()
-                ->withCount('vouchers')
                 ->withCount('fees')
                 ->withCount('feesToPay')
                 ->with(['certificate', 'feesToPay', 'user'])

@@ -53,9 +53,6 @@
                                 {{ __('Attivo') }}
                             </th>
                             <th>
-                                {{ __('Tipo') }}
-                            </th>
-                            <th>
                                 {{ __('Fidal') }}
                             </th>
                             <th>
@@ -66,9 +63,6 @@
                             </th>
                             <th>
                                 {{ __('Da pagare') }}
-                            </th>
-                            <th>
-                                {{ __('Vouchers') }}
                             </th>
                             <th>
                                 {{ __('Utente') }}
@@ -139,17 +133,6 @@
                 },
             },
             {
-                data: 'type',
-                render(data, type, row, meta) {
-                    if(data == 0){
-                        return '{{ App\Enums\MemberType::getDescription(App\Enums\MemberType::Athlete) }}';    
-                    }else if(data == 1){
-                        return '{{ App\Enums\MemberType::getDescription(App\Enums\MemberType::Supporter) }}';    
-                    }
-                    return null;
-                },
-            },
-            {
                 data: 'registration_number',
                 render(data, type, row, meta) {
                     return data ? data : null;
@@ -180,10 +163,6 @@
                     return null;
                 },
                 searchable: false,
-            },
-            {
-                data: 'vouchers_count',
-                searchable: false
             },
             {
                 data: 'user',
