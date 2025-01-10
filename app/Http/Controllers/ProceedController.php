@@ -6,6 +6,7 @@ use App\Models\AthleteFee;
 use App\Models\Proceed;
 use App\Models\User;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -16,10 +17,19 @@ class ProceedController extends Controller
      */
     public function index()
     {
+
+        $builder = User::find(1)->proceeds()->deducted()->selectRaw('DATE_FORMAT(deduct_at, "%Y-%m") as deduct_at, sum(custom_amount) as amount')
+        ->groupByRaw('DATE_FORMAT(deduct_at, "%Y-%m")');
+
         $this->authorize('registerPayment', AthleteFee::class);
 
         $accounts = User::whereHas('proceeds')->get();
-        return view('backend.proceeds.index', compact('accounts'));
+        
+        $proceedRangePeriod = $this->getProceedRangePeriod();
+        $periods = $proceedRangePeriod['periods'];
+        $currentPeriod = $proceedRangePeriod['current_period'];
+        
+        return view('backend.proceeds.index', compact('proceedRangePeriod', 'accounts'));
     }
 
     /**
@@ -44,7 +54,10 @@ class ProceedController extends Controller
             })
             ->editColumn('name', function ($data) {
                 return $data->athlete->fullname;
-            })->make(true);
+            })
+            //https://yajrabox.com/docs/laravel-datatables/master/response-with
+            ->with('total', $builder->sum('custom_amount'))
+            ->make(true);
         }
     }
 
@@ -56,7 +69,10 @@ class ProceedController extends Controller
             $builder = $user->proceeds()->deducted()->selectRaw('DATE_FORMAT(deduct_at, "%Y-%m") as deduct_at, sum(custom_amount) as amount')
                 ->groupByRaw('DATE_FORMAT(deduct_at, "%Y-%m")');
 
-            return datatables()->eloquent($builder)->make(true);
+            return datatables()
+                ->eloquent($builder)
+                ->with('total', $builder->get()->sum('amount'))
+                ->make(true);
         }
     }
 
@@ -70,20 +86,39 @@ class ProceedController extends Controller
         if (request()->ajax()) {
 
             $available_ids = $user->proceeds()->toDeduct()->pluck('id')->toArray();
-
+            $proceedRangePeriod = $this->getProceedRangePeriod();
+            
             $this->validate($request, [
                 'ids' => 'required|array',
-                'ids.*' => ['required', Rule::exists('athlete_fee', 'id'), Rule::in($available_ids)]
+                'ids.*' => ['required', Rule::exists('athlete_fee', 'id'), Rule::in($available_ids)],
+                'period' => [
+                    'required', 
+                    "after_or_equal:{$proceedRangePeriod['start_range']}", 
+                    "before_or_equal:{$proceedRangePeriod['end_range']}"
+                ]
             ]);
 
-            $user->proceeds()->toDeduct()->whereIn('id', $request->get('ids'))->get()->each(function($proced){
+            $user->proceeds()->toDeduct()->whereIn('id', $request->get('ids'))->get()->each(function($proced) use($request){
                 $proced->update([
-                    'deduct_at' => Carbon::now()
+                    'deduct_at' => $request->get('period')
                 ]);
             });
             
             return response(['type' => 'success', 'message' => __('Operazione eseguita con successo')]);        
         }
+    }
+
+    protected function getProceedRangePeriod()
+    {
+        $startRange = Carbon::now()->subMonths(3)->startOfMonth();
+        $endRange = Carbon::now()->endOfMonth();
+        
+        return [
+            'start_range' => Carbon::now()->subMonths(3)->startOfMonth(),
+            'end_range' => Carbon::now()->endOfMonth(),
+            'current_period' => Carbon::now(),
+            'periods' => CarbonPeriod::create($startRange->format('Y-m-d'), '1 month', $endRange->format('Y-m-d'))
+        ];
     }
 
 }

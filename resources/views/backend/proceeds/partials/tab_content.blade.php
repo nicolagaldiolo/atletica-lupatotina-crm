@@ -7,9 +7,21 @@
                 </div>
 
                 @can('deductPayment', App\Models\AthleteFee::class)
-                    <button style="display: none;" id="massUpdate-{{ $account->id }}" class="btn btn-primary" data-placement="top" title="{{ __('Scarica incasso') }}">
-                        <i class="fas fa-cash-register fa-lg"></i> {{ _('Scarica incasso') }}
-                    </button>
+                    <div class="row">
+                        <div class="ms-auto col-auto">
+                            <div style="display: none;" id="massUpdateContainer-{{ $account->id }}" class="mb-3 input-group input-group-sm">
+                                <label class="input-group-text">{{ __('Seleziona periodo') }}</label>
+                                <select id="massUpdatePeriod-{{ $account->id }}" class="form-select">
+                                    @foreach ($proceedRangePeriod['periods'] as $key => $date)
+                                        <option value="{{ $date->endOfMonth() }}" @if($date->format('Y-m') == $proceedRangePeriod['current_period']->format('Y-m')) selected @endif>{{ $date->format('Y-m') }}</option>    
+                                    @endforeach
+                                </select>
+                                <button id="massUpdate-{{ $account->id }}" class="btn btn-primary" type="button">
+                                    <i class="fas fa-cash-register fa-lg"></i> {{ _('Scarica incasso') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 @endcan
                 
                 <table id="datatable-{{ $account->id }}" class="table table-bordered table-hover table-responsive-sm">
@@ -32,6 +44,12 @@
                             </th>
                         </tr>
                     </thead>
+                    <tfoot>
+                        <tr>
+                            <th class="text-end" colspan="4"></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>    
@@ -51,6 +69,12 @@
                             </th>
                         </tr>
                     </thead>
+                    <tfoot>
+                        <tr>
+                            <th class="text-end"></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>    
@@ -74,7 +98,7 @@
         autoWidth: true,
         responsive: true,
         ajax: {
-            url: '{{ route("proceeds.deducted", $account->id) }}'
+            url: '{{ route("proceeds.deducted", $account->id) }}',
         },
         order: [[ 0, "desc" ]],
         columns: [
@@ -98,6 +122,15 @@
         layout: {            
             topEnd: 'buttons'
         },
+        footerCallback: function (row, data, start, end, display) {
+            //https://stackoverflow.com/questions/29725119/datatables-adding-json-data-to-footer-tfoot
+            var response = this.api().ajax.json();
+            if(response){
+                console.log("nicola", response);
+                $(this.api().column(0).footer()).html("Totale");
+                $(this.api().column(1).footer()).html(App.money(response.total));
+            }
+        }
     });
 
     let dataTable_{{ $account->id }} = $('#datatable-{{ $account->id }}').DataTable({
@@ -106,7 +139,7 @@
         autoWidth: true,
         responsive: true,
         ajax: {
-            url: '{{ route("proceeds.show", $account->id) }}'
+            url: '{{ route("proceeds.show", $account->id) }}',
         },
         select: {
             style: 'multi',
@@ -139,19 +172,29 @@
                     return App.money(data);
                 }
             },
-        ]
+        ],
+        footerCallback: function (row, data, start, end, display) {
+            //https://stackoverflow.com/questions/29725119/datatables-adding-json-data-to-footer-tfoot
+            var response = this.api().ajax.json();
+            if(response){
+                $(this.api().column(0).footer()).html("Totale");
+                $(this.api().column(4).footer()).html(App.money(response.total));
+            }
+        }
     });
     
     if(canDeductPayment){
+        let massUpdateBtnContainer_{{ $account->id }} = $('#massUpdateContainer-{{ $account->id }}');
         let massUpdateBtn_{{ $account->id }} = $('#massUpdate-{{ $account->id }}');
+        let massUpdatePeriod_{{ $account->id }} = $('#massUpdatePeriod-{{ $account->id }}');
         let selectAllBtn_{{ $account->id }} = $(".selectAll-{{ $account->id }}");
 
         dataTable_{{ $account->id }}.on('select deselect', function ( e, dt, type, indexes ) {
             if ( type === 'row' ) {
                 if(dataTableGetSelectedRows(dt).length){
-                    massUpdateBtn_{{ $account->id }}.show();
+                    massUpdateBtnContainer_{{ $account->id }}.show();
                 }else{
-                    massUpdateBtn_{{ $account->id }}.hide();
+                    massUpdateBtnContainer_{{ $account->id }}.hide();
                 }
             }
         });
@@ -166,8 +209,7 @@
 
         massUpdateBtn_{{ $account->id }}.click( function (e) {
             e.preventDefault();
-            let _self = $(this);
-            
+
             if(confirm("Sei sicuro?")){
                 let selectedRows = dataTableGetSelectedRows(dataTable_{{ $account->id }});
                 if(selectedRows.length){
@@ -181,6 +223,7 @@
                         url: '{{ route("proceeds.update", $account->id) }}',
                         data: {
                             _token: '{{ csrf_token() }}',
+                            period: massUpdatePeriod_{{ $account->id }}.val(),
                             ids: ids
                         }
 
@@ -188,9 +231,10 @@
                         dataTable_{{ $account->id }}.draw(false);
                         dataTable_deducted_{{ $account->id }}.draw(false);
                         selectAllBtn_{{ $account->id }}.prop('checked', false);
-                        _self.hide();
+                        massUpdateBtnContainer_{{ $account->id }}.hide();
                     }).fail(function(jqXHR, textStatus, errorThrown) {
-                        console.log("fail");
+                        let message = (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.message) ? jqXHR.responseJSON.message : 'Errore del server, impossibile elaborare la richiesta';
+                        alert(message);
                     }).always(function() {
                         console.log("always");
                     });
@@ -203,7 +247,7 @@
                 dataTable_{{ $account->id }}.draw(false);
                 dataTable_deducted_{{ $account->id }}.draw(false);
                 selectAllBtn_{{ $account->id }}.prop('checked', false);
-                _self.hide();
+                massUpdateBtnContainer_{{ $account->id }}.hide();
             }
         });
     }
