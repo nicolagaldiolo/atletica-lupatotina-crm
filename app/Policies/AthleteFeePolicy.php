@@ -49,12 +49,22 @@ class AthleteFeePolicy
         return false;
     }
 
-    public function subscribe(User $user): bool
+    public function subscribeRace(User $user): bool
     {
         return $user->can(Permissions::HandleSubscriptions);
     }
 
-    public function registerPayment(User $user, AthleteFee $athleteFee = null): bool
+    public function subscribeTrack(User $user): bool
+    {
+        return $user->can(Permissions::HandleSubscriptions);
+    }
+
+    public function registerPaymentRace(User $user, AthleteFee $athleteFee = null): bool
+    {
+        return $user->can(Permissions::HandlePayments) && (is_null($athleteFee) ? true : is_null($athleteFee->deduct_at));
+    }
+
+    public function registerPaymentTrack(User $user, AthleteFee $athleteFee = null): bool
     {
         return $user->can(Permissions::HandlePayments) && (is_null($athleteFee) ? true : is_null($athleteFee->deduct_at));
     }

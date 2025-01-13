@@ -15,31 +15,37 @@ class PaymentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($raceType)
     {
-        $this->authorize('registerPayment', AthleteFee::class);
+        $this->authorize('registerPaymentRace', AthleteFee::class);
 
-        $athletes = Athlete::whereHas('fees', function($query){
-            $query->whereNull('payed_at');
+        $athletes = Athlete::whereHas('fees', function($query) use($raceType){
+            $query->whereNull('payed_at')->whereHas('race', function($query) use($raceType){
+                $query->type($raceType);
+            });
         })->with([
-            'fees' => function($query){
-                $query->whereNull('payed_at');
+            'fees' => function($query) use($raceType){
+                $query->whereNull('payed_at')->whereHas('race', function($query) use($raceType){
+                    $query->type($raceType);
+                });
             },
-            'fees.race',
+            'fees.race' => function($query) use($raceType){
+                $query->type($raceType);
+            },
             'fees.athletefee',
         ])->get();
 
         $accountants = User::HandlePayments()->get();
 
-        return view('backend.payments.create', compact('athletes', 'accountants'));
+        return view('backend.payments.create', compact('athletes', 'accountants', 'raceType'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $raceType)
     {
-        $this->authorize('registerPayment', AthleteFee::class);
+        $this->authorize('registerPaymentRace', AthleteFee::class);
 
         $validated = $request->validate([
             'payments' => 'required|array',
@@ -60,6 +66,6 @@ class PaymentController extends Controller
         });            
 
         Utility::flashMessage();
-        return redirect(route('payments.create'));
+        return redirect(route('payments.create', $raceType));
     }
 }

@@ -15,32 +15,33 @@ class ProceedController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($raceType)
     {
+        $this->authorize('registerPaymentRace', AthleteFee::class);
 
-        $builder = User::find(1)->proceeds()->deducted()->selectRaw('DATE_FORMAT(deduct_at, "%Y-%m") as deduct_at, sum(custom_amount) as amount')
-        ->groupByRaw('DATE_FORMAT(deduct_at, "%Y-%m")');
-
-        $this->authorize('registerPayment', AthleteFee::class);
-
-        $accounts = User::whereHas('proceeds')->get();
+        $accounts = User::whereHas('proceeds.fee.race', function($query) use($raceType){
+            $query->type($raceType);
+        })->get();
         
         $proceedRangePeriod = $this->getProceedRangePeriod();
         $periods = $proceedRangePeriod['periods'];
         $currentPeriod = $proceedRangePeriod['current_period'];
         
-        return view('backend.proceeds.index', compact('proceedRangePeriod', 'accounts'));
+        return view('backend.proceeds.index', compact('proceedRangePeriod', 'accounts', 'raceType'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user = null)
+    public function show($raceType, User $user = null)
     {
-        $this->authorize('registerPayment', AthleteFee::class);
+        $this->authorize('registerPaymentRace', AthleteFee::class);
 
         if (request()->ajax()) {
             $builder = $user->proceeds()->toDeduct()
+                ->whereHas('fee.race', function($query) use($raceType){
+                    $query->type($raceType);
+                })
                 ->with(['athlete', 'fee.race'])
                 ->leftJoinRelationship('athlete');
 
@@ -61,12 +62,14 @@ class ProceedController extends Controller
         }
     }
 
-    public function deducted(User $user)
+    public function deducted($raceType, User $user)
     {
-        $this->authorize('registerPayment', AthleteFee::class);
+        $this->authorize('registerPaymentRace', AthleteFee::class);
 
         if (request()->ajax()) {
-            $builder = $user->proceeds()->deducted()->selectRaw('DATE_FORMAT(deduct_at, "%Y-%m") as deduct_at, sum(custom_amount) as amount')
+            $builder = $user->proceeds()->deducted()->whereHas('fee.race', function($query) use($raceType){
+                $query->type($raceType);
+            })->selectRaw('DATE_FORMAT(deduct_at, "%Y-%m") as deduct_at, sum(custom_amount) as amount')
                 ->groupByRaw('DATE_FORMAT(deduct_at, "%Y-%m")');
 
             return datatables()
@@ -79,13 +82,15 @@ class ProceedController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $raceType, User $user)
     {
         $this->authorize('deductPayment', AthleteFee::class);
         
         if (request()->ajax()) {
 
-            $available_ids = $user->proceeds()->toDeduct()->pluck('id')->toArray();
+            $available_ids = $user->proceeds()->toDeduct()->whereHas('fee.race', function($query) use($raceType){
+                $query->type($raceType);
+            })->pluck('id')->toArray();
             $proceedRangePeriod = $this->getProceedRangePeriod();
             
             $this->validate($request, [
@@ -98,7 +103,9 @@ class ProceedController extends Controller
                 ]
             ]);
 
-            $user->proceeds()->toDeduct()->whereIn('id', $request->get('ids'))->get()->each(function($proced) use($request){
+            $user->proceeds()->toDeduct()->whereHas('fee.race', function($query) use($raceType){
+                $query->type($raceType);
+            })->whereIn('id', $request->get('ids'))->get()->each(function($proced) use($request){
                 $proced->update([
                     'deduct_at' => $request->get('period')
                 ]);

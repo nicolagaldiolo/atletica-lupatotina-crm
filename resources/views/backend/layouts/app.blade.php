@@ -132,7 +132,7 @@ function newexportaction(e, dt, button, config) {
                 url: "{{ asset('vendor/DataTables/it-IT.json') }}",
             },
             pageLength: 25,
-            lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Tutti"]],
+            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tutti"]],
         });
 
         $( document ).ready(function() {

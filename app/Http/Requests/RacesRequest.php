@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\RaceType;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RacesRequest extends FormRequest
@@ -25,6 +27,7 @@ class RacesRequest extends FormRequest
     {
         return [
             'name' => 'required|max:191',
+            'type' => ['required', new EnumValue(RaceType::class)],
             'distance' => 'nullable|max:191',
             'date' => 'required|date',
             'is_subscrible' => 'required|boolean',
@@ -37,6 +40,7 @@ class RacesRequest extends FormRequest
     {
         return [
             'name' => __('nome'),
+            'type' => __('tipo'),
             'distance' => __('distanza'),
             'date' => __('data'),
             'is_subscrible' => __('iscrizioni aperte'),

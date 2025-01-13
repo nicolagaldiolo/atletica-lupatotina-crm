@@ -14,13 +14,12 @@
 <div class="card">
     {{ html()->form('POST', route("races.store"))->class('form')->open() }}
         <div class="card-header">
-
             <div class="row">
                 <div class="col">
                     <div class="float-end">
                         <div class="form-group">
                             @can('viewAny', App\Models\Race::class)
-                                <x-backend.buttons.return route='{{ route("races.index") }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                                <x-backend.buttons.return route='{{ route("races.index", $race->type) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
                             @endcan
                             @can('create', App\Models\Race::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>

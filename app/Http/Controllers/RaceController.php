@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Athlete;
 use App\Classes\Utility;
+use App\Enums\RaceType;
 use App\Exports\RaceSubscriptionsExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -24,13 +25,13 @@ class RaceController extends Controller
      * @return Response
      */
 
-    public function index()
+    public function index($raceType)
     {
         $this->authorize('viewAny', Race::class);
 
         if (request()->ajax()) {
 
-            $builder = Race::query()->withCount(['fees', 'athleteFee'])->with('fees.athletes');
+            $builder = Race::type($raceType)->withCount(['fees', 'athleteFee'])->with('fees.athletes');
             
             // Filtro per anno
             Session::put('dataTableSearch.searchByYear', request()->get('searchByYear', now()->year));
@@ -47,7 +48,7 @@ class RaceController extends Controller
             $searchByYear = Session::get('dataTableSearch.searchByYear', now()->year);
             $years = raceYears();
 
-            return view('backend.races.index', compact('years', 'searchByYear'));
+            return view('backend.races.index', compact('years', 'searchByYear', 'raceType'));
         }
     }
 
@@ -56,10 +57,11 @@ class RaceController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public function create($raceType)
     {
         $this->authorize('create', Race::class);
         $race = new Race();
+        $race->type = $raceType;
         return view('backend.races.create', compact('race'));
     }
 
@@ -129,23 +131,25 @@ class RaceController extends Controller
         return redirect(route('races.index'));
     }
 
-    public function subscriptionCreate()
+    public function subscriptionCreate($raceType)
     {
-        $this->authorize('subscribe', AthleteFee::class);
+        $this->authorize('subscribeRace', AthleteFee::class);
 
-        $races = Race::subscribeable()->whereHas('fees')->with('fees')->get();
+        $races = Race::subscribeable()->type($raceType)->whereHas('fees')->with('fees')->get();
 
         return view('backend.races.subscriptions.create', compact('races'));
     }
 
     public function subscriptionStore(RaceSubscriptionsRequest $request)
     {
-        $this->authorize('subscribe', AthleteFee::class);
+        $fee = Fee::with('race')->findOrFail($request->get('fee_id'));
+
+        $this->authorize('subscribeRace', AthleteFee::class);
         
-        Fee::findOrFail($request->get('fee_id'))->athletes()->syncWithoutDetaching($request->get('athletes', []));
+        $fee->athletes()->syncWithoutDetaching($request->get('athletes', []));
         
         Utility::flashMessage();
-        return redirect(route('races.subscription.create'));
+        return redirect(route('races.subscription.create', $fee->race->type));
     }
 
     public function athletes(Race $race)

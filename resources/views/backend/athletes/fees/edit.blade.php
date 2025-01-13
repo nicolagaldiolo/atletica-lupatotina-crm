@@ -25,17 +25,17 @@
         <div class="card-header">
             <div class="row">
                 <div class="col">
-                    @can('subscribe', $athleteFee)
+                    @can('subscribeRace', $athleteFee)
                         <x-backend.buttons.delete route='{{ route("athletes.fees.athletefee.destroySubscription", [$athlete, $fee, $athleteFee]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                     @endcan
 
                     <div class="float-end">
                         <div class="form-group">
-                            @if(Gate::any(['subscribe', 'registerPayment'], $athleteFee) || Gate::check('viewAny', [AthleteFee::class, $athlete]))
+                            @if(Gate::any(['subscribeRace', 'registerPaymentRace'], $athleteFee) || Gate::check('viewAny', [AthleteFee::class, $athlete]))
                                 <x-backend.buttons.return route='{{ route("athletes.fees.index", $athlete) }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
                             @endif
 
-                            @can('registerPayment', $athleteFee)
+                            @can('registerPaymentRace', $athleteFee)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                             @endcan
                         </div>
