@@ -6,6 +6,7 @@ use App\Enums\GenderType;
 use App\Enums\MemberType;
 use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AthletesRequest extends FormRequest
 {
@@ -30,7 +31,14 @@ class AthletesRequest extends FormRequest
 
         return [
             'name' => 'required|max:191',
-            'surname' => 'required|max:191',
+            'surname' => ['required', 'max:191', Rule::unique('athletes')->where(function ($query) use($id){
+                $query->where('name', request()->name);
+                $query->where('surname', request()->surname);
+                if($id){
+                    $query->where('id', '<>', $id);
+                }
+                return $query;
+             })],
             'gender' => ['nullable', new EnumValue(GenderType::class, false)],
             'phone' => 'nullable|max:191',
             'email' => 'nullable|max:191|email|unique:athletes,email,' . $id,
@@ -40,7 +48,7 @@ class AthletesRequest extends FormRequest
             'birth_place' => 'nullable|max:191',
             'birth_date' => 'nullable|date',
             'type' => ['required', new EnumValue(MemberType::class, false)],
-            'registration_number' => 'nullable|max:191',
+            'registration_number' => 'nullable|max:191|unique:athletes,registration_number,' . $id,
             'size' => 'nullable|max:191',
             '10k' => 'nullable|max:191',
             'half_marathon' => 'nullable|max:191',
@@ -69,6 +77,13 @@ class AthletesRequest extends FormRequest
             'half_marathon' => __('mezza maratona'),
             'marathon' => __('maratona'),
             'is_active' => __('attivo'),
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'surname.unique' => 'Nome e Cognome già utilizzati',
         ];
     }
 }
