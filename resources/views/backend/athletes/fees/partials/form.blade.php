@@ -42,7 +42,7 @@
             <span class="text-danger">*</span>
             <div class="form-check form-switch form-switch-lg">
                 <input name="bank_transfer" class="form-item" type="hidden" checked value="0">
-                <input class="form-check-input form-item {{ $errors->has('bank_transfer') ? 'is-invalid' : '' }}" type="checkbox" name="bank_transfer" {{ old('bank_transfer', $athleteFee->bank_transfer) ? 'checked' : "" }} value="1">
+                <input class="form-check-input form-item input-switch {{ $errors->has('bank_transfer') ? 'is-invalid' : '' }}" type="checkbox" name="bank_transfer" {{ old('bank_transfer', $athleteFee->bank_transfer) ? 'checked' : "" }} value="1">
                 @if ($errors->has('bank_transfer'))
                     <div class="invalid-feedback">{{ $errors->first('bank_transfer') }}</div>
                 @endif
@@ -51,7 +51,7 @@
     </div>
 
     <div class="col-12 col-sm-4">
-        <div class="form-group mb-3">
+        <div class="form-group mb-3 cashed_by_container @if($athleteFee->bank_transfer) invisible @endif">
             <label for="bank_transfer">{{ __('Esattore') }}</label>
             <span class="text-danger">*</span>
             <select class="form-select {{ $errors->has('cashed_by') ? 'is-invalid' : '' }}" name="cashed_by" id="inputGroupSelect01">
@@ -65,3 +65,20 @@
         </div>
     </div>
 </div>
+
+
+@push ('after-scripts')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.input-switch[name="bank_transfer"]').on('change', function(event) {
+            let is_checked = $(this).is(':checked');
+            let item = $('.cashed_by_container');
+            if(is_checked){
+                item.addClass('invisible');
+            }else{
+                item.removeClass('invisible');
+            }
+        });
+    });
+</script>
+@endpush

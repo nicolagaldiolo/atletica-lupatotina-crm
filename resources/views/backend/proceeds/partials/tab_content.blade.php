@@ -17,7 +17,7 @@
                                     @endforeach
                                 </select>
                                 <button id="massUpdate-{{ $account->id }}" class="btn btn-primary" type="button">
-                                    <i class="fas fa-cash-register fa-lg"></i> {{ _('Scarica incasso') }}
+                                    <i class="fas fa-cash-register fa-lg"></i> {{ __('Scarica incasso') }}
                                 </button>
                             </div>
                         </div>
