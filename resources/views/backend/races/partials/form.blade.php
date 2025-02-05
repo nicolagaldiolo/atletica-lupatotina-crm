@@ -29,41 +29,6 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-12 col-sm-4">
-        <div class="form-group mb-3">
-            <label for="is_subscrible">{{ __('Iscrizioni aperte') }}</label>
-            <div class="form-check form-switch form-switch-lg">
-                <input name="is_subscrible" type="hidden" checked value="0" @if($disabled) disabled @endif>
-                <input class="form-check-input {{ $errors->has('is_subscrible') ? 'is-invalid' : '' }}" type="checkbox" name="is_subscrible" {{ old('is_subscrible', $race->is_subscrible) ? 'checked' : "" }} value="1" @if($disabled) disabled @endif>
-                @if ($errors->has('is_subscrible'))
-                <div class="invalid-feedback">{{ $errors->first('is_subscrible') }}</div>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-sm-4">
-        <div class="form-group mb-3">
-            <label for="subscrible_expiration">{{ __('Iscrizioni aperte fino al') }}</label>
-            <input name="subscrible_expiration" class="form-control {{ $errors->has('subscrible_expiration') ? 'is-invalid' : '' }}" type="date" value="{{ old('subscrible_expiration', App\Classes\Utility::dateFormatted($race->subscrible_expiration)) }}" @if($disabled) disabled @endif>
-            @if ($errors->has('subscrible_expiration'))
-                <div class="invalid-feedback">{{ $errors->first('subscrible_expiration') }}</div>
-            @endif
-        </div>
-    </div>
-    <div class="col-12 col-sm-4">
-        <div class="form-group mb-3">
-            <label for="is_visible_on_site">{{ __('Visualizza sul sito') }}</label>
-            <div class="form-check form-switch form-switch-lg">
-                <input name="is_visible_on_site" type="hidden" checked value="0" @if($disabled) disabled @endif>
-                <input class="form-check-input {{ $errors->has('is_visible_on_site') ? 'is-invalid' : '' }}" type="checkbox" name="is_visible_on_site" {{ old('is_visible_on_site', $race->is_visible_on_site) ? 'checked' : "" }} value="1" @if($disabled) disabled @endif>
-                @if ($errors->has('is_visible_on_site'))
-                <div class="invalid-feedback">{{ $errors->first('is_visible_on_site') }}</div>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
 
 @push('after-styles')
 @endpush

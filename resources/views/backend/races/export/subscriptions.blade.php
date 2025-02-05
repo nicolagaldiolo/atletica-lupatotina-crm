@@ -1,7 +1,7 @@
 <table>
     <thead>
         <tr>
-            <td>{{ __('Nome') }}</td>
+            <td>{{ __('Nome')}}</td>
             <td>{{ __('Cognome') }}</td>
             <td>{{ __('Genere') }}</td>
             <td>{{ __('Telefono') }}</td>
@@ -50,7 +50,7 @@
                     @endif
                 </td>
                 <td>{{ $subscription->fee->name }}</td>
-                <td>@money($subscription->fee->amount)</td>
+                <td>@value($subscription->fee->amount)</td>
                 <td>
                     @if($subscription->fee->expired_at)
                         @date($subscription->fee->expired_at)
@@ -58,9 +58,9 @@
                         &nbsp; 
                     @endif
                 </td>
-                <td>@money($subscription->custom_amount)</td>
-                <td>@if($subscription->voucher && $subscription->voucher->type == App\Enums\VoucherType::Credit)@money($subscription->voucher->amount_calculated)@else &nbsp; @endif</td>
-                <td>@if($subscription->voucher && $subscription->voucher->type == App\Enums\VoucherType::Penalty)@money($subscription->voucher->amount_calculated)@else &nbsp; @endif</td>
+                <td>@value($subscription->custom_amount)</td>
+                <td>@if($subscription->voucher && $subscription->voucher->type == App\Enums\VoucherType::Credit)@value($subscription->voucher->amount_calculated)@else &nbsp; @endif</td>
+                <td>@if($subscription->voucher && $subscription->voucher->type == App\Enums\VoucherType::Penalty)@value($subscription->voucher->amount_calculated)@else &nbsp; @endif</td>
                 <td>
                     @if($subscription->payed_at) 
                         @date($subscription->payed_at) 

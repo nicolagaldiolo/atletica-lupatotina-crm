@@ -12,8 +12,9 @@ var App = function($) {
             var data = [];
             data.push(new Date(date).toLocaleDateString("it-IT", options));
             if(time){
-                data.push(new Date(date).toLocaleTimeString("it-IT", options));
+                data.push(new Date(date).toLocaleTimeString("it-IT"));
             }
+
             return data.join(" ");
         }
         return null;
