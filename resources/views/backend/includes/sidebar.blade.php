@@ -3,6 +3,9 @@
         <a href="{{ config('app.url') }}">
             <img class="sidebar-brand-full" src="{{asset('img/logo.png')}}" height="60" alt="{{ app_name() }}">
             <img class="sidebar-brand-narrow" src="{{asset('img/logo.png')}}" height="60" alt="{{ app_name() }}">
+            @if (!App::environment('production'))
+                <span class="badge bg-success ms-1">{{ Illuminate\Support\Str::ucfirst(Illuminate\Support\Facades\App::environment()) }}</span>
+            @endif
         </a>
     </div>
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>

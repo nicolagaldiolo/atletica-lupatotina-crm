@@ -29,7 +29,7 @@
                                 <option>2025</option>
                             </select>
                             <button class="btn btn-primary" type="button">
-                                <i class="fas fa-download"></i> {{ _('Download report') }}
+                                <i class="fas fa-download"></i> {{ __('Download report') }}
                             </button>
                         </div>
                     @endcan

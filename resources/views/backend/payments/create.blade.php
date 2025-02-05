@@ -88,11 +88,11 @@
                                                         $id_switch = 'flexSwitchCheckDefault_' . $athlete->id . '_' . $fee->id; 
                                                     @endphp
                                                     <input type="hidden" value="0" name="payments[{{ $fee->athletefee->id }}][bank_transfer]">
-                                                    <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $fee->athletefee->id }}][bank_transfer]" role="switch" id="{{ $id_switch }}">
+                                                    <input class="form-check-input input-switch" type="checkbox" value="1" name="payments[{{ $fee->athletefee->id }}][bank_transfer]" role="switch" id="{{ $id_switch }}">
                                                     <label class="form-check-label" for="{{ $id_switch }}"><i class="fa-solid fa-landmark"></i> {{ __('Bonifico') }}</label>
                                                 </div>
                                             </div>
-                                            <select class="form-select" name="payments[{{ $fee->athletefee->id }}][cashed_by]" id="inputGroupSelect01">
+                                            <select class="form-select" name="payments[{{ $fee->athletefee->id }}][cashed_by]">
                                                 @foreach ($accountants as $accountant)
                                                     <option @if(Auth::id() == $accountant->id) selected @endif value="{{ $accountant->id }}">{{ $accountant->name }}</option>
                                                 @endforeach
@@ -128,4 +128,17 @@
 @endpush
 
 @push ('after-scripts')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.input-switch').on('change', function(event) {
+            let is_checked = $(this).is(':checked');
+            let item = $(this).closest('.input-group').find('.form-select');
+            if(is_checked){
+                item.addClass('invisible');
+            }else{
+                item.removeClass('invisible');
+            }
+        });
+    });
+</script>
 @endpush
