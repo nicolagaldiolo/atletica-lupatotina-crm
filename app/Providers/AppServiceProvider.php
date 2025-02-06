@@ -26,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
             return "<?php echo number_format($amount, 2, ',', '.') . ' &euro;'; ?>";
         });
 
+        Blade::directive('value', function ($amount) {
+            return "<?php echo number_format($amount, 2, ',', '.'); ?>";
+        });
+
         Blade::directive('date', function ($date) {
             return "<?php echo ($date)->format('d/m/Y'); ?>";
         });

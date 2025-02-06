@@ -19,9 +19,7 @@ class Race extends Model
     protected $fillable = [
         'name',
         'distance',
-        'date',
-        'is_subscrible',
-        'subscrible_expiration'        
+        'date'
     ];
 
     /**
@@ -30,9 +28,7 @@ class Race extends Model
      * @var array
      */
     protected $casts = [
-        'date' => 'datetime',
-        'subscrible_expiration' => 'datetime',
-        'is_subscrible' => 'boolean'
+        'date' => 'datetime'
     ];
 
     public function athleteFee(): HasManyThrough

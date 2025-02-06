@@ -74,6 +74,7 @@
         autoWidth: true,
         responsive: true,
         ajax: '{{ route("races.athletes", $race) }}',
+        order: [[1, 'asc']],
         columns: [
             {
                 data: 'id',

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProceedExport;
 use App\Models\AthleteFee;
 use App\Models\Proceed;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProceedController extends Controller
 {
@@ -117,15 +120,42 @@ class ProceedController extends Controller
 
     protected function getProceedRangePeriod()
     {
-        $startRange = Carbon::now()->subMonths(3)->startOfMonth();
-        $endRange = Carbon::now()->endOfMonth();
+        $all_proceed = Proceed::toDeduct()->orderBy('payed_at', 'asc')->get();
+        $startRange = $all_proceed->first()->payed_at->startOfMonth();
+        $endRange = $all_proceed->last()->payed_at->endOfMonth();
         
         return [
-            'start_range' => Carbon::now()->subMonths(3)->startOfMonth(),
-            'end_range' => Carbon::now()->endOfMonth(),
+            'start_range' => $startRange,
+            'end_range' => $endRange,
             'current_period' => Carbon::now(),
             'periods' => CarbonPeriod::create($startRange->format('Y-m-d'), '1 month', $endRange->format('Y-m-d'))
         ];
+    }
+
+    public function export()
+    {
+        $this->authorize('deductPayment', AthleteFee::class);
+        
+        $filename = Str::slug("Iscrizione") . ".xlsx";
+
+        $accounts = User::whereHas('proceeds')->with([
+            'proceeds' => function($query){
+                $query->with(['athlete', 'fee.race'])
+                ->orderByRaw('athlete_id');
+            }
+        ])->get()->reduce(function($arr, $item){
+            $arr[$item->name] = $item->proceeds->groupBy(function ($i, int $key) {
+                if($i->deduct_at){
+                    return $i->deduct_at->startOfMonth()->format('Y-m');
+                }else{
+                    return '0000-00';
+                }
+            })->sort();
+            
+            return $arr;
+        }, []);
+
+        return Excel::download(new ProceedExport($accounts), $filename);
     }
 
 }

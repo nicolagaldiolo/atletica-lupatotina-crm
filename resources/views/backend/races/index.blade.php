@@ -49,8 +49,8 @@
                             </th>
                             <th>{{ __('Nome') }}</th>
                             <th>{{ __('Data') }}</th>
+                            <th>{{ __('Distanza') }}</th>
                             <th>{{ __('Iscrizioni') }}</th>
-                            <th>{{ __('Chiusura iscrizioni') }}</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -99,6 +99,11 @@
                 },
             },
             {
+                data: 'distance',
+                searchable: false,
+                orderable: false,
+            },
+            {
                 data: 'athlete_fee_count',
                 render(data) {
                     if(data){
@@ -108,12 +113,6 @@
                 },
                 orderable: false,
                 searchable: false,
-            },
-            {
-                data: 'subscrible_expiration',
-                render(data) {
-                    return App.date(data);
-                },
             },
             {
                 data: 'action',

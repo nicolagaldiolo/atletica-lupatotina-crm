@@ -1,4 +1,4 @@
-<div class="tab-pane fade @if($loop->first)active show @endif" id="account-{{$account->id}}" role="tabpanel" aria-labelledby="account-{{$account->id}}-tab" tabindex="{{ $loop->index }}">
+<div class="tab-pane fade @if($is_first)active show @endif" id="account-{{$user_id}}" role="tabpanel" aria-labelledby="account-{{$user_id}}-tab">
     <div class="row">
         <div class="col-12 col-xl-7">
             <div class="p-3">
@@ -9,14 +9,14 @@
                 @can('deductPayment', App\Models\AthleteFee::class)
                     <div class="row">
                         <div class="ms-auto col-auto">
-                            <div style="display: none;" id="massUpdateContainer-{{ $account->id }}" class="mb-3 input-group input-group-sm">
+                            <div style="display: none;" id="massUpdateContainer-{{ $user_id }}" class="mb-3 input-group input-group-sm">
                                 <label class="input-group-text">{{ __('Seleziona periodo') }}</label>
-                                <select id="massUpdatePeriod-{{ $account->id }}" class="form-select">
+                                <select id="massUpdatePeriod-{{ $user_id }}" class="form-select">
                                     @foreach ($proceedRangePeriod['periods'] as $key => $date)
                                         <option value="{{ $date->endOfMonth() }}" @if($date->format('Y-m') == $proceedRangePeriod['current_period']->format('Y-m')) selected @endif>{{ $date->format('Y-m') }}</option>    
                                     @endforeach
                                 </select>
-                                <button id="massUpdate-{{ $account->id }}" class="btn btn-primary" type="button">
+                                <button id="massUpdate-{{ $user_id }}" class="btn btn-primary" type="button">
                                     <i class="fas fa-cash-register fa-lg"></i> {{ __('Scarica incasso') }}
                                 </button>
                             </div>
@@ -24,11 +24,11 @@
                     </div>
                 @endcan
                 
-                <table id="datatable-{{ $account->id }}" class="table table-bordered table-hover table-responsive-sm">
+                <table id="datatable-{{ $user_id }}" class="table table-bordered table-hover table-responsive-sm">
                     <thead>
                         <tr>
                             <th>
-                                <input type="checkbox" class="selectAll-{{ $account->id }}" name="selectAll">
+                                <input type="checkbox" class="selectAll-{{ $user_id }}" name="selectAll">
                             </th>
                             <th>
                                 {{ __('Socio') }}
@@ -58,7 +58,7 @@
                 <div class="alert alert-success" role="alert">
                     <i class="fas fa-chart-line fa-lg"></i> <strong>{{ __('Incassato scaricato') }}</strong></h4>
                 </div>
-                <table id="datatable-deducted-{{ $account->id }}" class="table table-bordered table-hover table-responsive-sm">
+                <table id="datatable-deducted-{{ $user_id }}" class="table table-bordered table-hover table-responsive-sm">
                     <thead>
                         <tr>
                             <th>
@@ -92,7 +92,7 @@
         return dt.rows({ selected: true }).data().toArray();
     }
 
-    let dataTable_deducted_{{ $account->id }} = $('#datatable-deducted-{{ $account->id }}').DataTable({
+    let dataTable_deducted_{{ $user_id }} = $('#datatable-deducted-{{ $user_id }}').DataTable({
         processing: true,
         serverSide: true,
         autoWidth: true,
@@ -126,14 +126,13 @@
             //https://stackoverflow.com/questions/29725119/datatables-adding-json-data-to-footer-tfoot
             var response = this.api().ajax.json();
             if(response){
-                console.log("nicola", response);
                 $(this.api().column(0).footer()).html("Totale");
                 $(this.api().column(1).footer()).html(App.money(response.total));
             }
         }
     });
 
-    let dataTable_{{ $account->id }} = $('#datatable-{{ $account->id }}').DataTable({
+    let dataTable_{{ $user_id }} = $('#datatable-{{ $user_id }}').DataTable({
         processing: true,
         serverSide: true,
         autoWidth: true,
@@ -184,34 +183,34 @@
     });
     
     if(canDeductPayment){
-        let massUpdateBtnContainer_{{ $account->id }} = $('#massUpdateContainer-{{ $account->id }}');
-        let massUpdateBtn_{{ $account->id }} = $('#massUpdate-{{ $account->id }}');
-        let massUpdatePeriod_{{ $account->id }} = $('#massUpdatePeriod-{{ $account->id }}');
-        let selectAllBtn_{{ $account->id }} = $(".selectAll-{{ $account->id }}");
+        let massUpdateBtnContainer_{{ $user_id }} = $('#massUpdateContainer-{{ $user_id }}');
+        let massUpdateBtn_{{ $user_id }} = $('#massUpdate-{{ $user_id }}');
+        let massUpdatePeriod_{{ $user_id }} = $('#massUpdatePeriod-{{ $user_id }}');
+        let selectAllBtn_{{ $user_id }} = $(".selectAll-{{ $user_id }}");
 
-        dataTable_{{ $account->id }}.on('select deselect', function ( e, dt, type, indexes ) {
+        dataTable_{{ $user_id }}.on('select deselect', function ( e, dt, type, indexes ) {
             if ( type === 'row' ) {
                 if(dataTableGetSelectedRows(dt).length){
-                    massUpdateBtnContainer_{{ $account->id }}.show();
+                    massUpdateBtnContainer_{{ $user_id }}.show();
                 }else{
-                    massUpdateBtnContainer_{{ $account->id }}.hide();
+                    massUpdateBtnContainer_{{ $user_id }}.hide();
                 }
             }
         });
 
-        selectAllBtn_{{ $account->id }}.on( "click", function(e) {
+        selectAllBtn_{{ $user_id }}.on( "click", function(e) {
             if ($(this).is( ":checked" )) {
-                dataTable_{{ $account->id }}.rows().select();
+                dataTable_{{ $user_id }}.rows().select();
             } else {
-                dataTable_{{ $account->id }}.rows().deselect();
+                dataTable_{{ $user_id }}.rows().deselect();
             }
         });
 
-        massUpdateBtn_{{ $account->id }}.click( function (e) {
+        massUpdateBtn_{{ $user_id }}.click( function (e) {
             e.preventDefault();
 
             if(confirm("Sei sicuro?")){
-                let selectedRows = dataTableGetSelectedRows(dataTable_{{ $account->id }});
+                let selectedRows = dataTableGetSelectedRows(dataTable_{{ $user_id }});
                 if(selectedRows.length){
                     
                     let ids = selectedRows.map(function(item){
@@ -223,15 +222,15 @@
                         url: '{{ route("proceeds.update", [$raceType, $account->id]) }}',
                         data: {
                             _token: '{{ csrf_token() }}',
-                            period: massUpdatePeriod_{{ $account->id }}.val(),
+                            period: massUpdatePeriod_{{ $user_id }}.val(),
                             ids: ids
                         }
 
                     }).done(function(data) {
-                        dataTable_{{ $account->id }}.draw(false);
-                        dataTable_deducted_{{ $account->id }}.draw(false);
-                        selectAllBtn_{{ $account->id }}.prop('checked', false);
-                        massUpdateBtnContainer_{{ $account->id }}.hide();
+                        dataTable_{{ $user_id }}.draw(false);
+                        dataTable_deducted_{{ $user_id }}.draw(false);
+                        selectAllBtn_{{ $user_id }}.prop('checked', false);
+                        massUpdateBtnContainer_{{ $user_id }}.hide();
                     }).fail(function(jqXHR, textStatus, errorThrown) {
                         let message = (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.message) ? jqXHR.responseJSON.message : 'Errore del server, impossibile elaborare la richiesta';
                         alert(message);
@@ -244,10 +243,10 @@
                     alert("Nessuna riga selezionata");
                 }
             }else{
-                dataTable_{{ $account->id }}.draw(false);
-                dataTable_deducted_{{ $account->id }}.draw(false);
-                selectAllBtn_{{ $account->id }}.prop('checked', false);
-                massUpdateBtnContainer_{{ $account->id }}.hide();
+                dataTable_{{ $user_id }}.draw(false);
+                dataTable_deducted_{{ $user_id }}.draw(false);
+                selectAllBtn_{{ $user_id }}.prop('checked', false);
+                massUpdateBtnContainer_{{ $user_id }}.hide();
             }
         });
     }
