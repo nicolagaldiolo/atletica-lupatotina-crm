@@ -9,7 +9,11 @@
     <table>
         <thead>
             <tr>
-                <td style="background:#CFE2F3; font-weight:bold; text-align:center;" colspan="4">@if($key == '0000-00') {{ __('Incassato da scaricare')}} @else {{ __('Incassato il ')}} {{ $key }} @endif</td>
+                @if($key == '0000-00')
+                <td style="background:#CFE2F3; font-weight:bold; text-align:center;" colspan="4">{{ __('Incassato da scaricare')}}</td>
+                @else
+                <td style="background:#D5F1DE; font-weight:bold; text-align:center;" colspan="4">{{ __('Scaricato il ')}} {{ $key }}</td>
+                @endif
             </tr>
             <tr>
                 <td style="font-weight:bold;">{{ __('Socio') }}</td>
