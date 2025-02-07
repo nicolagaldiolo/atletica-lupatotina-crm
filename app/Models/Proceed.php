@@ -40,13 +40,37 @@ class Proceed extends Model
         return $this->belongsTo(Fee::class);
     }
 
+    public function cashed(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'cashed_by', 'id');
+    }
+
+    public function scopeDeducible(Builder $query): void
+    {
+        $query->where(function($query){
+            $query->byUser();
+        })->orWhere(function($query){
+            $query->ByBankTransfer();
+        });
+    }
+
+    public function scopeByUser(Builder $query): void
+    {
+        $query->where('bank_transfer', 0)->whereNotNull('cashed_by');
+    }
+    
+    public function scopeByBankTransfer(Builder $query): void
+    {
+        $query->where('bank_transfer', 1)->whereNull('cashed_by');
+    }
+
     public function scopeToDeduct(Builder $query): void
     {
-        $query->whereNull('deduct_at');
+        $query->deducible()->whereNull('deduct_at');
     }
 
     public function scopeDeducted(Builder $query): void
     {
-        $query->whereNotNull('deduct_at');
+        $query->deducible()->whereNotNull('deduct_at');
     }
 }

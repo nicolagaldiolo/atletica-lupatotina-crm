@@ -2,14 +2,15 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\Exportable;
+use Illuminate\Support\Str;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
 class ProceedExportPage implements FromView, WithColumnFormatting, ShouldAutoSize, WithStyles, WithTitle
 {
@@ -20,7 +21,7 @@ class ProceedExportPage implements FromView, WithColumnFormatting, ShouldAutoSiz
 
     public function __construct($proceeds, $title)
     {
-        $this->title = $title;
+        $this->title = Str::ucfirst($title);
         $this->proceeds = $proceeds;
     }
 
