@@ -27,22 +27,22 @@ class ProceedController extends Controller
         })->get();
         
         $proceedRangePeriod = $this->getProceedRangePeriod();
-        $periods = $proceedRangePeriod['periods'];
         $currentPeriod = $proceedRangePeriod['current_period'];
+        $yearForExport = $proceedRangePeriod['year_for_export'];
         
-        return view('backend.proceeds.index', compact('proceedRangePeriod', 'accounts', 'raceType'));
+        return view('backend.proceeds.index', compact('proceedRangePeriod', 'accounts', 'yearForExport', 'currentPeriod', 'raceType'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($raceType, User $user = null)
+    public function show($raceType, $user)
     {
         $this->authorize('registerPaymentRace', AthleteFee::class);
 
         if (request()->ajax()) {
-            $builder = $user->proceeds()->toDeduct()
-                ->whereHas('fee.race', function($query) use($raceType){
+            $user = ($user = intval($user)) ? User::whereHas('proceeds')->findOrFail($user) : null; 
+            $builder = ($user ? $user->proceeds() : Proceed::byBankTransfer())->toDeduct()->whereHas('fee.race', function($query) use($raceType){
                     $query->type($raceType);
                 })
                 ->with(['athlete', 'fee.race'])
@@ -65,12 +65,14 @@ class ProceedController extends Controller
         }
     }
 
+
     public function deducted($raceType, User $user)
     {
         $this->authorize('registerPaymentRace', AthleteFee::class);
 
         if (request()->ajax()) {
-            $builder = $user->proceeds()->deducted()->whereHas('fee.race', function($query) use($raceType){
+            $user = ($user = intval($user)) ? User::whereHas('proceeds')->findOrFail($user) : null; 
+            $builder = ($user ? $user->proceeds() : Proceed::byBankTransfer())->deducted()->whereHas('fee.race', function($query) use($raceType){
                 $query->type($raceType);
             })->selectRaw('DATE_FORMAT(deduct_at, "%Y-%m") as deduct_at, sum(custom_amount) as amount')
                 ->groupByRaw('DATE_FORMAT(deduct_at, "%Y-%m")');
@@ -85,15 +87,16 @@ class ProceedController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $raceType, User $user)
+    public function update(Request $request, $raceType, $user)
     {
         $this->authorize('deductPayment', AthleteFee::class);
         
         if (request()->ajax()) {
-
-            $available_ids = $user->proceeds()->toDeduct()->whereHas('fee.race', function($query) use($raceType){
+            $user = ($user = intval($user)) ? User::whereHas('proceeds')->findOrFail($user) : null; 
+            $available_ids = ($user ? $user->proceeds() : Proceed::byBankTransfer())->whereHas('fee.race', function($query) use($raceType){
                 $query->type($raceType);
-            })->pluck('id')->toArray();
+            })->toDeduct()->pluck('id')->toArray();
+
             $proceedRangePeriod = $this->getProceedRangePeriod();
             
             $this->validate($request, [
@@ -105,8 +108,8 @@ class ProceedController extends Controller
                     "before_or_equal:{$proceedRangePeriod['end_range']}"
                 ]
             ]);
-
-            $user->proceeds()->toDeduct()->whereHas('fee.race', function($query) use($raceType){
+            
+            ($user ? $user->proceeds() : Proceed::byBankTransfer())->toDeduct()->whereHas('fee.race', function($query) use($raceType){
                 $query->type($raceType);
             })->whereIn('id', $request->get('ids'))->get()->each(function($proced) use($request){
                 $proced->update([
@@ -121,40 +124,60 @@ class ProceedController extends Controller
     protected function getProceedRangePeriod()
     {
         $all_proceed = Proceed::toDeduct()->orderBy('payed_at', 'asc')->get();
+        
+        $year_for_export = collect([
+            ...Proceed::deducted()->select('deduct_at')->groupBy('deduct_at')->get()->map(function($item){
+                return $item->deduct_at->format('Y');
+            }),
+            ...Proceed::toDeduct()->select('payed_at')->groupBy('payed_at')->get()->map(function($item){
+                return $item->payed_at->format('Y');
+            })
+        ])->unique()->sort()->values();
+
         $startRange = $all_proceed->first()->payed_at->startOfMonth();
         $endRange = $all_proceed->last()->payed_at->endOfMonth();
-        
-        return [
+
+        $data = [
             'start_range' => $startRange,
             'end_range' => $endRange,
             'current_period' => Carbon::now(),
-            'periods' => CarbonPeriod::create($startRange->format('Y-m-d'), '1 month', $endRange->format('Y-m-d'))
+            'periods' => CarbonPeriod::create($startRange->format('Y-m-d'), '1 month', $endRange->format('Y-m-d')),
+            'year_for_export' => $year_for_export
         ];
+
+        return $data;
     }
 
-    public function export()
+    public function export(Request $request)
     {
         $this->authorize('deductPayment', AthleteFee::class);
-        
-        $filename = Str::slug("Iscrizione") . ".xlsx";
 
-        $accounts = User::whereHas('proceeds')->with([
-            'proceeds' => function($query){
-                $query->with(['athlete', 'fee.race'])
-                ->orderByRaw('athlete_id');
-            }
-        ])->get()->reduce(function($arr, $item){
-            $arr[$item->name] = $item->proceeds->groupBy(function ($i, int $key) {
-                if($i->deduct_at){
-                    return $i->deduct_at->startOfMonth()->format('Y-m');
-                }else{
-                    return '0000-00';
-                }
-            })->sort();
-            
+        $proceedRangePeriod = $this->getProceedRangePeriod();
+        $this->validate($request, [
+            'year' => [
+                'required', 
+                Rule::in($proceedRangePeriod['year_for_export']->toArray())
+            ]
+        ]);
+        
+        $year_to_export = $request->get('year');
+
+        $accounts = Proceed::deducible()->where(function($query) use($year_to_export){
+            $query->where(function($q) use($year_to_export){
+                $q->toDeduct()->whereRaw("YEAR(payed_at) = {$year_to_export}");
+            })->orWhere(function($q) use($year_to_export){
+                $q->deducted()->whereRaw("YEAR(deduct_at) = {$year_to_export}");
+            });
+        })->with(['cashed', 'athlete', 'fee.race'])->orderBy('bank_transfer')->orderBy('cashed_by')->orderByRaw('athlete_id')->get()->reduce(function($arr, $item){
+            $key = $item->cashed->name ?? 'bonifico';
+
+            $proceed_key = $item->deduct_at ? $item->deduct_at->startOfMonth()->format('Y-m') : '0000-00';
+
+            $arr[$key][$proceed_key][] = $item;
             return $arr;
         }, []);
 
+        $filename = Str::slug("Atletica lupatotina incassi {$year_to_export}") . ".xlsx";
         return Excel::download(new ProceedExport($accounts), $filename);
     }
 
