@@ -20,7 +20,7 @@ class ImpersonateServiceProvider extends ServiceProvider {
                     $otherUsers = $otherUsers->where('id', '<>', $impersonator);
                 }
 
-                return $view->with('otherUsers', $otherUsers->get());
+                return $view->with('otherUsers', $otherUsers->orderBy('name')->get());
             }
         });
 

@@ -7,7 +7,7 @@
             <img class="sidebar-brand-full" src="{{asset('img/logo.png')}}" height="46" alt="{{ app_name() }}">
         </a>
         
-        <ul class="header-nav">
+        <ul class="header-nav align-items-center">
 
             @if(auth()->user()->canImpersonate())
                 <li class="nav-item dropdown">
@@ -16,19 +16,13 @@
                             <i class="fa-solid fa-arrow-right-from-bracket"></i> {{ auth()->user()->name }}
                         </a>
                     @else
-                        <a class="nav-link" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa-solid fa-users"></i> {{ __('Impersonate')}}
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end pt-0">
-                            <div class="dropdown-header bg-light py-2">
-                                <div class="fw-semibold">{{ __('Impersonate User') }}</div>
-                            </div>
+                        <i class="fa-solid fa-users"></i>
+                        <select class="form-select myselect2 impersonate-users" name="state">
+                            <option>Impersonifica utente</option>
                             @foreach($otherUsers as $user)
-                            <a class="dropdown-item" href="{{ route('impersonate', $user->id) }}">
-                                {{ $user->name }}
-                            </a>
+                                <option value="{{ route('impersonate', $user->id) }}">{{ $user->name }}</option>
                             @endforeach
-                        </div>
+                        </select>
                     @endif
                 </li>
             @endif
@@ -78,3 +72,13 @@
         </div>
     </div>
 </header>
+
+@push ('after-scripts')
+<script>
+    $( document ).ready(function() {
+        $(".impersonate-users").on("change", function (e) { 
+            window.location.replace(e.target.value);
+        });
+    });
+</script>
+@endpush

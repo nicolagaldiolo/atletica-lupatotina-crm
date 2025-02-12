@@ -16,6 +16,7 @@
     @vite(['resources/sass/app-backend.scss', 'resources/js/app-backend.js'])
 
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
 
     @stack('after-styles')
@@ -55,9 +56,10 @@
     </div>
 
     <script type="text/javascript" src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/select2/dist/js/select2.full.min.js') }}"></script>
     <script>
 
-function newexportaction(e, dt, button, config) {
+        function newexportaction(e, dt, button, config) {
          var self = this;
          var oldStart = dt.settings()[0]._iDisplayStart;
          dt.one('preXhr', function (e, s, data) {

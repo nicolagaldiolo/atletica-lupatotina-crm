@@ -40,6 +40,10 @@ var App = function($) {
         $('body').tooltip({
             selector: '[data-toggle="tooltip"]'
         });
+
+        $('.myselect2').select2({
+            placeholder: "Seleziona un opzione",
+        });
     };
 
     return {
