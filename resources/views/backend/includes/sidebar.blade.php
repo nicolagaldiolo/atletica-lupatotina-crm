@@ -40,10 +40,18 @@
 
         @can('viewAny', App\Models\Race::class)
             <li class="nav-item">
-                <a class="nav-link @if(Route::is('races.*')) active @endif" href="{{ route('races.index') }}">
+                <a class="nav-link @if(Route::is('races.*')) active @endif" href="{{ route('races.index', App\Enums\RaceType::Race) }}">
                     <i class="nav-icon fa-solid fa-flag-checkered"></i>&nbsp;{{ __('Gare') }}
                 </a>
             </li>
+        @endcan
+
+        @can('viewAny', App\Models\Race::class)
+        <li class="nav-item">
+            <a class="nav-link @if(Route::is('races.*')) active @endif" href="{{ route('races.index', App\Enums\RaceType::Track) }}">
+                <i class="nav-icon fa-solid fa-flag-checkered"></i>&nbsp;{{ __('Pista') }}
+            </a>
+        </li>
         @endcan
 
         @can('report', App\Models\Athlete::class)
@@ -54,30 +62,53 @@
             </li>
         @endcan
 
-        @if (Gate::any(['subscribe', 'registerPayment'], App\Models\AthleteFee::class))
+        @if (Gate::any(['subscribeRace', 'registerPaymentRace'], App\Models\AthleteFee::class))
             <li class="nav-title"><a>{{ __('Registrazioni') }}</a></li>
         @endif
 
-        @can('registerPayment', App\Models\AthleteFee::class)
+        @can('registerPaymentRace', App\Models\AthleteFee::class)
             <li class="nav-item">
-                <a class="nav-link @if(Route::is('payments.*')) active @endif" href="{{ route('payments.create') }}">
-                    <i class="nav-icon fas fa-coins"></i>&nbsp;{{ __('Pagamenti') }}
+                <a class="nav-link @if(Route::is('payments.*')) active @endif" href="{{ route('payments.create', App\Enums\RaceType::Race) }}">
+                    <i class="nav-icon fas fa-coins"></i>&nbsp;{{ __('Pagamenti Gare') }}
                 </a>
             </li>
         @endcan
 
-        @can('subscribe', App\Models\AthleteFee::class)
+        @can('registerPaymentTrack', App\Models\AthleteFee::class)
             <li class="nav-item">
-                <a class="nav-link @if(Route::is('races.subscription.*')) active @endif" href="{{ route('races.subscription.create') }}">
-                    <i class="nav-icon fas fa-file-contract"></i>&nbsp;{{ __('Iscrizioni') }}
+                <a class="nav-link @if(Route::is('payments.*')) active @endif" href="{{ route('payments.create', App\Enums\RaceType::Track) }}">
+                    <i class="nav-icon fas fa-coins"></i>&nbsp;{{ __('Pagamenti Pista') }}
+                </a>
+            </li>
+        @endcan
+
+        @can('subscribeRace', App\Models\AthleteFee::class)
+            <li class="nav-item">
+                <a class="nav-link @if(Route::is('races.subscription.*')) active @endif" href="{{ route('races.subscription.create', App\Enums\RaceType::Race) }}">
+                    <i class="nav-icon fas fa-file-contract"></i>&nbsp;{{ __('Iscrizioni Gare') }}
+                </a>
+            </li>
+        @endcan
+        @can('subscribeTrack', App\Models\AthleteFee::class)
+            <li class="nav-item">
+                <a class="nav-link @if(Route::is('races.subscription.*')) active @endif" href="{{ route('races.subscription.create', App\Enums\RaceType::Track) }}">
+                    <i class="nav-icon fas fa-file-contract"></i>&nbsp;{{ __('Iscrizioni Pista') }}
                 </a>
             </li>
         @endcan
         
-        @can('registerPayment', App\Models\AthleteFee::class)
+        @can('registerPaymentRace', App\Models\AthleteFee::class)
             <li class="nav-item">
-                <a class="nav-link @if(Route::is('proceeds.*')) active @endif" href="{{ route('proceeds.index') }}">
-                    <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Incassi') }}
+                <a class="nav-link @if(Route::is('proceeds.*')) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Race) }}">
+                    <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Incassi Gare') }}
+                </a>
+            </li>
+        @endcan
+
+        @can('registerPaymentTrack', App\Models\AthleteFee::class)
+            <li class="nav-item">
+                <a class="nav-link @if(Route::is('proceeds.*')) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Track) }}">
+                    <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Incassi Pista') }}
                 </a>
             </li>
         @endcan

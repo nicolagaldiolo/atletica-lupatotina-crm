@@ -41,6 +41,11 @@ class Race extends Model
         return $this->hasMany(Fee::class);
     }
 
+    public function scopeType($query, $type): void
+    {
+        $query->where('type', $type);
+    }
+
     public function scopeSubscribeable($query): void
     {
         $query->where('date', '>=', Carbon::now()->startOfDay());

@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::get('/', [DashboardController::class, 'index'])->name('index');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('dashboard/certificates', [DashboardController::class, 'certificates'])->name('dashboard.certificates');
-    Route::get('dashboard/fees', [DashboardController::class, 'fees'])->name('dashboard.fees');
+    Route::get('dashboard/fees/{raceType}', [DashboardController::class, 'fees'])->name('dashboard.fees');
     
     Route::resource("roles", RolesController::class)->except('show');
 
@@ -54,7 +54,9 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::patch("users/{user}/unblock", [UserController::class, 'unblock'])->name('users.unblock');
     
     Route::resource('athletes', AthleteController::class);
-    Route::get('athletes/{athlete}/fees', [AthleteController::class, 'races'])->name('athletes.fees.index');
+    
+    Route::get('athletes/{athlete}/fees/{raceType}', [AthleteController::class, 'races'])->name('athletes.fees.index');
+
     Route::get('athletes/{athlete}/fees/{fee}/athletefee/{athleteFee}/edit', [AthleteController::class, 'editFee'])->name('athletes.fees.athletefee.edit');
     Route::patch('athletes/{athlete}/fees/{fee}/athletefee/{athleteFee}', [AthleteController::class, 'updateFee'])->name('athletes.fees.athletefee.update');
     Route::delete('athletes/{athlete}/fees/{fee}/athletefee/{athleteFee}', [AthleteController::class, 'destroySubscription'])->name('athletes.fees.athletefee.destroySubscription');
@@ -65,25 +67,29 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::get('reports/{year}/races', [ReportController::class, 'races'])->name('reports.races');
     Route::post('reports/download', [ReportController::class, 'download'])->name('reports.download');
 
-    Route::get('races/subscriptions', [RaceController::class, 'subscriptionCreate'])->name('races.subscription.create');
+    Route::get('races/subscriptions/{raceType}', [RaceController::class, 'subscriptionCreate'])->name('races.subscription.create');
     Route::post('races/subscriptions', [RaceController::class, 'subscriptionStore'])->name('races.subscription.store');
     Route::get('races/{race}/athletes', [RaceController::class, 'athletes'])->name('races.athletes');
     Route::get('races/{race}/subscriptions-list', [RaceController::class, 'subscriptionsList'])->name('races.subscriptions-list');
     
-    Route::resource('races', RaceController::class)->except('show');
+    Route::get('races/{raceType}', [RaceController::class, 'index'])->name('races.index');
+    Route::get('races/{raceType}/create', [RaceController::class, 'create'])->name('races.create');
+    Route::resource('races', RaceController::class)->except(['index', 'show', 'create']);
 
-    Route::get('proceeds', [ProceedController::class, 'index'])->name('proceeds.index');
-    Route::post('proceeds/export', [ProceedController::class, 'export'])->name('proceeds.export');
-    Route::get('proceeds/{user}', [ProceedController::class, 'show'])->name('proceeds.show');
-    Route::get('proceeds/{user}/deducted', [ProceedController::class, 'deducted'])->name('proceeds.deducted');
-    Route::patch('proceeds/{user}/deduct', [ProceedController::class, 'update'])->name('proceeds.update');
+    Route::get('proceeds/{raceType}', [ProceedController::class, 'index'])->name('proceeds.index');
+    Route::get('proceeds/export', [ProceedController::class, 'export'])->name('proceeds.export');
+    Route::get('proceeds/{raceType}/user/{user}', [ProceedController::class, 'show'])->name('proceeds.show');
+    Route::get('proceeds/{raceType}/user/{user}/deducted', [ProceedController::class, 'deducted'])->name('proceeds.deducted');
+    Route::patch('proceeds/{raceType}/user/{user}/deduct', [ProceedController::class, 'update'])->name('proceeds.update');
     
     
     Route::get('races/{race}/fees/{fee}/athletesSubscribeable', [RaceFeeController::class, 'athletesSubscribeable'])->name('races.fees.athletes-subscribeable');
     
     Route::resource('races.fees', RaceFeeController::class)->except('show');
-    
-    Route::resource('payments', PaymentController::class)->only(['create', 'store']);
+
+    Route::get('payments/{raceType}', [PaymentController::class, 'create'])->name('payments.create');
+    Route::post('payments/{raceType}', [PaymentController::class, 'store'])->name('payments.store');
+
 
     Route::resource('articles', ArticleController::class)->except('show');
 

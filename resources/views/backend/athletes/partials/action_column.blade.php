@@ -43,11 +43,20 @@
                             </a>
                         </li>
                     @endcan
-                    @if(Gate::any(['subscribe', 'registerPayment'], App\Models\AthleteFee::class) || Gate::check('viewAny', [App\Models\AthleteFee::class, $athlete]))
+                    @if(Gate::any(['subscribeRace', 'registerPaymentRace'], App\Models\AthleteFee::class) || Gate::check('viewAny', [App\Models\AthleteFee::class, $athlete]))
                         <li class="nav-item">
-                            <a class="nav-link @if(Route::is('athletes.fees.*')) active @endif" aria-current="page" href="{{ route("athletes.fees.index", $athlete) }}">
+                            <a class="nav-link @if(Route::is('athletes.fees.*')) active @endif" aria-current="page" href="{{ route("athletes.fees.index", [$athlete, "raceType" => App\Enums\RaceType::Race]) }}">
                                 <i class="fa-solid fa-flag-checkered"></i>
-                                {{ __('Iscrizioni') }}
+                                {{ __('Gare') }}
+                            </a>
+                        </li>
+                    @endif
+
+                    @if(Gate::any(['subscribeRace', 'registerPaymentRace'], App\Models\AthleteFee::class) || Gate::check('viewAny', [App\Models\AthleteFee::class, $athlete]))
+                        <li class="nav-item">
+                            <a class="nav-link @if(Route::is('athletes.fees.*')) active @endif" aria-current="page" href="{{ route("athletes.fees.index", [$athlete, "raceType" => App\Enums\RaceType::Track]) }}">
+                                <i class="fa-solid fa-flag-checkered"></i>
+                                {{ __('Pista') }}
                             </a>
                         </li>
                     @endif
@@ -76,9 +85,11 @@
             <x-backend.buttons.edit route='{{ route("athletes.certificates.index", $athlete) }}' small="true" icon="fas fa-briefcase-medical" title="{{ __('Certificati medici') }}"/>
         @endcan
         
-        @if (Gate::any(['subscribe', 'registerPayment'], App\Models\AthleteFee::class))
-            <x-backend.buttons.edit route='{{ route("athletes.fees.index", $athlete) }}' small="true" icon="fa-solid fa-flag-checkered" title="{{ __('Iscrizioni') }}"/>
+        @if (Gate::any(['subscribeRace', 'registerPaymentRace'], App\Models\AthleteFee::class))
+            <x-backend.buttons.edit route='{{ route("athletes.fees.index", [$athlete, "type" => 0]) }}' small="true" icon="fa-solid fa-flag-checkered" title="{{ __('Gare') }}"/>
         @endif
+
+        <x-backend.buttons.edit route='{{ route("athletes.fees.index", [$athlete, "type" => 1]) }}' small="true" icon="fa-solid fa-flag-checkered" title="{{ __('Pista') }}"/>
 
         @can('viewAny', App\Models\Voucher::class)
             <x-backend.buttons.edit route='{{ route("athletes.vouchers.index", $athlete) }}' small="true" icon="fas fa-tags" title="{{ __('Voucher') }}"/>

@@ -98,7 +98,7 @@
         autoWidth: true,
         responsive: true,
         ajax: {
-            url: '{{ route("proceeds.deducted", $user_id) }}',
+            url: '{{ route("proceeds.deducted", [$raceType, $account->id]) }}',
         },
         order: [[ 0, "desc" ]],
         columns: [
@@ -138,7 +138,7 @@
         autoWidth: true,
         responsive: true,
         ajax: {
-            url: '{{ route("proceeds.show", $user_id) }}',
+            url: '{{ route("proceeds.show", [$raceType, $account->id]) }}',
         },
         select: {
             style: 'multi',
@@ -219,7 +219,7 @@
 
                     $.ajax({
                         type: 'PATCH',
-                        url: '{{ route("proceeds.update", $user_id) }}',
+                        url: '{{ route("proceeds.update", [$raceType, $account->id]) }}',
                         data: {
                             _token: '{{ csrf_token() }}',
                             period: massUpdatePeriod_{{ $user_id }}.val(),

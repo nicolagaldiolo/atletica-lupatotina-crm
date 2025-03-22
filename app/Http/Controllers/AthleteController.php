@@ -159,11 +159,14 @@ class AthleteController extends Controller
         return redirect(route('athletes.index'));
     }
 
-    public function races(Athlete $athlete)
+    public function races(Athlete $athlete, $raceType)
     {
-        if (Gate::any(['subscribe', 'registerPayment'], AthleteFee::class) || Gate::check('viewAny', [AthleteFee::class, $athlete])) {
+        if (Gate::any(['subscribeRace', 'registerPaymentRace'], AthleteFee::class) || Gate::check('viewAny', [AthleteFee::class, $athlete])) {
             if (request()->ajax()) {
                 $builder = AthleteFee::with(['voucher', 'fee.race', 'cashed', 'owner'])
+                    ->whereHas('fee.race', function($query) use($raceType){
+                        $query->where('type', $raceType);
+                    })
                     ->leftJoinRelationship('fee.race')
                     ->where('athlete_id', $athlete->id);
     
@@ -179,7 +182,8 @@ class AthleteController extends Controller
                     return view('backend.athletes.fees.partials.action_column', compact('athleteFee'));
                 })->make(true);
             }else{
-                return view('backend.athletes.fees.index', compact('athlete'));
+                $i = $raceType;
+                return view('backend.athletes.fees.index', compact('athlete', 'raceType'));
             }
         }else{
             abort(403);
@@ -188,7 +192,7 @@ class AthleteController extends Controller
 
     public function editFee(Request $request, Athlete $athlete, Fee $fee, AthleteFee $athleteFee)
     {
-        $this->authorize('registerPayment', $athleteFee);
+        $this->authorize('registerPaymentRace', $athleteFee);
         
         $accountants = User::HandlePayments()->get();
         $athlete = $athleteFee->athlete;
@@ -199,7 +203,7 @@ class AthleteController extends Controller
 
     public function updateFee(Request $request, Athlete $athlete, Fee $fee, AthleteFee $athleteFee)
     {
-        $this->authorize('registerPayment', $athleteFee);
+        $this->authorize('registerPaymentRace', $athleteFee);
 
         $validated = $request->validate([
             'payed' => 'required|boolean',
@@ -218,7 +222,7 @@ class AthleteController extends Controller
 
     public function destroySubscription(Athlete $athlete, Fee $fee, AthleteFee $athleteFee)
     {
-        $this->authorize('subscribe', $athleteFee);
+        $this->authorize('subscribeRace', $athleteFee);
 
         $athleteFee->delete();
         Utility::flashMessage();
