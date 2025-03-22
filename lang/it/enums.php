@@ -2,6 +2,7 @@
 
 use App\Enums\GenderType;
 use App\Enums\MemberType;
+use App\Enums\RaceType;
 use App\Enums\VoucherType;
 
 return [
@@ -20,6 +21,11 @@ return [
     MemberType::class => [
         MemberType::Athlete => 'Atleta',
         MemberType::Supporter => 'Simpatizzante',
+    ],
+
+    RaceType::class => [
+        RaceType::Race => 'Gara',
+        RaceType::Track => 'Pista',
     ]
 
 ];

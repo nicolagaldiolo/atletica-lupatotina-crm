@@ -7,7 +7,7 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-    <x-backend-breadcrumb-item canurl="{{ Auth::user()->can('update', $race) }}" route="{{ route('races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item canurl="{{ Auth::user()->can('update', $race) }}" route="{{ route('races.edit', [$race->type, $race]) }}">{{ $race->name }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ __('Quote') }}</x-backend-breadcrumb-item>
 @endsection
 
@@ -21,7 +21,7 @@
         <x-backend.section-header>
             <x-slot name="toolbar">
                 @can('create', App\Models\Fee::class)
-                    <x-backend.buttons.create route="{{ route('races.fees.create', $race) }}" small="true" title="">
+                    <x-backend.buttons.create route="{{ route('races.fees.create', [$race->type, $race]) }}" small="true" title="">
                         {{ __('Aggiungi') }}
                     </x-backend.buttons.create>
                 @endcan
@@ -68,7 +68,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("races.fees.index", $race) }}',
+        ajax: '{{ route("races.fees.index", [$race->type, $race]) }}',
         columns: [
             {
                 data: 'id',

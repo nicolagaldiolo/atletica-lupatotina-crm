@@ -7,7 +7,7 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-    <x-backend-breadcrumb-item canurl="{{ Auth::user()->can('update', $race) }}" route="{{ route('races.edit', $race) }}">{{ $race->name }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item canurl="{{ Auth::user()->can('update', $race) }}" route="{{ route('races.edit', [$race->type, $race]) }}">{{ $race->name }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $entity }}</x-backend-breadcrumb-item>
 @endsection
 
@@ -21,7 +21,7 @@
         <x-backend.section-header>
             <x-slot name="toolbar">
                 @can('report', App\Models\Race::class)
-                    <x-backend.buttons.download route="{{ route('races.subscriptions-list', $race) }}" small="true" title="">
+                    <x-backend.buttons.download route="{{ route('races.subscriptions-list', [$race->type, $race]) }}" small="true" title="">
                         {{ __('Elenco iscritti') }}
                     </x-backend.buttons.download>
                 @endcan
@@ -73,7 +73,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("races.athletes", $race) }}',
+        ajax: '{{ route("races.athletes", [$race->type, $race]) }}',
         order: [[1, 'asc']],
         columns: [
             {

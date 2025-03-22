@@ -67,14 +67,17 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::get('reports/{year}/races', [ReportController::class, 'races'])->name('reports.races');
     Route::post('reports/download', [ReportController::class, 'download'])->name('reports.download');
 
-    Route::get('races/subscriptions/{raceType}', [RaceController::class, 'subscriptionCreate'])->name('races.subscription.create');
-    Route::post('races/subscriptions', [RaceController::class, 'subscriptionStore'])->name('races.subscription.store');
-    Route::get('races/{race}/athletes', [RaceController::class, 'athletes'])->name('races.athletes');
-    Route::get('races/{race}/subscriptions-list', [RaceController::class, 'subscriptionsList'])->name('races.subscriptions-list');
+    Route::get('races/{raceType}/subscriptions', [RaceController::class, 'subscriptionCreate'])->name('races.subscription.create');
+    Route::post('races/{raceType}/subscriptions', [RaceController::class, 'subscriptionStore'])->name('races.subscription.store');
+    Route::get('races/{raceType}/{race}/athletes', [RaceController::class, 'athletes'])->name('races.athletes');
+    Route::get('races/{raceType}/{race}/subscriptions-list', [RaceController::class, 'subscriptionsList'])->name('races.subscriptions-list');
     
     Route::get('races/{raceType}', [RaceController::class, 'index'])->name('races.index');
     Route::get('races/{raceType}/create', [RaceController::class, 'create'])->name('races.create');
-    Route::resource('races', RaceController::class)->except(['index', 'show', 'create']);
+    Route::post('races/{raceType}', [RaceController::class, 'store'])->name('races.store');
+    Route::get('races/{raceType}/{race}/edit', [RaceController::class, 'edit'])->name('races.edit');
+    Route::patch('races/{raceType}/{race}', [RaceController::class, 'update'])->name('races.update');
+    Route::delete('races/{raceType}/{race}', [RaceController::class, 'destroy'])->name('races.destroy');
 
     Route::get('proceeds/{raceType}', [ProceedController::class, 'index'])->name('proceeds.index');
     Route::get('proceeds/export', [ProceedController::class, 'export'])->name('proceeds.export');
@@ -82,14 +85,16 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::get('proceeds/{raceType}/user/{user}/deducted', [ProceedController::class, 'deducted'])->name('proceeds.deducted');
     Route::patch('proceeds/{raceType}/user/{user}/deduct', [ProceedController::class, 'update'])->name('proceeds.update');
     
-    
-    Route::get('races/{race}/fees/{fee}/athletesSubscribeable', [RaceFeeController::class, 'athletesSubscribeable'])->name('races.fees.athletes-subscribeable');
-    
-    Route::resource('races.fees', RaceFeeController::class)->except('show');
+    Route::get('races/{raceType}/{race}/fees', [RaceFeeController::class, 'index'])->name('races.fees.index');
+    Route::get('races/{raceType}/{race}/fees/create', [RaceFeeController::class, 'create'])->name('races.fees.create');
+    Route::post('races/{raceType}/{race}/fees', [RaceFeeController::class, 'store'])->name('races.fees.store');
+    Route::get('races/{raceType}/{race}/fees/{fee}/edit', [RaceFeeController::class, 'edit'])->name('races.fees.edit');
+    Route::patch('races/{raceType}/{race}/fees/{fee}', [RaceFeeController::class, 'update'])->name('races.fees.update');
+    Route::delete('races/{raceType}/{race}/fees/{fee}', [RaceFeeController::class, 'destroy'])->name('races.fees.destroy');
+    Route::get('races/{raceType}/{race}/fees/{fee}/athletesSubscribeable', [RaceFeeController::class, 'athletesSubscribeable'])->name('races.fees.athletes-subscribeable');
 
     Route::get('payments/{raceType}', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('payments/{raceType}', [PaymentController::class, 'store'])->name('payments.store');
-
 
     Route::resource('articles', ArticleController::class)->except('show');
 

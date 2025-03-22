@@ -15,18 +15,18 @@
 @endsection
 
 @section('content')
-{{ html()->modelForm($race, 'PATCH', route("races.update", $race))->class('form')->open() }}
+{{ html()->modelForm($race, 'PATCH', route("races.update", [$race->type, $race]))->class('form')->open() }}
 <div class="card">
 
     <div class="card-header">
         <div class="row">
             <div class="col">
                 @can('delete', $race)
-                    <x-backend.buttons.delete route='{{ route("races.destroy", $race) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+                    <x-backend.buttons.delete route='{{ route("races.destroy", [$race->type, $race]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                 @endcan
                 <div class="float-end">
                     @can('viewAny', App\Models\Race::class)
-                        <x-backend.buttons.return route='{{ route("races.index") }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
+                        <x-backend.buttons.return route='{{ route("races.index", $race->type) }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
                     @endcan
                     @can('update', $race)
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>

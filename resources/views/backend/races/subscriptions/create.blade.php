@@ -21,7 +21,7 @@
         </div>
     @else
         <div class="card">
-            {{ html()->form('POST', route("races.subscription.store"))->class('form')->open() }}
+            {{ html()->form('POST', route("races.subscription.store", $raceType))->class('form')->open() }}
                 <div class="card-header">
                     <div class="row">
                         <div class="col">
@@ -43,7 +43,7 @@
                                 @foreach ($races as $race)
                                     <optgroup label="{{ $race->name }}">
                                         @foreach ($race->fees as $fee)
-                                            <option data-race="{{ $race->id }}" data-fee="{{ $fee->id }}" value="{{ $fee->id }}" @if ($fee->id == old('fee_id')) selected @endif>{{ $race->name }} - {{ $fee->name }} (@money($fee->amount))</option>
+                                            <option data-type="{{ $race->type }}" data-race="{{ $race->id }}" data-fee="{{ $fee->id }}" value="{{ $fee->id }}" @if ($fee->id == old('fee_id')) selected @endif>{{ $race->name }} - {{ $fee->name }} (@money($fee->amount))</option>
                                         @endforeach
                                     </optgroup>
                                 @endforeach
@@ -86,10 +86,11 @@
     $(document).ready(function() {
         $('#fee_selector').on('change', function(event) {
             
+            var type = event.target.options[event.target.selectedIndex].dataset.type;
             var race_id = event.target.options[event.target.selectedIndex].dataset.race;
             var fee_id = event.target.options[event.target.selectedIndex].dataset.fee;
             
-            let endpoint_url = '{{ url("") }}/races/' + race_id + '/fees/' + fee_id + '/athletesSubscribeable';
+            let endpoint_url = '{{ url("") }}/races/' + type + '/' + race_id + '/fees/' + fee_id + '/athletesSubscribeable';
             
             $.ajax({
                 headers: {

@@ -74,19 +74,9 @@ class RaceController extends Controller
     public function store(RacesRequest $request)
     {
         $this->authorize('create', Race::class);
-        Race::create($request->validated());
+        $race = Race::create($request->validated());
         Utility::flashMessage();
-        return redirect(route('races.index'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
+        return redirect(route('races.index', $race->type));
     }
 
     /**
@@ -95,7 +85,7 @@ class RaceController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit(Race $race)
+    public function edit($raceType, Race $race)
     {
         $this->authorize('update', $race);
 
@@ -109,12 +99,12 @@ class RaceController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(RacesRequest $request, Race $race)
+    public function update(RacesRequest $request, $raceType, Race $race)
     {
         $this->authorize('update', $race);
         $race->update($request->validated());
         Utility::flashMessage();
-        return redirect(route('races.index'));
+        return redirect(route('races.index', $raceType));
     }
 
     /**
@@ -123,12 +113,12 @@ class RaceController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy(Race $race)
+    public function destroy($raceType, Race $race)
     {
         $this->authorize('delete', $race);
         $race->delete();
         Utility::flashMessage();
-        return redirect(route('races.index'));
+        return redirect(route('races.index', $raceType));
     }
 
     public function subscriptionCreate($raceType)
@@ -137,10 +127,10 @@ class RaceController extends Controller
 
         $races = Race::subscribeable()->type($raceType)->whereHas('fees')->with('fees')->get();
 
-        return view('backend.races.subscriptions.create', compact('races'));
+        return view('backend.races.subscriptions.create', compact('raceType', 'races'));
     }
 
-    public function subscriptionStore(RaceSubscriptionsRequest $request)
+    public function subscriptionStore(RaceSubscriptionsRequest $request, $raceType)
     {
         $fee = Fee::with('race')->findOrFail($request->get('fee_id'));
 
@@ -152,7 +142,7 @@ class RaceController extends Controller
         return redirect(route('races.subscription.create', $fee->race->type));
     }
 
-    public function athletes(Race $race)
+    public function athletes($raceType, Race $race)
     {
         $this->authorize('report', $race);
 
@@ -181,7 +171,7 @@ class RaceController extends Controller
         }
     }
 
-    public function subscriptionsList(Race $race)
+    public function subscriptionsList($raceType, Race $race)
     {
         $this->authorize('report', $race);
 

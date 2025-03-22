@@ -40,6 +40,7 @@
 
         @can('viewAny', App\Models\Race::class)
             <li class="nav-item">
+
                 <a class="nav-link @if(Route::is('races.*')) active @endif" href="{{ route('races.index', App\Enums\RaceType::Race) }}">
                     <i class="nav-icon fa-solid fa-flag-checkered"></i>&nbsp;{{ __('Gare') }}
                 </a>

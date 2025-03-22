@@ -18,6 +18,7 @@ class Race extends Model
 
     protected $fillable = [
         'name',
+        'type',
         'distance',
         'date'
     ];

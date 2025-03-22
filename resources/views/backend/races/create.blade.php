@@ -12,7 +12,7 @@
 
 @section('content')
 <div class="card">
-    {{ html()->form('POST', route("races.store"))->class('form')->open() }}
+    {{ html()->form('POST', route("races.store", $race->type))->class('form')->open() }}
         <div class="card-header">
             <div class="row">
                 <div class="col">

@@ -86,10 +86,10 @@
         @endcan
         
         @if (Gate::any(['subscribeRace', 'registerPaymentRace'], App\Models\AthleteFee::class))
-            <x-backend.buttons.edit route='{{ route("athletes.fees.index", [$athlete, "type" => 0]) }}' small="true" icon="fa-solid fa-flag-checkered" title="{{ __('Gare') }}"/>
+            <x-backend.buttons.edit route='{{ route("athletes.fees.index", [$athlete, App\Enums\RaceType::Race]) }}' small="true" icon="fa-solid fa-flag-checkered" title="{{ __('Gare') }}"/>
         @endif
 
-        <x-backend.buttons.edit route='{{ route("athletes.fees.index", [$athlete, "type" => 1]) }}' small="true" icon="fa-solid fa-flag-checkered" title="{{ __('Pista') }}"/>
+        <x-backend.buttons.edit route='{{ route("athletes.fees.index", [$athlete, App\Enums\RaceType::Track]) }}' small="true" icon="fa-solid fa-flag-checkered" title="{{ __('Pista') }}"/>
 
         @can('viewAny', App\Models\Voucher::class)
             <x-backend.buttons.edit route='{{ route("athletes.vouchers.index", $athlete) }}' small="true" icon="fas fa-tags" title="{{ __('Voucher') }}"/>

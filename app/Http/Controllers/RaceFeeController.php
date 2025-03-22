@@ -15,7 +15,7 @@ class RaceFeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Race $race)
+    public function index($raceType, Race $race)
     {
         $this->authorize('viewAny', Fee::class);
 
@@ -33,7 +33,7 @@ class RaceFeeController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Race $race)
+    public function create($raceType, Race $race)
     {
         $this->authorize('create', Fee::class);
         $fee = new Fee();
@@ -43,25 +43,18 @@ class RaceFeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(FeesRequest $request, Race $race)
+    public function store(FeesRequest $request, $raceType, Race $race)
     {
         $this->authorize('create', Fee::class);
         $race->fees()->create($request->validated());
         Utility::flashMessage();
-        return redirect(route('races.fees.index', $race));
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
+        return redirect(route('races.fees.index', [$raceType, $race]));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Race $race, Fee $fee)
+    public function edit($raceType, Race $race, Fee $fee)
     {
         $this->authorize('update', $fee);
         return view('backend.races.fees.edit', compact('race', 'fee'));
@@ -70,26 +63,26 @@ class RaceFeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(FeesRequest $request, Race $race, Fee $fee)
+    public function update(FeesRequest $request, $raceType, Race $race, Fee $fee)
     {
         $this->authorize('update', $fee);
         $fee->update($request->validated());
         Utility::flashMessage();
-        return redirect(route('races.fees.index', $race));
+        return redirect(route('races.fees.index', [$race->type, $race]));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Race $race, Fee $fee)
+    public function destroy($raceType, Race $race, Fee $fee)
     {
         $this->authorize('delete', $fee);
         $fee->delete();
         Utility::flashMessage();
-        return redirect(route('races.fees.index', $race));
+        return redirect(route('races.fees.index', [$race->type, $race]));
     }
 
-    public function athletesSubscribeable(Race $race, Fee $fee)
+    public function athletesSubscribeable($raceType, Race $race, Fee $fee)
     {
         $this->authorize('subscribeRace', AthleteFee::class);
         
