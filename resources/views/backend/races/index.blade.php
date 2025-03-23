@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Gare')
+    $entity = App\Enums\RaceType::getDescription($raceType);
 @endphp
 
 @section('title') {{ $entity }} @endsection

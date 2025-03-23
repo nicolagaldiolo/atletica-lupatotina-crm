@@ -66,7 +66,7 @@ class ProceedController extends Controller
     }
 
 
-    public function deducted($raceType, User $user)
+    public function deducted($raceType, $user)
     {
         $this->authorize('registerPaymentRace', AthleteFee::class);
 
