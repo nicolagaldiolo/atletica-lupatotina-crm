@@ -12,11 +12,11 @@
 
 @section('secondary-nav')
     <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
-        @can('create', App\Models\Race::class)
+        @canany(['createRace', 'createTrack'], App\Models\Race::class)
             <x-backend.buttons.create route="{{ route('races.create', $raceType) }}" small="true" title="">
                 {{ __('Aggiungi') }}
             </x-backend.buttons.create>
-        @endcan
+        @endcanany
     </div>
 @endsection
 

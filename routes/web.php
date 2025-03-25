@@ -80,7 +80,7 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::delete('races/{raceType}/{race}', [RaceController::class, 'destroy'])->name('races.destroy');
 
     Route::get('proceeds/{raceType}', [ProceedController::class, 'index'])->name('proceeds.index');
-    Route::get('proceeds/export', [ProceedController::class, 'export'])->name('proceeds.export');
+    Route::post('proceeds/{raceType}/export', [ProceedController::class, 'export'])->name('proceeds.export');
     Route::get('proceeds/{raceType}/user/{user}', [ProceedController::class, 'show'])->name('proceeds.show');
     Route::get('proceeds/{raceType}/user/{user}/deducted', [ProceedController::class, 'deducted'])->name('proceeds.deducted');
     Route::patch('proceeds/{raceType}/user/{user}/deduct', [ProceedController::class, 'update'])->name('proceeds.update');

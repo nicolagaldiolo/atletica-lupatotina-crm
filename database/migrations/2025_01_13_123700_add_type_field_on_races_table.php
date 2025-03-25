@@ -16,6 +16,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('races', function (Blueprint $table) {
+            $table->timestamp('date')->nullable()->change();
             $table->string('type')->after('name');
         });
 

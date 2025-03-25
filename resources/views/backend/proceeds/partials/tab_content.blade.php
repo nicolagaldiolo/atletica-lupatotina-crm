@@ -6,7 +6,7 @@
                     <i class="fas fa-cash-register fa-lg"></i> <strong>{{ __('Incassato da scaricare') }}</strong></h4>
                 </div>
 
-                @can('deductPayment', App\Models\AthleteFee::class)
+                @canany(['deductPaymentRace', 'deductPaymentTrack'], App\Models\AthleteFee::class)
                     <div class="row">
                         <div class="ms-auto col-auto">
                             <div style="display: none;" id="massUpdateContainer-{{ $user_id }}" class="mb-3 input-group input-group-sm">
@@ -16,13 +16,13 @@
                                         <option value="{{ $date->endOfMonth() }}" @if($date->format('Y-m') == $proceedRangePeriod['current_period']->format('Y-m')) selected @endif>{{ $date->format('Y-m') }}</option>    
                                     @endforeach
                                 </select>
-                                <button id="massUpdate-{{ $user_id }}" class="btn btn-primary" type="button">
-                                    <i class="fas fa-cash-register fa-lg"></i> {{ __('Scarica incasso') }}
+                                <button id="massUpdate-{{ $user_id }}" class="btn btn-success" type="button">
+                                    <i class="fas fa-cash-register fa-lg"></i> {{ __('Segna come incassato') }}
                                 </button>
                             </div>
                         </div>
                     </div>
-                @endcan
+                @endcanany
                 
                 <table id="datatable-{{ $user_id }}" class="table table-bordered table-hover table-responsive-sm">
                     <thead>
@@ -86,7 +86,7 @@
 
 <script type="module">
 
-    var canDeductPayment = @can('deductPayment', App\Models\AthleteFee::class) true @else false @endcan;
+    var canDeductPayment = @canany(['deductPaymentRace', 'deductPaymentTrack'], App\Models\AthleteFee::class) true @else false @endcanany;
 
     function dataTableGetSelectedRows(dt){
         return dt.rows({ selected: true }).data().toArray();

@@ -27,7 +27,13 @@ class RaceController extends Controller
 
     public function index($raceType)
     {
-        $this->authorize('viewAny', Race::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('viewAnyRace', Race::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('viewAnyTrack', Race::class);
+        }else{
+            abort(401);
+        }
 
         if (request()->ajax()) {
 
@@ -59,7 +65,14 @@ class RaceController extends Controller
      */
     public function create($raceType)
     {
-        $this->authorize('create', Race::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('createRace', Race::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('createTrack', Race::class);
+        }else{
+            abort(401);
+        }
+
         $race = new Race();
         $race->type = $raceType;
         return view('backend.races.create', compact('race'));
@@ -73,7 +86,16 @@ class RaceController extends Controller
      */
     public function store(RacesRequest $request)
     {
-        $this->authorize('create', Race::class);
+        $raceType = $request->get('type');
+
+        if($raceType == RaceType::Race){
+            $this->authorize('createRace', Race::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('createTrack', Race::class);
+        }else{
+            abort(401);
+        }
+        
         $race = Race::create($request->validated());
         Utility::flashMessage();
         return redirect(route('races.index', $race->type));
@@ -87,7 +109,13 @@ class RaceController extends Controller
      */
     public function edit($raceType, Race $race)
     {
-        $this->authorize('update', $race);
+        if($raceType == RaceType::Race){
+            $this->authorize('updateRace', $race);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('updateTrack', $race);
+        }else{
+            abort(401);
+        }
 
         return view('backend.races.edit', compact('race'));
     }
@@ -101,7 +129,14 @@ class RaceController extends Controller
      */
     public function update(RacesRequest $request, $raceType, Race $race)
     {
-        $this->authorize('update', $race);
+        if($raceType == RaceType::Race){
+            $this->authorize('updateRace', $race);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('updateTrack', $race);
+        }else{
+            abort(401);
+        }
+
         $race->update($request->validated());
         Utility::flashMessage();
         return redirect(route('races.index', $raceType));
@@ -115,7 +150,14 @@ class RaceController extends Controller
      */
     public function destroy($raceType, Race $race)
     {
-        $this->authorize('delete', $race);
+        if($raceType == RaceType::Race){
+            $this->authorize('deleteRace', $race);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('deleteTrack', $race);
+        }else{
+            abort(401);
+        }
+
         $race->delete();
         Utility::flashMessage();
         return redirect(route('races.index', $raceType));
@@ -123,7 +165,13 @@ class RaceController extends Controller
 
     public function subscriptionCreate($raceType)
     {
-        $this->authorize('subscribeRace', AthleteFee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('subscribeRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('subscribeTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
 
         $races = Race::subscribeable()->type($raceType)->whereHas('fees')->with('fees')->get();
 
@@ -132,10 +180,16 @@ class RaceController extends Controller
 
     public function subscriptionStore(RaceSubscriptionsRequest $request, $raceType)
     {
-        $fee = Fee::with('race')->findOrFail($request->get('fee_id'));
 
-        $this->authorize('subscribeRace', AthleteFee::class);
-        
+        if($raceType == RaceType::Race){
+            $this->authorize('subscribeRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('subscribeTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
+
+        $fee = Fee::with('race')->findOrFail($request->get('fee_id'));
         $fee->athletes()->syncWithoutDetaching($request->get('athletes', []));
         
         Utility::flashMessage();
@@ -144,7 +198,13 @@ class RaceController extends Controller
 
     public function athletes($raceType, Race $race)
     {
-        $this->authorize('report', $race);
+        if($raceType == RaceType::Race){
+            $this->authorize('reportRace', $race);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('reportTrack', $race);
+        }else{
+            abort(401);
+        }
 
         if (request()->ajax()) {
             $builder = AthleteFee::with(['voucher', 'athlete', 'fee'])->whereHas('fee', function($query) use($race){
@@ -173,7 +233,13 @@ class RaceController extends Controller
 
     public function subscriptionsList($raceType, Race $race)
     {
-        $this->authorize('report', $race);
+        if($raceType == RaceType::Race){
+            $this->authorize('reportRace', $race);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('reportTrack', $race);
+        }else{
+            abort(401);
+        }
 
         $race->load([
             'athleteFee' => [

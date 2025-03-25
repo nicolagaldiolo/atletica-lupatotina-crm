@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Athlete;
 use App\Classes\Utility;
+use App\Enums\RaceType;
 use App\Models\AthleteFee;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -17,7 +18,13 @@ class PaymentController extends Controller
      */
     public function create($raceType)
     {
-        $this->authorize('registerPaymentRace', AthleteFee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('registerPaymentRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('registerPaymentTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
 
         $athletes = Athlete::whereHas('fees', function($query) use($raceType){
             $query->whereNull('payed_at')->whereHas('race', function($query) use($raceType){
@@ -35,7 +42,7 @@ class PaymentController extends Controller
             'fees.athletefee',
         ])->get();
 
-        $accountants = User::HandlePayments()->get();
+        $accountants = User::HandlePaymentsRace()->get();
 
         return view('backend.payments.create', compact('athletes', 'accountants', 'raceType'));
     }
@@ -45,7 +52,13 @@ class PaymentController extends Controller
      */
     public function store(Request $request, $raceType)
     {
-        $this->authorize('registerPaymentRace', AthleteFee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('registerPaymentRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('registerPaymentTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
 
         $validated = $request->validate([
             'payments' => 'required|array',

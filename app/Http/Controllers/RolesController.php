@@ -283,7 +283,7 @@ class RolesController extends Controller
     {
         $permissions = Permission::select('name', 'id')->get()->groupBy(function(Permission $item){
             $arr = explode('_', $item->name);
-            return Str::ucfirst($arr[array_key_last($arr)]);
+            return Str::ucfirst(Str::singular($arr[array_key_last($arr)]));
         })->sortKeys();
 
         return $permissions;

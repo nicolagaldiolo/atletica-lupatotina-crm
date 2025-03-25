@@ -73,4 +73,11 @@ class Proceed extends Model
     {
         $query->deducible()->whereNotNull('deduct_at');
     }
+
+    public function scopeRaceType(Builder $query, $raceType): void
+    {
+        $query->whereHas('fee.race', function($query) use($raceType){
+            $query->type($raceType);
+        });
+    }
 }

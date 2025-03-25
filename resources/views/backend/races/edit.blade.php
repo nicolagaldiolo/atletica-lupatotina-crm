@@ -21,16 +21,16 @@
     <div class="card-header">
         <div class="row">
             <div class="col">
-                @can('delete', $race)
+                @canany(['deleteRace','deleteTrack'], $race)
                     <x-backend.buttons.delete route='{{ route("races.destroy", [$race->type, $race]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
-                @endcan
+                @endcanany
                 <div class="float-end">
-                    @can('viewAny', App\Models\Race::class)
+                    @canany(['viewAnyRace', 'viewAnyTrack'], App\Models\Race::class)
                         <x-backend.buttons.return route='{{ route("races.index", $race->type) }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
-                    @endcan
-                    @can('update', $race)
+                    @endcanany
+                    @canany(['updateRace', 'updateTrack'], $race)
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                    @endcan
+                    @endcanany
                 </div>
             </div>
         </div>

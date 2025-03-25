@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Utility;
+use App\Enums\RaceType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FeesRequest;
 use App\Models\Athlete;
@@ -17,7 +18,13 @@ class RaceFeeController extends Controller
      */
     public function index($raceType, Race $race)
     {
-        $this->authorize('viewAny', Fee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('viewAnyRace', Fee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('viewAnyTrack', Fee::class);
+        }else{
+            abort(401);
+        }
 
         if (request()->ajax()) {
             return datatables()->eloquent($race->fees())
@@ -35,7 +42,14 @@ class RaceFeeController extends Controller
      */
     public function create($raceType, Race $race)
     {
-        $this->authorize('create', Fee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('createRace', Fee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('createTrack', Fee::class);
+        }else{
+            abort(401);
+        }
+
         $fee = new Fee();
         return view('backend.races.fees.create', compact('race', 'fee'));
     }
@@ -45,7 +59,14 @@ class RaceFeeController extends Controller
      */
     public function store(FeesRequest $request, $raceType, Race $race)
     {
-        $this->authorize('create', Fee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('createRace', Fee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('createTrack', Fee::class);
+        }else{
+            abort(401);
+        }
+
         $race->fees()->create($request->validated());
         Utility::flashMessage();
         return redirect(route('races.fees.index', [$raceType, $race]));
@@ -56,7 +77,14 @@ class RaceFeeController extends Controller
      */
     public function edit($raceType, Race $race, Fee $fee)
     {
-        $this->authorize('update', $fee);
+        if($raceType == RaceType::Race){
+            $this->authorize('updateRace', $fee);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('updateTrack', $fee);
+        }else{
+            abort(401);
+        }
+
         return view('backend.races.fees.edit', compact('race', 'fee'));
     }
 
@@ -65,7 +93,13 @@ class RaceFeeController extends Controller
      */
     public function update(FeesRequest $request, $raceType, Race $race, Fee $fee)
     {
-        $this->authorize('update', $fee);
+        if($raceType == RaceType::Race){
+            $this->authorize('updateRace', $fee);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('updateTrack', $fee);
+        }else{
+            abort(401);
+        }
         $fee->update($request->validated());
         Utility::flashMessage();
         return redirect(route('races.fees.index', [$race->type, $race]));
@@ -76,7 +110,14 @@ class RaceFeeController extends Controller
      */
     public function destroy($raceType, Race $race, Fee $fee)
     {
-        $this->authorize('delete', $fee);
+        if($raceType == RaceType::Race){
+            $this->authorize('deleteRace', $fee);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('deleteTrack', $fee);
+        }else{
+            abort(401);
+        }
+        
         $fee->delete();
         Utility::flashMessage();
         return redirect(route('races.fees.index', [$race->type, $race]));
@@ -84,7 +125,13 @@ class RaceFeeController extends Controller
 
     public function athletesSubscribeable($raceType, Race $race, Fee $fee)
     {
-        $this->authorize('subscribeRace', AthleteFee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('subscribeRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('subscribeTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
         
         if (request()->ajax()) {
             $athletes = Athlete::active()->with(['validVouchers'])->whereDoesntHave('fees', function($query) use($fee){

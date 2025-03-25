@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RaceType;
 use App\Exports\ProceedExport;
 use App\Models\AthleteFee;
 use App\Models\Proceed;
@@ -20,13 +21,19 @@ class ProceedController extends Controller
      */
     public function index($raceType)
     {
-        $this->authorize('registerPaymentRace', AthleteFee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('registerPaymentRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('registerPaymentTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
 
         $accounts = User::whereHas('proceeds.fee.race', function($query) use($raceType){
             $query->type($raceType);
         })->get();
         
-        $proceedRangePeriod = $this->getProceedRangePeriod();
+        $proceedRangePeriod = $this->getProceedRangePeriod($raceType);
         $currentPeriod = $proceedRangePeriod['current_period'];
         $yearForExport = $proceedRangePeriod['year_for_export'];
         
@@ -38,15 +45,17 @@ class ProceedController extends Controller
      */
     public function show($raceType, $user)
     {
-        $this->authorize('registerPaymentRace', AthleteFee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('registerPaymentRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('registerPaymentTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
 
         if (request()->ajax()) {
             $user = ($user = intval($user)) ? User::whereHas('proceeds')->findOrFail($user) : null; 
-            $builder = ($user ? $user->proceeds() : Proceed::byBankTransfer())->toDeduct()->whereHas('fee.race', function($query) use($raceType){
-                    $query->type($raceType);
-                })
-                ->with(['athlete', 'fee.race'])
-                ->leftJoinRelationship('athlete');
+            $builder = ($user ? $user->proceeds() : Proceed::byBankTransfer())->toDeduct()->raceType($raceType)->with(['athlete', 'fee.race'])->leftJoinRelationship('athlete');
 
             return datatables()->eloquent($builder)
             ->filterColumn('name', function($query, $keyword) {
@@ -68,13 +77,20 @@ class ProceedController extends Controller
 
     public function deducted($raceType, $user)
     {
-        $this->authorize('registerPaymentRace', AthleteFee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('registerPaymentRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('registerPaymentTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
 
         if (request()->ajax()) {
             $user = ($user = intval($user)) ? User::whereHas('proceeds')->findOrFail($user) : null; 
-            $builder = ($user ? $user->proceeds() : Proceed::byBankTransfer())->deducted()->whereHas('fee.race', function($query) use($raceType){
-                $query->type($raceType);
-            })->selectRaw('DATE_FORMAT(deduct_at, "%Y-%m") as deduct_at, sum(custom_amount) as amount')
+            $builder = ($user ? $user->proceeds() : Proceed::byBankTransfer())
+                ->deducted()
+                ->raceType($raceType)
+                ->selectRaw('DATE_FORMAT(deduct_at, "%Y-%m") as deduct_at, sum(custom_amount) as amount')
                 ->groupByRaw('DATE_FORMAT(deduct_at, "%Y-%m")');
 
             return datatables()
@@ -89,15 +105,19 @@ class ProceedController extends Controller
      */
     public function update(Request $request, $raceType, $user)
     {
-        $this->authorize('deductPayment', AthleteFee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('deductPaymentRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('deductPaymentTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
         
         if (request()->ajax()) {
             $user = ($user = intval($user)) ? User::whereHas('proceeds')->findOrFail($user) : null; 
-            $available_ids = ($user ? $user->proceeds() : Proceed::byBankTransfer())->whereHas('fee.race', function($query) use($raceType){
-                $query->type($raceType);
-            })->toDeduct()->pluck('id')->toArray();
+            $available_ids = ($user ? $user->proceeds() : Proceed::byBankTransfer())->toDeduct()->raceType($raceType)->pluck('id')->toArray();
 
-            $proceedRangePeriod = $this->getProceedRangePeriod();
+            $proceedRangePeriod = $this->getProceedRangePeriod($raceType);
             
             $this->validate($request, [
                 'ids' => 'required|array',
@@ -109,50 +129,60 @@ class ProceedController extends Controller
                 ]
             ]);
             
-            ($user ? $user->proceeds() : Proceed::byBankTransfer())->toDeduct()->whereHas('fee.race', function($query) use($raceType){
-                $query->type($raceType);
-            })->whereIn('id', $request->get('ids'))->get()->each(function($proced) use($request){
-                $proced->update([
-                    'deduct_at' => $request->get('period')
-                ]);
-            });
+            ($user ? $user->proceeds() : Proceed::byBankTransfer())
+                ->toDeduct()->raceType($raceType)->whereIn('id', $request->get('ids'))->get()->each(function($proced) use($request){
+                    $proced->update([
+                        'deduct_at' => $request->get('period')
+                    ]);
+                });
             
             return response(['type' => 'success', 'message' => __('Operazione eseguita con successo')]);        
         }
     }
 
-    protected function getProceedRangePeriod()
+    protected function getProceedRangePeriod($raceType)
     {
-        $all_proceed = Proceed::toDeduct()->orderBy('payed_at', 'asc')->get();
+        $all_proceed = Proceed::toDeduct()->raceType($raceType)->orderBy('payed_at', 'asc')->get();
         
         $year_for_export = collect([
-            ...Proceed::deducted()->select('deduct_at')->groupBy('deduct_at')->get()->map(function($item){
+            ...Proceed::deducted()->raceType($raceType)->select('deduct_at')->groupBy('deduct_at')->get()->map(function($item){
                 return $item->deduct_at->format('Y');
             }),
-            ...Proceed::toDeduct()->select('payed_at')->groupBy('payed_at')->get()->map(function($item){
+            ...Proceed::toDeduct()->raceType($raceType)->select('payed_at')->groupBy('payed_at')->get()->map(function($item){
                 return $item->payed_at->format('Y');
             })
         ])->unique()->sort()->values();
-
-        $startRange = $all_proceed->first()->payed_at->startOfMonth();
-        $endRange = $all_proceed->last()->payed_at->endOfMonth();
-
+        
+        $startRange = null;
+        $endRange = null;
+        if($all_proceed->count()){
+            $startRange = $all_proceed->first()->payed_at->startOfMonth();
+            $endRange = $all_proceed->last()->payed_at->endOfMonth();
+        }
+        
+        
         $data = [
             'start_range' => $startRange,
             'end_range' => $endRange,
             'current_period' => Carbon::now(),
-            'periods' => CarbonPeriod::create($startRange->format('Y-m-d'), '1 month', $endRange->format('Y-m-d')),
+            'periods' => $startRange && $endRange ? CarbonPeriod::create($startRange->format('Y-m-d'), '1 month', $endRange->format('Y-m-d')) : [],
             'year_for_export' => $year_for_export
         ];
 
         return $data;
     }
 
-    public function export(Request $request)
+    public function export(Request $request, $raceType)
     {
-        $this->authorize('deductPayment', AthleteFee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('deductPaymentRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('deductPaymentTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
 
-        $proceedRangePeriod = $this->getProceedRangePeriod();
+        $proceedRangePeriod = $this->getProceedRangePeriod($raceType);
         $this->validate($request, [
             'year' => [
                 'required', 
@@ -162,7 +192,7 @@ class ProceedController extends Controller
         
         $year_to_export = $request->get('year');
 
-        $accounts = Proceed::deducible()->where(function($query) use($year_to_export){
+        $accounts = Proceed::deducible()->raceType($raceType)->where(function($query) use($year_to_export){
             $query->where(function($q) use($year_to_export){
                 $q->toDeduct()->whereRaw("YEAR(payed_at) = {$year_to_export}");
             })->orWhere(function($q) use($year_to_export){

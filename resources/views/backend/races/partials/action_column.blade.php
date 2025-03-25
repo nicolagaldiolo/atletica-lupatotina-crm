@@ -9,38 +9,38 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav nav-pills me-auto mb-2 mb-lg-0">
-                @can('viewAny', App\Models\Race::class)
+                @canany(['viewAnyRace', 'viewAnyTrack'], App\Models\Race::class)
                     <li class="nav-item">
                         <a class="nav-link @if(Route::is('races.index')) active @endif" aria-current="page" href="{{ route("races.index", $race->type) }}">
                             <i class="fa-solid fa-flag-checkered"></i>
                             {{ __('Elenco gare') }}
                         </a>
                     </li>
-                @endcan
-                @can('update', $race)
+                @endcanany
+                @canany(['updateRace', 'updateTrack'], $race)
                     <li class="nav-item">
                         <a class="nav-link @if(Route::is('races.edit')) active @endif" aria-current="page" href="{{ route("races.edit", [$race->type, $race]) }}">
                             <i class="fa-solid fa-edit"></i>
                             {{ __('Anagrafica') }}
                         </a>
                     </li>
-                @endcan
-                @can('viewAny', App\Models\Fee::class)
+                @endcanany
+                @canany(['viewAnyRace', 'viewAnyTrack'], App\Models\Fee::class)
                     <li class="nav-item">
                         <a class="nav-link @if(Route::is('races.fees.*')) active @endif" aria-current="page" href="{{ route("races.fees.index", [$race->type, $race]) }}">
                             <i class="fa fa-coins"></i>
                             {{ __('Quote') }}
                         </a>
                     </li>
-                @endcan
-                @can('report', $race)
+                @endcanany
+                @canany(['reportRace', 'reportTrack'], $race)
                     <li class="nav-item">
                         <a class="nav-link @if(Route::is('races.athletes')) active @endif" aria-current="page" href="{{ route("races.athletes", [$race->type, $race]) }}">
                             <i class="fas fa-running"></i>
                             {{ __('Iscrizioni') }}
                         </a>
                     </li>
-                @endcan
+                @endcanany
             </ul>
         </div>
     </div>
@@ -48,18 +48,18 @@
 @else
 <div class="text-end">
 
-    @can('update', $race)
+    @canany(['updateRace', 'updateTrack'], $race)
         <x-backend.buttons.edit route='{{ route("races.edit", [$race->type, $race]) }}' small="true" title="{{ __('Modifica') }}"/>
-    @endcan
-    @can('viewAny', App\Models\Fee::class)
+    @endcanany
+    @canany(['viewAnyRace', 'viewAnyTrack'], App\Models\Fee::class)
         <x-backend.buttons.edit route='{{ route("races.fees.index", [$race->type, $race]) }}' icon="fa fa-coins" title="{{ __('Quote') }}" small="true" />
-    @endcan
-    @can('report', $race)
+    @endcanany
+    @canany(['reportRace', 'reportTrack'], $race)
         <x-backend.buttons.edit route='{{ route("races.athletes", [$race->type, $race]) }}' icon="fas fa-running" title="{{ 'Iscrizioni' }}" small="true" />
-    @endcan
-    @can('delete', $race)
+    @endcanany
+    @canany(['deleteRace', 'deleteTrack'], $race)
         <x-backend.buttons.delete route='{{ route("races.destroy", [$race->type, $race]) }}' small="true" title="{{ __('Elimina') }}" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
-    @endcan
+    @endcanany
     
 </div>
 @endif

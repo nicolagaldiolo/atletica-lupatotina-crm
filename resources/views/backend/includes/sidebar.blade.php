@@ -26,7 +26,11 @@
             </li>
         @endif
         
-        @if (Gate::any(['viewAny', 'report'], App\Models\Athlete::class) || Gate::check('viewAny', App\Models\Race::class))
+        @if (
+            Gate::any(['viewAny', 'report'], App\Models\Athlete::class) || 
+            Gate::check('viewAnyRace', App\Models\Race::class) ||
+            Gate::check('viewAnyTrack', App\Models\Race::class)
+        )
             <li class="nav-title"><a>{{ __('Gestione società') }}</a></li>
         @endif
         
@@ -38,19 +42,18 @@
             </li>
         @endcan
 
-        @can('viewAny', App\Models\Race::class)
+        @can('viewAnyRace', App\Models\Race::class)
             <li class="nav-item">
-
                 <a class="nav-link @if(Route::is('races.*')) active @endif" href="{{ route('races.index', App\Enums\RaceType::Race) }}">
                     <i class="nav-icon fa-solid fa-flag-checkered"></i>&nbsp;{{ __('Gare') }}
                 </a>
             </li>
         @endcan
 
-        @can('viewAny', App\Models\Race::class)
+        @can('viewAnyTrack', App\Models\Race::class)
         <li class="nav-item">
             <a class="nav-link @if(Route::is('races.*')) active @endif" href="{{ route('races.index', App\Enums\RaceType::Track) }}">
-                <i class="nav-icon fa-solid fa-flag-checkered"></i>&nbsp;{{ __('Pista') }}
+                <i class="nav-icon fa-solid fa-ring"></i>&nbsp;{{ __('Pista') }}
             </a>
         </li>
         @endcan

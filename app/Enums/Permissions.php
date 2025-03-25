@@ -56,12 +56,30 @@ final class Permissions extends Enum
     const DeleteRaces = 'delete_races';
     const ReportRaces = 'report_races';
 
-    // Payments
-    const HandlePayments = 'handle_payments';
-    const DeductPayments = 'deduct_payments';
+    // Track
+    const ListTrack = 'list_track';
+    const ViewTrack = 'view_track';
+    const CreateTrack = 'create_track';
+    const EditTrack = 'edit_track';
+    const DeleteTrack = 'delete_track';
+    const ReportTrack = 'report_track';
+
+    // PaymentsRace
+    const HandlePayments = 'handle_payments'; // Deprecated (tenuto solo per retrocompatibilità)
+    const HandlePaymentsRace = 'handle_payments_race';
+    const DeductPayments = 'deduct_payments'; // Deprecated (tenuto solo per retrocompatibilità)
+    const DeductPaymentsRace = 'deduct_payments_race';
+
+    // PaymentsTrack
+    const HandlePaymentsTrack = 'handle_payments_track';
+    const DeductPaymentsTrack = 'deduct_payments_track';
     
     // Subscriptions
-    const HandleSubscriptions = 'handle_subscriptions';
+    const HandleSubscriptions = 'handle_subscriptions'; // Deprecated (tenuto solo per retrocompatibilità)
+    const HandleSubscriptionsRace = 'handle_subscriptions_race';
+
+    // SubscriptionsTrack
+    const HandleSubscriptionsTrack = 'handle_subscriptions_track';
 
     // Users
     const ListUsers = 'list_users';

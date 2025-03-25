@@ -20,11 +20,11 @@
     <div class="card-header">
         <x-backend.section-header>
             <x-slot name="toolbar">
-                @can('create', App\Models\Fee::class)
+                @canany(['createRace', 'createTrack'], App\Models\Fee::class)
                     <x-backend.buttons.create route="{{ route('races.fees.create', [$race->type, $race]) }}" small="true" title="">
                         {{ __('Aggiungi') }}
                     </x-backend.buttons.create>
-                @endcan
+                @endcanany
             </x-slot>
         </x-backend.section-header>
     </div>

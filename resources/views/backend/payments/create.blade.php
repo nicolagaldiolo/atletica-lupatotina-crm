@@ -26,9 +26,9 @@
                 <div class="row">
                     <div class="col">
                         <div class="float-end">
-                            @can('registerPaymentRace', App\Models\AthleteFee::class)
+                            @canany(['registerPaymentRace', 'registerPaymentTrack'], App\Models\AthleteFee::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                            @endcan
+                            @endcanany
                         </div>
                     </div>
                 </div>
@@ -110,9 +110,9 @@
                     <div class="col">
                         <div class="float-end">
                             <div class="form-group">
-                                @can('registerPaymentRace', App\Models\AthleteFee::class)
+                                @canany(['registerPaymentRace', 'registerPaymentTrack'], App\Models\AthleteFee::class)
                                     <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                                @endcan
+                                @endcanany
                             </div>
                         </div>
                     </div>

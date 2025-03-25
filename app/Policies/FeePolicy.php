@@ -12,40 +12,52 @@ class FeePolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAnyRace(User $user): bool
     {
         return $user->can(Permissions::EditRaces);
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Fee $fee): bool
+    public function viewAnyTrack(User $user): bool
     {
-        return false;
+        return $user->can(Permissions::EditTrack);
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function createRace(User $user): bool
     {
         return $user->can(Permissions::EditRaces);
+    }
+
+    public function createTrack(User $user): bool
+    {
+        return $user->can(Permissions::EditTrack);
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Fee $fee): bool
+    public function updateRace(User $user, Fee $fee): bool
     {
         return $user->can(Permissions::EditRaces);
+    }
+
+    public function updateTrack(User $user, Fee $fee): bool
+    {
+        return $user->can(Permissions::EditTrack);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Fee $fee): bool
+    public function deleteRace(User $user, Fee $fee): bool
     {
         return $user->can(Permissions::EditRaces);
+    }
+
+    public function deleteTrack(User $user, Fee $fee): bool
+    {
+        return $user->can(Permissions::EditTrack);
     }
 }

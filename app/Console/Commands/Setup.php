@@ -83,9 +83,10 @@ class Setup extends Command
                             Permissions::EditRaces,
                             Permissions::DeleteRaces,
                             Permissions::ReportRaces,
-                            Permissions::HandlePayments,
-                            Permissions::DeductPayments,
-                            Permissions::HandleSubscriptions,
+                            Permissions::HandlePaymentsRace,
+                            Permissions::HandlePaymentsTrack,
+                            Permissions::DeductPaymentsRace,
+                            Permissions::HandleSubscriptionsRace,
                             Permissions::ListUsers,
                             Permissions::ViewUsers,
                             Permissions::CreateUsers,
@@ -120,16 +121,18 @@ class Setup extends Command
                             Permissions::CreateVouchers,
                             Permissions::EditVouchers,
                             Permissions::DeleteVouchers,
-                            Permissions::HandlePayments,
-                            Permissions::DeductPayments,
-                            Permissions::HandleSubscriptions
+                            Permissions::HandlePaymentsRace,
+                            Permissions::HandlePaymentsTrack,
+                            Permissions::DeductPaymentsRace,
+                            Permissions::HandleSubscriptionsRace
                         ];
                         break;
                     case Roles::Accountant:
                         $permissions = [
                             Permissions::ViewDashboard,
                             Permissions::ListAthletes,
-                            Permissions::HandlePayments,
+                            Permissions::HandlePaymentsRace,
+                            Permissions::HandlePaymentsTrack,
                         ];
                         break;
                     case Roles::Healthcare:

@@ -32,7 +32,7 @@
                     <div class="float-end">
                         <div class="form-group">
                             @if(Gate::any(['subscribeRace', 'registerPaymentRace'], $athleteFee) || Gate::check('viewAny', [AthleteFee::class, $athlete]))
-                                <x-backend.buttons.return route='{{ route("athletes.fees.index", $athlete) }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
+                                <x-backend.buttons.return route='{{ route("athletes.fees.index", [$athlete, $fee->race->type]) }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
                             @endif
 
                             @can('registerPaymentRace', $athleteFee)

@@ -194,7 +194,7 @@ class AthleteController extends Controller
     {
         $this->authorize('registerPaymentRace', $athleteFee);
         
-        $accountants = User::HandlePayments()->get();
+        $accountants = User::HandlePaymentsRace()->get();
         $athlete = $athleteFee->athlete;
         $fee->load('race');
         
