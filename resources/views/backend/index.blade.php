@@ -9,7 +9,7 @@
 @section('content')
 
     <div class="mt-3">
-        <div class="alert alert-info" role="alert">
+        <div class="alert alert-info m-0" role="alert">
             <h4 class="alert-heading"><i class="fa-solid fa-coins"></i> Posso pagare una gara tramite bonifico?</h4>
             <p class="mb-0">
                 <strong>Beneficiario:</strong> Atletica Lupatotina Ass. Sportiva,
@@ -22,12 +22,12 @@
     @if(Auth::user()->athlete)
 
         <div class="row">
-            <div class="col-sm-6 p-3">
+            <div class="col-xl-4">
                 <h5>{{ __('Iscrizioni gare') }}</h5>
                 <div class="card mb-4">
-                    <div class="card-body p-3">
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-xl-6">
                                 <div class="d-flex align-items-center">
                                     <div class="bg-success text-white p-3 me-3">
                                         <i class="fa-solid fa-coins"></i>
@@ -38,7 +38,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-xl-6">
                                 <div class="d-flex align-items-center">
                                     <div class="bg-danger text-white p-3 me-3">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -51,19 +51,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer px-3 py-2">
+                    <div class="card-footer">
                         <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route("athletes.fees.index", [Auth::user()->athlete, "raceType" => App\Enums\RaceType::Race]) }}">
                             <span class="small fw-semibold">{{ __('Vai alle iscrioni gare') }}</span>
                             <i class="fa-solid fa-circle-chevron-right"></i>
                         </a>
                     </div>
                 </div>
-
+            </div>
+            <div class="col-xl-4">
                 <h5>{{ __('Iscrizioni pista') }}</h5>
                 <div class="card mb-4">
-                    <div class="card-body p-3">
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-xl-6">
                                 <div class="d-flex align-items-center">
                                     <div class="bg-success text-white p-3 me-3">
                                         <i class="fa-solid fa-coins"></i>
@@ -74,7 +75,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-xl-6">
                                 <div class="d-flex align-items-center">
                                     <div class="bg-danger text-white p-3 me-3">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -87,7 +88,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer px-3 py-2">
+                    <div class="card-footer">
                         <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route("athletes.fees.index", [Auth::user()->athlete, "raceType" => App\Enums\RaceType::Track]) }}">
                             <span class="small fw-semibold">{{ __('Vai alle iscrioni pista') }}</span>
                             <i class="fa-solid fa-circle-chevron-right"></i>
@@ -95,15 +96,15 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 p-3">
-
+        
+            <div class="col-xl-4">
                 <h5>{{ __('Il mio certificato') }}</h5>
                 @php
                     $certificate_status_class = $certificate->status['status_class'] ?? 'secondary';
                     $certificate_info = $certificate ? ($certificate->status['date'] . '(' . $certificate->status['date_diff'] . ')') : __('Nessun cartificato disponibile')
                 @endphp
                 <div class="card mb-4">
-                    <div class="card-body p-3 d-flex align-items-center">
+                    <div class="card-body d-flex align-items-center">
                         <div class="bg-{{ $certificate_status_class }} text-white p-3 me-3">
                             <i class="fa-solid fa-stethoscope"></i>
                         </div>
@@ -112,7 +113,7 @@
                             <div class="fs-6 fw-semibold text-{{ $certificate_status_class }}">{{ $certificate_info }}</div>
                         </div>
                     </div>
-                    <div class="card-footer px-3 py-2">
+                    <div class="card-footer">
                         <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route('athletes.certificates.index', Auth::user()->athlete) }}"><span class="small fw-semibold">{{ __('Vai ai certificati') }}</span>
                             <i class="fa-solid fa-circle-chevron-right"></i>
                         </a>
@@ -123,100 +124,99 @@
     @endif
 
     <div class="row">
-        @canany(['registerPaymentRace', 'registerPaymentTrack'], App\Models\AthleteFee::class)
-            <div class="col-sm-6 p-3">
-                @can('registerPaymentRace', App\Models\AthleteFee::class)
-                    <div class="mb-4">
-                        <h5>{{ __('Posizioni aperte Gare') }}</h5>
-
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <table id="datatable_athletes_races" class="table table-bordered table-striped table-hover table-responsive-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                        #
-                                                    </th>
-                                                    <th>
-                                                        {{ __('Nome') }}
-                                                    </th>
-                                                    <th>
-                                                        {{ __('Gare') }}
-                                                    </th>
-                                                    <th>
-                                                        {{ __('Totale') }}
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
+        @can('registerPaymentRace', App\Models\AthleteFee::class)
+            <div class="col-xl-4">
+                <div class="mt-4">
+                    <h5>{{ __('Posizioni aperte Gare') }}</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <table id="datatable_athletes_races" class="table table-bordered table-striped table-hover table-responsive-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    #
+                                                </th>
+                                                <th>
+                                                    {{ __('Nome') }}
+                                                </th>
+                                                <th>
+                                                    {{ __('Gare') }}
+                                                </th>
+                                                <th>
+                                                    {{ __('Totale') }}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endcan
-                @can('registerPaymentTrack', App\Models\AthleteFee::class)
-                    <div>
-                        <h5>{{ __('Posizioni aperte Pista') }}</h5>
-
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <table id="datatable_athletes_tracks" class="table table-bordered table-striped table-hover table-responsive-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                        #
-                                                    </th>
-                                                    <th>
-                                                        {{ __('Nome') }}
-                                                    </th>
-                                                    <th>
-                                                        {{ __('Gare') }}
-                                                    </th>
-                                                    <th>
-                                                        {{ __('Totale') }}
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endcan
+                </div>
             </div>
-        @endcanany
-        
+        @endcan
+        @can('registerPaymentTrack', App\Models\AthleteFee::class)
+            <div class="col-xl-4">
+                <div class="mt-4">
+                    <h5>{{ __('Posizioni aperte Pista') }}</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <table id="datatable_athletes_tracks" class="table table-bordered table-striped table-hover table-responsive-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    #
+                                                </th>
+                                                <th>
+                                                    {{ __('Nome') }}
+                                                </th>
+                                                <th>
+                                                    {{ __('Gare') }}
+                                                </th>
+                                                <th>
+                                                    {{ __('Totale') }}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endcan
         @can('viewAny', [App\Models\Certificate::class, null])
-            <div class="col-sm-6 p-3">
-                <h5>{{ __('Certificati in scadenza') }} (@date(Carbon\Carbon::now()->addMonth()->endOfMonth()))</h5>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <table id="datatable_certificates" class="table table-bordered table-striped table-hover table-responsive-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                #
-                                            </th>
-                                            <th>
-                                                {{ __('Nome') }}
-                                            </th>
-                                            <th>
-                                                {{ __('Certificato') }}
-                                            </th>
-                                            <th>
-                                                {{ __('Documento') }}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                </table>
+            <div class="col-xl-4">
+                <div class="mt-4">
+                    <h5>{{ __('Certificati in scadenza') }} (@date(Carbon\Carbon::now()->addMonth()->endOfMonth()))</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <table id="datatable_certificates" class="table table-bordered table-striped table-hover table-responsive-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    #
+                                                </th>
+                                                <th>
+                                                    {{ __('Nome') }}
+                                                </th>
+                                                <th>
+                                                    {{ __('Certificato') }}
+                                                </th>
+                                                <th>
+                                                    {{ __('Documento') }}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
