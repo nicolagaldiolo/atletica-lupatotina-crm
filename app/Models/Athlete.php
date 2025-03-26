@@ -28,6 +28,7 @@ class Athlete extends Model
     protected $fillable = [
         'name',
         'surname',
+        'tax_id',
         'gender',
         'phone',
         'email',

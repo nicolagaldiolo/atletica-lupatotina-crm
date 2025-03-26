@@ -3,6 +3,7 @@
         <tr>
             <td>{{ __('Nome')}}</td>
             <td>{{ __('Cognome') }}</td>
+            <td>{{ __('Codice fiscale') }}</td>
             <td>{{ __('Genere') }}</td>
             <td>{{ __('Telefono') }}</td>
             <td>{{ __('Email') }}</td>
@@ -27,6 +28,7 @@
             <tr>
                 <td>{{ $subscription->athlete->name }}</td>
                 <td>{{ $subscription->athlete->surname }}</td>
+                <td>{{ $subscription->athlete->tax_id }}</td>
                 <td>{{ App\Enums\GenderType::getDescription($subscription->athlete->gender) }}</td>
                 <td>{{ $subscription->athlete->phone }}</td>
                 <td>{{ $subscription->athlete->email }}</td>

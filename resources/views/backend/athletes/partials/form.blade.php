@@ -22,13 +22,22 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="surname">{{ __('Cognome') }}</label>
             <span class="text-danger">*</span>
             <input name="surname" class="form-control {{ $errors->has('surname') ? 'is-invalid' : '' }}" type="text" value="{{ old('surname', $athlete->surname) }}" @if($disabled) disabled @endif>
             @if ($errors->has('surname'))
                 <div class="invalid-feedback">{{ $errors->first('surname') }}</div>
+            @endif
+        </div>
+    </div>
+    <div class="col-12 col-sm-3">
+        <div class="form-group mb-3">
+            <label for="tax_id">{{ __('Codice fiscale') }}</label>
+            <input name="tax_id" class="form-control {{ $errors->has('tax_id') ? 'is-invalid' : '' }}" type="text" value="{{ old('tax_id', $athlete->tax_id) }}" @if($disabled) disabled @endif>
+            @if ($errors->has('tax_id'))
+                <div class="invalid-feedback">{{ $errors->first('tax_id') }}</div>
             @endif
         </div>
     </div>
@@ -46,7 +55,10 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-2">
+</div>
+
+<div class="row">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="registration_number">{{ __('Tessera fidal') }}</label>
             <input name="registration_number" class="form-control {{ $errors->has('registration_number') ? 'is-invalid' : '' }}" type="text" value="{{ old('registration_number', $athlete->registration_number) }}" @if($disabled) disabled @endif>
@@ -55,10 +67,7 @@
             @endif
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="gender">{{ __('Genere') }}</label>
             <select name="gender" class="form-control {{ $errors->has('gender') ? 'is-invalid' : '' }}" @if($disabled) disabled @endif>
@@ -71,7 +80,7 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="phone">{{ __('Telefono') }}</label>
             <input name="phone" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" type="text" value="{{ old('phone', $athlete->phone) }}" @if($disabled) disabled @endif>
@@ -80,7 +89,7 @@
             @endif
         </div>
     </div>
-    <div class="col-12 col-sm-4">
+    <div class="col-12 col-sm-3">
         <div class="form-group mb-3">
             <label for="email">{{ __('Email') }}</label>
             <input name="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="text" value="{{ old('email', $athlete->email) }}" @if($disabled) disabled @endif>

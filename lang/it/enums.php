@@ -9,8 +9,7 @@ return [
 
     GenderType::class => [
         GenderType::Male => 'Uomo',
-        GenderType::Female => 'Donna',
-        GenderType::Other => 'Altro',
+        GenderType::Female => 'Donna'
     ],
 
     VoucherType::class => [

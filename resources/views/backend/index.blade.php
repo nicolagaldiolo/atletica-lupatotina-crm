@@ -8,7 +8,21 @@
 
 @section('content')
 
+    <div class="mt-3">
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading"><i class="fa-solid fa-coins"></i> Posso pagare una gara tramite bonifico?</h4>
+            <p class="mb-0">Effettuare un bonifico bancario con l'importo della gara che si intende saldare specificando i seguenti dati:</p>
+            <hr>
+            <p class="mb-0">
+                <strong>Beneficiario:</strong> ATLETICA LUPATOTINA ASS. SPORTIVA,
+                <strong>IBAN:</strong> IT90A0200859770000005580195,
+                <strong>Causale:</strong> Nome cognome | Gara/e che si intende saldare
+            </p>
+        </div>
+    </div>
+
     @if(Auth::user()->athlete)
+
         <div class="row">
             <div class="col-sm-6 p-3">
                 <h5>{{ __('Iscrizioni gare') }}</h5>

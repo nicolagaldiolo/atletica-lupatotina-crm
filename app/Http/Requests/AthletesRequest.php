@@ -39,6 +39,7 @@ class AthletesRequest extends FormRequest
                 }
                 return $query;
              })],
+            'tax_id' => 'nullable|max:191',
             'gender' => ['nullable', new EnumValue(GenderType::class, false)],
             'phone' => 'nullable|max:191',
             'email' => 'nullable|max:191|email|unique:athletes,email,' . $id,
@@ -62,6 +63,7 @@ class AthletesRequest extends FormRequest
         return [
             'name' => __('nome'),
             'surname' => __('cognome'),
+            'tax_id' => __('codice fiscale'),
             'gender' => __('genere'),
             'phone' => __('telefono'),
             'email' => __('email'),
