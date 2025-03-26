@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RaceType;
 use App\Models\Athlete;
 use App\Enums\VoucherType;
 use App\Enums\ReportRowType;
@@ -123,7 +124,7 @@ class ReportController extends Controller
 
             Session::put('reports.searchByYear', $year);
 
-            $races = Race::whereRaw("DATE_FORMAT(date, '%Y') = {$year}")->get();
+            $races = Race::type(RaceType::Race)->whereRaw("DATE_FORMAT(date, '%Y') = {$year}")->get();
             
             return view('backend.reports.partials.race_list', compact('races'));
         }
