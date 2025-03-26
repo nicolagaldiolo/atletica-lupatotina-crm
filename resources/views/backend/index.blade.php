@@ -23,102 +23,108 @@
 
         <div class="row">
             <div class="col-xl-4">
-                <h5>{{ __('Iscrizioni gare') }}</h5>
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-success text-white p-3 me-3">
-                                        <i class="fa-solid fa-coins"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Pagate') }} ({{ $races_payed->count() }})</div>
-                                        <div class="fs-6 fw-semibold text-success">@money($races_payed->sum('athletefee.custom_amount'))</div>
+                <div class="mt-4">
+                    <h5>{{ __('Iscrizioni gare') }}</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-success text-white p-3 me-3">
+                                            <i class="fa-solid fa-coins"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Pagate') }} ({{ $races_payed->count() }})</div>
+                                            <div class="fs-6 fw-semibold text-success">@money($races_payed->sum('athletefee.custom_amount'))</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-danger text-white p-3 me-3">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Da pagare') }} ({{ $races_to_pay->count() }})</div>
-                                        <div class="fs-6 fw-semibold text-danger">@money($races_to_pay->sum('athletefee.custom_amount'))</div>
+                                <div class="col-xl-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-danger text-white p-3 me-3">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Da pagare') }} ({{ $races_to_pay->count() }})</div>
+                                            <div class="fs-6 fw-semibold text-danger">@money($races_to_pay->sum('athletefee.custom_amount'))</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route("athletes.fees.index", [Auth::user()->athlete, "raceType" => App\Enums\RaceType::Race]) }}">
-                            <span class="small fw-semibold">{{ __('Vai alle iscrioni gare') }}</span>
-                            <i class="fa-solid fa-circle-chevron-right"></i>
-                        </a>
+                        <div class="card-footer">
+                            <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route("athletes.fees.index", [Auth::user()->athlete, "raceType" => App\Enums\RaceType::Race]) }}">
+                                <span class="small fw-semibold">{{ __('Vai alle iscrioni gare') }}</span>
+                                <i class="fa-solid fa-circle-chevron-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-4">
-                <h5>{{ __('Iscrizioni pista') }}</h5>
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-success text-white p-3 me-3">
-                                        <i class="fa-solid fa-coins"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Pagate') }} ({{ $track_payed->count() }})</div>
-                                        <div class="fs-6 fw-semibold text-success">@money($track_payed->sum('athletefee.custom_amount'))</div>
+                <div class="mt-4">
+                    <h5>{{ __('Iscrizioni pista') }}</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-success text-white p-3 me-3">
+                                            <i class="fa-solid fa-coins"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Pagate') }} ({{ $track_payed->count() }})</div>
+                                            <div class="fs-6 fw-semibold text-success">@money($track_payed->sum('athletefee.custom_amount'))</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-danger text-white p-3 me-3">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Da pagare') }} ({{ $track_to_pay->count() }})</div>
-                                        <div class="fs-6 fw-semibold text-danger">@money($track_to_pay->sum('athletefee.custom_amount'))</div>
+                                <div class="col-xl-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-danger text-white p-3 me-3">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Da pagare') }} ({{ $track_to_pay->count() }})</div>
+                                            <div class="fs-6 fw-semibold text-danger">@money($track_to_pay->sum('athletefee.custom_amount'))</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route("athletes.fees.index", [Auth::user()->athlete, "raceType" => App\Enums\RaceType::Track]) }}">
-                            <span class="small fw-semibold">{{ __('Vai alle iscrioni pista') }}</span>
-                            <i class="fa-solid fa-circle-chevron-right"></i>
-                        </a>
+                        <div class="card-footer">
+                            <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route("athletes.fees.index", [Auth::user()->athlete, "raceType" => App\Enums\RaceType::Track]) }}">
+                                <span class="small fw-semibold">{{ __('Vai alle iscrioni pista') }}</span>
+                                <i class="fa-solid fa-circle-chevron-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         
             <div class="col-xl-4">
-                <h5>{{ __('Il mio certificato') }}</h5>
-                @php
-                    $certificate_status_class = $certificate->status['status_class'] ?? 'secondary';
-                    $certificate_info = $certificate ? ($certificate->status['date'] . '(' . $certificate->status['date_diff'] . ')') : __('Nessun cartificato disponibile')
-                @endphp
-                <div class="card mb-4">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="bg-{{ $certificate_status_class }} text-white p-3 me-3">
-                            <i class="fa-solid fa-stethoscope"></i>
+                <div class="mt-4">
+                    <h5>{{ __('Il mio certificato') }}</h5>
+                    @php
+                        $certificate_status_class = $certificate->status['status_class'] ?? 'secondary';
+                        $certificate_info = $certificate ? ($certificate->status['date'] . '(' . $certificate->status['date_diff'] . ')') : __('Nessun cartificato disponibile')
+                    @endphp
+                    <div class="card">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="bg-{{ $certificate_status_class }} text-white p-3 me-3">
+                                <i class="fa-solid fa-stethoscope"></i>
+                            </div>
+                            <div>
+                                <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Scadenza certificato') }}</div>
+                                <div class="fs-6 fw-semibold text-{{ $certificate_status_class }}">{{ $certificate_info }}</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ __('Scadenza certificato') }}</div>
-                            <div class="fs-6 fw-semibold text-{{ $certificate_status_class }}">{{ $certificate_info }}</div>
+                        <div class="card-footer">
+                            <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route('athletes.certificates.index', Auth::user()->athlete) }}"><span class="small fw-semibold">{{ __('Vai ai certificati') }}</span>
+                                <i class="fa-solid fa-circle-chevron-right"></i>
+                            </a>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route('athletes.certificates.index', Auth::user()->athlete) }}"><span class="small fw-semibold">{{ __('Vai ai certificati') }}</span>
-                            <i class="fa-solid fa-circle-chevron-right"></i>
-                        </a>
-                    </div>
-                </div> 
+                    </div> 
+                </div>
             </div>
         </div>
     @endif
