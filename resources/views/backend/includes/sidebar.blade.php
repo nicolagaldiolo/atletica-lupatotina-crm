@@ -66,9 +66,9 @@
             </li>
         @endcan
 
-        @if (Gate::any(['subscribeRace', 'registerPaymentRace'], App\Models\AthleteFee::class))
+        @canany(['subscribeRace', 'registerPaymentRace'], App\Models\AthleteFee::class)
             <li class="nav-title"><a>{{ __('Registrazioni Gare') }}</a></li>
-        @endif
+        @endcanany
 
         @can('registerPaymentRace', App\Models\AthleteFee::class)
             <li class="nav-item">
@@ -94,9 +94,9 @@
             </li>
         @endcan
 
-        @if (Gate::any(['subscribeTrack', 'registerPaymentTrack'], App\Models\AthleteFee::class))
+        @canany(['subscribeTrack', 'registerPaymentTrack'], App\Models\AthleteFee::class)
             <li class="nav-title"><a>{{ __('Registrazioni Pista') }}</a></li>
-        @endif
+        @endcanany
 
         @can('registerPaymentTrack', App\Models\AthleteFee::class)
             <li class="nav-item">
@@ -130,10 +130,7 @@
             </li>
         @endcan
 
-        @if(
-            Gate::check('viewAny', App\Models\User::class) || 
-            Gate::check('viewAny', App\Models\Role::class)
-        )
+        @if(Gate::check('viewAny', App\Models\User::class) || Gate::check('viewAny', App\Models\Role::class))
             <li class="nav-title"><a>{{ __('Amministrazione') }}</a></li>
         @endif
         

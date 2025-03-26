@@ -84,7 +84,13 @@ class DashboardController extends Controller
 
     public function fees($raceType)
     {
-        $this->authorize('registerPaymentRace', AthleteFee::class);
+        if($raceType == RaceType::Race){
+            $this->authorize('registerPaymentRace', AthleteFee::class);
+        }else if($raceType == RaceType::Track){
+            $this->authorize('registerPaymentTrack', AthleteFee::class);
+        }else{
+            abort(401);
+        }
         
         if (request()->ajax()) {
 

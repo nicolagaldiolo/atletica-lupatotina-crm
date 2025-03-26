@@ -21,21 +21,24 @@
 
 @section('content')
 <div class="card">
-    {{ html()->modelForm($athleteFee, 'PATCH', route("athletes.fees.athletefee.update", [$athlete, $fee, $athleteFee]))->class('form')->open() }}
+    {{ html()->modelForm($athleteFee, 'PATCH', route("athletes.fees.athletefee.update", [$athlete, $raceType, $fee, $athleteFee]))->class('form')->open() }}
         <div class="card-header">
             <div class="row">
                 <div class="col">
-                    @can('subscribeRace', $athleteFee)
-                        <x-backend.buttons.delete route='{{ route("athletes.fees.athletefee.destroySubscription", [$athlete, $fee, $athleteFee]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+                    @can((($raceType == App\Enums\RaceType::Race) ? 'subscribeRace' : (($raceType == App\Enums\RaceType::Track) ? 'subscribeTrack' : false)), $athleteFee)
+                        <x-backend.buttons.delete route='{{ route("athletes.fees.athletefee.destroySubscription", [$athlete, $raceType, $fee, $athleteFee]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                     @endcan
 
                     <div class="float-end">
                         <div class="form-group">
-                            @if(Gate::any(['subscribeRace', 'registerPaymentRace'], $athleteFee) || Gate::check('viewAny', [AthleteFee::class, $athlete]))
+                            @if(
+                                ($raceType == App\Enums\RaceType::Race ? Gate::any(['subscribeRace', 'registerPaymentRace'], $athleteFee) : ($raceType == App\Enums\RaceType::Track ? Gate::any(['subscribeTrack', 'registerPaymentTrack'], $athleteFee) : false)) || 
+                                Gate::check('viewAny', [AthleteFee::class, $athlete])
+                            )
                                 <x-backend.buttons.return route='{{ route("athletes.fees.index", [$athlete, $fee->race->type]) }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
                             @endif
 
-                            @can('registerPaymentRace', $athleteFee)
+                            @can((($raceType == App\Enums\RaceType::Race) ? 'registerPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'registerPaymentTrack' : false)), $athleteFee)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                             @endcan
                         </div>

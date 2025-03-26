@@ -55,11 +55,11 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     
     Route::resource('athletes', AthleteController::class);
     
-    Route::get('athletes/{athlete}/fees/{raceType}', [AthleteController::class, 'races'])->name('athletes.fees.index');
+    Route::get('athletes/{athlete}/{raceType}/fees', [AthleteController::class, 'races'])->name('athletes.fees.index');
 
-    Route::get('athletes/{athlete}/fees/{fee}/athletefee/{athleteFee}/edit', [AthleteController::class, 'editFee'])->name('athletes.fees.athletefee.edit');
-    Route::patch('athletes/{athlete}/fees/{fee}/athletefee/{athleteFee}', [AthleteController::class, 'updateFee'])->name('athletes.fees.athletefee.update');
-    Route::delete('athletes/{athlete}/fees/{fee}/athletefee/{athleteFee}', [AthleteController::class, 'destroySubscription'])->name('athletes.fees.athletefee.destroySubscription');
+    Route::get('athletes/{athlete}/{raceType}/fees/{fee}/athletefee/{athleteFee}/edit', [AthleteController::class, 'editFee'])->name('athletes.fees.athletefee.edit');
+    Route::patch('athletes/{athlete}/{raceType}/fees/{fee}/athletefee/{athleteFee}', [AthleteController::class, 'updateFee'])->name('athletes.fees.athletefee.update');
+    Route::delete('athletes/{athlete}/{raceType}/fees/{fee}/athletefee/{athleteFee}', [AthleteController::class, 'destroySubscription'])->name('athletes.fees.athletefee.destroySubscription');
     Route::resource('athletes.certificates', CertificateController::class)->except('show');
     Route::resource('athletes.vouchers', VoucherController::class)->except('show');
     

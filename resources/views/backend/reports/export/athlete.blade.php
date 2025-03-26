@@ -35,22 +35,22 @@
                     <td>@date($row['created_at'])</td>
                     <td>{{ $row['type'] }}</td>
                     <td>{{ $row['event'] }}</td>
-                    <td>@money($row['event_amount'])</td>
-                    <td>@money($row['voucher'])</td>
-                    <td>@money($row['penalty'])</td>
-                    <td>@money($row['amount'])</td>
+                    <td>{{ $row['event_amount'] }}</td>
+                    <td>{{ $row['voucher'] }}</td>
+                    <td>{{ $row['penalty'] }}</td>
+                    <td>{{ $row['amount'] }}</td>
                 </tr>
                 @php $partial_total += $row['amount'] @endphp
             @endforeach
             <tr>
                 <td style="background:#CFE2F3; font-weight:bold;" colspan="7">{{ $row['athlete_name'] }} {{ __(' - totale da incassare') }}</td>
-                <td style="background:#CFE2F3; font-weight:bold;">@money($partial_total)</td>
+                <td style="background:#CFE2F3; font-weight:bold;">{{ $partial_total }}</td>
             </tr>
             @php $gran_total += $partial_total @endphp
         @endforeach
         <tr>
             <td style="background:#3D86C6; font-weight:bold;" colspan="7">{{ __('Totale da incassare') }}</td>
-            <td style="background:#3D86C6; font-weight:bold;">@money($gran_total)</td>
+            <td style="background:#3D86C6; font-weight:bold;">{{ $gran_total }}</td>
         </tr>
     </tbody>
 </table>

@@ -111,70 +111,74 @@
     @endif
 
     <div class="row">
-        @can('registerPaymentRace', App\Models\AthleteFee::class)
+        @canany(['registerPaymentRace', 'registerPaymentTrack'], App\Models\AthleteFee::class)
             <div class="col-sm-6 p-3">
-                <div>
-                    <h5>{{ __('Posizioni aperte Gare') }}</h5>
+                @can('registerPaymentRace', App\Models\AthleteFee::class)
+                    <div class="mb-4">
+                        <h5>{{ __('Posizioni aperte Gare') }}</h5>
 
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <table id="datatable_athletes_races" class="table table-bordered table-striped table-hover table-responsive-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    #
-                                                </th>
-                                                <th>
-                                                    {{ __('Nome') }}
-                                                </th>
-                                                <th>
-                                                    {{ __('Gare') }}
-                                                </th>
-                                                <th>
-                                                    {{ __('Totale') }}
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <table id="datatable_athletes_races" class="table table-bordered table-striped table-hover table-responsive-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        #
+                                                    </th>
+                                                    <th>
+                                                        {{ __('Nome') }}
+                                                    </th>
+                                                    <th>
+                                                        {{ __('Gare') }}
+                                                    </th>
+                                                    <th>
+                                                        {{ __('Totale') }}
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="mt-4">
-                    <h5>{{ __('Posizioni aperte Pista') }}</h5>
+                @endcan
+                @can('registerPaymentTrack', App\Models\AthleteFee::class)
+                    <div>
+                        <h5>{{ __('Posizioni aperte Pista') }}</h5>
 
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <table id="datatable_athletes_tracks" class="table table-bordered table-striped table-hover table-responsive-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    #
-                                                </th>
-                                                <th>
-                                                    {{ __('Nome') }}
-                                                </th>
-                                                <th>
-                                                    {{ __('Gare') }}
-                                                </th>
-                                                <th>
-                                                    {{ __('Totale') }}
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <table id="datatable_athletes_tracks" class="table table-bordered table-striped table-hover table-responsive-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        #
+                                                    </th>
+                                                    <th>
+                                                        {{ __('Nome') }}
+                                                    </th>
+                                                    <th>
+                                                        {{ __('Gare') }}
+                                                    </th>
+                                                    <th>
+                                                        {{ __('Totale') }}
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endcan
             </div>
-        @endcan
+        @endcanany
         
         @can('viewAny', [App\Models\Certificate::class, null])
             <div class="col-sm-6 p-3">
