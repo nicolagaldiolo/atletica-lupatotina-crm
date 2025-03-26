@@ -21,16 +21,16 @@
     <div class="card-header">
         <div class="row">
             <div class="col">
-                @canany(['deleteRace','deleteTrack'], $race)
+                @can((($race->type == App\Enums\RaceType::Race) ? 'deleteRace' : (($race->type == App\Enums\RaceType::Track) ? 'deleteTrack' : false)), $race)
                     <x-backend.buttons.delete route='{{ route("races.destroy", [$race->type, $race]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
-                @endcanany
+                @endcan
                 <div class="float-end">
-                    @canany(['viewAnyRace', 'viewAnyTrack'], App\Models\Race::class)
+                    @can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Race::class)
                         <x-backend.buttons.return route='{{ route("races.index", $race->type) }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
-                    @endcanany
-                    @canany(['updateRace', 'updateTrack'], $race)
+                    @endcan
+                    @can((($race->type == App\Enums\RaceType::Race) ? 'updateRace' : (($race->type == App\Enums\RaceType::Track) ? 'updateTrack' : false)), $race)
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                    @endcanany
+                    @endcan
                 </div>
             </div>
         </div>

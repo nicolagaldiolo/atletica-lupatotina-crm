@@ -26,9 +26,9 @@
                 <div class="row">
                     <div class="col">
                         <div class="float-end">
-                            @canany(['registerPaymentRace', 'registerPaymentTrack'], App\Models\AthleteFee::class)
+                            @can((($raceType == App\Enums\RaceType::Race) ? 'registerPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'registerPaymentTrack' : false)), App\Models\AthleteFee::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                            @endcanany
+                            @endcan
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th>{{ __('Gara') }}</th>
+                                <th>{{ __('Iscrizione') }}</th>
                                 <th>{{ __('Pagamento') }}</th>
                             </tr>
                             @foreach ($athlete->fees as $fee)
@@ -110,9 +110,9 @@
                     <div class="col">
                         <div class="float-end">
                             <div class="form-group">
-                                @canany(['registerPaymentRace', 'registerPaymentTrack'], App\Models\AthleteFee::class)
+                                @can((($raceType == App\Enums\RaceType::Race) ? 'registerPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'registerPaymentTrack' : false)), App\Models\AthleteFee::class)
                                     <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                                @endcanany
+                                @endcan
                             </div>
                         </div>
                     </div>

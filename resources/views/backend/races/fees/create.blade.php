@@ -23,12 +23,12 @@
                 <div class="col">
                     <div class="float-end">
                         <div class="form-group">
-                            @canany(['viewAnyRace', 'viewAnyTrack'], App\Models\Fee::class)
+                            @can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Fee::class)
                                 <x-backend.buttons.return route='{{ route("races.fees.index", [$race->type, $race]) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
-                            @endcanany
-                            @canany(['createRace', 'createTrack'], App\Models\Fee::class)
+                            @endcan
+                            @can((($race->type == App\Enums\RaceType::Race) ? 'createRace' : (($race->type == App\Enums\RaceType::Track) ? 'createTrack' : false)), App\Models\Fee::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                            @endcanany
+                            @endcan
                         </div>
                     </div>
                 </div>

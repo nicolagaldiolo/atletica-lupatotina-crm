@@ -24,11 +24,12 @@
     </div>
 @else
     <div class="card">
-        @canany(['deductPaymentRace', 'deductPaymentTrack'], App\Models\AthleteFee::class)
+
+        @can((($raceType == App\Enums\RaceType::Race) ? 'deductPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'deductPaymentTrack' : false)), App\Models\AthleteFee::class)
             <div class="card-header">
                 <x-backend.section-header>
                     <x-slot name="toolbar">
-                        @canany(['reportRace', 'reportTrack'], App\Models\Race::class)
+                        @can((($raceType == App\Enums\RaceType::Race) ? 'reportRace' : (($raceType == App\Enums\RaceType::Track) ? 'reportTrack' : false)), App\Models\Race::class)
                             @if(count($yearForExport))
                                 <form method="POST" action="{{ route('proceeds.export', $raceType) }}">
                                     @csrf
@@ -45,11 +46,11 @@
                                     </div>
                                 </form>
                             @endif
-                        @endcanany
+                        @endcan
                     </x-slot>
                 </x-backend.section-header>
             </div>
-        @endcanany
+        @endcan
 
         <div class="card-body">
             @if (count($accounts))

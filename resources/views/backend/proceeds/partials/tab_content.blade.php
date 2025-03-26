@@ -6,7 +6,7 @@
                     <i class="fas fa-cash-register fa-lg"></i> <strong>{{ __('Incassato da scaricare') }}</strong></h4>
                 </div>
 
-                @canany(['deductPaymentRace', 'deductPaymentTrack'], App\Models\AthleteFee::class)
+                @can((($raceType == App\Enums\RaceType::Race) ? 'deductPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'deductPaymentTrack' : false)), App\Models\AthleteFee::class)
                     <div class="row">
                         <div class="ms-auto col-auto">
                             <div style="display: none;" id="massUpdateContainer-{{ $user_id }}" class="mb-3 input-group input-group-sm">
@@ -22,7 +22,7 @@
                             </div>
                         </div>
                     </div>
-                @endcanany
+                @endcan
                 
                 <table id="datatable-{{ $user_id }}" class="table table-bordered table-hover table-responsive-sm">
                     <thead>
@@ -86,7 +86,7 @@
 
 <script type="module">
 
-    var canDeductPayment = @canany(['deductPaymentRace', 'deductPaymentTrack'], App\Models\AthleteFee::class) true @else false @endcanany;
+    var canDeductPayment = @can((($raceType == App\Enums\RaceType::Race) ? 'deductPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'deductPaymentTrack' : false)), App\Models\AthleteFee::class) true @else false @endcan;
 
     function dataTableGetSelectedRows(dt){
         return dt.rows({ selected: true }).data().toArray();

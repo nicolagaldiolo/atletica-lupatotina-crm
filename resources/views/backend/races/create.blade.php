@@ -18,13 +18,13 @@
                 <div class="col">
                     <div class="float-end">
                         <div class="form-group">
-
-                            @canAny(['viewAnyRace', 'viewAnyTrack'], App\Models\Race::class)
+                            @can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Race::class)
                                 <x-backend.buttons.return route='{{ route("races.index", $race->type) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
-                            @endcanany
-                            @canAny(['createRace', 'createTrack'], App\Models\Race::class)
+                            @endcan
+                            
+                            @can((($race->type == App\Enums\RaceType::Race) ? 'createRace' : (($race->type == App\Enums\RaceType::Track) ? 'createTrack' : false)), App\Models\Race::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                            @endcanany
+                            @endcan
                         </div>
                     </div>
                 </div>

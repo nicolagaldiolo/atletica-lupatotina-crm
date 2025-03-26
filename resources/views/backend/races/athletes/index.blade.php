@@ -20,11 +20,11 @@
     <div class="card-header">
         <x-backend.section-header>
             <x-slot name="toolbar">
-                @canany(['reportRace', 'reportTrack'], App\Models\Race::class)
+                @can((($race->type == App\Enums\RaceType::Race) ? 'reportRace' : (($race->type == App\Enums\RaceType::Track) ? 'reportTrack' : false)), App\Models\Race::class)
                     <x-backend.buttons.download route="{{ route('races.subscriptions-list', [$race->type, $race]) }}" small="true" title="">
                         {{ __('Elenco iscritti') }}
                     </x-backend.buttons.download>
-                @endcanany
+                @endcan
             </x-slot>
         </x-backend.section-header>
     </div>

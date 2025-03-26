@@ -26,9 +26,9 @@
                     <div class="row">
                         <div class="col">
                             <div class="float-end">
-                                @canany(['subscribeRace', 'subscribeTrack'], App\Models\AthleteFee::class)
+                                @can((($raceType == App\Enums\RaceType::Race) ? 'subscribeRace' : (($raceType == App\Enums\RaceType::Track) ? 'subscribeTrack' : false)), App\Models\AthleteFee::class)
                                     <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                                @endcanany
+                                @endcan
                             </div>
                         </div>
                     </div>
@@ -61,9 +61,9 @@
                         <div class="col">
                             <div class="float-end">
                                 <div class="form-group">
-                                    @canany(['subscribeRace', 'subscribeTrack'], App\Models\AthleteFee::class)
+                                    @can((($race->type == App\Enums\RaceType::Race) ? 'subscribeRace' : (($race->type == App\Enums\RaceType::Track) ? 'subscribeTrack' : false)), App\Models\AthleteFee::class)
                                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                                    @endcanany
+                                    @endcan
                                 </div>
                             </div>
                         </div>
