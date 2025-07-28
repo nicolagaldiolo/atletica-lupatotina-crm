@@ -57,7 +57,10 @@
                                                 <input type="hidden" value="0" name="payments[{{ $fee->athletefee->id }}][payed]">
                                                 <input class="form-check-input" type="checkbox" value="1" name="payments[{{ $fee->athletefee->id }}][payed]" id="{{ $id_checkbox }}">
                                                 <label class="form-check-label" for="{{ $id_checkbox }}">
-                                                    <strong>{{ $fee->race->name }}</strong> ({{ $fee->name }} | @date($fee->expired_at) | @money($fee->amount))
+                                                    <strong>{{ $fee->race->name }}</strong> 
+                                                    @if($fee->name) | {{ $fee->name }} @endif
+                                                    @if($fee->expired_at) | @date($fee->expired_at) @endif
+                                                    @if($fee->amount) | @money($fee->amount) @endif
                                                     <div>
                                                         <span class="badge text-bg-primary">
                                                             <i class="nav-icon fas fa-coins"></i> @money($fee->athletefee->custom_amount)
