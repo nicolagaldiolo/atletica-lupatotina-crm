@@ -16,13 +16,13 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        {{ __('Situazione soci') }}
+        {{ __('Estrazioni') }}
     </div>
     <div class="card-body">
         @if($years->count())
             {{ html()->form('POST', route("reports.download"))->class('form')->open() }}
                 <div class="row">
-                    <div class="col-xxl-3 mb-3 mb-xxl-0">
+                    <div class="col-xxl-3 mb-3">
                         <div class="input-group">
                             <label class="input-group-text">{{ __('Anno') }}</label>
                             <select name="year" id="searchByYear" class="form-select">
@@ -32,13 +32,13 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-xxl mb-3 mb-xxl-0">
+                    <div class="col-xxl mb-3">
                         <div class="input-group">
                             <label class="input-group-text" for="raceLists">{{ __('Gara') }}</label>
                             <select name="race_id" class="form-select" id="raceLists"></select>
                         </div>
                     </div>
-                    <div class="col-xxl mb-3 mb-xxl-0">
+                    <div class="col-xxl mb-3">
                         <div class="input-group">
                             <label class="input-group-text" for="athleteLists">{{ __('Atleta') }}</label>
                             <select name="athlete_id" class="form-select" id="athleteLists">
@@ -49,12 +49,19 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-xxl-2">
-                        <button class="btn btn-primary w-100" type="submit">
-                            <i class="nav-icon fas fa-download"></i>&nbsp;{{ __('Download') }}
+                </div>  
+                <div class="row">
+                    <div class="col">
+                        <button name="report_type" value="{{ App\Enums\ReportType::SituazioneSoci }}" class="btn btn-primary w-100" type="submit">
+                            <i class="nav-icon fas fa-coins"></i>&nbsp;{{ __('Situazione soci') }}
                         </button>
                     </div>
-                </div>    
+                    <div class="col">
+                        <button name="report_type" value="{{ App\Enums\ReportType::PartecipazioneGare }}" class="btn btn-primary w-100" type="submit">
+                            <i class="nav-icon fas fa-solid fa-flag-checkered"></i>&nbsp;{{ __('Partecipazione gare') }}
+                        </button>
+                    </div>
+                </div>  
             {{ html()->form()->close() }}
         @endif
     </div>

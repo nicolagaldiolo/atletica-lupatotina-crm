@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class AtheletsExportRaceSimple implements FromView, WithColumnFormatting, ShouldAutoSize, WithStyles, WithTitle
+class RaceExportDetailed implements FromView, WithColumnFormatting, ShouldAutoSize, WithStyles, WithTitle
 {
     use Exportable;
 
@@ -41,7 +41,7 @@ class AtheletsExportRaceSimple implements FromView, WithColumnFormatting, Should
 
     public function view(): View
     {
-        return view('backend.reports.export.race_simple', [
+        return view('backend.reports.export.race_detailed', [
             'data' => $this->data
         ]);
     }

@@ -4,7 +4,7 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class AtheletsExport implements WithMultipleSheets
+class RaceExport implements WithMultipleSheets
 {
     private $data;
 
@@ -16,7 +16,8 @@ class AtheletsExport implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-            new AtheletsExportPage($this->data, 'Situazione Soci'),
+            new RaceExportSimple($this->data, 'Partecipazione gare'),
+            new RaceExportDetailed($this->data, 'Partecipazione gare dettagliata'),
         ];
     }
 }

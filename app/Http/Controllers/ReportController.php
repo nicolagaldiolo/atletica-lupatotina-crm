@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RaceType;
+use App\Enums\ReportType;
 use App\Models\Athlete;
 use App\Enums\VoucherType;
 use App\Enums\ReportRowType;
 use App\Exports\AtheletsExport;
+use App\Exports\RaceExport;
 use App\Http\Controllers\Controller;
 use App\Models\Race;
 use Illuminate\Http\Request;
@@ -44,14 +46,16 @@ class ReportController extends Controller
             'athlete_id' => 'nullable|exists:athletes,id',
         ]);
         
-        $year = $request->get('year');
-        $race_id = $request->get('race_id');
-        $athlete_id = $request->get('athlete_id');
+        $year = $request->get('year', null);
+        $race_id = $request->get('race_id', null);
+        $athlete_id = $request->get('athlete_id', null);
+
+        $report_type = $request->get('report_type');
 
         $athletes = Athlete::when($athlete_id, function($query) use($athlete_id){
             $query->where('id', $athlete_id);
         })->whereHas('fees.race', function($query) use($race_id, $year){
-            $query->when($year, function($q) use($year){
+            $query->type(RaceType::Race)->when($year, function($q) use($year){
                 $q->whereRaw("DATE_FORMAT(date, '%Y') = {$year}");
             })->when($race_id, function($q) use($race_id){
                 $q->where('id', $race_id);
@@ -59,82 +63,107 @@ class ReportController extends Controller
         })->with([
             'fees' => function($query) use($race_id, $year){
                 $query->whereHas('race', function($query) use($race_id, $year){
-                    $query->when($year, function($q) use($year){
+                    $query->type(RaceType::Race)->when($year, function($q) use($year){
                         $q->whereRaw("DATE_FORMAT(date, '%Y') = {$year}");
                     })->when($race_id, function($q) use($race_id){
                         $q->where('id', $race_id);
                     });
                 });
             },
-            'fees.race',
+            'fees.race' => function($query){
+                $query->type(RaceType::Race);
+            },
             'fees.athletefee.voucher',
             'validVouchers'
         ])->get();
-        
-        $data = $athletes->reduce(function($arr, $item){
 
-            $item->fees->each(function($fee) use($item, &$arr){
-                $arr[$item->id][] = [
-                    'athlete_name' => $item->full_name,
-                    'type' => ReportRowType::Subscription,
-                    'event' => $fee->race->name . ' (' . $fee->name . ')',
-                    'event_amount' => $fee->amount,
-                    'created_at' => $fee->athletefee->created_at,
-                    'voucher' => ($fee->athletefee->voucher && $fee->athletefee->voucher->type == VoucherType::Credit) ? $fee->athletefee->voucher->amount : null,
-                    'penalty' => ($fee->athletefee->voucher && $fee->athletefee->voucher->type == VoucherType::Penalty) ? $fee->athletefee->voucher->amount : null,
-                    'amount' => $fee->athletefee->custom_amount
-                ];
+        switch($report_type) {
+            case ReportType::SituazioneSoci:
+                
+                $data = $athletes->reduce(function($arr, $item){
 
-                if($fee->athletefee->payed_at){
-                    $arr[$item->id][] = [
-                        'athlete_name' => $item->full_name,
-                        'type' => ReportRowType::Payment,
-                        'event' => null,
-                        'event_amount' => null,
-                        'created_at' => $fee->athletefee->payed_at,
-                        'voucher' => null,
-                        'penalty' => null,
-                        'amount' => ($fee->athletefee->custom_amount * -1)
-                    ];
+                    $item->fees->each(function($fee) use($item, &$arr){
+                        $arr[$item->id][] = [
+                            'athlete_name' => $item->full_name,
+                            'type' => ReportRowType::Subscription,
+                            'event' => $fee->race->name . ' (' . $fee->name . ')',
+                            'event_amount' => $fee->amount,
+                            'created_at' => $fee->athletefee->created_at,
+                            'voucher' => ($fee->athletefee->voucher && $fee->athletefee->voucher->type == VoucherType::Credit) ? $fee->athletefee->voucher->amount : null,
+                            'penalty' => ($fee->athletefee->voucher && $fee->athletefee->voucher->type == VoucherType::Penalty) ? $fee->athletefee->voucher->amount : null,
+                            'amount' => $fee->athletefee->custom_amount
+                        ];
+
+                        if($fee->athletefee->payed_at){
+                            $arr[$item->id][] = [
+                                'athlete_name' => $item->full_name,
+                                'type' => ReportRowType::Payment,
+                                'event' => null,
+                                'event_amount' => null,
+                                'created_at' => $fee->athletefee->payed_at,
+                                'voucher' => null,
+                                'penalty' => null,
+                                'amount' => ($fee->athletefee->custom_amount * -1)
+                            ];
+                        }
+                    });
+
+                    $item->validVouchers->each(function($voucher) use($item, &$arr){
+                        $arr[$item->id][] = [
+                            'athlete_name' => $item->full_name,
+                            'type' => ReportRowType::Voucher,
+                            'event' => null,
+                            'event_amount' => null,
+                            'created_at' => $voucher->created_at,
+                            'voucher' => ($voucher->type == VoucherType::Credit) ? $voucher->amount : null,
+                            'penalty' => ($voucher->type == VoucherType::Penalty) ? $voucher->amount : null,
+                            'amount' => ($voucher->amount_calculated * -1)
+                        ];
+                    });
+
+
+                    return $arr;
+                }, []);
+
+                $filename = "Situazione-Atleti";
+                if($year){
+                    $filename .= "-{$year}";
                 }
-            });
 
-            $item->validVouchers->each(function($voucher) use($item, &$arr){
-                $arr[$item->id][] = [
-                    'athlete_name' => $item->full_name,
-                    'type' => ReportRowType::Voucher,
-                    'event' => null,
-                    'event_amount' => null,
-                    'created_at' => $voucher->created_at,
-                    'voucher' => ($voucher->type == VoucherType::Credit) ? $voucher->amount : null,
-                    'penalty' => ($voucher->type == VoucherType::Penalty) ? $voucher->amount : null,
-                    'amount' => ($voucher->amount_calculated * -1)
-                ];
-            });
+                return Excel::download(new AtheletsExport($data), $filename . ".xlsx");
 
+                break;
 
-            return $arr;
-        }, []);
+            case ReportType::PartecipazioneGare:
+                
+                $data_races = $athletes->reduce(function($arr, $item){
 
-        $data_races = $athletes->reduce(function($arr, $item){
+                    $arr[] = [
+                        'athlete' => $item,
+                        'races_count' => $item->fees->count(),
+                        'fees' => $item->fees,
+                    ];
 
-            $arr[] = [
-                'athlete' => $item,
-                'races_count' => $item->fees->count(),
-                'races' => $item->fees,
-            ];
+                    return $arr;
+                }, []);
 
-            return $arr;
-        }, []);
+                $data = array_values(Arr::sortDesc($data_races, function (array $value) {
+                    return $value['races_count'];
+                }));
 
-        $results = [
-            'data' => $data,
-            'races' => array_values(Arr::sortDesc($data_races, function (array $value) {
-                return $value['races_count'];
-            }))
-        ];
+                $filename = "Partecipazione-Gare";
+                if($year){
+                    $filename .= "-{$year}";
+                }
 
-        return Excel::download(new AtheletsExport($results), "Situazione Atleti.xlsx");
+                return Excel::download(new RaceExport($data), $filename . ".xlsx");
+
+                break;
+
+            default:
+                abort(403, 'nessuna azione selezionata');
+                break;
+        }
     }
 
     public function races(int $year)

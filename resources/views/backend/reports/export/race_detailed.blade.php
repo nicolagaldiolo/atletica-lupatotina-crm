@@ -15,13 +15,19 @@
     </thead>
     <tbody>
         @foreach($data as $item)
-
             @php $style = "background:" . App\Enums\GenderType::getColor($item['athlete']->gender) . "; font-weight:bold;" @endphp
             <tr>
                 <td style="{{ $style }}">{{ $item['athlete']->fullname }}</td>
                 <td style="{{ $style }}">{{ App\Enums\GenderType::getDescription($item['athlete']->gender) }}</td>
                 <td style="{{ $style }}">{{ $item['races_count'] }}</td>
             </tr>
+            @foreach($item['fees'] as $fee)
+                <tr>
+                    <td>{{ $fee->race->name }} ({{ $fee->name }})</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            @endforeach
         @endforeach
     </tbody>
 </table>
