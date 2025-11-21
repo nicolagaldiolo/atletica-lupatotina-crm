@@ -16,7 +16,8 @@ class AtheletsExport implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-            new AtheletsExportPage($this->data, 'Situazione atleti dettagliata')
+            //new AtheletsExportPage($this->data['data'], 'Situazione atleti dettagliata'),
+            new AtheletsExportRaceSimple($this->data['races'], 'Partecipazione gare')
         ];
     }
 }

@@ -10,6 +10,7 @@ use App\Exports\AtheletsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Race;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -47,7 +48,7 @@ class ReportController extends Controller
         $race_id = $request->get('race_id');
         $athlete_id = $request->get('athlete_id');
 
-        $data = Athlete::when($athlete_id, function($query) use($athlete_id){
+        $athletes = Athlete::when($athlete_id, function($query) use($athlete_id){
             $query->where('id', $athlete_id);
         })->whereHas('fees.race', function($query) use($race_id, $year){
             $query->when($year, function($q) use($year){
@@ -68,7 +69,9 @@ class ReportController extends Controller
             'fees.race',
             'fees.athletefee.voucher',
             'validVouchers'
-        ])->get()->reduce(function($arr, $item){
+        ])->get();
+        
+        $data = $athletes->reduce(function($arr, $item){
 
             $item->fees->each(function($fee) use($item, &$arr){
                 $arr[$item->id][] = [
@@ -113,7 +116,25 @@ class ReportController extends Controller
             return $arr;
         }, []);
 
-        return Excel::download(new AtheletsExport($data), "Situazione Atleti.xlsx");
+        $data_races = $athletes->reduce(function($arr, $item){
+
+            $arr[] = [
+                'athlete' => $item,
+                'races_count' => $item->fees->count(),
+                'races' => $item->fees,
+            ];
+
+            return $arr;
+        }, []);
+
+        $results = [
+            'data' => $data,
+            'races' => array_values(Arr::sortDesc($data_races, function (array $value) {
+                return $value['races_count'];
+            }))
+        ];
+
+        return Excel::download(new AtheletsExport($results), "Situazione Atleti.xlsx");
     }
 
     public function races(int $year)
