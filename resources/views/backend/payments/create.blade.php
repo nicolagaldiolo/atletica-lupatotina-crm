@@ -78,6 +78,9 @@
                                                                 @endif
                                                             </span>
                                                         @endif
+                                                        @if(!$fee->race->is_real_event)
+                                                            <span class="badge text-bg-warning"><i class="fas fa-clipboard-list"></i> {{ __("Evento di segreteria") }}</span>
+                                                        @endif
                                                     </div>
                                                 </label>
                                             </div>

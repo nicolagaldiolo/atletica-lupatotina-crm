@@ -75,6 +75,7 @@ class RaceController extends Controller
 
         $race = new Race();
         $race->type = $raceType;
+        $race->is_real_event = true;
         return view('backend.races.create', compact('race'));
     }
 

@@ -87,6 +87,13 @@
             },
             {
                 data: 'fee.race.name',
+                render(data, type, row, meta) {
+                    let html = data;
+                    if(!row.fee.race.is_real_event){
+                        html += ' <span class="badge bg-warning"><i class="fas fa-clipboard-list"></i> {{ __("Evento di segreteria") }}</span>';
+                    }
+                    return html;
+                }
             },
             {
                 data: 'fee',

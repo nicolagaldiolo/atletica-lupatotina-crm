@@ -55,7 +55,7 @@ class ReportController extends Controller
         $athletes = Athlete::when($athlete_id, function($query) use($athlete_id){
             $query->where('id', $athlete_id);
         })->whereHas('fees.race', function($query) use($race_id, $year){
-            $query->type(RaceType::Race)->when($year, function($q) use($year){
+            $query->type(RaceType::Race)->realEvent()->when($year, function($q) use($year){
                 $q->whereRaw("DATE_FORMAT(date, '%Y') = {$year}");
             })->when($race_id, function($q) use($race_id){
                 $q->where('id', $race_id);
@@ -63,7 +63,7 @@ class ReportController extends Controller
         })->with([
             'fees' => function($query) use($race_id, $year){
                 $query->whereHas('race', function($query) use($race_id, $year){
-                    $query->type(RaceType::Race)->when($year, function($q) use($year){
+                    $query->type(RaceType::Race)->realEvent()->when($year, function($q) use($year){
                         $q->whereRaw("DATE_FORMAT(date, '%Y') = {$year}");
                     })->when($race_id, function($q) use($race_id){
                         $q->where('id', $race_id);
@@ -71,7 +71,7 @@ class ReportController extends Controller
                 });
             },
             'fees.race' => function($query){
-                $query->type(RaceType::Race);
+                $query->type(RaceType::Race)->realEvent();
             },
             'fees.athletefee.voucher',
             'validVouchers'

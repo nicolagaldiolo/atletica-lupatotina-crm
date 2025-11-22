@@ -38,6 +38,20 @@
             @endif
         </div>
     </div>
+    <div class="col-12 col-sm-4">
+        <div class="form-group mb-3">
+            <label for="is_real_event">{{ __('Evento reale') }}</label>
+            <span class="text-danger">*</span>
+            <div class="form-check form-switch form-switch-lg">
+                <input name="is_real_event" type="hidden" checked value="0" @if($disabled) disabled @endif>
+                <input class="form-check-input {{ $errors->has('is_real_event') ? 'is-invalid' : '' }}" type="checkbox" name="is_real_event" {{ old('is_real_event', $race->is_real_event) ? 'checked' : "" }} value="1" @if($disabled) disabled @endif>
+                @if ($errors->has('is_real_event'))
+                <div class="invalid-feedback">{{ $errors->first('is_real_event') }}</div>
+                @endif
+            </div>
+            <small id="emailHelp" class="form-text text-muted">{{ __('Evento reale oppure gestione di segreteria (es: penalità).') }}</small>
+        </div>
+    </div>
 </div>
 
 @push('after-styles')

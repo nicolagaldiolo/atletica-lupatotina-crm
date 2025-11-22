@@ -28,6 +28,7 @@ class RacesRequest extends FormRequest
         return [
             'name' => 'required|max:191',
             'type' => ['required', new EnumValue(RaceType::class)],
+            'is_real_event' => 'required|boolean',
             'distance' => 'nullable|max:191',
             'date' => 'required|date'
         ];
@@ -40,6 +41,7 @@ class RacesRequest extends FormRequest
             'type' => __('tipo'),
             'distance' => __('distanza'),
             'date' => __('data'),
+            'is_real_event' => __('evento reale'),
         ];
     }
 }

@@ -19,6 +19,7 @@ class Race extends Model
     protected $fillable = [
         'name',
         'type',
+        'is_real_event',
         'distance',
         'date'
     ];
@@ -29,7 +30,8 @@ class Race extends Model
      * @var array
      */
     protected $casts = [
-        'date' => 'datetime'
+        'date' => 'datetime',
+        'is_real_event' => 'boolean',
     ];
 
     public function athleteFee(): HasManyThrough
@@ -45,6 +47,11 @@ class Race extends Model
     public function scopeType($query, $type): void
     {
         $query->where('type', $type);
+    }
+
+    public function scopeRealEvent($query): void
+    {
+        $query->where('is_real_event', true);
     }
 
     public function scopeSubscribeable($query): void

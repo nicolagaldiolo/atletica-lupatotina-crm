@@ -90,6 +90,13 @@
             {
                 data: 'name',
                 name: 'name',
+                render(data, type, row, meta) {
+                    let html = data;
+                    if(!row.is_real_event){
+                        html += ' <span class="badge bg-warning"><i class="fas fa-clipboard-list"></i> {{ __("Evento di segreteria") }}</span>';
+                    }
+                    return html;
+                }
             },
             {
                 data: 'date',
@@ -120,7 +127,13 @@
                 searchable: false,
                 orderable: false,
             }
-        ]
+        ],
+        createdRow: function( row, data, dataIndex){
+            if(!data.is_real_event){
+                $(row).addClass('bg-warning');
+                $(row).css('--cui-bg-opacity', '.3');
+            }
+        }
     });
 
     $('#dtSearch').click(function(){
