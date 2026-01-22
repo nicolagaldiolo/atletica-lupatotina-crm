@@ -125,7 +125,13 @@
             <li class="nav-title"><a>{{ __('Magazzino') }}</a></li>
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('articles.*')) active @endif" href="{{ route('articles.index') }}">
-                    <i class="nav-icon fa-solid fa-shirt"></i>&nbsp;{{ __('Abbigliamento') }}
+                    <i class="nav-icon fa-solid fa-shirt"></i>&nbsp;{{ __('Catalogo') }}
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @if(Route::is('seasons.*')) active @endif" href="{{ route('seasons.index') }}">
+                    <i class="nav-icon fa-solid fa-shirt"></i>&nbsp;{{ __('Vendite') }}
                 </a>
             </li>
         @endcan

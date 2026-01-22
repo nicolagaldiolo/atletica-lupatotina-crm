@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Race;
+use App\Models\Season;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
@@ -554,6 +555,15 @@ if(!function_exists('raceYears')) {
     function raceYears()
     {
         $years = Race::selectRaw("DATE_FORMAT(date, '%Y') as years")->groupBy('years')->orderBy('years')->get()->pluck('years');
+
+        return $years;
+    }
+}
+
+if(!function_exists('seasonYears')) {
+    function seasonYears()
+    {
+        $years = Season::selectRaw("DATE_FORMAT(start_at, '%Y') as years")->groupBy('years')->orderBy('years')->get()->pluck('years');
 
         return $years;
     }

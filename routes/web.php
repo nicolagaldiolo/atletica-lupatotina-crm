@@ -8,10 +8,12 @@ use App\Http\Controllers\AthleteController;
 use App\Http\Controllers\ProceedController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RaceFeeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoucherController;
@@ -97,6 +99,8 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::post('payments/{raceType}', [PaymentController::class, 'store'])->name('payments.store');
 
     Route::resource('articles', ArticleController::class)->except('show');
+    Route::resource('seasons', SeasonController::class);
+    Route::resource('seasons.orders', OrderController::class);
 
     Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('tasks/{task}', [TaskController::class, 'exec'])->name('tasks.exec');
