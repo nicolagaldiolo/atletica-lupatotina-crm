@@ -98,9 +98,11 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::get('payments/{raceType}', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('payments/{raceType}', [PaymentController::class, 'store'])->name('payments.store');
 
-    Route::resource('articles', ArticleController::class)->except('show');
+    Route::get('articles/create/{type}', [ArticleController::class, 'create'])->name('articles.create');
+    Route::resource('articles', ArticleController::class)->except('create');
     Route::resource('seasons', SeasonController::class);
     Route::resource('seasons.orders', OrderController::class);
+    Route::get('seasons/{season}/products', [OrderController::class, 'products'])->name('seasons.products.index');
 
     Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('tasks/{task}', [TaskController::class, 'exec'])->name('tasks.exec');

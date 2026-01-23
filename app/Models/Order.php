@@ -18,6 +18,10 @@ class Order extends Model
     use Owner;
 
     protected $fillable = [
+        'season_id',
+        'athlete_id',
+        'quantity',
+        'total_amount'
     ];
 
     /**
@@ -38,5 +42,10 @@ class Order extends Model
     public function athlete(): BelongsTo
     {
         return $this->belongsTo(Athlete::class);
+    }
+
+    public function rows(): HasMany
+    {
+        return $this->hasMany(OrderRow::class);
     }
 }

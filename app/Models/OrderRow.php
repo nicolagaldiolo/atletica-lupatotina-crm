@@ -16,8 +16,11 @@ class OrderRow extends Model
     use Owner;
 
     protected $fillable = [
+        'article_id',
+        'variant',
         'quantity',
-        'amount'
+        'amount',
+        'total_amount'
     ];
 
     /**
@@ -37,5 +40,10 @@ class OrderRow extends Model
     public function article(): BelongsTo
     {
         return $this->belongsTo(Article::class);
+    }
+
+    public function getRowTotalAttribute()
+    {
+        return implode(' ', [$this->surname, $this->name]);
     }
 }

@@ -17,6 +17,9 @@ class Article extends Model
     protected $fillable = [
         'name',
         'price',
+        'is_unlimited',
+        'quantity',
+        'type',
         'variants',
         'is_active'
     ];
@@ -25,6 +28,7 @@ class Article extends Model
         'price' => 'float',
         'variants' => 'array',
         'is_active' => 'boolean',
+        'is_unlimited' => 'boolean',
     ];
 
     public function scopeActive(Builder $query): void

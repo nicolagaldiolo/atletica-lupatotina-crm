@@ -36,4 +36,9 @@ class Season extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function orderRows(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderRow::class, Order::class);
+    }
 }

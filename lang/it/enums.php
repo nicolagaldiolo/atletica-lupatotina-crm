@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use App\Enums\ArticleType;
 use App\Enums\GenderType;
 use App\Enums\MemberType;
 use App\Enums\RaceType;
@@ -25,6 +26,10 @@ return [
     RaceType::class => [
         RaceType::Race => 'Gara',
         RaceType::Track => 'Pista',
-    ]
+    ],
 
+    ArticleType::class => [
+        ArticleType::Simple => 'Semplice',
+        ArticleType::Variants => 'Varianti',
+    ]
 ];

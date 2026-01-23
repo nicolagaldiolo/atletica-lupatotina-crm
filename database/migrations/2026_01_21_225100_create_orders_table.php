@@ -25,6 +25,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('season_id')->constrained()->onDelete('cascade');
             $table->foreignId('athlete_id')->constrained()->onDelete('cascade');
+            $table->integer('quantity')->default(0);
+            $table->decimal('total_amount', 14, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onDelete('set null');

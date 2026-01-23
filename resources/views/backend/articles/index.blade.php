@@ -13,12 +13,13 @@
 @section('secondary-nav')
     <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
         @can('create', App\Models\Article::class)
-            <x-backend.buttons.create route="{{ route('articles.create') }}" small="true" title="">
-                {{ __('Aggiungi nuovo') }}
-            </x-backend.buttons.create>
+            <x-backend.buttons.create-dropdown small="true" title="" label="{{ __('Aggiungi nuovo') }}">
+                @foreach (App\Enums\ArticleType::asArray() as $type)
+                    <li><a class="dropdown-item" href="{{ route('articles.create', ['type' => $type]) }}">{{ ucfirst($type) }}</a></li>
+                @endforeach
+            </x-backend.buttons.create-dropdown>
         @endcan
     </div>
-    
 @endsection
 
 @section('content')
@@ -33,12 +34,15 @@
                                 #
                             </th>
                             <th>
-                                {{ __('Nome') }}
+                                {{ __('Prodotto') }}
                             </th>
                             <th>
                                 {{ __('Prezzo') }}
                             </th>
-                            s<th>
+                            <th>
+                                {{ __('Quantità') }}
+                            </th>
+                            <th>
                                 {{ __('Attivo') }}
                             </th>
                             <th>&nbsp;</th>
@@ -82,6 +86,30 @@
                 data: 'price',
                 render(data) {
                     return App.money(data);
+                },
+            },
+            {
+                data: null,
+                render(data) {
+                    var html = null;
+                    switch(data.type){
+                        case '{{ App\Enums\ArticleType::Simple }}':
+                            html = data.quantity;
+                            break;
+                        case '{{ App\Enums\ArticleType::Variants }}':
+
+                            var variants = Object.entries(data.variants).reduce((arr, [key, val]) => {
+                                
+                                arr.push('<li>' + key + ': ' + val + '</li>')
+                                return arr;
+                            }, []);
+
+                            html = (variants.length ? ('<ul>' + variants.join('') + '</ul>') : null);
+                            break;
+                        default:
+                            html = 0;
+                    }
+                    return html;
                 },
             },
             {

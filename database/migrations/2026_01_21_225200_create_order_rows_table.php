@@ -1,7 +1,9 @@
 <?php
 
 use App\Classes\Utility;
+use App\Enums\ArticleType;
 use App\Enums\Permissions;
+use App\Enums\Sizes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,8 +27,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('article_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity')->default(1);
+            $table->enum('variant', Sizes::asArray())->nullable();
+            $table->integer('quantity')->default(0);
             $table->decimal('amount', 14, 2)->default(0);
+            $table->decimal('total_amount', 14, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onDelete('set null');

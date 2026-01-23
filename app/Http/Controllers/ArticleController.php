@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Utility;
+use App\Enums\ArticleType;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -32,11 +34,18 @@ class ArticleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(String $type)
     {
+        if (!in_array($type, ArticleType::asArray())) {
+            abort(404);
+        }
+
         $this->authorize('create', Article::class);
+
         $article = new Article();
         $article->is_active = true;
+        $article->type = $type;
+        
         return view('backend.articles.create', compact('article'));
     }
 
@@ -46,8 +55,11 @@ class ArticleController extends Controller
     public function store(ArticleRequest $request)
     {
         $this->authorize('create', Article::class);
+
         Article::create($request->validated());
+        
         Utility::flashMessage();
+        
         return redirect(route('articles.index'));
     }
 

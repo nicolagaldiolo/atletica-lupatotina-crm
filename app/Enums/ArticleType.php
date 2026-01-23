@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+use BenSampo\Enum\Contracts\LocalizedEnum;
 use BenSampo\Enum\Enum;
 
 /**
@@ -9,13 +10,8 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class Sizes extends Enum
+final class ArticleType extends Enum implements LocalizedEnum
 {
-    const XXS = 'XXS';
-    const XS = 'XS';
-    const S = 'S';
-    const M = 'M';
-    const L = 'L';
-    const XL = 'XL';
-    const XXL = 'XXL';
+    const Simple = 'simple';
+    const Variants = 'variants';
 }

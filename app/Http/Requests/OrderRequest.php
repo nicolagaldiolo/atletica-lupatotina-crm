@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class OrderRequest extends FormRequest
 {
@@ -22,21 +23,11 @@ class OrderRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
-
+    {   
         return [
-            'name' => 'required|max:191',
-            'price' => 'required|numeric',
-            'is_active' => 'required|boolean',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'name' => __('nome'),
-            'price' => __('importo'),
-            'is_active' => __('attivo'),
+            'articles' => 'required|array',
+            'articles.*.selected' => 'required|boolean',
+            'articles.*.variants' => 'required|array',
         ];
     }
 }

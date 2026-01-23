@@ -31,7 +31,10 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col">
+            <div class="col-lg-8">
+                <h3>
+                    {{ __('Elenco ordini') }}
+                </h3>
                 <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
                     <thead>
                         <tr>
@@ -45,12 +48,39 @@
                                 {{ __('Data ordine') }}
                             </th>
                             <th>
+                                {{ __('Articoli') }}
+                            </th>
+                            <th>
                                 {{ __('Importo') }}
                             </th>
                             <th>
                                 {{ __('Stato') }}
                             </th>
                             <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="col-lg-4">
+                <h3>
+                    {{ __('Elenco ordini') }}
+                </h3>
+
+                <table id="datatable_articles_detail" class="table table-bordered table-hover table-responsive-sm">
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                {{ __('Articolo') }}
+                            </th>
+                            <th>
+                                {{ __('Taglia') }}
+                            </th>
+                            <th>
+                                {{ __('Quantità') }}
+                            </th>
                         </tr>
                     </thead>
                 </table>
@@ -80,11 +110,8 @@
                 visible: false,
             },
             {
-                data: null,
-                //name: 'name'
-                render(data) {
-                    return 'Nicola';
-                },
+                data: 'fullname',
+                name: 'fullname',
             },
             {
                 data: 'created_at',
@@ -93,22 +120,54 @@
                 },
             },
             {
-                data: null,
+                data: 'rows_count'
+            },
+            {
+                data: 'total_amount',
                 render(data) {
-                    return 100;
-                    //return App.money(data);
+                    return App.money(data);
                 },
             },
             {
                 data: null,
                 render(data) {
                     return 'Consegnato';
-                    //return App.money(data);
                 },
             },
             {
                 data: 'action',
                 name: 'action',
+                orderable: false,
+                searchable: false
+            }
+        ]
+    });
+
+    $('#datatable_articles_detail').DataTable({
+        processing: true,
+        serverSide: true,
+        autoWidth: true,
+        responsive: true,
+        ajax: '{{ route("seasons.products.index", $season) }}',
+        columns: [
+            {
+                data: 'article_id',
+                visible: false,
+            },
+
+            {
+                data: 'name',
+                //visible: false,
+            },
+
+            {
+                data: 'variant',
+                orderable: false,
+                searchable: false
+            },
+            
+            {
+                data: 'quantity',
                 orderable: false,
                 searchable: false
             }

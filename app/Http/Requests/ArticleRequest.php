@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\ArticleType;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ArticleRequest extends FormRequest
 {
@@ -24,7 +27,12 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
+            'type' => ['required', new EnumValue(ArticleType::class, false)],
             'name' => 'required|max:191',
+            'quantity' => [Rule::requiredIf($this->type == ArticleType::Simple, 'numeric', 'min:0')],
+            'variants' => [Rule::requiredIf($this->type == ArticleType::Variants), 'array'],
+            'variants.*' => 'required_with:variants|numeric|min:0',
+            'is_unlimited' => 'required|boolean',
             'price' => 'required|numeric',
             'is_active' => 'required|boolean',
         ];
