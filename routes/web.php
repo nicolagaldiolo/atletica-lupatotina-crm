@@ -13,6 +13,8 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RaceFeeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SaleRowController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
@@ -107,9 +109,12 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::resource('articles', ArticleController::class)->except('create');
 
     Route::resource('seasons', SeasonController::class)->except('show');
-    Route::get('seasons/{season}/orders', [SeasonController::class, 'orders'])->name('seasons.orders.index');
-    Route::get('seasons/{season}/orders/{order}', [SeasonController::class, 'orderEdit'])->name('seasons.orders.edit');
-    Route::get('seasons/{season}/products', [SeasonController::class, 'products'])->name('seasons.products.index');
+    
+    Route::get('seasons/{season}/products', [SaleController::class, 'products'])->name('seasons.products.index');
+    
+    Route::resource('seasons.orders', SaleController::class);
+    Route::resource('seasons.orders.orderRows', SaleRowController::class);
+    
 
     Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('tasks/{task}', [TaskController::class, 'exec'])->name('tasks.exec');

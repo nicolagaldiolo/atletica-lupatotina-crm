@@ -19,18 +19,18 @@
 
 @section('content')
 <div class="card">
-    {{ html()->modelForm($order, 'PATCH', route("seasons.orders.update", [$season, $order]))->class('form')->open() }}
+    {{ html()->modelForm($order, 'PATCH', route("seasons.orders.orderRows.update", [$season, $order, $orderRow]))->class('form')->open() }}
     <div class="card-header">
         <div class="row">
             <div class="col">
                 
 
                 {{--@can((($race->type == App\Enums\RaceType::Race) ? 'deleteRace' : (($race->type == App\Enums\RaceType::Track) ? 'deleteTrack' : false)), $fee)--}}
-                    <x-backend.buttons.delete route='{{ route("seasons.orders.destroy", [$season, $order]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+                    <x-backend.buttons.delete route='{{ route("seasons.orders.orderRows.destroy", [$season, $order, $orderRow]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                 {{--@endcan--}}
                 <div class="float-end">
                     {{--@can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Fee::class)--}}
-                        <x-backend.buttons.return route='{{ route("seasons.orders.index", [$season]) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                        <x-backend.buttons.return route='{{ route("seasons.orders.edit", [$season, $order]) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
                     {{--@endcan--}}
                     {{--@can((($race->type == App\Enums\RaceType::Race) ? 'updateRace' : (($race->type == App\Enums\RaceType::Track) ? 'updateTrack' : false)), $fee)--}}
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
@@ -43,7 +43,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col">
-                @include ("backend.seasons.orders.partials.form", ['disabled' => false])
+                @include ("backend.seasons.orders.rows.partials.form", ['disabled' => false])
             </div>
         </div>
     </div>

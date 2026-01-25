@@ -138,13 +138,18 @@ class OrderController extends Controller
                 return intval($i) > 0;
             })->each(function($quantity, $variant_key) use($order, $article){
 
-                $order->rows()->create([
-                    'article_id' => $article->id,
-                    'amount' => $article->price,
-                    'quantity' => $quantity,
-                    'variant' => $article->type === ArticleType::Variants ? $variant_key : null,
-                    'total_amount' => $article->price * $quantity
-                ]);
+                for ($i = 1; $i <= $quantity; $i++) {
+
+                    $quantity_unit = 1;
+
+                    $order->rows()->create([
+                        'article_id' => $article->id,
+                        'amount' => $article->price,
+                        'quantity' => $quantity_unit,
+                        'variant' => $article->type === ArticleType::Variants ? $variant_key : null,
+                        'total_amount' => $article->price * $quantity_unit
+                    ]);
+                }
             });
         });
 

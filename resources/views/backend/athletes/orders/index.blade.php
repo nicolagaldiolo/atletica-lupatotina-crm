@@ -98,10 +98,7 @@
                 },
             },
             {
-                data: null,
-                render(data) {
-                    return 'Consegnato';
-                },
+                data: 'status'
             },
             {
                 data: 'action',

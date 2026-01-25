@@ -1,78 +1,89 @@
-<table class="table table-bordered table-responsive">
-    <thead>
-        <tr>
-            <th>{{ __('Articolo') }}</th>
-            <th>{{ __('Quantità') }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($articles as $article )
-            
-            <tr>
-                <td>
-                    <div class="form-check form-switch">
-                        <input type="hidden" value="0" name="articles[{{ $article->id }}][selected]" checked>
-                        <input class="form-check-input" type="checkbox" value="1" name="articles[{{ $article->id }}][selected]" @if(in_array($article->id, $order->rows->pluck('article_id')->unique()->toArray())) checked @endif>
-                    </div>
-                    <img src="https://picsum.photos/100" class="" alt="..." style="float:left">
-                    <h3>{{ $article->name }}</h3>
-                    <strong>{{ $article->price }} €</strong>
-                </td>
-                <td>
-                    <div class="form-group mb-3">
+<h5>
+    {{ $order->created_at }}
+    <small>({{ $order->created_at }}</small>
+</h5>
 
-                        <label for="name">{{ __('Quantità') }}</label>
-                        <span class="text-danger">*</span>
+<div class="row mt-4">
+    
+    <div class="col-12 col-sm-2">
+        <div class="form-group mb-3">
+            <label for="status">{{ __('Status') }}</label>
+            <span class="text-danger">*</span>
+            <select class="form-select {{ $errors->has('status') ? 'is-invalid' : '' }}" name="status">
+                @foreach (App\Enums\OrderRowStatus::asSelectArray() as $key => $value)
+                    <option value="{{ $key }}" @if($key == old('status', $order->status)) selected @endif>{{ __($value) }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    
+    <div class="col-12 col-sm-2">
+        <div class="form-group mb-3">
+            <label for="payed">{{ __('Pagato') }}</label>
+            <span class="text-danger">*</span>
+            <div class="form-check form-switch form-switch-lg">
+                <input name="payed" class="form-item" type="hidden" checked value="0">
+                <input class="form-check-input form-item {{ $errors->has('payed') ? 'is-invalid' : '' }}" type="checkbox" name="payed" {{ old('payed', ) ? 'checked' : "" }} value="1">
+                @if ($errors->has('payed'))
+                    <div class="invalid-feedback">{{ $errors->first('payed') }}</div>
+                @endif
+            </div>
+        </div>
+    </div>
 
-                        @if($article->type == \App\Enums\ArticleType::Simple)
+    <div class="col-12 col-sm-3">
+        <div class="form-group mb-3">
+            <label for="name">{{ __('Importo') }}</label>
+            <input disabled class="form-control" type="text" value="@money($orderRow->total_amount)">
+        </div>
+    </div>
 
-                            @php
-                                $quantity = ($order->rows->first(function($row) use($article){
-                                    return $row->article_id == $article->id && $row->variant == null;
-                                })->quantity ?? 0);
+    <div class="col-12 col-sm-2">
+        <div class="form-group mb-3">
+            <label for="bank_transfer">{{ __('Pagato con bonifico') }}</label>
+            <span class="text-danger">*</span>
+            <div class="form-check form-switch form-switch-lg">
+                <input name="bank_transfer" class="form-item" type="hidden" checked value="0">
+                <input class="form-check-input form-item input-switch {{ $errors->has('bank_transfer') ? 'is-invalid' : '' }}" type="checkbox" name="bank_transfer" {{ old('bank_transfer', true) ? 'checked' : "" }} value="1">
+                @if ($errors->has('bank_transfer'))
+                    <div class="invalid-feedback">{{ $errors->first('bank_transfer') }}</div>
+                @endif
+            </div>
+        </div>
+    </div>
 
-                                $key = 0;
-                            @endphp
+    <div class="col-12 col-sm-3">
+        <div class="form-group mb-3 cashed_by_container">
+            <label for="bank_transfer">{{ __('Esattore') }}</label>
+            <span class="text-danger">*</span>
+            <select class="form-select {{ $errors->has('cashed_by') ? 'is-invalid' : '' }}" name="cashed_by">
+                @foreach ($accountants as $accountant)
+                    {{--
+                    <option @if(old('cashed_by', $athleteFee->cashed_by ? $athleteFee->cashed_by : Auth::id()) == $accountant->id) selected @endif value="{{ $accountant->id }}">{{ $accountant->name }}</option>
+                    --}}
+                    <option selected value="{{ $accountant->id }}">{{ $accountant->name }}</option>
+                @endforeach
+            </select>
+            @if ($errors->has('cashed_by'))
+                <div class="invalid-feedback">{{ $errors->first('cashed_by') }}</div>
+            @endif
+        </div>
+    </div>
+</div>
 
-                            <input name="articles[{{ $article->id }}][variants][{{ $key }}]" class="form-control {{ $errors->has('articles.' . $article->id . '.variants.' . $key) ? 'is-invalid' : '' }}" type="number" step="1" min="0" value="{{ old('articles.' . $article->id . '.variants.' . $key, $quantity) }}">
-                            @if ($errors->has('variants.' . $key))
-                                <div class="invalid-feedback">{{ $errors->first('variants.' . $key) }}</div>
-                            @endif
 
-                        @elseif($article->type == \App\Enums\ArticleType::Variants)
-
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col">
-                                            @foreach(App\Enums\Sizes::asSelectArray() as $key => $value)
-
-                                                @php
-                                                    $quantity = ($order->rows->first(function($row) use($article, $key){
-                                                        return $row->article_id == $article->id && $row->variant == $key;
-                                                    })->quantity ?? 0);
-                                                @endphp
-
-                                                <div class="form-group mb-3">
-                                                    <label for="name">{{ $value }}</label>
-                                                    <span class="text-danger">*</span>
-                                                    <input name="articles[{{ $article->id }}][variants][{{ $key }}]" class="form-control {{ $errors->has('articles.' . $article->id . '.variants.' . $key) ? 'is-invalid' : '' }}" type="number" step="1" min="0" value="{{ old('articles.' . $article->id . '.variants.' . $key, $quantity) }}">
-                                                    @if ($errors->has('variants.' . $key))
-                                                        <div class="invalid-feedback">{{ $errors->first('variants.' . $key) }}</div>
-                                                    @endif
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        @endif
-
-                        
-                    </div>
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
+@push ('after-scripts')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.input-switch[name="bank_transfer"]').on('change', function(event) {
+            let is_checked = $(this).is(':checked');
+            let item = $('.cashed_by_container');
+            if(is_checked){
+                item.addClass('invisible');
+            }else{
+                item.removeClass('invisible');
+            }
+        });
+    });
+</script>
+@endpush

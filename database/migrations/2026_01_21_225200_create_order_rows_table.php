@@ -2,6 +2,8 @@
 
 use App\Classes\Utility;
 use App\Enums\ArticleType;
+use App\Enums\OrderRowStatus;
+use App\Enums\OrderStatus;
 use App\Enums\Permissions;
 use App\Enums\Sizes;
 use Illuminate\Database\Migrations\Migration;
@@ -31,6 +33,7 @@ return new class extends Migration
             $table->integer('quantity')->default(0);
             $table->decimal('amount', 14, 2)->default(0);
             $table->decimal('total_amount', 14, 2)->default(0);
+            $table->enum('status', OrderRowStatus::asArray())->default(OrderRowStatus::Pending);
             $table->timestamps();
             $table->softDeletes();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onDelete('set null');

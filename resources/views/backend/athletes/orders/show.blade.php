@@ -42,7 +42,7 @@
                     </h3>
                     <ul>
                         <li><span>Data creazione {{ $order->created_at }}</span></li>
-                        <li><span>Stato Ordine: Consegnato</span></li>
+                        <li><span>Stato Ordine: {{ $order->status }}</span></li>
                         <li><span>Ordinante: {{ $order->athlete->full_name }}</span></li>
                         <li><span>Articoli ordinati {{ $order->quantity }}</span></li>
                         <li><span>Totale {{ $order->total_amount }}</span></li>
@@ -57,6 +57,7 @@
                                 <th>{{ __('Prezzo') }}</th>
                                 <th>{{ __('Quantità') }}</th>
                                 <th>{{ __('Importo') }}</th>
+                                <th>{{ __('Status') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,6 +74,9 @@
                                     </td>
                                     <td>
                                         {{ $row->total_amount }}
+                                    </td>
+                                    <td>
+                                        {{ $row->status }}
                                     </td>
                                 </tr>    
                             @endforeach

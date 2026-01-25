@@ -97,11 +97,7 @@
                 data: 'total_amount',
             },
             {
-                data: null,
-                render(data, type, row, meta) {
-                    console.log(data, type, row, meta)
-                    return 'Consegnato';
-                },
+                data: 'status',
             },
             {
                 data: 'action',

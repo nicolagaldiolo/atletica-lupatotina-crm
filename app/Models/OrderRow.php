@@ -20,7 +20,8 @@ class OrderRow extends Model
         'variant',
         'quantity',
         'amount',
-        'total_amount'
+        'total_amount',
+        'status'
     ];
 
     /**
