@@ -26,42 +26,9 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-lg-8">
-                <h3>
-                    {{ __('Elenco ordini') }}
-                </h3>
+            <div class="col-lg-12">
+                
                 <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
-                    <thead>
-                        <tr>
-                            <th>
-                                #
-                            </th>
-                            <th>
-                                {{ __('Ordinante') }}
-                            </th>
-                            <th>
-                                {{ __('Data ordine') }}
-                            </th>
-                            <th>
-                                {{ __('Articoli') }}
-                            </th>
-                            <th>
-                                {{ __('Importo') }}
-                            </th>
-                            <th>
-                                {{ __('Stato') }}
-                            </th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-            <div class="col-lg-4">
-                <h3>
-                    {{ __('Elenco ordini') }}
-                </h3>
-
-                <table id="datatable_articles_detail" class="table table-bordered table-hover table-responsive-sm">
                     <thead>
                         <tr>
                             <th>
@@ -71,11 +38,21 @@
                                 {{ __('Articolo') }}
                             </th>
                             <th>
-                                {{ __('Taglia') }}
+                                {{ __('Variante') }}
                             </th>
                             <th>
                                 {{ __('Quantità') }}
                             </th>
+                            <th>
+                                {{ __('Importo') }}
+                            </th>
+                            <th>
+                                {{ __('Totale') }}
+                            </th>
+                            <th>
+                                {{ __('Stato') }}
+                            </th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                 </table>
@@ -97,7 +74,7 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("seasons.orders.index", $season) }}',
+        ajax: '{{ route("seasons.orders.edit", [$season, $order]) }}',
         columns: [
             {
                 data: 'id',
@@ -105,64 +82,30 @@
                 visible: false,
             },
             {
-                data: 'fullname',
-                name: 'fullname',
+                data: 'article.name',
             },
             {
-                data: 'created_at',
-                render(data) {
-                    return App.date(data);
-                },
+                data: 'variant',
             },
             {
-                data: 'quantity'
+                data: 'quantity',
+            },
+            {
+                data: 'amount'
             },
             {
                 data: 'total_amount',
-                render(data) {
-                    return App.money(data);
-                },
             },
             {
                 data: null,
-                render(data) {
+                render(data, type, row, meta) {
+                    console.log(data, type, row, meta)
                     return 'Consegnato';
                 },
             },
             {
                 data: 'action',
                 name: 'action',
-                orderable: false,
-                searchable: false
-            }
-        ]
-    });
-
-    $('#datatable_articles_detail').DataTable({
-        processing: true,
-        serverSide: true,
-        autoWidth: true,
-        responsive: true,
-        ajax: '{{ route("seasons.products.index", $season) }}',
-        columns: [
-            {
-                data: 'article_id',
-                visible: false,
-            },
-
-            {
-                data: 'name',
-                //visible: false,
-            },
-
-            {
-                data: 'variant',
-                orderable: false,
-                searchable: false
-            },
-            
-            {
-                data: 'quantity',
                 orderable: false,
                 searchable: false
             }

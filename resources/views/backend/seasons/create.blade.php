@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @php
-    entity = __('Stagioni')
+    $entity = __('Stagioni')
 @endphp
 
 @section('title') {{ $entity }} @endsection
@@ -12,19 +12,19 @@
 
 @section('content')
 <div class="card">
-    {{ html()->form('POST', route("races.store", $race->type))->class('form')->open() }}
+    {{ html()->form('POST', route("seasons.store"))->class('form')->open() }}
         <div class="card-header">
             <div class="row">
                 <div class="col">
                     <div class="float-end">
                         <div class="form-group">
-                            @can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Race::class)
-                                <x-backend.buttons.return route='{{ route("races.index", $race->type) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
-                            @endcan
+                            {{--@can('viewAnySeason', App\Models\Season::class)--}}
+                                <x-backend.buttons.return route='{{ route("seasons.index") }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                            {{--@endcan--}}
                             
-                            @can((($race->type == App\Enums\RaceType::Race) ? 'createRace' : (($race->type == App\Enums\RaceType::Track) ? 'createTrack' : false)), App\Models\Race::class)
+                            {{--@can('createSeason', App\Models\Season::class)--}}
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                            @endcan
+                            {{--@endcan--}}
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col">
-                    @include ("backend.races.partials.form", ['disabled' => false])
+                    @include ("backend.seasons.partials.form", ['disabled' => false])
                 </div>
             </div>
         </div>

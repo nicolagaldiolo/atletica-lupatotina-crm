@@ -1,20 +1,22 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Quote iscrizione')
+    $entity = __('Ordini')
 @endphp
 
 @section('title') {{ $entity }} @endsection
 
+@section('before-breadcrumbs')
+    <img class="avatar avatar-lg me-2" src="{{ $athlete->avatar }}">
+@endsection
+
 @section('breadcrumbs')
-    {{-- 
-    <x-backend-breadcrumb-item canurl="{{ Auth::user()->can('update', $race) }}" route="{{ route('races.edit', [$race->type, $race]) }}">{{ $race->name }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item type="active">{{ $fee->name }}</x-backend-breadcrumb-item>
-    --}}
+    <x-backend-breadcrumb-item canurl="true" route="#">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ $order->created_at }}</x-backend-breadcrumb-item>
 @endsection
 
 @section('secondary-nav')
-    {{--@include ("backend.races.partials.action_column", ['layout' => 'nav'])--}}
+    @include ("backend.athletes.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')

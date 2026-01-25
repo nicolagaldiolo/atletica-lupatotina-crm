@@ -7,6 +7,7 @@ use App\Enums\ArticleType;
 use App\Http\Requests\ArticleRequest;
 use App\Http\Requests\OrderRequest;
 use App\Models\Article;
+use App\Models\Athlete;
 use App\Models\Order;
 use App\Models\Season;
 use Illuminate\Support\Facades\DB;
@@ -16,59 +17,43 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Season $season)
+    public function index(Athlete $athlete)
     {
-
-
-    $builder = $season->orderRows()->select('articles.name', 'order_rows.article_id', 'order_rows.variant', DB::raw('SUM(order_rows.quantity) as quantity'))
-                ->groupBy('articles.name')->groupBy('orders.season_id')->groupBy('order_rows.article_id')->groupBy('order_rows.variant')->leftJoinRelationship('article')->get();
-
-        //dd($builder);
 
         if (request()->ajax()) {
 
-            $builder = $season->orders()->with('athlete')->withCount('rows')->leftJoinRelationship('athlete');
+            $builder = $athlete->orders();
 
             return datatables()->eloquent($builder)
-                ->orderColumn('fullname', function ($query, $order) {
-                    $query->orderBy('athletes.surname', $order)->orderBy('athletes.name', $order);
-                })
-                ->filterColumn('fullname', function($query, $keyword) {
-                    $sql = "CONCAT(athletes.name, athletes.surname)  like ?";
-                    $query->whereRaw($sql, ["%{$keyword}%"]);
-                })
-                ->editColumn('fullname', function (Order $order) {
-                    return $order->athlete->fullname;
-                })
-                ->addColumn('action', function (Order $order) use($season){
-                    return view('backend.seasons.orders.partials.action_column', compact('season', 'order'));
+                ->addColumn('action', function (Order $order) use($athlete){
+                    return view('backend.athletes.orders.partials.action_column', compact('athlete', 'order'));
                 })->make(true);
         }else{
-            return view('backend.seasons.orders.index', compact('season'));
+            return view('backend.athletes.orders.index', compact('athlete'));
         }
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Season $season)
+    public function create(Athlete $athlete)
     {
         //$this->authorize('create', Article::class);
         $order = new Order();
-        
         $articles = Article::active()->get();
-        return view('backend.seasons.orders.create', compact('season', 'order', 'articles'));
+
+        return view('backend.athletes.orders.create', compact('athlete', 'order', 'articles'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(OrderRequest $request, Season $season)
+    public function store(OrderRequest $request, Athlete $athlete)
     {
         //$this->authorize('create', Article::class);
 
-        $order = $season->orders()->create([
-            'athlete_id' => auth()->user()->athlete->id
+        $order = $athlete->orders()->create([
+            'season_id' => Season::active()->firstOrFail()->id
         ]);
 
         $articles = $request->get('articles' , []);
@@ -77,25 +62,25 @@ class OrderController extends Controller
 
         Utility::flashMessage();
 
-        return redirect(route('seasons.orders.index', $season));
+        return redirect(route('athletes.orders.index', $athlete));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Season $season, Order $order)
+    public function show(Athlete $athlete, Order $order)
     {
         //$this->authorize('update', $article);
 
         $order->load('rows');
 
-        return view('backend.seasons.orders.show', compact('season', 'order'));
+        return view('backend.athletes.orders.show', compact('athlete', 'order'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Season $season, Order $order)
+    public function edit(Athlete $athlete, Order $order)
     {
         //$this->authorize('update', $article);
 
@@ -103,13 +88,13 @@ class OrderController extends Controller
 
         $articles = Article::active()->get();
 
-        return view('backend.seasons.orders.edit', compact('season', 'order', 'articles'));
+        return view('backend.athletes.orders.edit', compact('athlete', 'order', 'articles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(OrderRequest $request, Season $season, Order $order)
+    public function update(OrderRequest $request, Athlete $athlete, Order $order)
     {
         //$this->authorize('update', $article);
         
@@ -119,13 +104,13 @@ class OrderController extends Controller
 
         Utility::flashMessage();
 
-        return redirect(route('seasons.orders.index', $season));
+        return redirect(route('athletes.orders.index', $athlete));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Season $season, Order $order)
+    public function destroy(Athlete $athlete, Order $order)
     {
         //$this->authorize('delete', $article);
         
@@ -133,7 +118,7 @@ class OrderController extends Controller
 
         Utility::flashMessage();
         
-        return redirect(route('seasons.orders.index', $season));
+        return redirect(route('athletes.orders.index', $athlete));
     }
 
     protected function handleOrderRows(Order $order, array $articles)
@@ -142,8 +127,6 @@ class OrderController extends Controller
         $order->rows->each(function($item){
             $item->forceDelete();
         });
-
-        $i = 10;
     
         collect($articles)->filter(function($item){
             return intval($item['selected']);
@@ -169,16 +152,5 @@ class OrderController extends Controller
             'total_amount' => $order->rows()->sum('total_amount'),
             'quantity' => $order->rows()->sum('quantity'),
         ]);
-    }
-
-    public function products(Season $season)
-    {
-
-        if (request()->ajax()) {
-            $builder = $season->orderRows()->select('articles.name', 'order_rows.article_id', 'order_rows.variant', DB::raw('SUM(order_rows.quantity) as quantity'))
-                ->groupBy('articles.name')->groupBy('orders.season_id')->groupBy('order_rows.article_id')->groupBy('order_rows.variant')->leftJoinRelationship('article');
-
-            return datatables()->eloquent($builder)->make(true);
-        }
     }
 }

@@ -1,19 +1,22 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Gare')
+    $entity = __('Abbigliamento')
 @endphp
 
 @section('title') {{ $entity }} @endsection
-{{-- 
-@section('breadcrumbs')
-    <x-backend-breadcrumb-item canurl="{{ Auth::user()->can('update', $race) }}" route="{{ route('races.edit', [$race->type, $race]) }}">{{ $race->name }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item type="active">{{ __('Quote') }}</x-backend-breadcrumb-item>
+
+@section('before-breadcrumbs')
+    <img class="avatar avatar-lg me-2" src="{{ $athlete->avatar }}">
 @endsection
---}}
+
+@section('breadcrumbs')
+    <x-backend-breadcrumb-item canrul="{{ Auth::user()->can('edit', $athlete) }}" route='{{route("athletes.edit", $athlete)}}'>{{ $athlete->fullname }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ $entity }}</x-backend-breadcrumb-item>
+@endsection
 
 @section('secondary-nav')
-    {{--@include ("backend.races.partials.action_column", ['layout' => 'nav'])--}}
+    @include ("backend.athletes.partials.action_column", ['layout' => 'nav'])
 @endsection
 
 @section('content')
@@ -21,23 +24,22 @@
     <div class="card-header">
         <x-backend.section-header>
             <x-slot name="toolbar">
+                {{--@can((($race->type == App\Enums\RaceType::Race) ? 'createRace' : (($race->type == App\Enums\RaceType::Track) ? 'createTrack' : false)), App\Models\Fee::class)--}}
+                    <x-backend.buttons.create route="{{ route('athletes.orders.create', $athlete) }}" small="true" title="">
+                        {{ __('Crea ordine') }}
+                    </x-backend.buttons.create>
+                {{--  @endcan --}}
             </x-slot>
         </x-backend.section-header>
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-lg-8">
-                <h3>
-                    {{ __('Elenco ordini') }}
-                </h3>
+            <div class="col-lg-12">
                 <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
                     <thead>
                         <tr>
                             <th>
                                 #
-                            </th>
-                            <th>
-                                {{ __('Ordinante') }}
                             </th>
                             <th>
                                 {{ __('Data ordine') }}
@@ -52,30 +54,6 @@
                                 {{ __('Stato') }}
                             </th>
                             <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-            <div class="col-lg-4">
-                <h3>
-                    {{ __('Elenco ordini') }}
-                </h3>
-
-                <table id="datatable_articles_detail" class="table table-bordered table-hover table-responsive-sm">
-                    <thead>
-                        <tr>
-                            <th>
-                                #
-                            </th>
-                            <th>
-                                {{ __('Articolo') }}
-                            </th>
-                            <th>
-                                {{ __('Taglia') }}
-                            </th>
-                            <th>
-                                {{ __('Quantità') }}
-                            </th>
                         </tr>
                     </thead>
                 </table>
@@ -97,16 +75,12 @@
         serverSide: true,
         autoWidth: true,
         responsive: true,
-        ajax: '{{ route("seasons.orders.index", $season) }}',
+        ajax: '{{ route("athletes.orders.index", $athlete) }}',
         columns: [
             {
                 data: 'id',
                 name: 'id',
                 visible: false,
-            },
-            {
-                data: 'fullname',
-                name: 'fullname',
             },
             {
                 data: 'created_at',
@@ -132,37 +106,6 @@
             {
                 data: 'action',
                 name: 'action',
-                orderable: false,
-                searchable: false
-            }
-        ]
-    });
-
-    $('#datatable_articles_detail').DataTable({
-        processing: true,
-        serverSide: true,
-        autoWidth: true,
-        responsive: true,
-        ajax: '{{ route("seasons.products.index", $season) }}',
-        columns: [
-            {
-                data: 'article_id',
-                visible: false,
-            },
-
-            {
-                data: 'name',
-                //visible: false,
-            },
-
-            {
-                data: 'variant',
-                orderable: false,
-                searchable: false
-            },
-            
-            {
-                data: 'quantity',
                 orderable: false,
                 searchable: false
             }

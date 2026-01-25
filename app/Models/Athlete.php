@@ -135,6 +135,11 @@ class Athlete extends Model
         return $this->hasMany(Voucher::class)->whereDoesntHave('athleteFee');
     }
 
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

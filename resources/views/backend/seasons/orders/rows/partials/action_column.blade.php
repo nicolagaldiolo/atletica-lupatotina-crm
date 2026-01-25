@@ -3,5 +3,7 @@
     {{--
     
     --}}
-    <x-backend.buttons.show route='{{ route("seasons.orders.edit", [$season, $order]) }}' icon="fas fa-bars" small="true" title="{{ __('Visualizza') }}"/>    
+    {{--
+    <x-backend.buttons.show route='{{ route("seasons.orders.show", [$season, $order]) }}' icon="fas fa-bars" small="true" title="{{ __('Visualizza') }}"/>    
+    --}}
 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ModelStorage;
 use App\Traits\Owner;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,6 +14,7 @@ class Article extends Model
     use HasFactory;
     use SoftDeletes;
     use Owner;
+    use ModelStorage;
 
     protected $fillable = [
         'name',
@@ -30,6 +32,16 @@ class Article extends Model
         'is_active' => 'boolean',
         'is_unlimited' => 'boolean',
     ];
+
+    public function images()
+    {
+        return $this->hasMany(ArticleImage::class)->orderBy('position')->orderBy('id');
+    }
+
+    public function imageDefault()
+    {
+        return $this->hasOne(ArticleImage::class)->default()->orderBy('position')->orderBy('id');
+    }
 
     public function scopeActive(Builder $query): void
     {

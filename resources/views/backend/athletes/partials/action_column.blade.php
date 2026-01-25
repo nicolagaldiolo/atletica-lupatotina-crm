@@ -69,6 +69,13 @@
                             </a>
                         </li>
                     @endcan
+
+                    <li class="nav-item">
+                        <a class="nav-link @if(Route::is('athletes.orders.*')) active @endif" aria-current="page" href="{{ route("athletes.orders.index", $athlete) }}">
+                            <i class="fas fa-shirt"></i>
+                            {{ __('Abbigliamento') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -93,6 +100,9 @@
         @can('viewAny', App\Models\Voucher::class)
             <x-backend.buttons.edit route='{{ route("athletes.vouchers.index", $athlete) }}' small="true" icon="fas fa-tags" title="{{ __('Voucher') }}"/>
         @endcan
+        {{--@can('viewAny', App\Models\Voucher::class)--}}
+            <x-backend.buttons.edit route='{{ route("athletes.orders.index", $athlete) }}' small="true" icon="fas fa-shirt" title="{{ __('Abbigliamento') }}"/>
+        {{--@endcan--}}
         @can('delete', $athlete)
             <x-backend.buttons.delete route='{{ route("athletes.destroy", $athlete) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" title="{{ __('Elimina') }}" data_token="{{csrf_token()}}"/>
         @endcan

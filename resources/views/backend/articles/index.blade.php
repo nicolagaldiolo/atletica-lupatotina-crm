@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Abbigliamento')
+    $entity = __('Articoli')
 @endphp
 
 @section('title') {{ $entity }} @endsection
@@ -81,6 +81,13 @@
             },
             {
                 data: 'name',
+                render(data, type, row, meta) {
+                    var html = [data];
+                    if(row.image_default && row.image_default.public_url){
+                        html.push('<img width="100" src="' + row.image_default.public_url + '" />');
+                    }
+                    return html.join(" ");
+                },
             },
             {
                 data: 'price',

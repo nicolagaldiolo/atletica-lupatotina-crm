@@ -12,7 +12,7 @@
 
 @section('content')
 <div class="card">
-    {{ html()->form('POST', route("articles.store"))->class('form')->open() }}
+    {{ html()->form('POST', route("articles.store"))->acceptsFiles()->class('form')->open() }}
         <div class="card-header">
             <div class="row">
                 <div class="col">

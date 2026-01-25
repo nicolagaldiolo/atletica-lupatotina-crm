@@ -7,30 +7,24 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-    <x-backend-breadcrumb-item type="active">{{ $race->name }}</x-backend-breadcrumb-item>
-@endsection
-
-@section('secondary-nav')
-    @include ("backend.races.partials.action_column", ['layout' => 'nav'])
+    <x-backend-breadcrumb-item type="active">{{ $season->name }}</x-backend-breadcrumb-item>
 @endsection
 
 @section('content')
-{{ html()->modelForm($race, 'PATCH', route("races.update", [$race->type, $race]))->class('form')->open() }}
+{{ html()->modelForm($season, 'PATCH', route("seasons.update", $season))->class('form')->open() }}
 <div class="card">
 
     <div class="card-header">
         <div class="row">
             <div class="col">
-                @can((($race->type == App\Enums\RaceType::Race) ? 'deleteRace' : (($race->type == App\Enums\RaceType::Track) ? 'deleteTrack' : false)), $race)
-                    <x-backend.buttons.delete route='{{ route("races.destroy", [$race->type, $race]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
-                @endcan
+                <x-backend.buttons.delete route='{{ route("seasons.destroy", $season) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                 <div class="float-end">
-                    @can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Race::class)
-                        <x-backend.buttons.return route='{{ route("races.index", $race->type) }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
-                    @endcan
-                    @can((($race->type == App\Enums\RaceType::Race) ? 'updateRace' : (($race->type == App\Enums\RaceType::Track) ? 'updateTrack' : false)), $race)
+                    {{--@can('viewAnySeason', App\Models\Season::class)--}}
+                        <x-backend.buttons.return route='{{ route("seasons.index") }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
+                    {{--@endcan--}}
+                    {{--@can('updateSeason', App\Models\Season::class)--}}
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                    @endcan
+                    {{--@endcan--}}
                 </div>
             </div>
         </div>
@@ -38,7 +32,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col">
-                @include ("backend.races.partials.form", ['disabled' => false])
+                @include ("backend.seasons.partials.form", ['disabled' => false])
             </div>
         </div>
     </div>

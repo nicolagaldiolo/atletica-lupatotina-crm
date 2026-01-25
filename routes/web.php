@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::delete('athletes/{athlete}/{raceType}/fees/{fee}/athletefee/{athleteFee}', [AthleteController::class, 'destroySubscription'])->name('athletes.fees.athletefee.destroySubscription');
     Route::resource('athletes.certificates', CertificateController::class)->except('show');
     Route::resource('athletes.vouchers', VoucherController::class)->except('show');
+    Route::resource('athletes.orders', OrderController::class);
     
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('reports/{year}/races', [ReportController::class, 'races'])->name('reports.races');
@@ -99,10 +100,16 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::post('payments/{raceType}', [PaymentController::class, 'store'])->name('payments.store');
 
     Route::get('articles/create/{type}', [ArticleController::class, 'create'])->name('articles.create');
+    Route::delete('articles/{article}/images/{articleImage}', [ArticleController::class, 'destroyImage'])->name('articles.destroyImage');
+    Route::post('articles/{article}/images/{articleImage}', [ArticleController::class, 'defaultImage'])->name('articles.defaultImage');
+    Route::post('articles/{article}/images/{articleImage}/disable', [ArticleController::class, 'disableImage'])->name('articles.disableImage');
+    Route::post('articles/{article}/sortImages', [ArticleController::class, 'sortImages'])->name('articles.sortImages');
     Route::resource('articles', ArticleController::class)->except('create');
-    Route::resource('seasons', SeasonController::class);
-    Route::resource('seasons.orders', OrderController::class);
-    Route::get('seasons/{season}/products', [OrderController::class, 'products'])->name('seasons.products.index');
+
+    Route::resource('seasons', SeasonController::class)->except('show');
+    Route::get('seasons/{season}/orders', [SeasonController::class, 'orders'])->name('seasons.orders.index');
+    Route::get('seasons/{season}/orders/{order}', [SeasonController::class, 'orderEdit'])->name('seasons.orders.edit');
+    Route::get('seasons/{season}/products', [SeasonController::class, 'products'])->name('seasons.products.index');
 
     Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('tasks/{task}', [TaskController::class, 'exec'])->name('tasks.exec');

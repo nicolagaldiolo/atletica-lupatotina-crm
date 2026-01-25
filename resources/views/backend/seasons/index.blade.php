@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Stagioni')
+    $entity = __('Vendite')
 @endphp
 
 @section('title') {{ $entity }} @endsection

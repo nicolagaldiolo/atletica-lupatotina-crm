@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\Owner;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,5 +41,11 @@ class Season extends Model
     public function orderRows(): HasManyThrough
     {
         return $this->hasManyThrough(OrderRow::class, Order::class);
+    }
+
+    public function scopeActive(Builder $query)
+    {
+        $now = Carbon::now();
+        return $query->where('start_at', '<=', $now)->where('end_at', '>=', $now);
     }
 }

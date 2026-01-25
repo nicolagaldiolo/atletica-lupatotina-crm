@@ -17,7 +17,7 @@
 @endsection
 
 @section('content')
-{{ html()->modelForm($article, 'PATCH', route("articles.update", $article))->class('form')->open() }}
+{{ html()->modelForm($article, 'PATCH', route("articles.update", $article))->acceptsFiles()->class('form')->open() }}
 <div class="card">
     <div class="card-header">
         <div class="row">
