@@ -11,7 +11,7 @@
             <span class="text-danger">*</span>
             <select class="form-select {{ $errors->has('status') ? 'is-invalid' : '' }}" name="status">
                 @foreach (App\Enums\OrderRowStatus::asSelectArray() as $key => $value)
-                    <option value="{{ $key }}" @if($key == old('status', $order->status)) selected @endif>{{ __($value) }}</option>
+                    <option value="{{ $key }}" @if($key == old('status', $orderRow->status)) selected @endif>{{ __($value) }}</option>
                 @endforeach
             </select>
         </div>

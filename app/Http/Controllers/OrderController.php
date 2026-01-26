@@ -10,6 +10,7 @@ use App\Models\Article;
 use App\Models\Athlete;
 use App\Models\Order;
 use App\Models\Season;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -52,15 +53,19 @@ class OrderController extends Controller
     {
         //$this->authorize('create', Article::class);
 
-        $order = $athlete->orders()->create([
-            'season_id' => Season::active()->firstOrFail()->id
-        ]);
+        try{
+            $order = $athlete->orders()->create([
+                'season_id' => Season::active()->firstOrFail()->id
+            ]);
 
-        $articles = $request->get('articles' , []);
+            $articles = $request->get('articles' , []);
 
-        $this->handleOrderRows($order, $articles);
+            $this->handleOrderRows($order, $articles);
 
-        Utility::flashMessage();
+            Utility::flashMessage();
+        }catch(Exception $e){
+            Utility::flashMessage('error');
+        }
 
         return redirect(route('athletes.orders.index', $athlete));
     }
@@ -98,11 +103,15 @@ class OrderController extends Controller
     {
         //$this->authorize('update', $article);
         
-        $articles = $request->get('articles' , []);
+        try{
+            $articles = $request->get('articles' , []);
 
-        $this->handleOrderRows($order, $articles);
+            $this->handleOrderRows($order, $articles);
 
-        Utility::flashMessage();
+            Utility::flashMessage();
+        }catch(Exception $e){
+            Utility::flashMessage('error');
+        }
 
         return redirect(route('athletes.orders.index', $athlete));
     }

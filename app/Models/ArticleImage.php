@@ -94,7 +94,7 @@ class ArticleImage extends Model
     {
         $path = null;
         if($this->image && Storage::exists($this->image)){
-            $path = asset($this->image);
+            $path = asset('storage/' . $this->image);
         }
 
         return $path;

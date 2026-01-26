@@ -84,6 +84,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $user->hasRole(Roles::SuperAdmin);
     }
 
+    public function scopeHandlePaymentsOrders($query): void
+    {
+        $query->permission(Permissions::HandlePaymentsRace);
+    }
+
     public function scopeHandlePaymentsRace($query): void
     {
         $query->permission(Permissions::HandlePaymentsRace);

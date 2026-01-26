@@ -211,10 +211,15 @@ class AthleteController extends Controller
 
     public function updateFee(Request $request, Athlete $athlete, $raceType, Fee $fee, AthleteFee $athleteFee)
     {
+
+        $cashiers = [];
+
         if($raceType == RaceType::Race){
             $this->authorize('registerPaymentRace', $athleteFee);
+            $cashiers = User::handlePaymentsRace()->get()->pluck('id')->toArray();
         }else if($raceType == RaceType::Track){
             $this->authorize('registerPaymentTrack', $athleteFee);
+            $cashiers = User::handlePaymentsTrack()->get()->pluck('id')->toArray();
         }else{
             abort(401);
         }
@@ -224,7 +229,7 @@ class AthleteController extends Controller
             'bank_transfer' => 'required|boolean',
             'cashed_by' => [
                 'required',
-                Rule::exists('users', 'id'),
+                Rule::in($cashiers)
             ]
         ]);
 
