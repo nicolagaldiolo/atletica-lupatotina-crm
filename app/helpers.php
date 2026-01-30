@@ -551,6 +551,26 @@ if (!function_exists('cashFee')) {
     }
 }
 
+if (!function_exists('handleTransaction')) {
+    function handleTransaction($transactionable, $payed = false, $amount = 0, $bank_transfer = false, $cashed_by = null)
+    {
+        $transactionable->transactions->each(function($item){
+            $item->delete();
+        });
+
+        if($payed){
+            $transactionable->transactions()->create([
+                'payed_at' => Carbon::now(),
+                'amount' => $amount,
+                'bank_transfer' => $bank_transfer,
+                'cashed_by' => $bank_transfer ? null : $cashed_by
+            ]);
+        }
+
+        return $transactionable->transactions;
+    }
+}
+
 if(!function_exists('raceYears')) {
     function raceYears()
     {

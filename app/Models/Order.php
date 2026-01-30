@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use App\Traits\Owner;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,7 +26,8 @@ class Order extends Model
     ];
 
     protected $appends = [
-        'status'
+        'status',
+        'is_payed'
     ];
 
     /**
@@ -41,21 +42,35 @@ class Order extends Model
 
     public function getStatusAttribute()
     {
+        $order_canceled = OrderStatus::Canceled;
+        $order_delivered = OrderStatus::Delivered;
+        $order_partially_delivered = OrderStatus::Partially_delivered;
+        $order_processing = OrderStatus::Processing;
+        $order_pending = OrderStatus::Pending;
 
-
-        $orderStatus = DB::table('order_rows')
-        ->where('order_id', $this->order_id)
-        ->selectRaw("
+        $orderStatus = DB::table('order_rows')->where('order_id', $this->order_id)->selectRaw("
             CASE
-                WHEN COUNT(*) = SUM(status = 'cancelled') THEN 'cancelled'
-                WHEN COUNT(*) = SUM(status = 'delivered') THEN 'delivered'
-                WHEN SUM(status = 'delivered') > 0 THEN 'partially_delivered'
-                WHEN SUM(status = 'processing') > 0 THEN 'processing'
-                ELSE 'pending'
+                WHEN COUNT(*) = SUM(status = '$order_canceled') THEN '$order_canceled'
+                WHEN COUNT(*) = SUM(status = '$order_delivered') THEN '$order_delivered'
+                WHEN SUM(status = '$order_delivered') > 0 THEN '$order_partially_delivered'
+                WHEN SUM(status = '$order_processing') > 0 THEN '$order_processing'
+                ELSE '$order_pending'
             END AS order_status
         ")->value('order_status');
         
         return $orderStatus;
+    }
+
+    public function getIsPayedAttribute()
+    {
+
+        /*
+        const Pending = 'pending';
+        const PartialPayped = 'partial_payed';
+        const Payed = 'payed';
+        */
+        $i = 10;
+        return true;
     }
 
     public function season(): BelongsTo

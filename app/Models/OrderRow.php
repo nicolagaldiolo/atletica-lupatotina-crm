@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Traits\Owner;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OrderRow extends Model
 {
@@ -24,13 +24,18 @@ class OrderRow extends Model
         'status'
     ];
 
+    protected $appends = [
+        'is_payed'
+    ];
+
     /**
      * The attributes that should be cast.
      *
      * @var array
      */
     protected $casts = [
-        'amount' => 'float'
+        'amount' => 'float',
+        'total_amount' => 'float'
     ];
 
     public function order(): BelongsTo
@@ -43,8 +48,13 @@ class OrderRow extends Model
         return $this->belongsTo(Article::class);
     }
 
-    public function getRowTotalAttribute()
+    public function getIsPayedAttribute()
     {
-        return implode(' ', [$this->surname, $this->name]);
+        return $this->transactions->sum('amount') >= $this->total_amount;
+    }
+
+    public function transactions(): MorphMany
+    {
+        return $this->morphMany(Transaction::class, 'transactionable');
     }
 }

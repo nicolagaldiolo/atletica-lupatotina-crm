@@ -3,18 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Utility;
-use App\Enums\ArticleType;
-use App\Http\Requests\ArticleRequest;
-use App\Http\Requests\OrderRequest;
 use App\Http\Requests\SaleRowRequest;
-use App\Models\Article;
-use App\Models\Athlete;
 use App\Models\Order;
 use App\Models\OrderRow;
 use App\Models\Season;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class SaleRowController extends Controller
 {
@@ -35,8 +28,13 @@ class SaleRowController extends Controller
 
     public function update(SaleRowRequest $request, Season $season, Order $order, OrderRow $orderRow)
     {
-        $orderRow->update($request->validated());
+        $orderRow->update($request->only('status'));
 
+        $payed = (bool) $request->get('payed');
+        $bank_transfer = (bool) $request->get('bank_transfer');
+        
+        handleTransaction($orderRow, $payed, $orderRow->total_amount, $bank_transfer, $request->get('cashed_by'));
+        
         Utility::flashMessage();
 
         return redirect(route('seasons.orders.orderRows.edit', [$season, $order, $orderRow]));

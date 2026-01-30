@@ -51,6 +51,9 @@
                             <th>
                                 {{ __('Stato') }}
                             </th>
+                            <th>
+                                {{ __('Pagamento') }}
+                            </th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -125,6 +128,11 @@
             },
             {
                 data: 'status'
+            },
+            {
+                data: 'is_payed',
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'action',
