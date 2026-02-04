@@ -125,6 +125,7 @@
             <li class="nav-title"><a>{{ __('Incassi') }}</a></li>
         @endif
 
+        {{-- 
         @can('registerPaymentRace', App\Models\AthleteFee::class)
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('proceeds.*') && (request()->route()->parameter('raceType') == App\Enums\RaceType::Race)) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Race) }}">
@@ -132,6 +133,7 @@
                 </a>
             </li>
         @endcan
+        --}}
 
         @can('registerPaymentRace', App\Models\AthleteFee::class)
             <li class="nav-item">
