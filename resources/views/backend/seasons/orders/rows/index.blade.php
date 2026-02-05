@@ -55,13 +55,12 @@
                                             </select>
                                         </div>
                                     </div>
-                                    {{-- 
+                                    
                                     <div class="col-12 col-sm-2">
                                         <div class="form-group mb-3">
                                             <label for="payed">{{ __('Pagato') }}</label>
                                             <span class="text-danger">*</span>
                                             <div class="form-check form-switch form-switch-lg">
-                                                <input name="payed" class="form-item" type="hidden" checked value="0">
                                                 <input class="form-check-input form-item" type="checkbox" name="payed" value="1">
                                             </div>
                                         </div>
@@ -72,7 +71,6 @@
                                             <label for="bank_transfer">{{ __('Pagato con bonifico') }}</label>
                                             <span class="text-danger">*</span>
                                             <div class="form-check form-switch form-switch-lg">
-                                                <input name="bank_transfer" class="form-item" type="hidden" checked value="0">
                                                 <input class="form-check-input form-item input-switch" type="checkbox" name="bank_transfer" value="1">
                                             </div>
                                         </div>
@@ -80,7 +78,7 @@
 
                                     <div class="col-12 col-sm-3">
                                         <div class="form-group mb-3 cashed_by_container">
-                                            <label for="bank_transfer">{{ __('Esattore') }}</label>
+                                            <label for="cashed_by">{{ __('Esattore') }}</label>
                                             <span class="text-danger">*</span>
                                             <select class="form-select" name="cashed_by">
                                                 @foreach ($accountants as $accountant)
@@ -89,7 +87,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    --}}
                                     
                                     <div class="col-12 col-sm-3">
                                         <button id="massUpdate" {{--style="display: none;"--}} class="btn btn-light" data-toggle="tooltip" data-placement="top" title="{{ __('Aggiorna articoli') }}">
@@ -131,7 +128,6 @@
                             <th>
                                 {{ __('Pagamento') }}
                             </th>
-                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                 </table>
@@ -181,6 +177,9 @@
             {
                 data: 'article.name',
                 render(data, type, row, meta) {
+
+                    console.log(row);
+
                     let html = [];
                     
                     if(row.article && row.article.image_default && row.article.image_default.public_url){
@@ -212,12 +211,28 @@
                 orderable: false,
                 searchable: false
             },
+            /*{
+                data: 'bank_transfer',
+                render(data, type, row, meta) {
+                    if(row.payed_at){
+                        return [
+                            App.date(row.payed_at),
+                            data ? '<span class="badge text-bg-secondary"><i class="fa-solid fa-landmark"></i> Bonifico</span>' : '<span class="badge text-bg-success"><i class="fa-solid fa-coins"></i> Contanti</span>'
+                        ].join("<br>");
+                    }else{
+                        return '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
+                    }
+                }
+            },
             {
-                data: 'action',
-                name: 'action',
+                data: 'cashed',
+                render(data) {
+                    return data ? data.name : null;
+                },
                 orderable: false,
                 searchable: false
-            }
+            },
+            */
         ]
     });
 
@@ -244,25 +259,28 @@
         let selectedRows = dataTableGetSelectedRows(dataTable);
 
         if(selectedRows.length){
-            //const params = new URLSearchParams({});
             let currentIds = selectedRows.map(function(item){
                 return item.id;
             });
 
             const form = document.querySelector('#massUpdateForm');
             
-            const fields = form.querySelectorAll(
-                'input:not(:disabled), select:not(:disabled), textarea:not(:disabled)'
-            );
+            const status = $(form).find('[name="status"]').val();
+            const payed = $(form).find('[name="payed"]').is(':checked') ? 1 : 0;
+            const bank_transfer = $(form).find('[name="bank_transfer"]').is(':checked') ? 1 : 0;
+            const cashed_by = $(form).find('[name="cashed_by"]').val();
+
 
             let payload = {
-                ids: currentIds
+                ids: currentIds,
+                status: status,
+                payed: payed,
+                bank_transfer: bank_transfer,
+                cashed_by: cashed_by
             };
 
-            fields.forEach(field => {
-                payload[field.name] = field.value;
-            });
-
+            console.log(payload);
+            
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -271,31 +289,16 @@
                 type: 'PATCH',
                 data: payload,
             }).done(function(data) {
-                //console.log(data);
-                $('#athletes-list').html(data);
-                /*if (data.type == 'success') {
-                    iziToast.success({
-                        message: data.message
-                    });
-                } else {
-                    iziToast.error({
-                        message: data.message
-                    });
-                }
-                */
+                console.log(data);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.log("fail");
-                /*iziToast.error({
-                    message: jqXHR.responseJSON ? jqXHR.responseJSON.message : textStatus
-                });
-                */
+                //iziToast.error({
+                //    message: jqXHR.responseJSON ? jqXHR.responseJSON.message : textStatus
+                //});
+                
             }).always(function() {
                 console.log("always");
-                //is_done = true;
-                //$button.attr('disabled', false);
-                //Tools.unblockUI();
-                //drawDocumentStatus();
-                //dataTable.draw(false);
+                dataTable.draw(false);
             });
 
             //window.location.href = "";

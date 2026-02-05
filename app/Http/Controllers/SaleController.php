@@ -6,6 +6,7 @@ use App\Classes\Utility;
 use App\Enums\ArticleType;
 use App\Http\Requests\ArticleRequest;
 use App\Http\Requests\OrderRequest;
+use App\Http\Requests\SaleRequest;
 use App\Models\Article;
 use App\Models\Athlete;
 use App\Models\Order;
@@ -51,12 +52,9 @@ class SaleController extends Controller
     {
         if (request()->ajax()) {
 
-            $builder = $order->rows()->with('article.imageDefault');
+            $builder = $order->rows()->with(['article.imageDefault', 'transaction.cashed']);
 
-            return datatables()->eloquent($builder)
-                ->addColumn('action', function (OrderRow $orderRow) use($season, $order){
-                    return view('backend.seasons.orders.rows.partials.action_column', compact('season', 'order', 'orderRow'));
-                })->make(true);
+            return datatables()->eloquent($builder)->make(true);
         }else{
 
             $accountants = User::HandlePaymentsRace()->get();
@@ -64,11 +62,18 @@ class SaleController extends Controller
         }
     }
 
-    public function update(Request $request, Season $season, Order $order)
+    public function update(SaleRequest $request, Season $season, Order $order)
     {
+
         $order->rows()->whereIn('id', $request->get('ids', []))->get()->each(function($orderRow) use($request){    
             $orderRow->update($request->only('status'));
-            handleTransaction($orderRow);
+            
+            if($request->has('payed')){
+                $payed = (bool) $request->get('payed', false);
+                $bank_transfer = (bool) $request->get('bank_transfer', false);
+                $cashed_by = $request->get('cashed_by', null);
+                handleTransaction($orderRow, $payed, $orderRow->total_amount, $bank_transfer, $cashed_by);
+            }
         });
 
         return response()->json();

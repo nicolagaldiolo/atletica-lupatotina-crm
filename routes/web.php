@@ -109,12 +109,8 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::resource('articles', ArticleController::class)->except('create');
 
     Route::resource('seasons', SeasonController::class)->except('show');
-    
     Route::get('seasons/{season}/products', [SaleController::class, 'products'])->name('seasons.products.index');
-    
-    Route::resource('seasons.orders', SaleController::class);
-    Route::resource('seasons.orders.orderRows', SaleRowController::class);
-    
+    Route::resource('seasons.orders', SaleController::class);    
 
     Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('tasks/{task}', [TaskController::class, 'exec'])->name('tasks.exec');

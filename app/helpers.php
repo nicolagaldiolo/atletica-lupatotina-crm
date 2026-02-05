@@ -554,12 +554,10 @@ if (!function_exists('cashFee')) {
 if (!function_exists('handleTransaction')) {
     function handleTransaction($transactionable, $payed = false, $amount = 0, $bank_transfer = false, $cashed_by = null)
     {
-        $transactionable->transactions->each(function($item){
-            $item->delete();
-        });
+        $transactionable->transaction()->delete();
 
         if($payed){
-            $transactionable->transactions()->create([
+            $transactionable->transaction()->create([
                 'payed_at' => Carbon::now(),
                 'amount' => $amount,
                 'bank_transfer' => $bank_transfer,
@@ -567,7 +565,7 @@ if (!function_exists('handleTransaction')) {
             ]);
         }
 
-        return $transactionable->transactions;
+        return $transactionable->transaction;
     }
 }
 
