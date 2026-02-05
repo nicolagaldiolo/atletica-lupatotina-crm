@@ -15,8 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->boolean('is_unlimited')->after('price');    
-            $table->integer('quantity')->nullable()->after('is_unlimited');
+            $table->integer('quantity')->nullable()->after('price');
             $table->enum('type', ArticleType::asArray())->default(ArticleType::Simple)->after('quantity');
         });
     }
@@ -27,7 +26,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->dropColumn('is_unlimited');    
             $table->dropColumn('quantity');
             $table->dropColumn('type');    
         });

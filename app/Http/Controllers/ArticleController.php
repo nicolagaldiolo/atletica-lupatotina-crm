@@ -45,7 +45,6 @@ class ArticleController extends Controller
 
         $article = new Article();
         $article->is_active = true;
-        $article->is_unlimited = true;
         $article->type = $type;
         
         return view('backend.articles.create', compact('article'));

@@ -19,7 +19,6 @@ class Article extends Model
     protected $fillable = [
         'name',
         'price',
-        'is_unlimited',
         'quantity',
         'type',
         'variants',
@@ -29,8 +28,7 @@ class Article extends Model
     protected $casts = [
         'price' => 'float',
         'variants' => 'array',
-        'is_active' => 'boolean',
-        'is_unlimited' => 'boolean',
+        'is_active' => 'boolean'
     ];
 
     public function images()

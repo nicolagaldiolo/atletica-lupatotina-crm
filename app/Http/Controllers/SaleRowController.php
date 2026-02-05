@@ -21,22 +21,22 @@ class SaleRowController extends Controller
 
     public function edit(Season $season, Order $order, OrderRow $orderRow)
     {
-        $accountants = User::HandlePaymentsRace()->get();
+        //$accountants = User::HandlePaymentsRace()->get();
 
-        return view('backend.seasons.orders.rows.edit', compact('season', 'order', 'orderRow', 'accountants'));
+        //return view('backend.seasons.orders.rows.edit', compact('season', 'order', 'orderRow', 'accountants'));
     }
 
     public function update(SaleRowRequest $request, Season $season, Order $order, OrderRow $orderRow)
     {
-        $orderRow->update($request->only('status'));
+        //$orderRow->update($request->only('status'));
 
-        $payed = (bool) $request->get('payed');
-        $bank_transfer = (bool) $request->get('bank_transfer');
+        //$payed = (bool) $request->get('payed');
+        //$bank_transfer = (bool) $request->get('bank_transfer');
         
-        handleTransaction($orderRow, $payed, $orderRow->total_amount, $bank_transfer, $request->get('cashed_by'));
+        //handleTransaction($orderRow, $payed, $orderRow->total_amount, $bank_transfer, $request->get('cashed_by'));
         
-        Utility::flashMessage();
+        //Utility::flashMessage();
 
-        return redirect(route('seasons.orders.orderRows.edit', [$season, $order, $orderRow]));
+        //return redirect(route('seasons.orders.orderRows.edit', [$season, $order, $orderRow]));
     }
 }

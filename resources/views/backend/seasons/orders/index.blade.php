@@ -61,7 +61,7 @@
             </div>
             <div class="col-lg-4">
                 <h3>
-                    {{ __('Elenco ordini') }}
+                    {{ __('Articoli ordinati') }}
                 </h3>
 
                 <table id="datatable_articles_detail" class="table table-bordered table-hover table-responsive-sm">
@@ -157,6 +157,17 @@
 
             {
                 data: 'name',
+                render(data, type, row, meta) {
+                    let html = [];
+                    
+                    if(row.image){
+                        html.push("<img width='50' src='" + row.image + "' />");
+                    }
+
+                    html.push(data);
+
+                    return html.join(" ");
+                },
                 //visible: false,
             },
 

@@ -1,111 +1,28 @@
-<ul class="list-group mb-2">
-    <li class="list-group-item">
-        <div class="row">
-            <div class="col-md-4">
-                Articolo
-            </div>
-            <div class="col-md-4">
-                Prezzo
-            </div>
-        </div>
-    </li>
-</ul>
 @foreach ($articles as $article )
+
+    @php
+        $selected = old('articles.' . $article->id . '.selected', in_array($article->id, $order->rows->pluck('article_id')->unique()->toArray()));
+    @endphp      
+
     <ul class="list-group mb-2">
-        <li class="list-group-item">
+        <li class="list-group-item order_article_item">
             <div class="row">
                 <div class="col-md-4 d-flex align-items-center">
                     <div class="form-check form-switch">
                         <input type="hidden" value="0" name="articles[{{ $article->id }}][selected]" checked>
-                        <input class="form-check-input" type="checkbox" value="1" name="articles[{{ $article->id }}][selected]" @if(in_array($article->id, $order->rows->pluck('article_id')->unique()->toArray())) checked @endif>
+                        <input class="form-check-input order_article_switch" type="checkbox" value="1" name="articles[{{ $article->id }}][selected]" {{ $selected ? 'checked' : "" }}>
                     </div>
                     @if($article->imageDefault)
-                        <img width="300" src="{{ $article->imageDefault->public_url }}" class="" alt="..." style="float:left">
+                        <img width="300" src="{{ $article->imageDefault->public_url }}">
                     @endif
                 </div>
                 <div class="col-md-8">
                     <div class="">
-                        {{ $article->name }}
-                        <strong>{{ $article->price }} €</strong>
+                        <h3>{{ $article->name }}</h3>
+                        <h4>{{ $article->price }} €</h4>
                     </div>
-                    @if($article->type == \App\Enums\ArticleType::Simple)
 
-                            @php
-                                $quantity = ($order->rows->first(function($row) use($article){
-                                    return $row->article_id == $article->id && $row->variant == null;
-                                })->quantity ?? 0);
-
-                                $key = 0;
-                            @endphp
-
-                            <input name="articles[{{ $article->id }}][variants][{{ $key }}]" class="form-control {{ $errors->has('articles.' . $article->id . '.variants.' . $key) ? 'is-invalid' : '' }}" type="number" step="1" min="0" value="{{ old('articles.' . $article->id . '.variants.' . $key, $quantity) }}">
-                            @if ($errors->has('variants.' . $key))
-                                <div class="invalid-feedback">{{ $errors->first('variants.' . $key) }}</div>
-                            @endif
-
-                        @elseif($article->type == \App\Enums\ArticleType::Variants)
-
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col">
-                                            @foreach(App\Enums\Sizes::asSelectArray() as $key => $value)
-
-                                                @php
-                                                    $quantity = ($order->rows->first(function($row) use($article, $key){
-                                                        return $row->article_id == $article->id && $row->variant == $key;
-                                                    })->quantity ?? 0);
-                                                @endphp
-
-                                                <div class="form-group mb-3">
-                                                    <label for="name">{{ $value }}</label>
-                                                    <span class="text-danger">*</span>
-                                                    <input name="articles[{{ $article->id }}][variants][{{ $key }}]" class="form-control {{ $errors->has('articles.' . $article->id . '.variants.' . $key) ? 'is-invalid' : '' }}" type="number" step="1" min="0" value="{{ old('articles.' . $article->id . '.variants.' . $key, $quantity) }}">
-                                                    @if ($errors->has('variants.' . $key))
-                                                        <div class="invalid-feedback">{{ $errors->first('variants.' . $key) }}</div>
-                                                    @endif
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        @endif
-                </div>
-            </div>
-        </li>
-    </ul>
-@endforeach
-
-<table class="table table-bordered table-responsive">
-    <thead>
-        <tr>
-            <th>{{ __('Articolo') }}</th>
-            <th>{{ __('Quantità') }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($articles as $article )
-            
-            <tr>
-                <td>
-                    <div class="form-check form-switch">
-                        <input type="hidden" value="0" name="articles[{{ $article->id }}][selected]" checked>
-                        <input class="form-check-input" type="checkbox" value="1" name="articles[{{ $article->id }}][selected]" @if(in_array($article->id, $order->rows->pluck('article_id')->unique()->toArray())) checked @endif>
-                    </div>
-                    @if($article->imageDefault)
-                        <img width="200" src="{{ $article->imageDefault->public_url }}" class="" alt="..." style="float:left">
-                    @endif
-                    <h3>{{ $article->name }}</h3>
-                    <strong>{{ $article->price }} €</strong>
-                </td>
-                <td>
-                    <div class="form-group mb-3">
-
-                        <label for="name">{{ __('Quantità') }}</label>
-                        <span class="text-danger">*</span>
-
+                    <div class="variants_container @if(!$selected) d-none @endif">
                         @if($article->type == \App\Enums\ArticleType::Simple)
 
                             @php
@@ -116,17 +33,29 @@
                                 $key = 0;
                             @endphp
 
-                            <input name="articles[{{ $article->id }}][variants][{{ $key }}]" class="form-control {{ $errors->has('articles.' . $article->id . '.variants.' . $key) ? 'is-invalid' : '' }}" type="number" step="1" min="0" value="{{ old('articles.' . $article->id . '.variants.' . $key, $quantity) }}">
-                            @if ($errors->has('variants.' . $key))
-                                <div class="invalid-feedback">{{ $errors->first('variants.' . $key) }}</div>
+                            
+
+                            @if ($errors->has('articles.' . $article->id . '.variants'))
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>{{ $errors->first('articles.' . $article->id . '.variants') }}</strong>
+                                </div>
                             @endif
 
+                            <input name="articles[{{ $article->id }}][variants][{{ $key }}]" class="form-control" type="number" step="1" min="0" value="{{ old('articles.' . $article->id . '.variants.' . $key, $quantity) }}">
+                            
                         @elseif($article->type == \App\Enums\ArticleType::Variants)
 
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
+                                            
+                                            @if ($errors->has('articles.' . $article->id . '.variants'))
+                                                <div class="alert alert-danger" role="alert">
+                                                    <strong>{{ $errors->first('articles.' . $article->id . '.variants') }}</strong>
+                                                </div>
+                                            @endif
+
                                             @foreach(App\Enums\Sizes::asSelectArray() as $key => $value)
 
                                                 @php
@@ -135,14 +64,10 @@
                                                     })->quantity ?? 0);
                                                 @endphp
 
-                                                <div class="form-group mb-3">
-                                                    <label for="name">{{ $value }}</label>
-                                                    <span class="text-danger">*</span>
-                                                    <input name="articles[{{ $article->id }}][variants][{{ $key }}]" class="form-control {{ $errors->has('articles.' . $article->id . '.variants.' . $key) ? 'is-invalid' : '' }}" type="number" step="1" min="0" value="{{ old('articles.' . $article->id . '.variants.' . $key, $quantity) }}">
-                                                    @if ($errors->has('variants.' . $key))
-                                                        <div class="invalid-feedback">{{ $errors->first('variants.' . $key) }}</div>
-                                                    @endif
-                                                </div>
+                                                <div class="input-group has-validation mb-3">
+                                                    <span class="input-group-text text-uppercase" id="basic-addon1">{{ $value }}</span>
+                                                    <input name="articles[{{ $article->id }}][variants][{{ $key }}]" class="form-control" type="number" step="1" min="0" value="{{ old('articles.' . $article->id . '.variants.' . $key, $quantity) }}">
+                                                </div>                                                
                                             @endforeach
                                         </div>
                                     </div>
@@ -150,11 +75,32 @@
                             </div>
 
                         @endif
-
-                        
                     </div>
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
+                </div>
+            </div>
+        </li>
+    </ul>
+@endforeach
+
+@push ('after-scripts')
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+        $(document).on('change', '.order_article_switch', function(){
+
+            var variants = $(this).closest('.order_article_item').find('.variants_container');
+
+            if($(this).is(':checked')){
+                variants.removeClass('d-none');
+            }else{
+                variants.addClass('d-none');
+            }
+            variants.find('*').prop('disabled', !($(this).is(':checked')));
+            
+        });
+
+    });
+</script>
+
+@endpush

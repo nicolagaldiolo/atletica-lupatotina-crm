@@ -64,6 +64,9 @@
                             @foreach ($order->rows as $row)
                                 <tr>
                                     <td>
+                                        @if($row->article->imageDefault)
+                                            <img width="80" src="{{ $row->article->imageDefault->public_url }}">
+                                        @endif
                                         {{ $row->article->name }} @if($row->variant) - {{ App\Enums\Sizes::getDescription($row->variant) }} @endif
                                     </td>
                                     <td>

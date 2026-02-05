@@ -11,7 +11,10 @@ use App\Models\Athlete;
 use App\Models\Order;
 use App\Models\OrderRow;
 use App\Models\Season;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class SaleController extends Controller
 {
@@ -48,25 +51,52 @@ class SaleController extends Controller
     {
         if (request()->ajax()) {
 
-            $builder = $order->rows()->with('article');
+            $builder = $order->rows()->with('article.imageDefault');
 
             return datatables()->eloquent($builder)
                 ->addColumn('action', function (OrderRow $orderRow) use($season, $order){
                     return view('backend.seasons.orders.rows.partials.action_column', compact('season', 'order', 'orderRow'));
                 })->make(true);
         }else{
-            return view('backend.seasons.orders.rows.index', compact('season', 'order'));
+
+            $accountants = User::HandlePaymentsRace()->get();
+            return view('backend.seasons.orders.rows.index', compact('season', 'order', 'accountants'));
         }
+    }
+
+    public function update(Request $request, Season $season, Order $order)
+    {
+        $order->rows()->whereIn('id', $request->get('ids', []))->get()->each(function($orderRow) use($request){    
+            $orderRow->update($request->only('status'));
+            handleTransaction($orderRow);
+        });
+
+        return response()->json();
     }
 
     public function products(Season $season)
     {
 
         if (request()->ajax()) {
-            $builder = $season->orderRows()->select('articles.name', 'order_rows.article_id', 'order_rows.variant', DB::raw('SUM(order_rows.quantity) as quantity'))
-                ->groupBy('articles.name')->groupBy('orders.season_id')->groupBy('order_rows.article_id')->groupBy('order_rows.variant')->leftJoinRelationship('article');
+            $builder = $season->orderRows()
+                ->select('article_images.image', 'articles.name', 'order_rows.article_id', 'order_rows.variant', DB::raw('SUM(order_rows.quantity) as quantity'))
+                ->groupBy('article_images.image')
+                ->groupBy('articles.name')
+                ->groupBy('orders.season_id')
+                ->groupBy('order_rows.article_id')
+                ->groupBy('order_rows.variant')
+                ->leftJoinRelationship('article.imageDefault');
 
-            return datatables()->eloquent($builder)->make(true);
+            return datatables()->eloquent($builder)
+                ->editColumn('image', function ($data) {
+                
+                    $path = null;
+                    if($data->image && Storage::exists($data->image)){
+                        $path = asset('storage/' . $data->image);
+                    }
+
+                    return $path;
+                })->make(true);
         }
     }
 }

@@ -52,20 +52,6 @@
             </div>
             <div class="tab-pane fade" id="nav-stock" role="tabpanel" aria-labelledby="nav-stock-tab" tabindex="0">
                 <div class="form-group mb-3">
-                    <label for="is_unlimited">{{ __('Magazzino infinito') }}</label>
-                    <span class="text-danger">*</span>
-                    <div class="form-check form-switch form-switch-lg">
-                        <input name="is_unlimited" type="hidden" checked value="0">
-                        <input class="form-check-input {{ $errors->has('is_unlimited') ? 'is-invalid' : '' }}"
-                            type="checkbox" name="is_unlimited"
-                            {{ old('is_unlimited', $article->is_unlimited) ? 'checked' : '' }} value="1">
-                        @if ($errors->has('is_unlimited'))
-                            <div class="invalid-feedback">{{ $errors->first('is_unlimited') }}</div>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
                     <label for="name">{{ __('Quantità') }}</label>
                     <span class="text-danger">*</span>
 
@@ -208,7 +194,7 @@
         $('#upload_images').fileinput({
             allowedFileExtensions: ['jpeg', 'png', 'jpg', 'gif', 'svg', 'webp'],
             uploadAsync: false,
-            maxFileSize: 2048,
+            maxFileSize: 0,
             language: 'it',
             theme: 'fas',
             previewThumbTags: {

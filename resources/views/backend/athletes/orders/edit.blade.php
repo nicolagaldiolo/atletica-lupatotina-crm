@@ -28,14 +28,14 @@
                 
 
                 {{--@can((($race->type == App\Enums\RaceType::Race) ? 'deleteRace' : (($race->type == App\Enums\RaceType::Track) ? 'deleteTrack' : false)), $fee)--}}
-                    <x-backend.buttons.delete route='{{ route("athletes.orders.destroy", [$athlete, $order]) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+                    <x-backend.buttons.delete route='{{ route("athletes.orders.destroy", [$athlete, $order]) }}'data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                 {{--@endcan--}}
                 <div class="float-end">
                     {{--@can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Fee::class)--}}
-                        <x-backend.buttons.return route='{{ route("athletes.orders.index", [$athlete]) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
+                        <x-backend.buttons.return route='{{ route("athletes.orders.index", [$athlete]) }}'>{{ __('Annulla') }}</x-backend.buttons.return>
                     {{--@endcan--}}
                     {{--@can((($race->type == App\Enums\RaceType::Race) ? 'updateRace' : (($race->type == App\Enums\RaceType::Track) ? 'updateTrack' : false)), $fee)--}}
-                        <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
+                        <x-backend.buttons.save>{{__('Salva ordine')}}</x-backend.buttons.save>
                     {{--@endcan--}}
                 </div>
             </div>
@@ -46,6 +46,26 @@
         <div class="row">
             <div class="col">
                 @include ("backend.athletes.orders.partials.form", ['disabled' => false])
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <div class="row">
+            <div class="col">
+                
+
+                {{--@can((($race->type == App\Enums\RaceType::Race) ? 'deleteRace' : (($race->type == App\Enums\RaceType::Track) ? 'deleteTrack' : false)), $fee)--}}
+                    <x-backend.buttons.delete route='{{ route("athletes.orders.destroy", [$athlete, $order]) }}'data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
+                {{--@endcan--}}
+                <div class="float-end">
+                    {{--@can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Fee::class)--}}
+                        <x-backend.buttons.return route='{{ route("athletes.orders.index", [$athlete]) }}'>{{ __('Annulla') }}</x-backend.buttons.return>
+                    {{--@endcan--}}
+                    {{--@can((($race->type == App\Enums\RaceType::Race) ? 'updateRace' : (($race->type == App\Enums\RaceType::Track) ? 'updateTrack' : false)), $fee)--}}
+                        <x-backend.buttons.save>{{__('Salva ordine')}}</x-backend.buttons.save>
+                    {{--@endcan--}}
+                </div>
             </div>
         </div>
     </div>

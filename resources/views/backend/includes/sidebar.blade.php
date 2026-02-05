@@ -116,7 +116,7 @@
 
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('seasons.*')) active @endif" href="{{ route('seasons.index') }}">
-                    <i class="nav-icon fa-solid fa-shirt"></i>&nbsp;{{ __('Ordini') }}
+                    <i class="nav-icon fas fa-shopping-cart"></i>&nbsp;{{ __('Ordini') }}
                 </a>
             </li>
         @endcan
