@@ -127,6 +127,61 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="mt-4">
+                    <h5>{{ __('Ordini abbigliamento') }}</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                @foreach ($order_by_status as $key=>$orderStatus)    
+                                    @php 
+                                        $quantity = $orderStatus->pluck('rows')->flatten()->sum('quantity'); 
+                                        $order_status_enum = App\Enums\OrderStatus::getColor($key);
+                                    @endphp
+                                    <div class="col-xl-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="{{  $order_status_enum['bg_class'] }} p-3 me-3">
+                                                <i class="{{  $order_status_enum['icon'] }}"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ App\Enums\OrderStatus::getDescription($key) }} ({{ $orderStatus->count() }})</div>
+                                                <div class="fs-6 fw-semibold {{  $order_status_enum['text_class'] }}">{{ $quantity }} {{ Illuminate\Support\Str::upper(trans_choice('{1} articolo|[2,*] articoli', $quantity)) }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                @foreach ($order_by_payments as $key=>$order_payment)    
+                                    @php 
+                                        $quantity = $order_payment->pluck('rows')->flatten()->sum('quantity'); 
+                                        $payment_status_enum = App\Enums\PaymentStatus::getColor($key);
+                                    @endphp
+                                    <div class="col-xl-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="{{ $payment_status_enum['bg_class'] }} p-3 me-3">
+                                                <i class="{{ $payment_status_enum['icon'] }}"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-medium-emphasis text-uppercase fw-semibold small">{{ App\Enums\PaymentStatus::getDescription($key) }} ({{ $order_payment->count() }})</div>
+                                                <div class="fs-6 fw-semibold {{ $payment_status_enum['text_class'] }}">{{ $quantity }} {{ Illuminate\Support\Str::upper(trans_choice('{1} articolo|[2,*] articoli', $quantity)) }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn-block text-medium-emphasis d-flex justify-content-between align-items-center" href="{{ route("athletes.orders.index", Auth::user()->athlete) }}">
+                                <span class="small fw-semibold">{{ __('Vai agli ordini') }}</span>
+                                <i class="fa-solid fa-circle-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 
     <div class="row">

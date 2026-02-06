@@ -40,12 +40,12 @@
                     <h3>
                         {{ __('Dettagli ordine') }}
                     </h3>
-                    <ul>
-                        <li><span>Data creazione {{ $order->created_at }}</span></li>
-                        <li><span>Stato Ordine: {{ $order->status }}</span></li>
-                        <li><span>Ordinante: {{ $order->athlete->full_name }}</span></li>
-                        <li><span>Articoli ordinati {{ $order->quantity }}</span></li>
-                        <li><span>Totale {{ $order->total_amount }}</span></li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><span>Data creazione: <strong>@date($order->created_at)</strong></span></li>
+                        <li class="list-group-item"><span>Stato Ordine: <strong>{{ $order->status }}</strong></span></li>
+                        <li class="list-group-item"><span>Ordinante: <strong>{{ $order->athlete->full_name }}</strong></span></li>
+                        <li class="list-group-item"><span>Articoli ordinati: <strong>{{ $order->quantity }}</strong></span></li>
+                        <li class="list-group-item">Totale: <strong>@money($order->total_amount)</strong></li>
                     </ul>
                 </div>
                 <div class="col-lg-6">
@@ -58,6 +58,7 @@
                                 <th>{{ __('Quantità') }}</th>
                                 <th>{{ __('Importo') }}</th>
                                 <th>{{ __('Status') }}</th>
+                                <th>{{ __('Pagamento') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,16 +71,32 @@
                                         {{ $row->article->name }} @if($row->variant) - {{ App\Enums\Sizes::getDescription($row->variant) }} @endif
                                     </td>
                                     <td>
-                                        {{ $row->article->price }} €
+                                        @money($row->article->price)
                                     </td>
                                     <td>
                                         {{ $row->quantity }}
                                     </td>
                                     <td>
-                                        {{ $row->total_amount }}
+                                        @money($row->total_amount)
                                     </td>
                                     <td>
                                         {{ $row->status }}
+                                    </td>
+                                    <td>
+                                        @if($row->transaction && $row->transaction->payed_at)
+                                            {{ $row->transaction->payed_at }}<br>
+                                            @if($row->transaction && $row->transaction->bank_transfer) 
+                                                <span class="badge text-bg-secondary">
+                                                    <i class="fa-solid fa-landmark"></i> Bonifico
+                                                </span>
+                                            @else
+                                                <span class="badge text-bg-success">
+                                                    <i class="fa-solid fa-coins"></i> Contanti
+                                                </span>
+                                            @endif
+                                        @else
+                                            <i class="text-danger fa-solid fa-triangle-exclamation"></i>
+                                        @endif
                                     </td>
                                 </tr>    
                             @endforeach

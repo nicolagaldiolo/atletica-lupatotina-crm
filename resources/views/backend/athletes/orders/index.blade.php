@@ -53,6 +53,9 @@
                             <th>
                                 {{ __('Stato') }}
                             </th>
+                            <th>
+                                {{ __('Pagamento') }}
+                            </th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -93,12 +96,16 @@
             },
             {
                 data: 'total_amount',
-                render(data) {
+                render(data, type, row, meta) {
+                    console.log(data, type, row, meta);
                     return App.money(data);
                 },
             },
             {
                 data: 'status'
+            },
+            {
+                data: 'payment_status'
             },
             {
                 data: 'action',

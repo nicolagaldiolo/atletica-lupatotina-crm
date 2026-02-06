@@ -28,6 +28,8 @@ class SaleRequest extends FormRequest
     public function rules()
     {   
         return [
+            'massive_enable_status' => 'required|boolean',
+            'massive_enable_payment' => 'required|boolean',
             'status' => ['required', new EnumValue(OrderRowStatus::class)],
             'payed' => 'required|boolean',
             'bank_transfer' => 'required|boolean',

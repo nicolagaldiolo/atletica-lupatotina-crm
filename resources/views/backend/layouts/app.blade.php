@@ -13,11 +13,11 @@
 
     <script src="{{ asset('vendor/jquery/jquery-3.6.4.min.js') }}"></script>
 
-    @vite(['resources/sass/app-backend.scss', 'resources/js/app-backend.js'])
-
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
+
+    @vite(['resources/sass/app-backend.scss', 'resources/js/app-backend.js'])
 
     @stack('after-styles')
 

@@ -103,4 +103,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Proceed::class, 'cashed_by');
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'cashed_by');
+    }
 }

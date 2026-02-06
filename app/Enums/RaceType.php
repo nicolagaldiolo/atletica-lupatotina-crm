@@ -14,4 +14,5 @@ final class RaceType extends Enum implements LocalizedEnum
 {
     const Race = 'race';
     const Track = 'track';
+    const Clothes = 'clothes';
 }

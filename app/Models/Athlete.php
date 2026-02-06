@@ -15,6 +15,7 @@ use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 use App\Traits\HasAvatar;
 use App\Traits\ModelStorage;
 use App\Traits\Owner;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Athlete extends Model
 {
@@ -138,6 +139,11 @@ class Athlete extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function orderRows(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderRow::class, Order::class);
     }
 
     public function user()

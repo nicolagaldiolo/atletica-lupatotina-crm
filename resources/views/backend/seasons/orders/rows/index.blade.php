@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-lg-12">
                 
-                <div class="card" id="massUpdateForm" {{--style="display: none;"--}}>
+                <div class="card" id="massUpdateForm" style="display: none;">
                     <div class="card-header">
                         <div class="d-flex justify-content-between">
                             <div>
@@ -37,65 +37,69 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <div class="row mt-4">
-                                    <div class="col-12 col-sm-2">
-                                        <div class="form-group mb-3">
-                                            <label for="status">{{ __('Status') }}</label>
-                                            
-                                            <div class="form-check form-switch form-switch-lg">
-                                                <input class="form-check-input form-item" type="checkbox">
-                                            </div>
+                        {{ html()->modelForm($order, 'PATCH', 'seasons.orders.update', [$season, $order])->class('form')->open() }}
+                            <div class="row">
+                                <div class="col-12 col-sm-2">
+                                    <div class="form-group mb-3">
+                                        <label for="status">{{ __('Gestisci consegna') }}</label>
+                                        
+                                        <div class="form-check form-switch form-switch-lg">
+                                            <input class="form-check-input form-item" type="checkbox" name="massive_enable_status" value="1">
+                                        </div>
 
-                                            <select class="form-select" name="status">
-                                                @foreach (App\Enums\OrderRowStatus::asSelectArray() as $key => $value)
-                                                    <option value="{{ $key }}">{{ __($value) }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-12 col-sm-2">
-                                        <div class="form-group mb-3">
-                                            <label for="payed">{{ __('Pagato') }}</label>
-                                            <span class="text-danger">*</span>
-                                            <div class="form-check form-switch form-switch-lg">
-                                                <input class="form-check-input form-item" type="checkbox" name="payed" value="1">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-sm-2">
-                                        <div class="form-group mb-3">
-                                            <label for="bank_transfer">{{ __('Pagato con bonifico') }}</label>
-                                            <span class="text-danger">*</span>
-                                            <div class="form-check form-switch form-switch-lg">
-                                                <input class="form-check-input form-item input-switch" type="checkbox" name="bank_transfer" value="1">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-sm-3">
-                                        <div class="form-group mb-3 cashed_by_container">
-                                            <label for="cashed_by">{{ __('Esattore') }}</label>
-                                            <span class="text-danger">*</span>
-                                            <select class="form-select" name="cashed_by">
-                                                @foreach ($accountants as $accountant)
-                                                    <option @if(Auth::id() == $accountant->id) selected @endif value="{{ $accountant->id }}">{{ $accountant->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-12 col-sm-3">
-                                        <button id="massUpdate" {{--style="display: none;"--}} class="btn btn-light" data-toggle="tooltip" data-placement="top" title="{{ __('Aggiorna articoli') }}">
-                                            <i class="fas fa-edit pr-4"></i> {{ __('Aggiorna selezionati') }}
-                                        </button>
+                                        <select class="form-select" name="status" disabled>
+                                            @foreach (App\Enums\OrderRowStatus::asSelectArray() as $key => $value)
+                                                <option value="{{ $key }}">{{ __($value) }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
+                                
+                                 <label for="status">{{ __('Gestisci Pagamento') }}</label>
+                                        
+                                        <div class="form-check form-switch form-switch-lg">
+                                            <input class="form-check-input form-item" type="checkbox" name="massive_enable_payment" value="1">
+                                        </div>
+                                
+                                <div class="col-12 col-sm-2">
+                                    <div class="form-group mb-3">
+                                        <label for="payed">{{ __('Pagato') }}</label>
+                                        <span class="text-danger">*</span>
+                                        <div class="form-check form-switch form-switch-lg">
+                                            <input class="form-check-input form-item" type="checkbox" name="payed" value="1" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-2">
+                                    <div class="form-group mb-3">
+                                        <label for="bank_transfer">{{ __('Pagato con bonifico') }}</label>
+                                        <span class="text-danger">*</span>
+                                        <div class="form-check form-switch form-switch-lg">
+                                            <input class="form-check-input form-item input-switch" type="checkbox" name="bank_transfer" value="1" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-3">
+                                    <div class="form-group mb-3 cashed_by_container">
+                                        <label for="cashed_by">{{ __('Esattore') }}</label>
+                                        <span class="text-danger">*</span>
+                                        <select class="form-select" name="cashed_by" disabled>
+                                            @foreach ($accountants as $accountant)
+                                                <option @if(Auth::id() == $accountant->id) selected @endif value="{{ $accountant->id }}">{{ $accountant->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-sm-3">
+                                    <button id="massUpdate" class="btn btn-light" disabled>
+                                        <i class="fas fa-edit pr-4"></i> {{ __('Aggiorna selezionati') }}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        {{ html()->form()->close() }}
                     </div>
                 </div>
 
@@ -127,6 +131,9 @@
                             </th>
                             <th>
                                 {{ __('Pagamento') }}
+                            </th>
+                            <th>
+                                {{ __('Pagato a') }}
                             </th>
                         </tr>
                     </thead>
@@ -209,30 +216,26 @@
             {
                 data: 'is_payed',
                 orderable: false,
-                searchable: false
-            },
-            /*{
-                data: 'bank_transfer',
+                searchable: false,
                 render(data, type, row, meta) {
-                    if(row.payed_at){
+                    if(row.transaction && row.transaction.payed_at){
                         return [
-                            App.date(row.payed_at),
-                            data ? '<span class="badge text-bg-secondary"><i class="fa-solid fa-landmark"></i> Bonifico</span>' : '<span class="badge text-bg-success"><i class="fa-solid fa-coins"></i> Contanti</span>'
+                            App.date(row.transaction.payed_at),
+                            (row.transaction && row.transaction.bank_transfer) ? '<span class="badge text-bg-secondary"><i class="fa-solid fa-landmark"></i> Bonifico</span>' : '<span class="badge text-bg-success"><i class="fa-solid fa-coins"></i> Contanti</span>'
                         ].join("<br>");
                     }else{
                         return '<i class="text-danger fa-solid fa-triangle-exclamation"></i>';
                     }
-                }
+                },
             },
             {
-                data: 'cashed',
+                data: null,
                 render(data) {
-                    return data ? data.name : null;
+                    return data && data.transaction && data.transaction.cashed ? data.transaction.cashed.name : null;
                 },
                 orderable: false,
                 searchable: false
             },
-            */
         ]
     });
 
@@ -254,6 +257,52 @@
         }
     });
 
+    const massive_enable_status = $('[name="massive_enable_status"]');
+    const massive_enable_payment = $('[name="massive_enable_payment"]');
+
+    const form = document.querySelector('#massUpdateForm');
+            
+    const status = $('[name="status"]');
+    const payed = $('[name="payed"]');
+    const bank_transfer = $('[name="bank_transfer"]');
+    const cashed_by = $('[name="cashed_by"]');
+
+    let massUpdateBtnHandler = function(){
+        console.log("Eccomi");
+        massUpdateBtn.prop('disabled', !(massive_enable_status.is(':checked') || massive_enable_payment.is(':checked')));
+    }
+
+    massive_enable_status.on('change', function () {
+        const self_checked = $(this).is(':checked');
+        status.prop('disabled', !self_checked);
+
+        massUpdateBtnHandler();
+    });
+
+    massive_enable_payment.on('change', function () {
+        const self_checked = $(this).is(':checked');
+
+        payed.prop('disabled', !self_checked);
+
+        massUpdateBtnHandler();
+    });
+
+    payed.on('change', function () {
+        const self_checked = $(this).is(':checked');
+
+        bank_transfer.prop('disabled', !self_checked);
+        cashed_by.prop('disabled', !self_checked);
+        
+        massUpdateBtnHandler();
+    });
+
+    bank_transfer.on('change', function () {
+        const self_checked = $(this).is(':checked');
+        cashed_by.prop('disabled', self_checked);
+        
+        massUpdateBtnHandler();
+    });
+
     massUpdateBtn.click( function (e) {
         e.preventDefault();
         let selectedRows = dataTableGetSelectedRows(dataTable);
@@ -263,20 +312,16 @@
                 return item.id;
             });
 
-            const form = document.querySelector('#massUpdateForm');
             
-            const status = $(form).find('[name="status"]').val();
-            const payed = $(form).find('[name="payed"]').is(':checked') ? 1 : 0;
-            const bank_transfer = $(form).find('[name="bank_transfer"]').is(':checked') ? 1 : 0;
-            const cashed_by = $(form).find('[name="cashed_by"]').val();
-
 
             let payload = {
                 ids: currentIds,
-                status: status,
-                payed: payed,
-                bank_transfer: bank_transfer,
-                cashed_by: cashed_by
+                massive_enable_status: (massive_enable_status.is(':checked') ? 1 : 0),
+                status: status.val(),
+                massive_enable_payment: (massive_enable_payment.is(':checked') ? 1 : 0),
+                payed: payed.is(':checked') ? 1 : 0,
+                bank_transfer: bank_transfer.is(':checked') ? 1 : 0,
+                cashed_by: cashed_by.val()
             };
 
             console.log(payload);
@@ -298,7 +343,8 @@
                 
             }).always(function() {
                 console.log("always");
-                dataTable.draw(false);
+                //dataTable.draw(false);
+                window.location.reload();
             });
 
             //window.location.href = "";

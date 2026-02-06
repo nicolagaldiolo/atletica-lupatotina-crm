@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\RaceType;
 use App\Exports\ProceedExport;
 use App\Models\AthleteFee;
+use App\Models\OrderRow;
 use App\Models\Proceed;
+use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -21,17 +23,31 @@ class ProceedController extends Controller
      */
     public function index($raceType)
     {
-        if($raceType == RaceType::Race){
+        $i = 10;
+
+        if($raceType == RaceType::Clothes){
+            //$this->authorize('registerPaymentRace', AthleteFee::class);
+
+            $accounts = User::whereHas('transactions', function($query){
+                $query->whereHasMorph('transactionable', [
+                    OrderRow::class
+                ]);
+            })->get();
+        }else if($raceType == RaceType::Race){
             $this->authorize('registerPaymentRace', AthleteFee::class);
+
+            $accounts = User::whereHas('proceeds.fee.race', function($query) use($raceType){
+                $query->type($raceType);
+            })->get();
         }else if($raceType == RaceType::Track){
             $this->authorize('registerPaymentTrack', AthleteFee::class);
+
+            $accounts = User::whereHas('proceeds.fee.race', function($query) use($raceType){
+                $query->type($raceType);
+            })->get();
         }else{
             abort(401);
         }
-
-        $accounts = User::whereHas('proceeds.fee.race', function($query) use($raceType){
-            $query->type($raceType);
-        })->get();
         
         $proceedRangePeriod = $this->getProceedRangePeriod($raceType);
         $currentPeriod = $proceedRangePeriod['current_period'];
@@ -142,7 +158,36 @@ class ProceedController extends Controller
 
     protected function getProceedRangePeriod($raceType)
     {
-        $all_proceed = Proceed::toDeduct()->raceType($raceType)->orderBy('payed_at', 'asc')->get();
+        if($raceType == RaceType::Clothes){
+            $all_proceed = Transaction::whereHasMorph('transactionable', [
+                    OrderRow::class
+                ])->toDeduct()->orderBy('payed_at', 'asc')->get();
+            
+            $year_for_export = collect([
+                ...Transaction::whereHasMorph('transactionable', [
+                    OrderRow::class
+                ])->deducted()->select('deduct_at')->groupBy('deduct_at')->get()->map(function($item){
+                    return $item->deduct_at->format('Y');
+                }),
+                ...Transaction::whereHasMorph('transactionable', [
+                    OrderRow::class
+                ])->toDeduct()->select('payed_at')->groupBy('payed_at')->get()->map(function($item){
+                    return $item->payed_at->format('Y');
+                })
+            ])->unique()->sort()->values();
+
+        }else{
+            $all_proceed = Proceed::toDeduct()->raceType($raceType)->orderBy('payed_at', 'asc')->get();
+
+            $year_for_export = collect([
+                ...Proceed::deducted()->raceType($raceType)->select('deduct_at')->groupBy('deduct_at')->get()->map(function($item){
+                    return $item->deduct_at->format('Y');
+                }),
+                ...Proceed::toDeduct()->raceType($raceType)->select('payed_at')->groupBy('payed_at')->get()->map(function($item){
+                    return $item->payed_at->format('Y');
+                })
+            ])->unique()->sort()->values();
+        }
         
         $year_for_export = collect([
             ...Proceed::deducted()->raceType($raceType)->select('deduct_at')->groupBy('deduct_at')->get()->map(function($item){

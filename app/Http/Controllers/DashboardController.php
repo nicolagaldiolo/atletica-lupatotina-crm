@@ -47,8 +47,20 @@ class DashboardController extends Controller
         });
 
         $certificate = Auth::user()->athlete->certificate ?? null;
-        
-        return view('backend.index', compact('races_payed', 'races_to_pay', 'track_to_pay', 'track_payed', 'certificate'));
+
+        $order = Auth::user()->athlete->orders()->with('rows')->get();
+        $order_by_status = $order->groupBy('status');
+        $order_by_payments = $order->groupBy('payment_status');
+
+        return view('backend.index', compact(
+            'races_payed', 
+            'races_to_pay', 
+            'track_to_pay', 
+            'track_payed', 
+            'certificate',
+            'order_by_status',
+            'order_by_payments',
+        ));
     }
 
     public function certificates()

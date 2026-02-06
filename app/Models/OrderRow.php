@@ -51,7 +51,7 @@ class OrderRow extends Model
 
     public function getIsPayedAttribute()
     {
-        return ($this->transaction->sum('amount') ?? 0) >= $this->total_amount;
+        return ($this->transaction ? ((bool) $this->transaction->payed_at) : false);
     }
 
     public function transaction(): MorphOne

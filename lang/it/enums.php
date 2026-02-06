@@ -3,6 +3,9 @@
 use App\Enums\ArticleType;
 use App\Enums\GenderType;
 use App\Enums\MemberType;
+use App\Enums\OrderRowStatus;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Enums\RaceType;
 use App\Enums\VoucherType;
 
@@ -10,7 +13,8 @@ return [
 
     GenderType::class => [
         GenderType::Male => 'Uomo',
-        GenderType::Female => 'Donna'
+        GenderType::Female => 'Donna',
+        GenderType::Other => 'Altro',
     ],
 
     VoucherType::class => [
@@ -31,5 +35,19 @@ return [
     ArticleType::class => [
         ArticleType::Simple => 'Semplice',
         ArticleType::Variants => 'Varianti',
+    ],
+
+    OrderStatus::class => [
+        OrderStatus::Pending => 'In Attesa di conferma',
+        OrderStatus::Processing => 'In lavorazione',
+        OrderStatus::Partially_delivered => 'Parzialmente consegnato',
+        OrderStatus::Delivered => 'Consegnato',
+        OrderStatus::Canceled => 'Annullato',
+    ],
+
+    PaymentStatus::class => [
+        PaymentStatus::NotPayed => 'Non pagato',
+        PaymentStatus::PartialPayped => 'Parzialemente Pagato',
+        PaymentStatus::Payed => 'Pagato'
     ]
 ];

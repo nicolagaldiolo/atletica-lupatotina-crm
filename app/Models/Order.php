@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Traits\Owner;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,7 +28,7 @@ class Order extends Model
 
     protected $appends = [
         'status',
-        'is_payed'
+        'payment_status'
     ];
 
     /**
@@ -48,7 +49,7 @@ class Order extends Model
         $order_processing = OrderStatus::Processing;
         $order_pending = OrderStatus::Pending;
 
-        $orderStatus = DB::table('order_rows')->where('order_id', $this->order_id)->selectRaw("
+        $orderStatus = DB::table('order_rows')->where('order_id', $this->id)->selectRaw("
             CASE
                 WHEN COUNT(*) = SUM(status = '$order_canceled') THEN '$order_canceled'
                 WHEN COUNT(*) = SUM(status = '$order_delivered') THEN '$order_delivered'
@@ -61,16 +62,28 @@ class Order extends Model
         return $orderStatus;
     }
 
-    public function getIsPayedAttribute()
+    public function getPaymentStatusAttribute()
     {
+        $payment_status = null; 
+        $rows = $this->rows()->with('transaction')->get();
 
-        /*
-        const Pending = 'pending';
-        const PartialPayped = 'partial_payed';
-        const Payed = 'payed';
-        */
-        $i = 10;
-        return true;
+        $toal_rows = $rows->count();
+        $payed_rows = $rows->filter(function($item) { 
+            return $item->is_payed; 
+        })->count();
+        $not_payed_rows = $rows->filter(function($item) { 
+            return !$item->is_payed; 
+        })->count();
+        
+        if ($toal_rows == $not_payed_rows) {
+            $payment_status = PaymentStatus::NotPayed;
+        }else if($toal_rows == $payed_rows) {
+            $payment_status = PaymentStatus::Payed;
+        }else if($payed_rows > 0){
+            $payment_status = PaymentStatus::PartialPayped;
+        }
+
+        return $payment_status;
     }
 
     public function season(): BelongsTo

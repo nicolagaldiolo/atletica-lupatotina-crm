@@ -130,7 +130,7 @@
                 data: 'status'
             },
             {
-                data: 'is_payed',
+                data: 'payment_status',
                 orderable: false,
                 searchable: false
             },
@@ -140,7 +140,7 @@
                 orderable: false,
                 searchable: false
             }
-        ]
+        ],
     });
 
     $('#datatable_articles_detail').DataTable({

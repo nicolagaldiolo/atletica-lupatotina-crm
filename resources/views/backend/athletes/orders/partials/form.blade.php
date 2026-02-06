@@ -26,9 +26,9 @@
                         @if($article->type == \App\Enums\ArticleType::Simple)
 
                             @php
-                                $quantity = ($order->rows->first(function($row) use($article){
+                                $quantity = $order->rows->filter(function($row) use($article){
                                     return $row->article_id == $article->id && $row->variant == null;
-                                })->quantity ?? 0);
+                                })->sum('quantity');
 
                                 $key = 0;
                             @endphp
@@ -57,11 +57,10 @@
                                             @endif
 
                                             @foreach(App\Enums\Sizes::asSelectArray() as $key => $value)
-
                                                 @php
-                                                    $quantity = ($order->rows->first(function($row) use($article, $key){
+                                                    $quantity = $order->rows->filter(function($row) use($article, $key){
                                                         return $row->article_id == $article->id && $row->variant == $key;
-                                                    })->quantity ?? 0);
+                                                    })->sum('quantity');
                                                 @endphp
 
                                                 <div class="input-group has-validation mb-3">

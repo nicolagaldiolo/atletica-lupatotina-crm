@@ -66,11 +66,14 @@ class SaleController extends Controller
     {
 
         $order->rows()->whereIn('id', $request->get('ids', []))->get()->each(function($orderRow) use($request){    
-            $orderRow->update($request->only('status'));
-            
-            if($request->has('payed')){
-                $payed = (bool) $request->get('payed', false);
-                $bank_transfer = (bool) $request->get('bank_transfer', false);
+
+            if($request->boolean('massive_enable_status', false)){
+                $orderRow->update($request->only('status'));
+            }
+
+            if($request->boolean('massive_enable_payment', false)){
+                $payed = $request->boolean('payed', false);
+                $bank_transfer = $request->boolean('bank_transfer', false);
                 $cashed_by = $request->get('cashed_by', null);
                 handleTransaction($orderRow, $payed, $orderRow->total_amount, $bank_transfer, $cashed_by);
             }

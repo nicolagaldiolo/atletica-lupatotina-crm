@@ -127,11 +127,13 @@
 
         {{-- 
         @can('registerPaymentRace', App\Models\AthleteFee::class)
+        --}}
             <li class="nav-item">
-                <a class="nav-link @if(Route::is('proceeds.*') && (request()->route()->parameter('raceType') == App\Enums\RaceType::Race)) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Race) }}">
+                <a class="nav-link @if(Route::is('proceeds.*') && (request()->route()->parameter('raceType') == App\Enums\RaceType::Clothes)) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Clothes) }}">
                     <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Abbigliamento') }}
                 </a>
             </li>
+        {{--
         @endcan
         --}}
 

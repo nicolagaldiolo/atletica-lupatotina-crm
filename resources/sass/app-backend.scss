@@ -31,3 +31,7 @@ html:not([dir=rtl]) .header-brand{
 .nav-link{
     padding: $nav-link-padding-y $nav-link-padding-x;
 }
+
+table.dataTable{
+    border-collapse: collapse;
+}
