@@ -30,7 +30,7 @@
                 <h3>
                     {{ __('Elenco ordini') }}
                 </h3>
-                <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
+                <table id="datatable" class="table table-bordered table-responsive-sm">
                     <thead>
                         <tr>
                             <th>
@@ -64,7 +64,7 @@
                     {{ __('Articoli ordinati') }}
                 </h3>
 
-                <table id="datatable_articles_detail" class="table table-bordered table-hover table-responsive-sm">
+                <table id="datatable_articles_detail" class="table table-bordered table-responsive-sm">
                     <thead>
                         <tr>
                             <th>

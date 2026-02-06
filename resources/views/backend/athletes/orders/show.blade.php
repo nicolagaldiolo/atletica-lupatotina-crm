@@ -36,19 +36,17 @@
 
         <div class="card-body">
             <div class="row">
-                <div class="col-lg-6">
-                    <h3>
-                        {{ __('Dettagli ordine') }}
-                    </h3>
+                <div class="col-lg-4">
+                    <h5>{{ __('Dettagli ordine') }}</h5>
                     <ul class="list-group">
                         <li class="list-group-item"><span>Data creazione: <strong>@date($order->created_at)</strong></span></li>
-                        <li class="list-group-item"><span>Stato Ordine: <strong>{{ $order->status }}</strong></span></li>
+                        <li class="list-group-item"><span>Stato Ordine: <strong>{{ App\Enums\OrderStatus::getDescription($order->status) }}</strong></span></li>
                         <li class="list-group-item"><span>Ordinante: <strong>{{ $order->athlete->full_name }}</strong></span></li>
                         <li class="list-group-item"><span>Articoli ordinati: <strong>{{ $order->quantity }}</strong></span></li>
                         <li class="list-group-item">Totale: <strong>@money($order->total_amount)</strong></li>
                     </ul>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-8">
 
                     <table class="table table-bordered table-responsive">
                         <thead>
@@ -80,7 +78,7 @@
                                         @money($row->total_amount)
                                     </td>
                                     <td>
-                                        {{ $row->status }}
+                                        {{ App\Enums\OrderRowStatus::getDescription($row->status) }}
                                     </td>
                                     <td>
                                         @if($row->transaction && $row->transaction->payed_at)

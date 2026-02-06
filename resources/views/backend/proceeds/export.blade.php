@@ -5,6 +5,10 @@
     }
 </style>
 
+@php 
+    $is_clothes = ($raceType == App\Enums\RaceType::Clothes)
+@endphp
+
 @foreach ($proceeds as $key=>$proc)
     <table>
         <thead>
@@ -17,7 +21,7 @@
             </tr>
             <tr>
                 <td style="font-weight:bold;">{{ __('Socio') }}</td>
-                <td style="font-weight:bold;">{{ __('Gara') }}</td>
+                <td style="font-weight:bold;">{{ $is_clothes ? __('Ordine') : __('Gara') }}</td>
                 <td style="font-weight:bold;">{{ __('Pagamento') }}</td>
                 <td style="font-weight:bold;">{{ __('Importo') }}</td>
             </tr>
@@ -26,13 +30,13 @@
             @php $total = 0; @endphp
             @foreach ($proc as $item)
                 <tr>
-                    <td>{{ $item->athlete->fullname }}</td>
-                    <td>{{ $item->fee->race->name }}</td>
+                    <td>{{ $is_clothes ? $item->transactionable->order->athlete->fullname : $item->athlete->fullname }}</td>
+                    <td>{{ $is_clothes ? $item->transactionable->order->created_at : $item->fee->race->name }}</td>
                     <td>@date($item->payed_at)</td>
-                    <td>{{ $item->custom_amount }}</td>
+                    <td>{{ $is_clothes ? $item->amount : $item->custom_amount }}</td>
                     <td style="font-weight:bold;" colspan="4">&nbsp;</td>
                 </tr>
-                @php $total += $item->custom_amount; @endphp
+                @php $total += ($is_clothes ? $item->amount : $item->custom_amount); @endphp
             @endforeach
             <tr>
                 <td style="font-weight:bold;" colspan="4">{{ $total }}</td>

@@ -18,11 +18,13 @@ class ProceedExportPage implements FromView, WithColumnFormatting, ShouldAutoSiz
 
     private $proceeds;
     private $title;
+    private $raceType;
 
-    public function __construct($proceeds, $title)
+    public function __construct($proceeds, $title, $raceType)
     {
         $this->title = Str::ucfirst($title);
         $this->proceeds = $proceeds;
+        $this->raceType = $raceType;
     }
 
     public function title(): string
@@ -43,7 +45,8 @@ class ProceedExportPage implements FromView, WithColumnFormatting, ShouldAutoSiz
     public function view(): View
     {
         return view('backend.proceeds.export', [
-            'proceeds' => $this->proceeds
+            'proceeds' => $this->proceeds,
+            'raceType' => $this->raceType
         ]);
     }
 }

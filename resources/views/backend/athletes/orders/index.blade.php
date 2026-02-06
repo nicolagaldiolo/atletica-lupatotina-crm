@@ -35,7 +35,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-lg-12">
-                <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
+                <table id="datatable" class="table table-bordered table-responsive-sm">
                     <thead>
                         <tr>
                             <th>
@@ -92,7 +92,13 @@
                 },
             },
             {
-                data: 'quantity'
+                data: 'quantity',
+                render(data, type, row, meta) {
+                    if(data){
+                        return '<span class="badge text-bg-secondary">' + data + '</span>';
+                    }
+                    return null;
+                }
             },
             {
                 data: 'total_amount',

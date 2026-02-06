@@ -6,7 +6,7 @@
                     <i class="fas fa-cash-register fa-lg"></i> <strong>{{ __('Incassato da scaricare') }}</strong></h4>
                 </div>
 
-                @can((($raceType == App\Enums\RaceType::Race) ? 'deductPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'deductPaymentTrack' : false)), App\Models\AthleteFee::class)
+                @if($raceType == App\Enums\RaceType::Clothes)
                     <div class="row">
                         <div class="ms-auto col-auto">
                             <div style="display: none;" id="massUpdateContainer-{{ $user_id }}" class="mb-3 input-group input-group-sm">
@@ -22,9 +22,27 @@
                             </div>
                         </div>
                     </div>
-                @endcan
+                @else
+                    @can((($raceType == App\Enums\RaceType::Race) ? 'deductPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'deductPaymentTrack' : false)), App\Models\AthleteFee::class)
+                        <div class="row">
+                            <div class="ms-auto col-auto">
+                                <div style="display: none;" id="massUpdateContainer-{{ $user_id }}" class="mb-3 input-group input-group-sm">
+                                    <label class="input-group-text">{{ __('Seleziona periodo') }}</label>
+                                    <select id="massUpdatePeriod-{{ $user_id }}" class="form-select">
+                                        @foreach ($proceedRangePeriod['periods'] as $key => $date)
+                                            <option value="{{ $date->endOfMonth() }}" @if($date->format('Y-m') == $proceedRangePeriod['current_period']->format('Y-m')) selected @endif>{{ $date->format('Y-m') }}</option>    
+                                        @endforeach
+                                    </select>
+                                    <button id="massUpdate-{{ $user_id }}" class="btn btn-success" type="button">
+                                        <i class="fas fa-cash-register fa-lg"></i> {{ __('Segna come incassato') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @endcan
+                @endif
                 
-                <table id="datatable-{{ $user_id }}" class="table table-bordered table-hover table-responsive-sm">
+                <table id="datatable-{{ $user_id }}" class="table table-bordered table-responsive-sm">
                     <thead>
                         <tr>
                             <th>
@@ -34,7 +52,7 @@
                                 {{ __('Socio') }}
                             </th>
                             <th>
-                                {{ __('Gara') }}
+                                {{ ($raceType == App\Enums\RaceType::Clothes) ? __('Ordine') : __('Gara') }}
                             </th>
                             <th>
                                 {{ __('Pagamento') }}
@@ -58,7 +76,7 @@
                 <div class="alert alert-success" role="alert">
                     <i class="fas fa-chart-line fa-lg"></i> <strong>{{ __('Incassato scaricato') }}</strong></h4>
                 </div>
-                <table id="datatable-deducted-{{ $user_id }}" class="table table-bordered table-hover table-responsive-sm">
+                <table id="datatable-deducted-{{ $user_id }}" class="table table-bordered table-responsive-sm">
                     <thead>
                         <tr>
                             <th>
@@ -86,8 +104,11 @@
 
 <script type="module">
 
-    var canDeductPayment = @can((($raceType == App\Enums\RaceType::Race) ? 'deductPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'deductPaymentTrack' : false)), App\Models\AthleteFee::class) true @else false @endcan;
-
+    @if($raceType == App\Enums\RaceType::Clothes)
+        var canDeductPayment = true;
+    @else
+        var canDeductPayment = @can((($raceType == App\Enums\RaceType::Race) ? 'deductPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'deductPaymentTrack' : false)), App\Models\AthleteFee::class) true @else false @endcan;
+    @endif
     function dataTableGetSelectedRows(dt){
         return dt.rows({ selected: true }).data().toArray();
     }
@@ -154,10 +175,14 @@
                 visible: canDeductPayment
             },
             {
-                data: 'name'
+                data: 'name',
+                searchable: false,
+                orderable: false,
             },
             {
-                data: 'fee.race.name',
+                data: 'subject',
+                searchable: false,
+                orderable: false,
             },
             {
                 data: 'payed_at',
@@ -166,8 +191,9 @@
                 },
             },
             {
-                data: 'custom_amount',
+                data: "{{ ($raceType == App\Enums\RaceType::Clothes) ? 'amount' : 'custom_amount' }}",
                 render(data, type, row, meta) {
+                    console.log(row);
                     return App.money(data);
                 }
             },

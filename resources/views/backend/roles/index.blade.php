@@ -25,7 +25,7 @@
         
         <div class="row mt-4">
             <div class="col">
-                <table class="table table-hover table-responsive-sm">
+                <table class="table table-responsive-sm">
                     <thead>
                         <tr>
                             <th>{{ __("labels.backend.$module_name.fields.name") }}</th>

@@ -18,12 +18,14 @@ class Transaction extends Model
         'payed_at',
         'amount',
         'bank_transfer',
-        'cashed_by'
+        'cashed_by',
+        'deduct_at'
     ];
 
     protected $casts = [
         'payed_at' => 'datetime',
-        'amount' => 'float'
+        'amount' => 'float',
+        'deduct_at' => 'datetime',
     ];
     
     /**

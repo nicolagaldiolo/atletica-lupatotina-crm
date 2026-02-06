@@ -20,7 +20,7 @@ class SeasonController extends Controller
      */
     public function index()
     {
-
+        $this->authorize('viewAny', Article::class);
 
         if (request()->ajax()) {
 

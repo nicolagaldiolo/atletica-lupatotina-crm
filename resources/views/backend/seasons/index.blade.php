@@ -26,7 +26,7 @@
                 <div class="col-auto">
                     <div class="input-group">
                         <label class="input-group-text fw-bold">{{ __('Seleziona anno') }}</label>
-                        <select id="searchByYear" class="form-select">
+                        <select id="searchByYear" name="" class="form-select">
                             @foreach ($years as $year)
                                 <option value="{{ $year }}" @if($year == $searchByYear) selected @endif>{{ $year }}</option>    
                             @endforeach
@@ -39,7 +39,7 @@
         
         <div class="row mt-3">
             <div class="col">
-                <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
+                <table id="datatable" class="table table-bordered table-responsive-sm">
                     <thead>
                         <tr>
                             <th>
@@ -93,29 +93,27 @@
                 data: 'start_at',
                 name: 'start_at',
                 render(data, type, row, meta) {
-                    console.log(data, type, row, meta)
-                    /*let html = data;
-                    if(!row.is_real_event){
-                        html += ' <span class="badge bg-warning"><i class="fas fa-clipboard-list"></i> {{ __("Evento di segreteria") }}</span>';
-                    }
-                    return html;
-                    */
-                    return data;
+                    return App.date(data);
                 }
             },
             {
                 data: 'end_at',
                 name: 'end_at',
-                /*searchable: false,
                 render(data) {
                     return App.date(data);
-                },*/
+                }
             },
             {
                 data: 'orders_count',
                 name: 'orders_count',
                 searchable: false,
                 orderable: false,
+                render(data, type, row, meta) {
+                    if(data){
+                        return '<span class="badge text-bg-secondary">' + data + '</span>';
+                    }
+                    return null;
+                }
             },
             {
                 data: 'action',

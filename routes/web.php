@@ -106,7 +106,7 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::post('articles/{article}/images/{articleImage}', [ArticleController::class, 'defaultImage'])->name('articles.defaultImage');
     Route::post('articles/{article}/images/{articleImage}/disable', [ArticleController::class, 'disableImage'])->name('articles.disableImage');
     Route::post('articles/{article}/sortImages', [ArticleController::class, 'sortImages'])->name('articles.sortImages');
-    Route::resource('articles', ArticleController::class)->except('create');
+    Route::resource('articles', ArticleController::class)->except(['create', 'show']);
 
     Route::resource('seasons', SeasonController::class)->except('show');
     Route::get('seasons/{season}/products', [SaleController::class, 'products'])->name('seasons.products.index');

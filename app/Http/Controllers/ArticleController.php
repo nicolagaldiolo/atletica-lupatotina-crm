@@ -116,7 +116,6 @@ class ArticleController extends Controller
      */
     public function destroyImage(Article $article, ArticleImage $articleImage)
     {
-
         $this->authorize('update', $article);
 
         $articleImage->delete();
@@ -159,6 +158,8 @@ class ArticleController extends Controller
 
     protected function synRelations(Request $request, Article $article)
     {
+        $this->authorize('update', $article);
+
         // Salvo le immagini
         if($request->has('images')){
             foreach ($request->file('images') as $image) {

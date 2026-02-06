@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Classes\Utility;
 use App\Enums\ArticleType;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Http\Requests\ArticleRequest;
 use App\Http\Requests\OrderRequest;
 use App\Models\Article;
@@ -26,6 +28,12 @@ class OrderController extends Controller
             $builder = $athlete->orders();
 
             return datatables()->eloquent($builder)
+                ->editColumn('status', function(Order $order){
+                    return OrderStatus::getDescription($order->status);
+                })
+                ->editColumn('payment_status', function(Order $order){
+                    return PaymentStatus::getDescription($order->payment_status);
+                })
                 ->addColumn('action', function (Order $order) use($athlete){
                     return view('backend.athletes.orders.partials.action_column', compact('athlete', 'order'));
                 })->make(true);

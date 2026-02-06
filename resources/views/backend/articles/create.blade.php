@@ -30,11 +30,7 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col">
-                    @include ("backend.articles.partials.form")
-                </div>
-            </div>
+            @include ("backend.articles.partials.form")
         </div>
     {{ html()->form()->close() }}
 </div>

@@ -81,6 +81,14 @@ final class Permissions extends Enum
     // SubscriptionsTrack
     const HandleSubscriptionsTrack = 'handle_subscriptions_track';
 
+    // Orders
+    const ListOrders = 'list_orders';
+    const ViewOrders = 'view_orders';
+    const CreateOrders = 'create_orders';
+    const EditOrders = 'edit_orders';
+    const DeleteOrders = 'delete_orders';
+    const ReportOrders = 'report_orders';
+
     // Users
     const ListUsers = 'list_users';
     const ViewUsers = 'view_users';

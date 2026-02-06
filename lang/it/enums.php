@@ -33,8 +33,8 @@ return [
     ],
 
     ArticleType::class => [
-        ArticleType::Simple => 'Semplice',
-        ArticleType::Variants => 'Varianti',
+        ArticleType::Simple => 'Taglia Unica',
+        ArticleType::Variants => 'Varianti Taglie',
     ],
 
     OrderStatus::class => [
@@ -43,6 +43,13 @@ return [
         OrderStatus::Partially_delivered => 'Parzialmente consegnato',
         OrderStatus::Delivered => 'Consegnato',
         OrderStatus::Canceled => 'Annullato',
+    ],
+
+    OrderRowStatus::class => [
+        OrderRowStatus::Pending => 'In Attesa di conferma',
+        OrderRowStatus::Processing => 'In lavorazione',
+        OrderRowStatus::Delivered => 'Consegnato',
+        OrderRowStatus::Canceled => 'Annullato'
     ],
 
     PaymentStatus::class => [

@@ -8,14 +8,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    protected $permissions = [];
-
-    public function __construct()
-    {
-        $this->permissions = [
-        ];
-    }
-
     /**
      * Run the migrations.
      */
@@ -33,8 +25,6 @@ return new class extends Migration
             $table->foreignId('updated_by')->nullable()->constrained('users', 'id')->onDelete('set null');
             $table->foreignId('deleted_by')->nullable()->constrained('users', 'id')->onDelete('set null');
         });
-
-        Utility::manageDbPermissions($this->permissions);
     }
 
     /**
@@ -42,8 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Utility::manageDbPermissions($this->permissions, true);
-
         Schema::dropIfExists('orders');
     }
 };

@@ -85,6 +85,14 @@
                 </a>
             </li>
         @endcan
+
+        @can('registerPaymentRace', App\Models\AthleteFee::class)
+            <li class="nav-item">
+                <a class="nav-link @if(Route::is('proceeds.*') && (request()->route()->parameter('raceType') == App\Enums\RaceType::Race)) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Race) }}">
+                    <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Incassi Gare') }}
+                </a>
+            </li>
+        @endcan
         
         @canany(['subscribeTrack', 'registerPaymentTrack'], App\Models\AthleteFee::class)
             <li class="nav-title"><a>{{ __('Registrazioni Pista') }}</a></li>
@@ -106,14 +114,31 @@
             </li>
         @endcan
 
-        @can('viewAny', App\Models\Article::class)
+        @can('registerPaymentTrack', App\Models\AthleteFee::class)
+            <li class="nav-item">
+                <a class="nav-link @if(Route::is('proceeds.*') && (request()->route()->parameter('raceType') == App\Enums\RaceType::Track)) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Track) }}">
+                    <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Incassi Pista') }}
+                </a>
+            </li>
+        @endcan
+
+
+        @if (
+            Gate::check('viewAny', App\Models\Article::class) ||
+            Gate::check('viewAny', App\Models\Order::class)
+        )
             <li class="nav-title"><a>{{ __('Abbigliamento') }}</a></li>
+        @endif
+
+        @can('viewAny', App\Models\Article::class)
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('articles.*')) active @endif" href="{{ route('articles.index') }}">
                     <i class="nav-icon fa-solid fa-shirt"></i>&nbsp;{{ __('Magazzino') }}
                 </a>
             </li>
+        @endcan
 
+        @can('viewAny', App\Models\Order::class)
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('seasons.*')) active @endif" href="{{ route('seasons.index') }}">
                     <i class="nav-icon fas fa-shopping-cart"></i>&nbsp;{{ __('Ordini') }}
@@ -121,37 +146,18 @@
             </li>
         @endcan
 
-        @if (Gate::any(['registerPaymentRace', 'registerPaymentTrack'], App\Models\AthleteFee::class))
-            <li class="nav-title"><a>{{ __('Incassi') }}</a></li>
-        @endif
-
-        {{-- 
+            {{-- 
         @can('registerPaymentRace', App\Models\AthleteFee::class)
         --}}
-            <li class="nav-item">
+            {{--<li class="nav-item">
                 <a class="nav-link @if(Route::is('proceeds.*') && (request()->route()->parameter('raceType') == App\Enums\RaceType::Clothes)) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Clothes) }}">
-                    <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Abbigliamento') }}
+                    <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Incassi Ordini') }}
                 </a>
-            </li>
+            </li>--}}
         {{--
         @endcan
         --}}
-
-        @can('registerPaymentRace', App\Models\AthleteFee::class)
-            <li class="nav-item">
-                <a class="nav-link @if(Route::is('proceeds.*') && (request()->route()->parameter('raceType') == App\Enums\RaceType::Race)) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Race) }}">
-                    <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Gare') }}
-                </a>
-            </li>
-        @endcan
-
-        @can('registerPaymentTrack', App\Models\AthleteFee::class)
-            <li class="nav-item">
-                <a class="nav-link @if(Route::is('proceeds.*') && (request()->route()->parameter('raceType') == App\Enums\RaceType::Track)) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Track) }}">
-                    <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Pista') }}
-                </a>
-            </li>
-        @endcan
+        
 
         @if(Gate::check('viewAny', App\Models\User::class) || Gate::check('viewAny', App\Models\Role::class))
             <li class="nav-title"><a>{{ __('Amministrazione') }}</a></li>

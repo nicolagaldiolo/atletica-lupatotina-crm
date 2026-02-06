@@ -104,7 +104,7 @@
                 </div>
 
 
-                <table id="datatable" class="table table-bordered table-hover table-responsive-sm">
+                <table id="datatable" class="table table-bordered table-responsive-sm">
                     <thead>
                         <tr>
                             <th>

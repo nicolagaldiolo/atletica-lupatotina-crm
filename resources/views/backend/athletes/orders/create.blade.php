@@ -31,7 +31,7 @@
                                 <x-backend.buttons.return route='{{ route("athletes.orders.index", $athlete) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
                             {{--@endcan--}}
                             {{--@can((($race->type == App\Enums\RaceType::Race) ? 'createRace' : (($race->type == App\Enums\RaceType::Track) ? 'createTrack' : false)), App\Models\Fee::class)--}}
-                                <x-backend.buttons.save small="true" >{{__('Salva ordine')}}</x-backend.buttons.save>
+                                <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
                             {{-- @endcan--}}
                         </div>
                     </div>
@@ -41,7 +41,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col">
-                    @include ("backend.athletes.orders.partials.form", ['disabled' => false])
+                    @include ("backend.athletes.orders.partials.form")
                 </div>
             </div>
         </div>
@@ -51,10 +51,10 @@
                     <div class="float-end">
                         <div class="form-group">
                             {{--@can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Fee::class)--}}
-                                <x-backend.buttons.return route='{{ route("athletes.orders.index", $athlete) }}'>{{ __('Annulla') }}</x-backend.buttons.return>
+                                <x-backend.buttons.return route='{{ route("athletes.orders.index", $athlete) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
                             {{--@endcan--}}
                             {{--@can((($race->type == App\Enums\RaceType::Race) ? 'createRace' : (($race->type == App\Enums\RaceType::Track) ? 'createTrack' : false)), App\Models\Fee::class)--}}
-                                <x-backend.buttons.save>{{__('Salva ordine')}}</x-backend.buttons.save>
+                                <x-backend.buttons.save small="true">{{__('Salva')}}</x-backend.buttons.save>
                             {{-- @endcan--}}
                         </div>
                     </div>
