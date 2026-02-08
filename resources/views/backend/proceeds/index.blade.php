@@ -25,6 +25,7 @@
 @else
     <div class="card">
         @if($raceType == App\Enums\RaceType::Clothes)
+            @can('deductPayment', App\Models\Order::class)
                 <div class="card-header">
                     <x-backend.section-header>
                         <x-slot name="toolbar">
@@ -47,6 +48,7 @@
                         </x-slot>
                     </x-backend.section-header>
                 </div>
+            @endcan
         @else
             @can((($raceType == App\Enums\RaceType::Race) ? 'deductPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'deductPaymentTrack' : false)), App\Models\AthleteFee::class)
                 <div class="card-header">

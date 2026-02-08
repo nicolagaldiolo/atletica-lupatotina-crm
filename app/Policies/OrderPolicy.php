@@ -63,4 +63,14 @@ class OrderPolicy
             )
         );
     }
+
+    public function registerPayment(User $user): bool
+    {
+        return $user->can(Permissions::HandlePaymentsOrders);
+    }
+
+    public function deductPayment(User $user): bool
+    {
+        return $user->can(Permissions::DeductPaymentsOrders);
+    }
 }

@@ -30,6 +30,7 @@ return [
     RaceType::class => [
         RaceType::Race => 'Gara',
         RaceType::Track => 'Pista',
+        RaceType::Clothes => 'Abbigliamento'
     ],
 
     ArticleType::class => [

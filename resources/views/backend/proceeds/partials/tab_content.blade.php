@@ -7,21 +7,23 @@
                 </div>
 
                 @if($raceType == App\Enums\RaceType::Clothes)
-                    <div class="row">
-                        <div class="ms-auto col-auto">
-                            <div style="display: none;" id="massUpdateContainer-{{ $user_id }}" class="mb-3 input-group input-group-sm">
-                                <label class="input-group-text">{{ __('Seleziona periodo') }}</label>
-                                <select id="massUpdatePeriod-{{ $user_id }}" class="form-select">
-                                    @foreach ($proceedRangePeriod['periods'] as $key => $date)
-                                        <option value="{{ $date->endOfMonth() }}" @if($date->format('Y-m') == $proceedRangePeriod['current_period']->format('Y-m')) selected @endif>{{ $date->format('Y-m') }}</option>    
-                                    @endforeach
-                                </select>
-                                <button id="massUpdate-{{ $user_id }}" class="btn btn-success" type="button">
-                                    <i class="fas fa-cash-register fa-lg"></i> {{ __('Segna come incassato') }}
-                                </button>
+                    @can('deductPayment', App\Models\Order::class)
+                        <div class="row">
+                            <div class="ms-auto col-auto">
+                                <div style="display: none;" id="massUpdateContainer-{{ $user_id }}" class="mb-3 input-group input-group-sm">
+                                    <label class="input-group-text">{{ __('Seleziona periodo') }}</label>
+                                    <select id="massUpdatePeriod-{{ $user_id }}" class="form-select">
+                                        @foreach ($proceedRangePeriod['periods'] as $key => $date)
+                                            <option value="{{ $date->endOfMonth() }}" @if($date->format('Y-m') == $proceedRangePeriod['current_period']->format('Y-m')) selected @endif>{{ $date->format('Y-m') }}</option>    
+                                        @endforeach
+                                    </select>
+                                    <button id="massUpdate-{{ $user_id }}" class="btn btn-success" type="button">
+                                        <i class="fas fa-cash-register fa-lg"></i> {{ __('Segna come incassato') }}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endcan
                 @else
                     @can((($raceType == App\Enums\RaceType::Race) ? 'deductPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'deductPaymentTrack' : false)), App\Models\AthleteFee::class)
                         <div class="row">
@@ -105,7 +107,7 @@
 <script type="module">
 
     @if($raceType == App\Enums\RaceType::Clothes)
-        var canDeductPayment = true;
+        var canDeductPayment = @can('deductPayment', App\Models\Order::class) true @else false @endcan;
     @else
         var canDeductPayment = @can((($raceType == App\Enums\RaceType::Race) ? 'deductPaymentRace' : (($raceType == App\Enums\RaceType::Track) ? 'deductPaymentTrack' : false)), App\Models\AthleteFee::class) true @else false @endcan;
     @endif

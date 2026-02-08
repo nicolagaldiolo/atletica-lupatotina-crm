@@ -87,7 +87,6 @@ final class Permissions extends Enum
     const CreateOrders = 'create_orders';
     const EditOrders = 'edit_orders';
     const DeleteOrders = 'delete_orders';
-    const ReportOrders = 'report_orders';
     const HandlePaymentsOrders = 'handle_payments_orders';
     const DeductPaymentsOrders = 'deduct_payments_orders';
 

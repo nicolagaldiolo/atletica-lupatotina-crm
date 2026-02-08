@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\RaceType;
 use App\Exports\ProceedExport;
 use App\Models\AthleteFee;
+use App\Models\Order;
 use App\Models\OrderRow;
 use App\Models\Proceed;
 use App\Models\Transaction;
@@ -24,7 +25,7 @@ class ProceedController extends Controller
     public function index($raceType)
     {
         if($raceType == RaceType::Clothes){
-            //$this->authorize('registerPaymentRace', AthleteFee::class);
+            $this->authorize('registerPayment', Order::class);
 
             $accounts = User::whereHas('transactions', function($query){
                 $query->whereHasMorph('transactionable', [
@@ -60,7 +61,7 @@ class ProceedController extends Controller
     public function show($raceType, $user)
     {
         if($raceType == RaceType::Clothes){
-            //
+            $this->authorize('registerPayment', Order::class);
         }else if($raceType == RaceType::Race){
             $this->authorize('registerPaymentRace', AthleteFee::class);
         }else if($raceType == RaceType::Track){
@@ -119,7 +120,7 @@ class ProceedController extends Controller
     public function deducted($raceType, $user)
     {
         if($raceType == RaceType::Clothes){
-            //
+            $this->authorize('registerPayment', Order::class);
         }else if($raceType == RaceType::Race){
             $this->authorize('registerPaymentRace', AthleteFee::class);
         }else if($raceType == RaceType::Track){
@@ -169,7 +170,7 @@ class ProceedController extends Controller
     public function update(Request $request, $raceType, $user)
     {
         if($raceType == RaceType::Clothes){
-            //
+            $this->authorize('registerPayment', Order::class);
         }else if($raceType == RaceType::Race){
             $this->authorize('deductPaymentRace', AthleteFee::class);
         }else if($raceType == RaceType::Track){
@@ -300,7 +301,7 @@ class ProceedController extends Controller
     public function export(Request $request, $raceType)
     {
         if($raceType == RaceType::Clothes){
-            //$this->authorize('deductPaymentRace', AthleteFee::class);
+            $this->authorize('deductPayment', Order::class);
         }else if($raceType == RaceType::Race){
             $this->authorize('deductPaymentRace', AthleteFee::class);
         }else if($raceType == RaceType::Track){
@@ -362,7 +363,8 @@ class ProceedController extends Controller
             return $arr;
         }, []);
 
-        $filename = Str::slug("Atletica lupatotina incassi {$raceType} {$year_to_export}") . ".xlsx";
+        $raceTypeDescription = RaceType::getDescription($raceType);
+        $filename = Str::slug("Atletica lupatotina incassi {$raceTypeDescription} {$year_to_export}") . ".xlsx";
         return Excel::download(new ProceedExport($accounts, $raceType), $filename);
     }
 

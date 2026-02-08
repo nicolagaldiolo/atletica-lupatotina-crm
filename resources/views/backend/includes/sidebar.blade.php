@@ -126,7 +126,8 @@
         @if (
             Gate::check('viewAny', App\Models\Article::class) ||
             Gate::check('viewAny', App\Models\Season::class) ||
-            Gate::check('create', [App\Models\Order::class, Auth::user()->athlete])
+            Gate::check('create', [App\Models\Order::class, Auth::user()->athlete]) ||
+            Gate::check('registerPayment', App\Models\Order::class)
         )
             <li class="nav-title"><a>{{ __('Abbigliamento') }}</a></li>
         @endif
@@ -150,22 +151,18 @@
         @can('viewAny', App\Models\Season::class)
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('seasons.*')) active @endif" href="{{ route('seasons.index') }}">
-                    <i class="nav-icon fas fa-clipboard-list"></i>&nbsp;{{ __('Stagioni') }}
+                    <i class="nav-icon fas fa-clipboard-list"></i>&nbsp;{{ __('Vendite') }}
                 </a>
             </li>
         @endcan
 
-            {{-- 
-        @can('registerPaymentRace', App\Models\AthleteFee::class)
-        --}}
-            {{--<li class="nav-item">
+        @can('registerPayment', App\Models\Order::class)
+            <li class="nav-item">
                 <a class="nav-link @if(Route::is('proceeds.*') && (request()->route()->parameter('raceType') == App\Enums\RaceType::Clothes)) active @endif" href="{{ route('proceeds.index', App\Enums\RaceType::Clothes) }}">
                     <i class="nav-icon fas fa-cash-register"></i>&nbsp;{{ __('Incassi Ordini') }}
                 </a>
-            </li>--}}
-        {{--
+            </li>
         @endcan
-        --}}
         
 
         @if(Gate::check('viewAny', App\Models\User::class) || Gate::check('viewAny', App\Models\Role::class))
