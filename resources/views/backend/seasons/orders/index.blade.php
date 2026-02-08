@@ -1,70 +1,72 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Gare')
+    $entity = __('Stagioni')
 @endphp
 
 @section('title') {{ $entity }} @endsection
-{{-- 
+
 @section('breadcrumbs')
-    <x-backend-breadcrumb-item canurl="{{ Auth::user()->can('update', $race) }}" route="{{ route('races.edit', [$race->type, $race]) }}">{{ $race->name }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item type="active">{{ __('Quote') }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active" canurl="" route="{{ route('seasons.index', $season) }}">{{ $season->name }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ __('Ordini') }}</x-backend-breadcrumb-item>
 @endsection
---}}
 
 @section('secondary-nav')
-    {{--@include ("backend.races.partials.action_column", ['layout' => 'nav'])--}}
 @endsection
 
 @section('content')
 <div class="card">
     <div class="card-header">
-        <x-backend.section-header>
-            <x-slot name="toolbar">
-            </x-slot>
-        </x-backend.section-header>
-    </div>
-    <div class="card-body">
         <div class="row">
-            <div class="col-lg-8">
-                <h3>
-                    {{ __('Elenco ordini') }}
-                </h3>
-                <table id="datatable" class="table table-bordered table-responsive-sm">
-                    <thead>
-                        <tr>
-                            <th>
-                                #
-                            </th>
-                            <th>
-                                {{ __('Ordinante') }}
-                            </th>
-                            <th>
-                                {{ __('Data ordine') }}
-                            </th>
-                            <th>
-                                {{ __('Articoli') }}
-                            </th>
-                            <th>
-                                {{ __('Importo') }}
-                            </th>
-                            <th>
-                                {{ __('Stato') }}
-                            </th>
-                            <th>
-                                {{ __('Pagamento') }}
-                            </th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                </table>
+            <div class="col">
+                <div class="float-end">
+                    @can('viewAny', App\Models\Season::class)
+                        <x-backend.buttons.return route='{{ route("seasons.index") }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
+                    @endcan
+                </div>
             </div>
-            <div class="col-lg-4">
-                <h3>
-                    {{ __('Articoli ordinati') }}
-                </h3>
+        </div>
+    </div>
 
-                <table id="datatable_articles_detail" class="table table-bordered table-responsive-sm">
+    <div class="card-body">
+        
+        <h5>{{ __('Ordini ordinati') }}</h5>
+            <table id="datatable" class="table table-bordered table-responsive-sm">
+                <thead>
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            {{ __('Numero') }}
+                        </th>
+                        <th>
+                            {{ __('Socio') }}
+                        </th>
+                        <th>
+                            {{ __('Data ordine') }}
+                        </th>
+                        <th>
+                            {{ __('Articoli') }}
+                        </th>
+                        <th>
+                            {{ __('Importo') }}
+                        </th>
+                        <th>
+                            {{ __('Stato') }}
+                        </th>
+                        <th>
+                            {{ __('Pagamento') }}
+                        </th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+            </table>
+
+        
+        
+            <h5 class="mt-5">{{ __('Articoli ordinati') }}</h5>
+            <table id="datatable_articles_detail" class="table table-bordered table-responsive-sm">
                     <thead>
                         <tr>
                             <th>
@@ -82,8 +84,6 @@
                         </tr>
                     </thead>
                 </table>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -108,6 +108,9 @@
                 visible: false,
             },
             {
+                data: 'number',
+            },
+            {
                 data: 'fullname',
                 name: 'fullname',
             },
@@ -116,18 +119,26 @@
                 render(data) {
                     return App.date(data);
                 },
+                orderable: false,
+                searchable: false
             },
             {
-                data: 'quantity'
+                data: 'quantity',
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'total_amount',
                 render(data) {
                     return App.money(data);
                 },
+                orderable: false,
+                searchable: false
             },
             {
-                data: 'status'
+                data: 'status',
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'payment_status',

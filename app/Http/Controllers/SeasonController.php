@@ -20,7 +20,7 @@ class SeasonController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', Article::class);
+        $this->authorize('viewAny', Season::class);
 
         if (request()->ajax()) {
 
@@ -50,7 +50,8 @@ class SeasonController extends Controller
      */
     public function create()
     {
-        //$this->authorize('create', Article::class);
+        $this->authorize('create', Season::class);
+
         $season = new Season();
         return view('backend.seasons.create', compact('season'));
     }
@@ -60,7 +61,8 @@ class SeasonController extends Controller
      */
     public function store(SeasonRequest $request)
     {
-        //$this->authorize('create', Article::class);
+        $this->authorize('create', Season::class);
+        
         Season::create($request->validated());
         Utility::flashMessage();
         
@@ -80,7 +82,8 @@ class SeasonController extends Controller
      */
     public function edit(Season $season)
     {
-        //$this->authorize('update', $article);
+        $this->authorize('update', $season);
+
         return view('backend.seasons.edit', compact('season'));
     }
 
@@ -89,7 +92,8 @@ class SeasonController extends Controller
      */
     public function update(SeasonRequest $request, Season $season)
     {
-        //$this->authorize('update', $season);
+        $this->authorize('update', $season);
+
         $season->update($request->validated());
 
         Utility::flashMessage();
@@ -102,7 +106,8 @@ class SeasonController extends Controller
      */
     public function destroy(Season $season)
     {
-        //$this->authorize('delete', $article);
+        $this->authorize('delete', $season);
+
         $season->delete();
         Utility::flashMessage();
 

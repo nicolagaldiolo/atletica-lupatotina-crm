@@ -16,7 +16,9 @@ return new class extends Migration
             Permissions::CreateOrders,
             Permissions::EditOrders,
             Permissions::DeleteOrders,
-            Permissions::ReportOrders
+            Permissions::ReportOrders,
+            Permissions::HandlePaymentsOrders,
+            Permissions::DeductPaymentsOrders
         ];
     }
 

@@ -14,7 +14,7 @@
     <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
         @can('create', App\Models\Athlete::class)
             <x-backend.buttons.create route="{{ route('athletes.create') }}" small="true" title="">
-                {{ __('Aggiungi nuovo') }}
+                {{ __('Aggiungi') }}
             </x-backend.buttons.create>
         @endcan
     </div>

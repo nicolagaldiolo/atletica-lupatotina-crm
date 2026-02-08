@@ -25,7 +25,7 @@
                 </a>
             </li>
         @endif
-        
+
         @if (
             Gate::any(['viewAny', 'report'], App\Models\Athlete::class) || 
             Gate::check('viewAnyRace', App\Models\Race::class) ||
@@ -125,10 +125,19 @@
 
         @if (
             Gate::check('viewAny', App\Models\Article::class) ||
-            Gate::check('viewAny', App\Models\Order::class)
+            Gate::check('viewAny', App\Models\Season::class) ||
+            Gate::check('create', [App\Models\Order::class, Auth::user()->athlete])
         )
             <li class="nav-title"><a>{{ __('Abbigliamento') }}</a></li>
         @endif
+
+        @can('create', [App\Models\Order::class, Auth::user()->athlete])
+            <li class="nav-item">
+                <a class="nav-link @if(Route::is('athletes.orders.*')) active @endif" href="{{ route("athletes.orders.create", Auth::user()->athlete) }}">
+                    <i class="nav-icon fas fa-cart-plus"></i>&nbsp;@lang('Nuovo ordine')
+                </a>
+            </li>
+        @endcan
 
         @can('viewAny', App\Models\Article::class)
             <li class="nav-item">
@@ -138,10 +147,10 @@
             </li>
         @endcan
 
-        @can('viewAny', App\Models\Order::class)
+        @can('viewAny', App\Models\Season::class)
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('seasons.*')) active @endif" href="{{ route('seasons.index') }}">
-                    <i class="nav-icon fas fa-shopping-cart"></i>&nbsp;{{ __('Ordini') }}
+                    <i class="nav-icon fas fa-clipboard-list"></i>&nbsp;{{ __('Stagioni') }}
                 </a>
             </li>
         @endcan

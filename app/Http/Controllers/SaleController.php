@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Classes\Utility;
 use App\Enums\ArticleType;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Http\Requests\ArticleRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\SaleRequest;
@@ -24,6 +26,7 @@ class SaleController extends Controller
      */
     public function index(Season $season)
     {
+        $this->authorize('viewAny', [Order::class, new Athlete()]);
 
         if (request()->ajax()) {
 
@@ -40,6 +43,12 @@ class SaleController extends Controller
                 ->editColumn('fullname', function (Order $order) {
                     return $order->athlete->fullname;
                 })
+                ->editColumn('status', function(Order $order){
+                    return OrderStatus::getDescription($order->status);
+                })
+                ->editColumn('payment_status', function(Order $order){
+                    return PaymentStatus::getDescription($order->payment_status);
+                })
                 ->addColumn('action', function (Order $order) use($season){
                     return view('backend.seasons.orders.partials.action_column', compact('season', 'order'));
                 })->make(true);
@@ -50,6 +59,8 @@ class SaleController extends Controller
 
     public function edit(Season $season, Order $order)
     {
+        $this->authorize('update', [$order, new Athlete()]);
+
         if (request()->ajax()) {
 
             $builder = $order->rows()->with(['article.imageDefault', 'transaction.cashed']);
@@ -58,12 +69,13 @@ class SaleController extends Controller
         }else{
 
             $accountants = User::HandlePaymentsRace()->get();
-            return view('backend.seasons.orders.rows.index', compact('season', 'order', 'accountants'));
+            return view('backend.seasons.orders.edit', compact('season', 'order', 'accountants'));
         }
     }
 
     public function update(SaleRequest $request, Season $season, Order $order)
     {
+        $this->authorize('update', [$order, new Athlete()]);
 
         $order->rows()->whereIn('id', $request->get('ids', []))->get()->each(function($orderRow) use($request){    
 
@@ -84,6 +96,7 @@ class SaleController extends Controller
 
     public function products(Season $season)
     {
+        $this->authorize('viewAny', [Order::class, new Athlete()]);
 
         if (request()->ajax()) {
             $builder = $season->orderRows()

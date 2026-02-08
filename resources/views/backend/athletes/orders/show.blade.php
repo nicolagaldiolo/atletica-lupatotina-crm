@@ -12,7 +12,7 @@
 
 @section('breadcrumbs')
     <x-backend-breadcrumb-item canurl="true" route="#">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item type="active">{{ $order->created_at }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ $order->number }}</x-backend-breadcrumb-item>
 @endsection
 
 @section('secondary-nav')
@@ -24,31 +24,27 @@
         <div class="card-header">
             <div class="row">
                 <div class="col">
-                    
-                    <div class="float-end">
-                        {{--@can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Fee::class)--}}
-                            <x-backend.buttons.return route='{{ route("athletes.orders.index", [$athlete]) }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
-                        {{--@endcan--}}
-                    </div>
+                    @include ("backend.athletes.orders.partials.action_column", ['layout' => 'form', 'disabled' => true])
                 </div>
             </div>
         </div>
 
         <div class="card-body">
-            <div class="row">
-                <div class="col-lg-4">
-                    <h5>{{ __('Dettagli ordine') }}</h5>
-                    <ul class="list-group">
-                        <li class="list-group-item"><span>Data creazione: <strong>@date($order->created_at)</strong></span></li>
-                        <li class="list-group-item"><span>Stato Ordine: <strong>{{ App\Enums\OrderStatus::getDescription($order->status) }}</strong></span></li>
-                        <li class="list-group-item"><span>Ordinante: <strong>{{ $order->athlete->full_name }}</strong></span></li>
-                        <li class="list-group-item"><span>Articoli ordinati: <strong>{{ $order->quantity }}</strong></span></li>
-                        <li class="list-group-item">Totale: <strong>@money($order->total_amount)</strong></li>
-                    </ul>
-                </div>
-                <div class="col-lg-8">
+            <h5>{{ __('Dettaglio ordine') }}</h5>
 
-                    <table class="table table-bordered table-responsive">
+            <ul class="list-group">
+                <li class="list-group-item"><span>Numero Ordine: <strong>{{ $order->number }}</strong></span></li>
+                <li class="list-group-item"><span>Data creazione: <strong>@date($order->created_at)</strong></span></li>
+                <li class="list-group-item"><span>Stato Ordine: <strong>{{ App\Enums\OrderStatus::getDescription($order->status) }}</strong></span></li>
+                <li class="list-group-item"><span>Ordinante: <strong>{{ $order->athlete->full_name }}</strong></span></li>
+                <li class="list-group-item"><span>Articoli ordinati: <strong>{{ $order->quantity }}</strong></span></li>
+                <li class="list-group-item">Totale: <strong>@money($order->total_amount)</strong></li>
+            </ul>
+
+            <div class="mt-3">
+                <h5>{{ __('Articoli') }}</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>{{ __('Articolo') }}</th>
@@ -100,6 +96,13 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col">
+                    @include ("backend.athletes.orders.partials.action_column", ['layout' => 'form', 'disabled' => true])
                 </div>
             </div>
         </div>

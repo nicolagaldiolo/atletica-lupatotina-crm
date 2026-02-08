@@ -7,7 +7,7 @@
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
-    <x-backend-breadcrumb-item type="active">{{ __('Nuovo articolo') }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ __('Nuovo articolo') }} ({{ App\Enums\ArticleType::getDescription($article->type) }})</x-backend-breadcrumb-item>
 @endsection
 
 @section('content')

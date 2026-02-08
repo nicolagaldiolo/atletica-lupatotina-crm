@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Vendite')
+    $entity = __('Stagioni')
 @endphp
 
 @section('title') {{ $entity }} @endsection
@@ -11,15 +11,23 @@
 @endsection
 
 @section('secondary-nav')
-    <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
-        <x-backend.buttons.create route="{{ route('seasons.create') }}" small="true" title="">
-            {{ __('Aggiungi') }}
-        </x-backend.buttons.create>
-    </div>
 @endsection
 
 @section('content')
 <div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                <div class="float-end">
+                    @can('create', App\Models\Season::class)
+                        <x-backend.buttons.create route="{{ route('seasons.create') }}" small="true" title="">
+                            {{ __('Aggiungi') }}
+                        </x-backend.buttons.create>
+                    @endcan
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="card-body">
         @if($years->count())
             <div class="row">
@@ -48,6 +56,7 @@
                             <th>{{ __('Nome') }}</th>
                             <th>{{ __('Data inizio') }}</th>
                             <th>{{ __('Data fine') }}</th>
+                            <th>{{ __('Stato') }}</th>
                             <th>{{ __('Ordini') }}</th>
                             <th>&nbsp;</th>
                         </tr>
@@ -101,6 +110,16 @@
                 name: 'end_at',
                 render(data) {
                     return App.date(data);
+                }
+            },
+            {
+                data: 'is_open',
+                render(data, type, row, meta) {
+                    if(data){
+                        return '<span class="badge text-bg-success">Attiva</span>';
+                    }else{
+                        return '<span class="badge text-bg-danger">Non attiva</span>';
+                    }
                 }
             },
             {

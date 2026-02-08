@@ -12,7 +12,7 @@
 
 @section('breadcrumbs')
     <x-backend-breadcrumb-item canurl="true" route="#">{{ $athlete->fullname }}</x-backend-breadcrumb-item>
-    <x-backend-breadcrumb-item type="active">{{ $order->created_at }}</x-backend-breadcrumb-item>
+    <x-backend-breadcrumb-item type="active">{{ $order->number }}</x-backend-breadcrumb-item>
 @endsection
 
 @section('secondary-nav')
@@ -25,45 +25,19 @@
     <div class="card-header">
         <div class="row">
             <div class="col">
-                {{--@can((($race->type == App\Enums\RaceType::Race) ? 'deleteRace' : (($race->type == App\Enums\RaceType::Track) ? 'deleteTrack' : false)), $fee)--}}
-                    <x-backend.buttons.delete route='{{ route("athletes.orders.destroy", [$athlete, $order]) }}'data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}" />
-                {{--@endcan--}}
-                <div class="float-end">
-                    {{--@can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Fee::class)--}}
-                        <x-backend.buttons.return route='{{ route("athletes.orders.index", [$athlete]) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
-                    {{--@endcan--}}
-                    {{--@can((($race->type == App\Enums\RaceType::Race) ? 'updateRace' : (($race->type == App\Enums\RaceType::Track) ? 'updateTrack' : false)), $fee)--}}
-                        <x-backend.buttons.save small="true">{{__('Salva')}}</x-backend.buttons.save>
-                    {{--@endcan--}}
-                </div>
+                @include ("backend.athletes.orders.partials.action_column", ['layout' => 'form', 'disabled' => false])
             </div>
         </div>
     </div>
 
     <div class="card-body">
-        <div class="row">
-            <div class="col">
-                @include ("backend.athletes.orders.partials.form", ['disabled' => false])
-            </div>
-        </div>
+        @include ("backend.athletes.orders.partials.form")
     </div>
 
     <div class="card-footer">
         <div class="row">
             <div class="col">
-                
-
-                {{--@can((($race->type == App\Enums\RaceType::Race) ? 'deleteRace' : (($race->type == App\Enums\RaceType::Track) ? 'deleteTrack' : false)), $fee)--}}
-                    <x-backend.buttons.delete route='{{ route("athletes.orders.destroy", [$athlete, $order]) }}'data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}" />
-                {{--@endcan--}}
-                <div class="float-end">
-                    {{--@can((($race->type == App\Enums\RaceType::Race) ? 'viewAnyRace' : (($race->type == App\Enums\RaceType::Track) ? 'viewAnyTrack' : false)), App\Models\Fee::class)--}}
-                        <x-backend.buttons.return route='{{ route("athletes.orders.index", [$athlete]) }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
-                    {{--@endcan--}}
-                    {{--@can((($race->type == App\Enums\RaceType::Race) ? 'updateRace' : (($race->type == App\Enums\RaceType::Track) ? 'updateTrack' : false)), $fee)--}}
-                        <x-backend.buttons.save small="true">{{__('Salva')}}</x-backend.buttons.save>
-                    {{--@endcan--}}
-                </div>
+                @include ("backend.athletes.orders.partials.action_column", ['layout' => 'form', 'disabled' => false])
             </div>
         </div>
     </div>

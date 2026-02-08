@@ -35,3 +35,27 @@ html:not([dir=rtl]) .header-brand{
 table.dataTable{
     border-collapse: collapse;
 }
+
+@media (max-width: 576px) {
+  .table-stacked thead {
+    display: none;
+  }
+
+  .table-stacked tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: .5rem;
+    padding: .75rem;
+  }
+
+  .table-stacked td {
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem 0;
+  }
+
+  .table-bordered > :not(caption) > * > *{
+    border: 0;
+  }
+}

@@ -586,3 +586,10 @@ if(!function_exists('seasonYears')) {
         return $years;
     }
 }
+
+if(!function_exists('isOrderEnable')) {
+    function isOrderEnable()
+    {
+        return boolval(Season::active()->first()->id ?? 0);
+    }
+}

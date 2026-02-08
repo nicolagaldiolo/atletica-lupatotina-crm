@@ -23,6 +23,10 @@ class Season extends Model
         'end_at',
     ];
 
+    protected $appends = [
+        'is_open'
+    ];
+
     /**
      * The attributes that should be cast.
      *
@@ -32,6 +36,11 @@ class Season extends Model
         'start_at' => 'datetime',
         'end_at' => 'datetime'
     ];
+
+    public function getIsOpenAttribute(){
+        $now = Carbon::now();
+        return $this->start_at <= $now && $this->end_at >= $now;
+    }
 
     public function orders(): HasMany
     {

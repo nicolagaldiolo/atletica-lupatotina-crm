@@ -1,12 +1,13 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Gare');
+    $entity = __('Stagioni');
 @endphp
 
 @section('title') {{ $entity }} @endsection
 
 @section('breadcrumbs')
+    <x-backend-breadcrumb-item>{{ $entity }}</x-backend-breadcrumb-item>
     <x-backend-breadcrumb-item type="active">{{ $season->name }}</x-backend-breadcrumb-item>
 @endsection
 
@@ -19,12 +20,12 @@
             <div class="col">
                 <x-backend.buttons.delete route='{{ route("seasons.destroy", $season) }}' small="true" data_confirm='Sei sicuro?' data_method="DELETE" data_token="{{csrf_token()}}"/>
                 <div class="float-end">
-                    {{--@can('viewAnySeason', App\Models\Season::class)--}}
+                    @can('viewAny', App\Models\Season::class)
                         <x-backend.buttons.return route='{{ route("seasons.index") }}' small="true">{{ __('Indietro') }}</x-backend.buttons.return>
-                    {{--@endcan--}}
-                    {{--@can('updateSeason', App\Models\Season::class)--}}
+                    @endcan
+                    @can('update', $season)
                         <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                    {{--@endcan--}}
+                    @endcan
                 </div>
             </div>
         </div>

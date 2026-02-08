@@ -18,13 +18,13 @@
                 <div class="col">
                     <div class="float-end">
                         <div class="form-group">
-                            {{--@can('viewAnySeason', App\Models\Season::class)--}}
+                            @can('viewAny', App\Models\Season::class)
                                 <x-backend.buttons.return route='{{ route("seasons.index") }}' small="true">{{ __('Annulla') }}</x-backend.buttons.return>
-                            {{--@endcan--}}
+                            @endcan
                             
-                            {{--@can('createSeason', App\Models\Season::class)--}}
+                            @can('create', App\Models\Season::class)
                                 <x-backend.buttons.save small="true" >{{__('Salva')}}</x-backend.buttons.save>
-                            {{--@endcan--}}
+                            @endcan
                         </div>
                     </div>
                 </div>

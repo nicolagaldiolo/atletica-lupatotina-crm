@@ -22,6 +22,7 @@ class OrderController extends Controller
      */
     public function index(Athlete $athlete)
     {
+        $this->authorize('viewAny', [Order::class, $athlete]);
 
         if (request()->ajax()) {
 
@@ -35,10 +36,11 @@ class OrderController extends Controller
                     return PaymentStatus::getDescription($order->payment_status);
                 })
                 ->addColumn('action', function (Order $order) use($athlete){
-                    return view('backend.athletes.orders.partials.action_column', compact('athlete', 'order'));
+                    return view('backend.athletes.orders.partials.action_column', ['layout' => 'datatable'], compact('athlete', 'order'));
                 })->make(true);
         }else{
-            return view('backend.athletes.orders.index', compact('athlete'));
+            $orders_enabled = isOrderEnable();
+            return view('backend.athletes.orders.index', compact('orders_enabled', 'athlete'));
         }
     }
 
@@ -47,7 +49,8 @@ class OrderController extends Controller
      */
     public function create(Athlete $athlete)
     {
-        //$this->authorize('create', Article::class);
+        $this->authorize('create', [Order::class, $athlete]);
+
         $order = new Order();
         $articles = Article::active()->get();
 
@@ -59,7 +62,7 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request, Athlete $athlete)
     {
-        //$this->authorize('create', Article::class);
+        $this->authorize('create', [Order::class, $athlete]);
 
         try{
             $order = $athlete->orders()->create([
@@ -83,7 +86,7 @@ class OrderController extends Controller
      */
     public function show(Athlete $athlete, Order $order)
     {
-        //$this->authorize('update', $article);
+        $this->authorize('view', [$order, $athlete]);
 
         $order->load('rows');
 
@@ -95,7 +98,7 @@ class OrderController extends Controller
      */
     public function edit(Athlete $athlete, Order $order)
     {
-        //$this->authorize('update', $article);
+        $this->authorize('update', [$order, $athlete]);
 
         $order->load('rows');
 
@@ -109,7 +112,7 @@ class OrderController extends Controller
      */
     public function update(OrderRequest $request, Athlete $athlete, Order $order)
     {
-        //$this->authorize('update', $article);
+        $this->authorize('update', [$order, $athlete]);
         
         try{
             $articles = $request->get('articles' , []);
@@ -129,7 +132,7 @@ class OrderController extends Controller
      */
     public function destroy(Athlete $athlete, Order $order)
     {
-        //$this->authorize('delete', $article);
+        $this->authorize('delete', [$order, $athlete]);
         
         $order->delete();
 

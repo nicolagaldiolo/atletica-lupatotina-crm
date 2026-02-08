@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Order extends Model
 {
@@ -27,6 +27,7 @@ class Order extends Model
     ];
 
     protected $appends = [
+        'number',
         'status',
         'payment_status'
     ];
@@ -37,9 +38,15 @@ class Order extends Model
      * @var array
      */
     protected $casts = [
+        'number' => 'string',
         'start_at' => 'datetime',
         'end_at' => 'datetime'
     ];
+
+    public function getNumberAttribute()
+    {
+        return Str::padLeft($this->id, 6, '0');
+    }
 
     public function getStatusAttribute()
     {

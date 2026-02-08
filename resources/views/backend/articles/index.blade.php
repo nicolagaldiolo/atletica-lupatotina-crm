@@ -12,18 +12,26 @@
 
 @section('secondary-nav')
     <div class="btn-toolbar d-block text-end" role="toolbar" aria-label="Toolbar with buttons">
-        @can('create', App\Models\Article::class)
-            <x-backend.buttons.create-dropdown small="true" title="" label="{{ __('Aggiungi') }}">
-                @foreach (App\Enums\ArticleType::asArray() as $type)
-                    <li><a class="dropdown-item" href="{{ route('articles.create', ['type' => $type]) }}">{{ App\Enums\ArticleType::getDescription($type) }}</a></li>
-                @endforeach
-            </x-backend.buttons.create-dropdown>
-        @endcan
     </div>
 @endsection
 
 @section('content')
 <div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                <div class="float-end">
+                    @can('create', App\Models\Article::class)
+                        <x-backend.buttons.create-dropdown small="true" title="" label="{{ __('Aggiungi') }}">
+                            @foreach (App\Enums\ArticleType::asArray() as $type)
+                                <li><a class="dropdown-item" href="{{ route('articles.create', ['type' => $type]) }}">{{ App\Enums\ArticleType::getDescription($type) }}</a></li>
+                            @endforeach
+                        </x-backend.buttons.create-dropdown>
+                    @endcan
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="card-body">
         <div class="row mt-3">
             <div class="col">

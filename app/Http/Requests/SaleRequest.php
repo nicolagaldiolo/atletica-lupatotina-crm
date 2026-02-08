@@ -32,7 +32,7 @@ class SaleRequest extends FormRequest
             'massive_enable_payment' => 'required|boolean',
             'status' => ['required', new EnumValue(OrderRowStatus::class)],
             'payed' => 'required|boolean',
-            'bank_transfer' => 'required|boolean',
+            'bank_transfer' => 'required',
             'cashed_by' => [
                 'required',
                 Rule::in(User::handlePaymentsOrders()->get()->pluck('id')->toArray())

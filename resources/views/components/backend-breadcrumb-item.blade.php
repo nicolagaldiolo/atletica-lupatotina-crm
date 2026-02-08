@@ -9,7 +9,7 @@
 @else
 <li class="breadcrumb-item">
     @if($canurl)
-        <a href='{{$route}}'>
+        <a @if($route)href='{{$route}}' @endif>
             {{ $slot }}
         </a>
     @else
