@@ -48,6 +48,9 @@
                                 {{ __('Prezzo') }}
                             </th>
                             <th>
+                                {{ __('Tipo') }}
+                            </th>
+                            <th>
                                 {{ __('Quantità') }}
                             </th>
                             <th>
@@ -105,7 +108,11 @@
                 },
             },
             {
+                data: 'type_description'
+            },
+            {
                 data: null,
+                visible: false,
                 render(data) {
                     var html = null;
                     switch(data.type){

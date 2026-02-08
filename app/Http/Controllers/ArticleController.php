@@ -24,6 +24,9 @@ class ArticleController extends Controller
             $builder = Article::with('imageDefault');
 
             return datatables()->eloquent($builder)
+                ->editColumn('type_description', function(Article $article){
+                    return ArticleType::getDescription($article->type);
+                })
                 ->addColumn('action', function ($article) {
                     return view('backend.articles.partials.action_column', compact('article'));
                 })->make(true);
