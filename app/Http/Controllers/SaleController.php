@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderRowStatus;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Http\Requests\ArticleRequest;
@@ -63,7 +64,11 @@ class SaleController extends Controller
 
             $builder = $order->rows()->with(['article.imageDefault', 'transaction.cashed', 'size']);
 
-            return datatables()->eloquent($builder)->make(true);
+            return datatables()->eloquent($builder)
+                ->editColumn('status', function(OrderRow $row){
+                    return OrderRowStatus::getDescription($row->status);
+                })    
+                ->make(true);
         }else{
 
             $accountants = User::HandlePaymentsRace()->get();

@@ -208,10 +208,16 @@
                     data: 'quantity',
                 },
                 {
-                    data: 'amount'
+                    data: 'amount',
+                    render(data, type, row, meta) {
+                        return data ? App.money(data) : 0;
+                    }
                 },
                 {
                     data: 'total_amount',
+                    render(data, type, row, meta) {
+                        return data ? App.money(data) : 0;
+                    }
                 },
                 {
                     data: 'status',
@@ -236,8 +242,7 @@
                 {
                     data: null,
                     render(data) {
-                        return data && data.transaction && data.transaction.cashed ? data.transaction.cashed
-                            .name : null;
+                        return data && data.transaction && data.transaction.cashed ? data.transaction.cashed.name : null;
                     },
                     orderable: false,
                     searchable: false
