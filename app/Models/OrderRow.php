@@ -18,7 +18,7 @@ class OrderRow extends Model
 
     protected $fillable = [
         'article_id',
-        'variant',
+        'size_id',
         'quantity',
         'amount',
         'total_amount',
@@ -57,5 +57,10 @@ class OrderRow extends Model
     public function transaction(): MorphOne
     {
         return $this->morphOne(Transaction::class, 'transactionable');
+    }
+
+    public function size(): BelongsTo
+    {
+        return $this->belongsTo(Size::class);
     }
 }

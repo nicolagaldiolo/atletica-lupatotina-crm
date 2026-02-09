@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @php
-    $entity = __('Articoli')
+    $entity = __('Taglie')
 @endphp
 
 @section('title') {{ $entity }} @endsection
@@ -22,7 +22,7 @@
             <div class="col">
                 <div class="float-end">
                     @can('create', App\Models\Article::class)
-                        <x-backend.buttons.create route="{{ route('articles.create') }}" small="true" title="">
+                        <x-backend.buttons.create route="{{ route('sizes.create') }}" small="true" title="">
                             {{ __('Aggiungi') }}
                         </x-backend.buttons.create>
                     @endcan
@@ -40,13 +40,7 @@
                                 #
                             </th>
                             <th>
-                                {{ __('Prodotto') }}
-                            </th>
-                            <th>
-                                {{ __('Prezzo') }}
-                            </th>
-                            <th>
-                                {{ __('Quantità') }}
+                                {{ __('Taglia') }}
                             </th>
                             <th>
                                 {{ __('Attivo') }}
@@ -74,7 +68,7 @@
         autoWidth: true,
         responsive: true,
         ajax: {
-            url: '{{ route("articles.index") }}'
+            url: '{{ route("sizes.index") }}'
         },
         order: [[ 1, "asc" ]],
         columns: [
@@ -87,36 +81,6 @@
             },
             {
                 data: 'name',
-                render(data, type, row, meta) {
-                    var html = [];
-                    if(row.image_default && row.image_default.public_url){
-                        html.push('<img width="100" src="' + row.image_default.public_url + '" />');
-                    }
-                    html.push(data);
-                    return html.join(" ");
-                },
-            },
-            {
-                data: 'price',
-                render(data) {
-                    return App.money(data);
-                },
-            },
-            {
-                data: 'variants',
-                //visible: false,
-                render(data) {
-                    var html = null;
-
-                    var variants = data.reduce(function(arr, item){
-                        arr.push('<li class="list-group-item"><strong>' + item.size + '</strong>: ' + item.qta + '</li>')
-                        return arr;
-                    }, []);
-                    
-                    var html = (variants.length ? ('<ul class="list-group list-group-flush">' + variants.join('') + '</ul>') : null);
-                    
-                    return html;
-                },
             },
             {
                 data: 'is_active',

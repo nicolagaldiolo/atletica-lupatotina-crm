@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-use App\Enums\ArticleType;
 use App\Enums\GenderType;
 use App\Enums\MemberType;
 use App\Enums\OrderRowStatus;
@@ -31,11 +30,6 @@ return [
         RaceType::Race => 'Gara',
         RaceType::Track => 'Pista',
         RaceType::Clothes => 'Abbigliamento'
-    ],
-
-    ArticleType::class => [
-        ArticleType::Simple => 'Taglia Unica',
-        ArticleType::Variants => 'Varianti Taglie',
     ],
 
     OrderStatus::class => [

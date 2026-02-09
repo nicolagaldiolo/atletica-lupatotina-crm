@@ -7,11 +7,9 @@ use App\Traits\Owner;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Article extends Model
 {
-    use HasFactory;
     use SoftDeletes;
     use Owner;
     use ModelStorage;
@@ -19,10 +17,12 @@ class Article extends Model
     protected $fillable = [
         'name',
         'price',
-        'quantity',
-        'type',
         'variants',
         'is_active'
+    ];
+
+    protected $appends = [
+        'variants_available'
     ];
 
     protected $casts = [
@@ -44,5 +44,12 @@ class Article extends Model
     public function scopeActive(Builder $query): void
     {
         $query->where('is_active', true);
+    }
+
+    public function getVariantsAvailableAttribute()
+    {
+        return collect($this->variants)->filter(function ($value) {
+            return boolval($value['is_active'] ?? false);
+        });
     }
 }

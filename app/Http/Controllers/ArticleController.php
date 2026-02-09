@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Utility;
-use App\Enums\ArticleType;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Models\ArticleImage;
+use App\Models\Size;
 use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Http\Request;
 
@@ -24,8 +24,17 @@ class ArticleController extends Controller
             $builder = Article::with('imageDefault');
 
             return datatables()->eloquent($builder)
-                ->editColumn('type_description', function(Article $article){
-                    return ArticleType::getDescription($article->type);
+                ->editColumn('variants', function ($article) {
+
+                    $sizes = Size::whereIn('id', $article->variants_available->keys())->get()->reduce(function($arr, $item) use($article){
+                        $arr[] = [
+                            'size' => $item->name,
+                            'qta' => $article->variants_available->get($item->id)->qta ?? 0
+                        ];
+                        return $arr;
+                    }, []);
+
+                    return $sizes;
                 })
                 ->addColumn('action', function ($article) {
                     return view('backend.articles.partials.action_column', compact('article'));
@@ -38,17 +47,12 @@ class ArticleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(String $type)
+    public function create()
     {
-        if (!in_array($type, ArticleType::asArray())) {
-            abort(404);
-        }
-
         $this->authorize('create', Article::class);
 
         $article = new Article();
         $article->is_active = true;
-        $article->type = $type;
         
         return view('backend.articles.create', compact('article'));
     }

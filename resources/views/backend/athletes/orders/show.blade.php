@@ -48,6 +48,7 @@
                         <thead>
                             <tr>
                                 <th>{{ __('Articolo') }}</th>
+                                <th>{{ __('Taglia') }}</th>
                                 <th>{{ __('Prezzo') }}</th>
                                 <th>{{ __('Quantità') }}</th>
                                 <th>{{ __('Importo') }}</th>
@@ -62,7 +63,11 @@
                                         @if($row->article->imageDefault)
                                             <img width="80" src="{{ $row->article->imageDefault->public_url }}">
                                         @endif
-                                        {{ $row->article->name }} @if($row->variant) - {{ App\Enums\Sizes::getDescription($row->variant) }} @endif
+                                        
+                                        {{ $row->article->name }}
+                                    </td>
+                                    <td>
+                                        {{ $row->size->name }}
                                     </td>
                                     <td>
                                         @money($row->article->price)

@@ -17,6 +17,8 @@ class Utility
                 Permission::firstOrCreate(['name' => $permission]);
             }
         });
+
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
     }
 
     public static function flashMessage($type = 'success', $message = null)

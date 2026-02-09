@@ -6,7 +6,7 @@ use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ArticleRequest extends FormRequest
+class SizeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +26,7 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:191',
-            'variants' => 'required|array',
-            'variants.*' => 'required_with:variants|array',
-            'variants.*.qta' => 'required_with:variants|numeric|min:0',
-            'variants.*.is_active' => 'required_with:variants|required|boolean',
-            'price' => 'required|numeric',
+            'name' => ['required', 'string', 'max:191', Rule::unique('sizes', 'name')->ignore($this->size)],
             'is_active' => 'required|boolean',
         ];
     }
@@ -40,7 +35,6 @@ class ArticleRequest extends FormRequest
     {
         return [
             'name' => __('nome'),
-            'price' => __('importo'),
             'is_active' => __('attivo'),
         ];
     }

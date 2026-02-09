@@ -1,7 +1,5 @@
 <?php
 
-use App\Enums\ArticleType;
-use App\Enums\MemberType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;

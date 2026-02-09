@@ -14,9 +14,6 @@
             </div>
         </div>
 
-        <input name="type" class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}" type="hidden"
-            value="{{ $article->type }}">
-
         <div class="form-group mb-3">
             <label for="name">{{ __('Nome') }}</label>
             <span class="text-danger">*</span>
@@ -40,33 +37,36 @@
             <label for="name">{{ __('Quantità') }}</label>
             <span class="text-danger">*</span>
 
-            @if ($article->type == \App\Enums\ArticleType::Simple)
-                <input name="quantity" class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}"
-                    type="number" step="1" min="0"
-                    value="{{ old('quantity', $article->quantity ? $article->quantity : 0) }}">
-                @if ($errors->has('quantity'))
-                    <div class="invalid-feedback">{{ $errors->first('quantity') }}</div>
-                @endif
-            @elseif($article->type == \App\Enums\ArticleType::Variants)
-                <div class="card">
-                    <div class="card-body">
-                        @foreach (App\Enums\Sizes::asSelectArray() as $key => $value)
-                        <div class="input-group mb-3">
-                            <span style="width: 50px;" class="input-group-text" id="basic-addon1"><strong>{{ Str::upper($value) }}</strong></span>
-                            <input name="variants[{{ $key }}]"
-                                    class="form-control {{ $errors->has('variants.' . $key) ? 'is-invalid' : '' }}"
-                                    type="number" step="1" min="0"
-                                    value="{{ old('variants.' . $key, $article->variants[$key] ?? 0) }}">
-                                @if ($errors->has('variants.' . $key))
-                                    <div class="invalid-feedback">
-                                        {{ $errors->first('variants.' . $key) }}
-                                    </div>
-                                @endif
+            <div class="card">
+                <div class="card-body">
+                    @foreach (App\Models\Size::active()->get() as $size)
+                        <div class="@if(!$loop->first) mt-1 @endif row g-3 align-items-center">
+                            <div class="col-auto">
+                                <div class="input-group">
+                                    <span style="width: 200px;" class="input-group-text" id="basic-addon1"><strong>{{ $size->name }}</strong></span>
+                                    <input name="variants[{{ $size->id }}][qta]"
+                                            class="form-control {{ $errors->has('variants.' . $size->id . '.qta') ? 'is-invalid' : '' }}"
+                                            type="number" step="1" 
+                                            value="{{ old('variants.' . $size->id . '.qta', $article->variants[$size->id]['qta'] ?? 0) }}">
+                                        @if ($errors->has('variants.' . $size->id . '.qta'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('variants.' . $size->id . '.qta') }}
+                                            </div>
+                                        @endif
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="form-check form-switch form-switch-lg">
+                                    <input type="hidden" type="checkbox" name="variants[{{ $size->id }}][is_active]" value="0" checked>
+                                    <input class="form-check-input {{ $errors->has('variants.' . $size->id . '.is_active') ? 'is-invalid' : '' }}" type="checkbox" name="variants[{{ $size->id }}][is_active]" 
+                                    {{ old('variants.' . $size->id . '.is_active', $article->variants[$size->id]['is_active'] ?? false) ? 'checked' : '' }} value="1" role="switch" id="switchCheckDefault1">
+                                    <label class="form-check-label" for="switchCheckDefault1">{{ __('Attiva taglia') }}</label>
+                                </div>
+                            </div>
                         </div>
-                        @endforeach
-                    </div>
+                    @endforeach
                 </div>
-            @endif
+            </div>
         </div>
     </div>
     <div class="col-12 col-sm-6">

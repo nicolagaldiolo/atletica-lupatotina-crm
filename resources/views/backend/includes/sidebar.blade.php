@@ -143,7 +143,15 @@
         @can('viewAny', App\Models\Article::class)
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('articles.*')) active @endif" href="{{ route('articles.index') }}">
-                    <i class="nav-icon fa-solid fa-shirt"></i>&nbsp;{{ __('Magazzino') }}
+                    <i class="nav-icon fa-solid fa-shirt"></i>&nbsp;{{ __('Articoli') }}
+                </a>
+            </li>
+        @endcan
+
+        @can('viewAny', App\Models\Size::class)
+            <li class="nav-item">
+                <a class="nav-link @if(Route::is('sizes.*')) active @endif" href="{{ route('sizes.index') }}">
+                    <i class="nav-icon fas fa-tags"></i>&nbsp;{{ __('Taglie') }}
                 </a>
             </li>
         @endcan

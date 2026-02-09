@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Utility;
-use App\Enums\ArticleType;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
-use App\Http\Requests\ArticleRequest;
 use App\Http\Requests\OrderRequest;
 use App\Models\Article;
 use App\Models\Athlete;
 use App\Models\Order;
 use App\Models\Season;
+use App\Models\Size;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -53,7 +52,7 @@ class OrderController extends Controller
 
         $order = new Order();
         $articles = Article::active()->get();
-
+        
         return view('backend.athletes.orders.create', compact('athlete', 'order', 'articles'));
     }
 
@@ -156,7 +155,7 @@ class OrderController extends Controller
 
             collect($item['variants'] ?? [])->filter(function($i){
                 return intval($i) > 0;
-            })->each(function($quantity, $variant_key) use($order, $article){
+            })->each(function($quantity, $size_id) use($order, $article){
 
                 for ($i = 1; $i <= $quantity; $i++) {
 
@@ -164,9 +163,9 @@ class OrderController extends Controller
 
                     $order->rows()->create([
                         'article_id' => $article->id,
+                        'size_id' => $size_id,
                         'amount' => $article->price,
                         'quantity' => $quantity_unit,
-                        'variant' => $article->type === ArticleType::Variants ? $variant_key : null,
                         'total_amount' => $article->price * $quantity_unit
                     ]);
                 }

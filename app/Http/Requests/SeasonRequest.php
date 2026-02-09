@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\ArticleType;
-use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class SeasonRequest extends FormRequest
 {

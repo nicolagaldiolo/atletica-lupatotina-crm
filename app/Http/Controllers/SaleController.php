@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\Utility;
-use App\Enums\ArticleType;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Http\Requests\ArticleRequest;
@@ -63,7 +61,7 @@ class SaleController extends Controller
 
         if (request()->ajax()) {
 
-            $builder = $order->rows()->with(['article.imageDefault', 'transaction.cashed']);
+            $builder = $order->rows()->with(['article.imageDefault', 'transaction.cashed', 'size']);
 
             return datatables()->eloquent($builder)->make(true);
         }else{
@@ -100,13 +98,15 @@ class SaleController extends Controller
 
         if (request()->ajax()) {
             $builder = $season->orderRows()
-                ->select('article_images.image', 'articles.name', 'order_rows.article_id', 'order_rows.variant', DB::raw('SUM(order_rows.quantity) as quantity'))
+                ->select('article_images.image', 'articles.name as article_name', 'order_rows.article_id', 'sizes.name as size_name', DB::raw('SUM(order_rows.quantity) as quantity'))
                 ->groupBy('article_images.image')
                 ->groupBy('articles.name')
                 ->groupBy('orders.season_id')
                 ->groupBy('order_rows.article_id')
-                ->groupBy('order_rows.variant')
-                ->leftJoinRelationship('article.imageDefault');
+                ->groupBy('order_rows.size_id')
+                ->groupBy('sizes.name')
+                ->leftJoinRelationship('article.imageDefault')
+                ->leftJoinRelationship('size');
 
             return datatables()->eloquent($builder)
                 ->editColumn('image', function ($data) {

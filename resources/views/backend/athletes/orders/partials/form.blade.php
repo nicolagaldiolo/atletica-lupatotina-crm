@@ -29,32 +29,7 @@
                         </div>
 
                         <div class="variants_container mt-4 @if (!$selected) d-none @endif">
-                            @if ($article->type == \App\Enums\ArticleType::Simple)
-                                @php
-                                    $quantity = $order->rows
-                                        ->filter(function ($row) use ($article) {
-                                            return $row->article_id == $article->id && $row->variant == null;
-                                        })
-                                        ->sum('quantity');
-
-                                    $key = 0;
-                                @endphp
-
-
-
-                                @if ($errors->has('articles.' . $article->id . '.variants'))
-                                    <div class="alert alert-danger" role="alert">
-                                        {{ $errors->first('articles.' . $article->id . '.variants') }}
-                                    </div>
-                                @endif
-                                <div class="input-group has-validation mb-3">
-                                    <span class="input-group-text" id="basic-addon1"><strong>Taglia
-                                            Unica</strong></span>
-                                    <input name="articles[{{ $article->id }}][variants][{{ $key }}]"
-                                        class="form-control" type="number" step="1" min="0"
-                                        value="{{ old('articles.' . $article->id . '.variants.' . $key, $quantity) }}">
-                                </div>
-                            @elseif($article->type == \App\Enums\ArticleType::Variants)
+                            
                                 <div class="card">
                                     <div class="card-body">
 
@@ -64,29 +39,28 @@
                                                 {{ $errors->first('articles.' . $article->id . '.variants') }}
                                             </div>
                                         @endif
-
-                                        @foreach (App\Enums\Sizes::asSelectArray() as $key => $value)
+                                        
+                                        @foreach (App\Models\Size::whereIn('id', $article->variants_available->keys())->get() as $size)
                                             @php
                                                 $quantity = $order->rows
-                                                    ->filter(function ($row) use ($article, $key) {
+                                                    ->filter(function ($row) use ($article, $size) {
                                                         return $row->article_id == $article->id &&
-                                                            $row->variant == $key;
+                                                            $row->size->id == $size->id;
                                                     })
                                                     ->sum('quantity');
                                             @endphp
 
                                             <div class="input-group has-validation mb-3">
-                                                <span style="width: 50px;" class="input-group-text text-uppercase"
-                                                    id="basic-addon1"><strong>{{ $value }}</strong></span>
+                                                <span class="input-group-text text-uppercase"
+                                                    id="basic-addon1"><strong>{{ $size->name }}</strong></span>
                                                 <input
-                                                    name="articles[{{ $article->id }}][variants][{{ $key }}]"
+                                                    name="articles[{{ $article->id }}][variants][{{ $size->id }}]"
                                                     class="form-control" type="number" step="1" min="0"
-                                                    value="{{ old('articles.' . $article->id . '.variants.' . $key, $quantity) }}">
+                                                    value="{{ old('articles.' . $article->id . '.variants.' . $size->id, $quantity) }}">
                                             </div>
                                         @endforeach
                                     </div>
                                 </div>
-                            @endif
                         </div>
                     </div>
                 </div>

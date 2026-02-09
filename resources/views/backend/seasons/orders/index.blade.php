@@ -167,7 +167,7 @@
             },
 
             {
-                data: 'name',
+                data: 'article_name',
                 render(data, type, row, meta) {
                     let html = [];
                     
@@ -179,19 +179,13 @@
 
                     return html.join(" ");
                 },
-                //visible: false,
             },
-
             {
-                data: 'variant',
-                orderable: false,
-                searchable: false
+                data: 'size_name',
             },
             
             {
-                data: 'quantity',
-                orderable: false,
-                searchable: false
+                data: 'quantity'
             }
         ]
     });

@@ -65,19 +65,19 @@
                             <li class="list-group-item payment-item" style="display:none;">
                                 <input class="form-check-input me-1" type="radio" name="payed" value="0"
                                     id="radio_no_payed" checked>
-                                <label class="form-check-label" for="radio_no_payed">Non pagato</label>
+                                <label class="form-check-label" for="radio_no_payed">{{ __('Non pagato') }}</label>
                             </li>
 
                             <li class="list-group-item payment-item" style="display:none;">
                                 <input class="form-check-input me-1" type="radio" name="payed" value="1"
                                     id="radio_payed">
-                                <label class="form-check-label" for="radio_payed">Pagato</label>
+                                <label class="form-check-label" for="radio_payed">{{ __('Pagato') }}</label>
 
                                 <ul class="list-group mt-2 payed-type-item" style="display:none;">
                                     <li class="list-group-item">
                                         <input class="form-check-input me-1" type="radio" name="payment"
                                             value="bank_transfer" id="radio_payment_bank" checked>
-                                        <label class="form-check-label" for="radio_payment_bank">Pagato con bonifico</label>
+                                        <label class="form-check-label" for="radio_payment_bank">{{ __('Pagato con bonifico') }}</label>
                                     </li>
 
                                     <li class="list-group-item">
@@ -86,7 +86,7 @@
                                                 <input class="form-check-input me-1" type="radio" name="payment"
                                                     value="cash" id="radio_payment_cash">
                                                 <label class="form-check-label text-nowrap flex-shrink-0"
-                                                    for="radio_payment_cash">Pagato in contanti</label>
+                                                    for="radio_payment_cash">{{ __('Pagato in contanti') }}</label>
                                             </div>
                                             <select class="form-select" name="cashed_by" disabled>
                                                 @foreach ($accountants as $accountant)
@@ -190,9 +190,6 @@
                 {
                     data: 'article.name',
                     render(data, type, row, meta) {
-
-                        console.log(row);
-
                         let html = [];
 
                         if (row.article && row.article.image_default && row.article.image_default.public_url) {
@@ -205,7 +202,7 @@
                     }
                 },
                 {
-                    data: 'variant',
+                    data: 'size.name',
                 },
                 {
                     data: 'quantity',

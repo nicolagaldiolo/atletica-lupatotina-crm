@@ -16,6 +16,7 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleRowController;
 use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\SizeController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoucherController;
@@ -101,12 +102,13 @@ Route::group(['middleware' => ['auth', 'can:' . Permissions::ViewDashboard]], fu
     Route::get('payments/{raceType}', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('payments/{raceType}', [PaymentController::class, 'store'])->name('payments.store');
 
-    Route::get('articles/create/{type}', [ArticleController::class, 'create'])->name('articles.create');
     Route::delete('articles/{article}/images/{articleImage}', [ArticleController::class, 'destroyImage'])->name('articles.destroyImage');
     Route::post('articles/{article}/images/{articleImage}', [ArticleController::class, 'defaultImage'])->name('articles.defaultImage');
     Route::post('articles/{article}/images/{articleImage}/disable', [ArticleController::class, 'disableImage'])->name('articles.disableImage');
     Route::post('articles/{article}/sortImages', [ArticleController::class, 'sortImages'])->name('articles.sortImages');
-    Route::resource('articles', ArticleController::class)->except(['create', 'show']);
+    Route::resource('articles', ArticleController::class)->except('show');
+
+    Route::resource('sizes', SizeController::class)->except('show');
 
     Route::resource('seasons', SeasonController::class)->except('show');
     Route::get('seasons/{season}/products', [SaleController::class, 'products'])->name('seasons.products.index');
