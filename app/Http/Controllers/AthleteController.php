@@ -33,8 +33,7 @@ class AthleteController extends Controller
 
             $builder = Athlete::query()
                 ->withCount('fees')
-                ->withCount('feesToPay')
-                ->with(['certificate', 'feesToPay', 'user'])
+                ->with(['certificate', 'feesToPay.race', 'user'])
                 ->leftJoinRelationship('certificate');
                 //->leftJoinRelationship('certificate', function(PowerJoinClause $join){
                 //    $join->expiring();

@@ -15,7 +15,7 @@ class AthleteFee extends Pivot
 
     protected $fillable = [
         'payed_at',
-        'amount',
+        'custom_amount',
         'voucher_id',
         'bank_transfer',
         'cashed_by',
@@ -23,7 +23,7 @@ class AthleteFee extends Pivot
 
     protected $casts = [
         'payed_at' => 'datetime',
-        'amount' => 'float'
+        'custom_amount' => 'float'
     ];
 
     protected static function booted(): void
