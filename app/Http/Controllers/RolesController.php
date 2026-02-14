@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
@@ -195,11 +196,11 @@ class RolesController extends Controller
 
         $this->validate($request, [
             'name' => 'required|max:20|unique:roles,name,'.$role->id,
-            'permissions' => 'required',
+            'permissions' => $role->name === Roles::SuperAdmin ? 'nullable' : 'required',
         ]);
 
         $input = $request->except(['permissions']);
-        $permissions = $request['permissions'];
+        $permissions = $request->get('permissions', []);
         $$module_name_singular->fill($input)->save();
 
         $p_all = Permission::all(); //Get all permissions
