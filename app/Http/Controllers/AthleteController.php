@@ -195,13 +195,14 @@ class AthleteController extends Controller
         
         if($raceType == RaceType::Race){
             $this->authorize('registerPaymentRace', $athleteFee);
+            $accountants = User::HandlePaymentsRace()->get();
         }else if($raceType == RaceType::Track){
             $this->authorize('registerPaymentTrack', $athleteFee);
+            $accountants = User::HandlePaymentsTrack()->get();
         }else{
             abort(401);
         }
         
-        $accountants = User::HandlePaymentsRace()->get();
         $athlete = $athleteFee->athlete;
         $fee->load('race');
         
