@@ -42,7 +42,13 @@ class PaymentController extends Controller
             'fees.athletefee',
         ])->get();
 
-        $accountants = User::HandlePaymentsRace()->get();
+        if($raceType == RaceType::Race){
+            $accountants = User::HandlePaymentsRace()->get();
+        }else if($raceType == RaceType::Track){
+            $accountants = User::handlePaymentsTrack()->get();
+        }else{
+            $accountants = collect();
+        }
 
         return view('backend.payments.create', compact('athletes', 'accountants', 'raceType'));
     }
