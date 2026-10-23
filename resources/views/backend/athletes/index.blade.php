@@ -160,7 +160,7 @@
                     var html = [];
 
                     @canany(['subscribeRace', 'registerPaymentRace'], App\Models\AthleteFee::class)
-                        let race_fees_to_pay = row.fees_to_pay.filter(item => item.race.type === 'race');
+                        let race_fees_to_pay = row.fees_to_pay.filter(item => item?.race?.type === 'race');
                         if(race_fees_to_pay.length){
                             let amount_race = race_fees_to_pay.reduce((i, item) => i+item.athletefee.custom_amount, 0);
                             html.push('<span class="badge text-bg-danger"><i class="fa-solid fa-flag-checkered"></i> ' + App.money(amount_race) + ' (' + race_fees_to_pay.length + ')</span>');
@@ -168,7 +168,7 @@
                     @endcanany
 
                     @canany(['subscribeTrack', 'registerPaymentTrack'], App\Models\AthleteFee::class)
-                        let track_fees_to_pay = row.fees_to_pay.filter(item => item.race.type === 'track');
+                        let track_fees_to_pay = row.fees_to_pay.filter(item => item?.race?.type === 'track');
                         if(track_fees_to_pay.length){
                             let amount_track = track_fees_to_pay.reduce((i, item) => i+item.athletefee.custom_amount, 0);
                             html.push('<span class="badge text-bg-danger"><i class="fa-solid fa-ring"></i> ' + App.money(amount_track) + ' (' + track_fees_to_pay.length + ')</span>');
