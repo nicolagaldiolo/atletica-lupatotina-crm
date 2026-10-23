@@ -9,9 +9,6 @@
         </a>
     </div>
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
-        
-        <li>Ciao</li>
-
         @can(App\Enums\Permissions::ViewDashboard)
             <li class="nav-item">
                 <a class="nav-link @if(Route::is('dashboard.*')) active @endif" href="{{ route('dashboard') }}">
